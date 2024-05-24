@@ -4,6 +4,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'apis/bodah/infos.dart';
 import 'colors/color.dart';
 import 'functions/function.dart';
 import 'providers/auth/prov_reset_password.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(
           create: (_) => Functions(),
+        ),
+        Provider(
+          create: (_) => ApiInfos(),
         ),
         Provider(create: (_) => DBServices()),
         ChangeNotifierProvider(

@@ -33,7 +33,9 @@ dependencies:
   fl_chart: ^0.66.2
   carousel_slider: ^4.0.0
   font_awesome_flutter: ^10.7.0
-
+  shared_preferences: ^2.0.6 
+  flutter_secure_storage: ^5.0.2
+  http: ^1.2.1
   
   flutter_localizations:
     sdk: flutter
@@ -48,7 +50,7 @@ dependencies:
   dropdown_search: ^5.0.6
   flutter_iconpicker_plus: ^3.2.3
   dotted_border: ^2.0.0
-
+  
   
 
 
