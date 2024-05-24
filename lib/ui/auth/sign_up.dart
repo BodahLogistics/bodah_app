@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, non_constant_identifier_names, use_build_context_synchronously, prefer_const_declarations, deprecated_member_use
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../providers/auth/prov_sign_up.dart';
 import 'sign_in.dart';
+import 'validate_account.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -30,6 +32,7 @@ class SignUp extends StatelessWidget {
     String confirm_password = provider.confirm_password;
     bool affiche = provider.affiche;
     bool hide_password = provider.hide_password;
+    bool accepte = provider.accepte;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -305,6 +308,59 @@ class SignUp extends StatelessWidget {
                           ),
                         )
                       : Container(),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: RadioListTile(
+                  title: Text(
+                    "J'accepte les termes d'utilisation de l'application",
+                    style: TextStyle(fontFamily: "Poppins", fontSize: 14),
+                  ),
+                  value: true,
+                  groupValue: accepte,
+                  onChanged: (value) {
+                    provider.change_accepte(value);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                      onPressed: () async {
+                        final url = 'https://bodah.bj/conditions-generales';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.8,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Vous devez vous connecter à internet. Une erreur s'est produite",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      child: Text(
+                        "Consulter les termes d'utilisation",
+                        style: TextStyle(
+                            color: MyColors.secondary,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                            decoration: TextDecoration.underline),
+                      )),
+                ),
+              ),
               SizedBox(
                 height: 15,
               ),
@@ -315,9 +371,19 @@ class SignUp extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: MyColors.secondary),
+                        backgroundColor: accepte
+                            ? MyColors.secondary
+                            : MyColors.secondary.withOpacity(.4)),
                     onPressed: () async {
-                      provider.change_affiche(true);
+                      if (!accepte) {
+                        ShowErrorMessage(
+                          context,
+                          "Vous devez avant tout accepter les termes et conditions d'utilisation de notre application",
+                          "Termes d'utilisation",
+                        );
+                      } else {
+                        provider.change_affiche(true);
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

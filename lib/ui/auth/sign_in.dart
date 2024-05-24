@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../providers/auth/prov_sign_in.dart';
+import 'forgot_password.dart';
 import 'sign_up.dart';
 
 class SignIn extends StatelessWidget {
@@ -79,7 +80,7 @@ class SignIn extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 15),
               child: SizedBox(
                 height: 40,
                 child: TextField(
@@ -106,8 +107,44 @@ class SignIn extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return ForgotPassword();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Mot de passe oublié ?",
+                      style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.secondary,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline),
+                    )),
+              ),
             ),
             SizedBox(
               height: 40,

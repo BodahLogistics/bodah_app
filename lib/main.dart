@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'colors/color.dart';
 import 'functions/function.dart';
+import 'providers/auth/prov_reset_password.dart';
 import 'providers/auth/prov_sign_in.dart';
 import 'providers/auth/prov_sign_up.dart';
 import 'services/data_base_service.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProvSignUp(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProvResetPassword(),
+        )
       ],
       child: MaterialApp(
         routes: {"/login": (context) => SignIn()},
@@ -53,8 +57,8 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: AnimatedSplashScreen(
-          splash: 'images/logo.png',
-          nextScreen: Wrappers(),
+          splash: 'images/log.png',
+          nextScreen: SignIn(),
           splashTransition: SplashTransition.fadeTransition,
         ),
       ),
