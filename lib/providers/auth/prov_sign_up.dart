@@ -1,5 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:bodah/modals/pays.dart';
+import 'package:bodah/modals/rules.dart';
+import 'package:bodah/modals/statuts.dart';
+import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 
 class ProvSignUp with ChangeNotifier {
@@ -7,6 +11,37 @@ class ProvSignUp with ChangeNotifier {
   String get code => _code;
   void change_code(String? value) {
     _code = value!;
+    notifyListeners();
+  }
+
+  Rules _rule = Rules(id: 0, nom: "");
+  Statuts _statut = Statuts(id: 0, name: "");
+
+  Rules get rule => _rule;
+  Statuts get statut => _statut;
+
+  void change_rule(Rules rule) {
+    _rule = rule;
+    notifyListeners();
+  }
+
+  void change_statut(Statuts statut) {
+    _statut = statut;
+    notifyListeners();
+  }
+
+  Pays _pay = Pays(id: 0, name: "", flag: "", country_code: "");
+  Villes _ville = Villes(id: 0, name: "", country_id: 0);
+
+  Pays get pay => _pay;
+  Villes get ville => _ville;
+  void change_pays(Pays pay) {
+    _pay = pay;
+    notifyListeners();
+  }
+
+  void change_ville(Villes ville) {
+    _ville = ville;
     notifyListeners();
   }
 

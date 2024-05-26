@@ -1,16 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
 class Pays {
   final int id;
   final String name;
-  final String flag;
-  final String country_code;
+  final String? flag;
+  final String? country_code;
+
   Pays({
     required this.id,
     required this.name,
-    required this.flag,
-    required this.country_code,
+    this.flag,
+    this.country_code,
   });
 
   Pays copyWith({
@@ -28,7 +28,7 @@ class Pays {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'name': name,
       'flag': flag,
@@ -40,15 +40,15 @@ class Pays {
     return Pays(
       id: map['id'] as int,
       name: map['name'] as String,
-      flag: map['flag'] as String,
-      country_code: map['country_code'] as String,
+      flag: map['flag'] != null ? map['flag'] as String : null,
+      country_code:
+          map['country_code'] != null ? map['country_code'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Pays.fromJson(String source) =>
-      Pays.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Pays.fromJson(String source) => Pays.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -56,10 +56,11 @@ class Pays {
   }
 
   @override
-  bool operator ==(covariant Pays other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
+    return other is Pays &&
+        other.id == id &&
         other.name == name &&
         other.flag == flag &&
         other.country_code == country_code;

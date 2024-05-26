@@ -1,7 +1,9 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../modals/users.dart';
 
 class Functions {
   Color convertHexToColor(String hexColor) {
@@ -19,5 +21,10 @@ class Functions {
   Future<void> storeToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
+  }
+
+  bool existing_phone_number(List<Users> users, String phone_number) {
+    bool any = users.any((element) => element.telephone == phone_number);
+    return any;
   }
 }
