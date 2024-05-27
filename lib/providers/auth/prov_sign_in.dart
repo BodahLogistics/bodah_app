@@ -32,4 +32,10 @@ class ProvSignIn with ChangeNotifier {
     _affiche = value!;
     notifyListeners();
   }
+
+  void reset() {
+    _phone_number = "";
+    _password = "";
+    notifyListeners();
+  }
 }

@@ -2,6 +2,7 @@
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:bodah/providers/api/api_data.dart';
+import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ApiProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProvValiAccount(),
+        )
       ],
       child: MaterialApp(
         routes: {"/login": (context) => SignIn()},
@@ -66,7 +70,7 @@ class MyApp extends StatelessWidget {
         ),
         home: AnimatedSplashScreen(
           splash: 'images/log.png',
-          nextScreen: SignIn(),
+          nextScreen: Wrappers(),
           splashTransition: SplashTransition.fadeTransition,
         ),
       ),

@@ -1,10 +1,11 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors
 
 import 'dart:convert';
 
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/modals/villes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bodah/providers/auth/prov_reset_password.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../apis/bodah/infos.dart';
 import '../modals/pays.dart';
@@ -16,29 +17,46 @@ class DBServices {
   var api_url = ApiInfos.baseUrl;
   var api_key = ApiInfos.api_key;
   var auth_token = ApiInfos.aauth_token;
-
-  Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+  Future<void> writeSecureToken(String key, String value) async {
+    await storage.write(key: key, value: value);
   }
 
-  Future<void> setToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
+  Future<String?> readSecureToken(String key) async {
+    return await storage.read(key: key);
   }
 
-  Future<Users> get user async {
-    var token = await getToken();
-    var url = Uri.https(api_url, 'user');
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-      'API_Key': api_key,
-      'AUTH_Token': auth_token
-    });
+  Future<void> deleteSecureToken(String key) async {
+    await storage.delete(key: key);
+  }
 
-    if (response.statusCode == 200) {
-      return Users.fromJson(jsonDecode(response.body));
+  Future<Users> user() async {
+    var token = await readSecureToken("token");
+
+    if (token != null) {
+      var url = "${api_url}user";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        final userData = jsonDecode(response.body);
+        return Users.fromMap(userData);
+      }
+
+      return Users(
+          id: 0,
+          name: "",
+          country_id: 0,
+          telephone: "",
+          deleted: 0,
+          is_verified: 0,
+          is_active: 0,
+          code_sended: "");
     }
 
     return Users(
@@ -58,8 +76,8 @@ class DBServices {
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'AKI_KEY': api_key,
-        'AUTH_TOKEN': auth_token
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
       });
 
       if (response.statusCode == 200) {
@@ -79,8 +97,8 @@ class DBServices {
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'AKI_KEY': api_key,
-        'AUTH_TOKEN': auth_token
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
       });
 
       if (response.statusCode == 200) {
@@ -100,8 +118,8 @@ class DBServices {
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'AKI_KEY': api_key,
-        'AUTH_TOKEN': auth_token
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
       });
 
       if (response.statusCode == 200) {
@@ -121,8 +139,8 @@ class DBServices {
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'AKI_KEY': api_key,
-        'AUTH_TOKEN': auth_token
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
       });
 
       if (response.statusCode == 200) {
@@ -142,8 +160,8 @@ class DBServices {
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'AKI_KEY': api_key,
-        'AUTH_TOKEN': auth_token
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
       });
 
       if (response.statusCode == 200) {
@@ -159,57 +177,56 @@ class DBServices {
 
   Future<String> register(String nom, String number, Statuts statut, Rules rule,
       String password, String confirm_password, Villes ville, Pays pay) async {
-    var url = "${api_url}register";
-    final uri = Uri.parse(url);
-    final response = await http.post(uri, headers: {
-      'Content-Type': 'application/json',
-      'AKI_KEY': api_key,
-      'AUTH_TOKEN': auth_token
-    }, body: {
-      'name': nom,
-      'phone_number': number,
-      'statut': statut.id,
-      'role': rule.id,
-      'city': ville.id,
-      'country': pay.id,
-      'password': password,
-      'confirm_password': confirm_password
-    });
+    try {
+      var url = "${api_url}register";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'name': nom,
+        'phone_number': number,
+        'statut': statut.id.toString(),
+        'role': rule.id.toString(),
+        'city': ville.id.toString(),
+        'country': pay.id.toString(),
+        'password': password,
+        'confirm_password': confirm_password
+      });
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      String token = data['token'];
-      await setToken(token);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        String token = data['token'];
+        await writeSecureToken('token', token);
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "502";
     }
-
-    return response.statusCode.toString();
   }
 
   Future<String> login(String number, String password) async {
     try {
       var url = "${api_url}login";
       final uri = Uri.parse(url);
-      final response = await http.post(uri,
-          body: jsonEncode({
-            'phone_number': number,
-            'password': password,
-          }));
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'phone_number': number,
+        'password': password,
+      });
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data['token'];
-        await setToken(token);
-      }
-
-      if (response.statusCode == 500) {
-        final data = jsonDecode(response.body);
-        print(data);
+        await writeSecureToken('token', token);
       }
 
       return response.statusCode.toString();
     } catch (e) {
-      print(e);
-      return "802";
+      return "502";
     }
   }
 
@@ -217,13 +234,68 @@ class DBServices {
     var url = "${api_url}account/validate/" + user.id.toString();
     final uri = Uri.parse(url);
     final response = await http.post(uri, headers: {
-      'Content-Type': 'application/json',
-      'AKI_KEY': api_key,
-      'AUTH_TOKEN': auth_token
+      'API-KEY': api_key,
+      'AUTH-TOKEN': auth_token
     }, body: {
       'code': code,
     });
 
     return response.statusCode.toString();
+  }
+
+  Future<String> resetPassword(
+      String number, ProvResetPassword provider) async {
+    try {
+      var url = "${api_url}reset/send/code";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'phone_number': number,
+      });
+
+      if (response.statusCode == 200) {
+        final userData = jsonDecode(response.body);
+        final user = Users.fromMap(userData);
+        provider.change_user(user);
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "502";
+    }
+  }
+
+  Future<String> validateResetCode(String code, Users user) async {
+    try {
+      var url = "${api_url}reset/validate/" + user.id.toString();
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'code': code,
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "502";
+    }
+  }
+
+  Future<String> change_password(
+      Users user, String password, String confirm_password) async {
+    try {
+      var url = "${api_url}reset/" + user.id.toString();
+      final uri = Uri.parse(url);
+      final response = await http.post(uri,
+          headers: {'API-KEY': api_key, 'AUTH-TOKEN': auth_token},
+          body: {'password': password, 'confirm_password': confirm_password});
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "502";
+    }
   }
 }

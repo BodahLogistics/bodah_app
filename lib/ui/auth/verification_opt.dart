@@ -1,36 +1,34 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously, prefer_const_literals_to_create_immutables, prefer_interpolation_to_compose_strings
 
+import 'package:bodah/providers/auth/prov_reset_password.dart';
+import 'package:bodah/ui/auth/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../colors/color.dart';
 import '../../functions/function.dart';
-import '../../providers/auth/prov_val_account.dart';
+import '../../services/data_base_service.dart';
 
 class VerificationOTP extends StatelessWidget {
-  const VerificationOTP(
-      {super.key,
-      required this.telephone,
-      required this.password,
-      required this.verificationId,
-      required this.verificationToken});
+  const VerificationOTP({
+    super.key,
+    required this.telephone,
+  });
 
   final String telephone;
-  final String password;
-  final String verificationId;
-  final int? verificationToken;
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
-    final provider = Provider.of<ProvValiAccount>(context);
+    final provider = Provider.of<ProvResetPassword>(context);
     String first = provider.first;
     String second = provider.second;
     String third = provider.third;
     String fourth = provider.fourth;
     String fifth = provider.fifth;
     String sixth = provider.sixth;
-
     bool affiche = provider.affiche;
+    final service = Provider.of<DBServices>(context);
+    final user = provider.user;
 
     return Scaffold(
       body: Padding(
@@ -40,7 +38,7 @@ class VerificationOTP extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Senna Finance",
+                "Bodah",
                 style: TextStyle(
                     color: MyColors.secondary,
                     fontWeight: FontWeight.bold,
@@ -315,6 +313,166 @@ class VerificationOTP extends StatelessWidget {
                             "Vérification OTP");
                       } else {
                         provider.change_affiche(true);
+                        final statut_code =
+                            await service.validateResetCode(code_taped, user);
+
+                        if (statut_code == "502") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Une erreur s'est produite",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "404") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Compte non retrouvé",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "422") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Erreur de validation",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "500") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Vérifiez votre connection internet et réessayez",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "101") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Code déja expiré. Cliquez pour recevoir un nouveau code",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "201") {
+                          provider.change_affiche(false);
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.redAccent,
+                            content: Text(
+                              "Le code saisi est invalid",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (statut_code == "200") {
+                          provider.change_affiche(false);
+                          provider.reset();
+                          final snackBar = SnackBar(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                left: MediaQuery.of(context).size.width * 0.5,
+                                right: 20),
+                            backgroundColor: Colors.green,
+                            content: Text(
+                              "Vérification OTP réussie. Procédez au changement du mot de passe",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Poppins"),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 500),
+                              pageBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation) {
+                                return ResetPassword();
+                              },
+                              transitionsBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        }
                       }
                     },
                     child: Row(
@@ -357,7 +515,7 @@ Future<dynamic> DisplayFirst(BuildContext context, String element) {
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialog) {
-      final provider = Provider.of<ProvValiAccount>(dialog);
+      final provider = Provider.of<ProvResetPassword>(dialog);
       return AlertDialog(
         content: Padding(
           padding: const EdgeInsets.all(10),

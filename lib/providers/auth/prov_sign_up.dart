@@ -6,6 +6,8 @@ import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 
+import '../../modals/users.dart';
+
 class ProvSignUp with ChangeNotifier {
   String _code = "";
   String get code => _code;
@@ -99,6 +101,34 @@ class ProvSignUp with ChangeNotifier {
 
   void change_affiche(bool? value) {
     _affiche = value!;
+    notifyListeners();
+  }
+
+  Users _user = Users(
+      id: 0,
+      name: "",
+      country_id: 0,
+      telephone: "",
+      deleted: 0,
+      is_verified: 0,
+      is_active: 0,
+      code_sended: "");
+  Users get user => _user;
+
+  void change_user(Users user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  void reset() {
+    _rule = Rules(id: 0, nom: "");
+    _statut = Statuts(id: 0, name: "");
+    _pay = Pays(id: 0, name: "", flag: "", country_code: "");
+    _ville = Villes(id: 0, name: "", country_id: 0);
+    _nom = "";
+    _password = "";
+    _confirm_password = "";
+    _telephone = "";
     notifyListeners();
   }
 }

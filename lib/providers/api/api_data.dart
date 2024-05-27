@@ -44,26 +44,39 @@ class ApiProvider with ChangeNotifier {
       code_sended: "");
   Users get user => _user;
 
-  Future<void> InitSignUpData() async {
+  Users _new_user = Users(
+      id: 0,
+      name: "",
+      country_id: 0,
+      telephone: "",
+      deleted: 0,
+      is_verified: 0,
+      is_active: 0,
+      code_sended: "");
+  Users get new_user => _new_user;
+
+  Future<void> InitData() async {
     _isLoading = true;
     notifyListeners();
-    final response = await apiService.getPays();
-    _pays = response;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
+    final response = await apiService.user();
+    _user = response;
+    final response_pays = await apiService.getPays();
+    _pays = response_pays;
     final response_role = await apiService.getRules();
     _rules = response_role;
     final response_statuts = await apiService.getStatuts();
     _statuts = response_statuts;
-    final response_users = await apiService.getUsers();
-    _users = response_users;
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> InitSignInData() async {
+  Future<void> InitUser() async {
     _isLoading = true;
     notifyListeners();
-    final response_users = await apiService.getUsers();
-    _users = response_users;
+    final response = await apiService.user();
+    _new_user = response;
     _isLoading = false;
     notifyListeners();
   }
@@ -73,15 +86,6 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
     final response = await apiService.getVilles(country_id);
     _villes = response;
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> getUser() async {
-    _isLoading = true;
-    notifyListeners();
-    final response = await apiService.user;
-    _user = response;
     _isLoading = false;
     notifyListeners();
   }

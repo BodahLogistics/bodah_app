@@ -5,21 +5,10 @@ import 'package:provider/provider.dart';
 import '../../../../functions/function.dart';
 import '../../../../providers/api/api_data.dart';
 
-class ExpediteurDashBoard extends StatefulWidget {
-  const ExpediteurDashBoard({super.key});
-
-  @override
-  State<ExpediteurDashBoard> createState() => _ExpediteurDashBoardState();
-}
-
-class _ExpediteurDashBoardState extends State<ExpediteurDashBoard> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ApiProvider>(context, listen: false).getUser();
-    });
-  }
+class ExpediteurDashBoard extends StatelessWidget {
+  const ExpediteurDashBoard({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
