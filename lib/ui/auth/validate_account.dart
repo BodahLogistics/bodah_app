@@ -6,29 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../colors/color.dart';
 import '../../functions/function.dart';
-import '../../providers/api/api_data.dart';
 import '../../providers/auth/prov_val_account.dart';
 
-class ValidateAccount extends StatefulWidget {
+class ValidateAccount extends StatelessWidget {
   const ValidateAccount({
     super.key,
     required this.telephone,
   });
 
   final String telephone;
-
-  @override
-  State<ValidateAccount> createState() => _ValidateAccountState();
-}
-
-class _ValidateAccountState extends State<ValidateAccount> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ApiProvider>(context, listen: false).InitUser();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +27,8 @@ class _ValidateAccountState extends State<ValidateAccount> {
     String fifth = provider.fifth;
     String sixth = provider.sixth;
     bool affiche = provider.affiche;
-    final api_provider = Provider.of<ApiProvider>(context);
     final service = Provider.of<DBServices>(context);
-    final user = api_provider.new_user;
-    bool loading = api_provider.loading;
-
-    if (loading) {
-      return Scaffold(
-        body: Center(
-            child: CircularProgressIndicator(
-          color: MyColors.secondary,
-        )),
-      );
-    }
+    final user = provider.user;
 
     return Scaffold(
       body: Padding(
@@ -91,10 +66,10 @@ class _ValidateAccountState extends State<ValidateAccount> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Entrez le code de vérification envoyé par sms au numéro " +
-                      widget.telephone.substring(0, 5) +
+                      telephone.substring(0, 5) +
                       "****" +
-                      widget.telephone.substring(
-                          widget.telephone.length - 4, widget.telephone.length),
+                      telephone.substring(
+                          telephone.length - 4, telephone.length),
                   style: TextStyle(
                       color: function.convertHexToColor("#79747E"),
                       fontFamily: "Poppins",

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: use_super_parameters, prefer_const_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,9 +6,12 @@ import '../colors/color.dart';
 import '../providers/api/api_data.dart';
 import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
+import '../ui/users/transporteur/dashboard/index.dart';
+import 'package:bodah/functions/function.dart';
+import 'package:bodah/modals/rules.dart';
 
 class Wrappers extends StatefulWidget {
-  const Wrappers({super.key});
+  const Wrappers({Key? key}) : super(key: key);
 
   @override
   State<Wrappers> createState() => _WrappersState();
@@ -18,48 +21,37 @@ class _WrappersState extends State<Wrappers> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ApiProvider>(context, listen: false).InitData();
-    });
+
+    Provider.of<ApiProvider>(context, listen: false).InitData(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final function = Provider.of<Functions>(context);
     final apiProvider = Provider.of<ApiProvider>(context);
-    final user = apiProvider.user;
-    final bool loading = apiProvider.loading;
-
+    bool loading = apiProvider.loading;
     if (loading) {
       return Scaffold(
         body: Center(
-            child: CircularProgressIndicator(
-          color: MyColors.secondary,
-        )),
+          child: CircularProgressIndicator(
+            color: MyColors.secondary,
+          ),
+        ),
       );
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (user.id > 0) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ExpediteurDashBoard()),
-          (route) => false,
-        );
-      } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => SignIn()),
-          (route) => false,
-        );
-      }
-    });
+    final user = apiProvider.user;
 
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(
-          color: MyColors.secondary,
-        ),
-      ),
-    );
+    if (user.id > 0) {
+      List<Rules> rules = apiProvider.roles;
+      bool is_transporteur = function.hasRole(rules, "Expéditeur");
+
+      if (is_transporteur) {
+        return TransporteurDashboard();
+      }
+
+      return ExpediteurDashBoard();
+    }
+    return SignIn();
   }
 }

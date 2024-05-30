@@ -3,9 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modals/rules.dart';
 import '../modals/users.dart';
 
 class Functions {
+  bool hasRole(List<Rules> rules, String role) {
+    return rules.any((data) => data.nom == role);
+  }
+
   Color convertHexToColor(String hexColor) {
     if (hexColor.startsWith('#')) {
       hexColor = hexColor.substring(1);

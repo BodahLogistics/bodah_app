@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/users.dart';
@@ -27,6 +27,9 @@ class ApiProvider with ChangeNotifier {
   List<Rules> _rules = [];
   List<Rules> get rules => _rules;
 
+  List<Rules> _roles = [];
+  List<Rules> get roles => _roles;
+
   List<Statuts> _statuts = [];
   List<Statuts> get statuts => _statuts;
 
@@ -44,39 +47,22 @@ class ApiProvider with ChangeNotifier {
       code_sended: "");
   Users get user => _user;
 
-  Users _new_user = Users(
-      id: 0,
-      name: "",
-      country_id: 0,
-      telephone: "",
-      deleted: 0,
-      is_verified: 0,
-      is_active: 0,
-      code_sended: "");
-  Users get new_user => _new_user;
+  String _token = "";
+  String get token => _token;
 
-  Future<void> InitData() async {
+  Future<void> InitData(context) async {
     _isLoading = true;
-    notifyListeners();
-    final response_users = await apiService.getUsers();
+    final response_users = await apiService.getUsers(context);
     _users = response_users;
-    final response = await apiService.user();
-    _user = response;
-    final response_pays = await apiService.getPays();
+    final response = await apiService.user(context);
+    _user = response[0];
+    _roles = response[1];
+    final response_pays = await apiService.getPays(context);
     _pays = response_pays;
-    final response_role = await apiService.getRules();
+    final response_role = await apiService.getRules(context);
     _rules = response_role;
-    final response_statuts = await apiService.getStatuts();
+    final response_statuts = await apiService.getStatuts(context);
     _statuts = response_statuts;
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> InitUser() async {
-    _isLoading = true;
-    notifyListeners();
-    final response = await apiService.user();
-    _new_user = response;
     _isLoading = false;
     notifyListeners();
   }

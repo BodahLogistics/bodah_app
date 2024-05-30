@@ -2,7 +2,25 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../../modals/users.dart';
+
 class ProvValiAccount with ChangeNotifier {
+  Users _user = Users(
+      id: 0,
+      name: "",
+      country_id: 0,
+      telephone: "",
+      deleted: 0,
+      is_verified: 0,
+      is_active: 0,
+      code_sended: "");
+  Users get user => _user;
+
+  void change_user(Users user) {
+    _user = user;
+    notifyListeners();
+  }
+
   String _first = "";
   String get first => _first;
   void change_first(String value) {

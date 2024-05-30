@@ -14,10 +14,12 @@ import 'providers/auth/prov_reset_password.dart';
 import 'providers/auth/prov_sign_in.dart';
 import 'providers/auth/prov_sign_up.dart';
 import 'services/data_base_service.dart';
+import 'services/secure_storage.dart';
 import 'ui/auth/sign_in.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         Provider(
           create: (_) => ApiInfos(),
         ),
+        Provider(create: (_) => SecureStorage()),
         Provider(create: (_) => DBServices()),
         ChangeNotifierProvider(
           create: (context) => ProvSignIn(),
@@ -44,8 +47,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProvResetPassword(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ApiProvider(),
+        ChangeNotifierProvider<ApiProvider>(
+          create: (_) => ApiProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => ProvValiAccount(),

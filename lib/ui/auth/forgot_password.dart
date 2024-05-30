@@ -136,10 +136,7 @@ class ForgotPassword extends StatelessWidget {
                     if (statut_code == "502") {
                       provider.change_affiche(false);
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
+                        margin: EdgeInsets.only(),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Une erreur s'est produite",
@@ -154,10 +151,7 @@ class ForgotPassword extends StatelessWidget {
                     } else if (statut_code == "101") {
                       provider.change_affiche(false);
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
+                        margin: EdgeInsets.only(),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Aucun compte n'est associé à ce numéro de téléphone",
@@ -172,10 +166,7 @@ class ForgotPassword extends StatelessWidget {
                     } else if (statut_code == "422") {
                       provider.change_affiche(false);
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
+                        margin: EdgeInsets.only(),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Erreur de validation",
@@ -190,10 +181,7 @@ class ForgotPassword extends StatelessWidget {
                     } else if (statut_code == "500") {
                       provider.change_affiche(false);
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
+                        margin: EdgeInsets.only(),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Vérifiez votre cpnnection internet et réessayer",
@@ -209,10 +197,7 @@ class ForgotPassword extends StatelessWidget {
                       provider.change_affiche(false);
                       provider.reset();
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
+                        margin: EdgeInsets.only(),
                         backgroundColor: Colors.green,
                         content: Text(
                           "Un code de validation vous a été envoyé. Procédez à la validation",

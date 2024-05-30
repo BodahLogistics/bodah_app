@@ -1,4 +1,4 @@
-package com.example.bodah_app
+package bodah.app.logistics
 
 import io.flutter.embedding.android.FlutterActivity
 

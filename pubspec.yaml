@@ -34,7 +34,7 @@ dependencies:
   carousel_slider: ^4.0.0
   font_awesome_flutter: ^10.7.0
   shared_preferences: ^2.0.6 
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^9.2.2
   http: ^1.2.1
   
   flutter_localizations:
@@ -45,7 +45,6 @@ dependencies:
   mailer: ^6.1.0
   geolocator: ^11.0.0
   geocoding: ^3.0.0
-  device_info: ^2.0.3
   math_expressions: ^2.0.0
   dropdown_search: ^5.0.6
   flutter_iconpicker_plus: ^3.2.3

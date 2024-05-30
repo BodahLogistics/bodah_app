@@ -6,6 +6,7 @@ import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/users.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/api/api_data.dart';
+import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/gestures.dart';
@@ -36,6 +37,7 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final provider = Provider.of<ProvSignUp>(context);
+    final prov_val_ac = Provider.of<ProvValiAccount>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     String password = provider.password;
     String nom = provider.nom;
@@ -616,16 +618,17 @@ class SignUp extends StatelessWidget {
                               password,
                               confirm_password,
                               ville,
-                              pay);
+                              pay,
+                              prov_val_ac);
 
                           if (statut_code == "422") {
                             provider.change_affiche(false);
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.75,
                                   left: MediaQuery.of(context).size.width * 0.5,
-                                  right: 20),
+                                  right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
                                 "Erreur de validation",
@@ -643,9 +646,9 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.75,
                                   left: MediaQuery.of(context).size.width * 0.5,
-                                  right: 20),
+                                  right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
                                 "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
@@ -663,9 +666,9 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.75,
                                   left: MediaQuery.of(context).size.width * 0.5,
-                                  right: 20),
+                                  right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
                                 "Une erreur s'est produite",
@@ -707,9 +710,9 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.75,
                                   left: MediaQuery.of(context).size.width * 0.5,
-                                  right: 20),
+                                  right: 5),
                               backgroundColor: Colors.green,
                               content: Text(
                                 "Un code de validation vous a été envoyé. Procédez à l validation de votre compte",

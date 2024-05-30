@@ -193,10 +193,6 @@ class SignIn extends StatelessWidget {
                     if (phone_number.length < 8 || password.length < 8) {
                       provider.change_affiche(false);
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.9,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           'Données invalides',
@@ -215,10 +211,6 @@ class SignIn extends StatelessWidget {
                       if (statut_code == "422") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
                             "Erreur de validation",
@@ -233,10 +225,6 @@ class SignIn extends StatelessWidget {
                       } else if (statut_code == "500") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
                             "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
@@ -251,10 +239,6 @@ class SignIn extends StatelessWidget {
                       } else if (statut_code == "101") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
                             "Aucun n'est associé à ce numéro de téléphone",
@@ -269,10 +253,6 @@ class SignIn extends StatelessWidget {
                       } else if (statut_code == "202") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
                             "Mot de passe incorrect",
@@ -287,10 +267,6 @@ class SignIn extends StatelessWidget {
                       } else if (statut_code == "502") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
                             "Une erreir s'est produite",
@@ -329,10 +305,6 @@ class SignIn extends StatelessWidget {
                         );
 
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.green,
                           content: Text(
                             "Vous avez été connecté avec suucès. Patientez pour la redirection",

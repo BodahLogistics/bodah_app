@@ -5,35 +5,25 @@ import 'dart:convert';
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:bodah/providers/auth/prov_val_account.dart';
 import '../apis/bodah/infos.dart';
 import '../modals/pays.dart';
 import '../modals/statuts.dart';
 import '../modals/users.dart';
 import 'package:http/http.dart' as http;
 
+import 'secure_storage.dart';
+
 class DBServices {
   var api_url = ApiInfos.baseUrl;
   var api_key = ApiInfos.api_key;
   var auth_token = ApiInfos.aauth_token;
-  final FlutterSecureStorage storage = FlutterSecureStorage();
-  Future<void> writeSecureToken(String key, String value) async {
-    await storage.write(key: key, value: value);
-  }
+  SecureStorage secure = SecureStorage();
 
-  Future<String?> readSecureToken(String key) async {
-    return await storage.read(key: key);
-  }
+  Future<List<dynamic>> user(context) async {
+    String? token = await secure.readSecureData('token');
 
-  Future<void> deleteSecureToken(String key) async {
-    await storage.delete(key: key);
-  }
-
-  Future<Users> user() async {
-    var token = await readSecureToken("token");
-
-    if (token != null) {
+    if (token.isNotEmpty) {
       var url = "${api_url}user";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
@@ -44,11 +34,31 @@ class DBServices {
       });
 
       if (response.statusCode == 200) {
-        final userData = jsonDecode(response.body);
-        return Users.fromMap(userData);
+        final data = jsonDecode(response.body);
+        final roles = data['roles'];
+        final user = Users.fromMap(data['user']);
+        final List<Rules> rules =
+            roles.map((role) => Rules.fromMap(role)).toList();
+
+        return [user, rules];
       }
 
-      return Users(
+      return [
+        Users(
+            id: 0,
+            name: "",
+            country_id: 0,
+            telephone: "",
+            deleted: 0,
+            is_verified: 0,
+            is_active: 0,
+            code_sended: ""),
+        <Rules>[]
+      ];
+    }
+
+    return [
+      Users(
           id: 0,
           name: "",
           country_id: 0,
@@ -56,21 +66,12 @@ class DBServices {
           deleted: 0,
           is_verified: 0,
           is_active: 0,
-          code_sended: "");
-    }
-
-    return Users(
-        id: 0,
-        name: "",
-        country_id: 0,
-        telephone: "",
-        deleted: 0,
-        is_verified: 0,
-        is_active: 0,
-        code_sended: "");
+          code_sended: ""),
+      <Rules>[]
+    ];
   }
 
-  Future<List<Pays>> getPays() async {
+  Future<List<Pays>> getPays(context) async {
     try {
       var url = "${api_url}countries";
       final uri = Uri.parse(url);
@@ -91,7 +92,7 @@ class DBServices {
     }
   }
 
-  Future<List<Rules>> getRules() async {
+  Future<List<Rules>> getRules(context) async {
     try {
       var url = "${api_url}roles";
       final uri = Uri.parse(url);
@@ -112,7 +113,7 @@ class DBServices {
     }
   }
 
-  Future<List<Statuts>> getStatuts() async {
+  Future<List<Statuts>> getStatuts(context) async {
     try {
       var url = "${api_url}statuts";
       final uri = Uri.parse(url);
@@ -133,7 +134,7 @@ class DBServices {
     }
   }
 
-  Future<List<Users>> getUsers() async {
+  Future<List<Users>> getUsers(context) async {
     try {
       var url = "${api_url}users";
       final uri = Uri.parse(url);
@@ -175,8 +176,16 @@ class DBServices {
     }
   }
 
-  Future<String> register(String nom, String number, Statuts statut, Rules rule,
-      String password, String confirm_password, Villes ville, Pays pay) async {
+  Future<String> register(
+      String nom,
+      String number,
+      Statuts statut,
+      Rules rule,
+      String password,
+      String confirm_password,
+      Villes ville,
+      Pays pay,
+      ProvValiAccount provider) async {
     try {
       var url = "${api_url}register";
       final uri = Uri.parse(url);
@@ -188,8 +197,8 @@ class DBServices {
         'phone_number': number,
         'statut': statut.id.toString(),
         'role': rule.id.toString(),
-        'city': ville.id.toString(),
-        'country': pay.id.toString(),
+        'city': ville.id,
+        'country': pay.id,
         'password': password,
         'confirm_password': confirm_password
       });
@@ -197,7 +206,9 @@ class DBServices {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data['token'];
-        await writeSecureToken('token', token);
+        await secure.writeSecureData('token', token);
+        final user = Users.fromMap(data['user']);
+        provider.change_user(user);
       }
 
       return response.statusCode.toString();
@@ -221,11 +232,12 @@ class DBServices {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data['token'];
-        await writeSecureToken('token', token);
+        await secure.writeSecureData('token', token);
       }
 
       return response.statusCode.toString();
     } catch (e) {
+      print(e);
       return "502";
     }
   }
