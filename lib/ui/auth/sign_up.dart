@@ -60,6 +60,18 @@ class SignUp extends StatelessWidget {
 
     final service = Provider.of<DBServices>(context);
 
+    bool loading = api_provider.loading;
+
+    if (loading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: MyColors.secondary,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -67,17 +79,11 @@ class SignUp extends StatelessWidget {
           padding:
               const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Bodah",
-                  style: TextStyle(
-                      color: MyColors.secondary,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Poppins",
-                      fontSize: 17),
-                ),
+              SizedBox(
+                height: 30,
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -220,12 +226,12 @@ class SignUp extends StatelessWidget {
                             color: MyColors.black)),
                   ),
 
-                  onChanged: (String? selectedType) {
+                  onChanged: (String? selectedType) async {
                     if (selectedType != null) {
                       final pay_selected = pays.firstWhere(
                           (element) => element.name == selectedType);
                       provider.change_pays(pay_selected);
-                      api_provider.getAllVilles(pay_selected.id);
+                      await api_provider.getAllVilles(24);
                     }
                   },
                   selectedItem: pay
@@ -406,7 +412,7 @@ class SignUp extends StatelessWidget {
                           child: Container(
                             alignment: Alignment.centerLeft,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.28,
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: Container(
                                 color: MyColors.secondary,
                                 alignment: Alignment.centerLeft,
@@ -557,9 +563,9 @@ class SignUp extends StatelessWidget {
                           final snackBar = SnackBar(
                             margin: EdgeInsets.only(
                                 bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
+                                    MediaQuery.of(context).size.height * 0.88,
+                                left: MediaQuery.of(context).size.width * 0.3,
+                                right: 5),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               'Données invalides',
@@ -576,9 +582,9 @@ class SignUp extends StatelessWidget {
                           final snackBar = SnackBar(
                             margin: EdgeInsets.only(
                                 bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
+                                    MediaQuery.of(context).size.height * 0.88,
+                                left: MediaQuery.of(context).size.width * 0.3,
+                                right: 5),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               'Mot de passe mal confirmé',
@@ -595,9 +601,9 @@ class SignUp extends StatelessWidget {
                           final snackBar = SnackBar(
                             margin: EdgeInsets.only(
                                 bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
+                                    MediaQuery.of(context).size.height * 0.88,
+                                left: MediaQuery.of(context).size.width * 0.3,
+                                right: 5),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               'Numéro de téléphone déjà utilisé',
@@ -626,8 +632,8 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.75,
-                                  left: MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.height * 0.88,
+                                  left: MediaQuery.of(context).size.width * 0.3,
                                   right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
@@ -646,8 +652,8 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.75,
-                                  left: MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.height * 0.88,
+                                  left: MediaQuery.of(context).size.width * 0.3,
                                   right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
@@ -666,8 +672,8 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.75,
-                                  left: MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.height * 0.88,
+                                  left: MediaQuery.of(context).size.width * 0.3,
                                   right: 5),
                               backgroundColor: Colors.redAccent,
                               content: Text(
@@ -710,8 +716,8 @@ class SignUp extends StatelessWidget {
                             final snackBar = SnackBar(
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height * 0.75,
-                                  left: MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.height * 0.88,
+                                  left: MediaQuery.of(context).size.width * 0.3,
                                   right: 5),
                               backgroundColor: Colors.green,
                               content: Text(

@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_prefixes
 
+import 'dart:io';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:bodah/providers/api/api_data.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/wrappers/wrapper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +20,15 @@ import 'services/data_base_service.dart';
 import 'services/secure_storage.dart';
 import 'ui/auth/sign_in.dart';
 
+void enablePlatformOverrideForDesktop() {
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux)) {
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  enablePlatformOverrideForDesktop();
   runApp(MyApp());
 }
 

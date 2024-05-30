@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../providers/auth/prov_val_account.dart';
+import 'verification_opt.dart';
 
 class ValidateAccount extends StatelessWidget {
   const ValidateAccount({
@@ -34,18 +35,8 @@ class ValidateAccount extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Bodah",
-                style: TextStyle(
-                    color: MyColors.secondary,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Poppins",
-                    fontSize: 17),
-              ),
-            ),
             Container(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -79,213 +70,17 @@ class ValidateAccount extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Wrap(
+                spacing: 10, // Espacement horizontal entre les boutons
+                runSpacing:
+                    10, // Espacement vertical entre les lignes de boutons
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "First");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: first.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                first,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "Second");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: second.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                second,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "Third");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: third.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                third,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "Fourth");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: fourth.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                fourth,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "Fifth");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: fourth.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                fifth,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      DisplayFirst(context, "Sixth");
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.11,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: MyColors.secondary,
-                              width: 1,
-                              style: BorderStyle.solid)),
-                      child: fourth.isEmpty
-                          ? Center(
-                              child: Text(
-                                "-",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                sixth,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ),
+                  buildTextButton(context, first, "First"),
+                  buildTextButton(context, second, "Second"),
+                  buildTextButton(context, third, "Third"),
+                  buildTextButton(context, fourth, "Fourth"),
+                  buildTextButton(context, fifth, "Fifth"),
+                  buildTextButton(context, sixth, "Sixth"),
                 ],
               ),
             ),
@@ -319,11 +114,6 @@ class ValidateAccount extends StatelessWidget {
                         if (statut_code == "404") {
                           provider.change_affiche(false);
                           final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               "Compte non retrouvé",
@@ -338,11 +128,6 @@ class ValidateAccount extends StatelessWidget {
                         } else if (statut_code == "500") {
                           provider.change_affiche(false);
                           final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
@@ -357,11 +142,6 @@ class ValidateAccount extends StatelessWidget {
                         } else if (statut_code == "101") {
                           provider.change_affiche(false);
                           final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               "Le code saisi est incorrect ou est expiré",
@@ -376,11 +156,6 @@ class ValidateAccount extends StatelessWidget {
                         } else if (statut_code == "201") {
                           provider.change_affiche(false);
                           final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
                             backgroundColor: Colors.redAccent,
                             content: Text(
                               "Le code saisi est invalid",
@@ -419,11 +194,6 @@ class ValidateAccount extends StatelessWidget {
                           );
 
                           final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
                             backgroundColor: Colors.green,
                             content: Text(
                               "Votre compte a été validé",

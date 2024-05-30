@@ -34,11 +34,20 @@ class DBServices {
       });
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final roles = data['roles'];
-        final user = Users.fromMap(data['user']);
-        final List<Rules> rules =
-            roles.map((role) => Rules.fromMap(role)).toList();
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+
+        final user = Users.fromMap(data['user'] as Map<String, dynamic>);
+        List<Rules> rules = [];
+
+        if (data['roles'] is List) {
+          final roles = data['roles'] as List<dynamic>;
+          rules = roles
+              .map((role) => Rules.fromMap(role as Map<String, dynamic>))
+              .toList();
+        } else {
+          final role = data['roles'] as Map<String, dynamic>;
+          rules = [Rules.fromMap(role)];
+        }
 
         return [user, rules];
       }
@@ -165,6 +174,8 @@ class DBServices {
         'AUTH-TOKEN': auth_token
       });
 
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Villes.fromMap(json)).toList();
@@ -197,7 +208,7 @@ class DBServices {
         'phone_number': number,
         'statut': statut.id.toString(),
         'role': rule.id.toString(),
-        'city': ville.id,
+        'city': ville.id.toString(),
         'country': pay.id,
         'password': password,
         'confirm_password': confirm_password
@@ -213,6 +224,7 @@ class DBServices {
 
       return response.statusCode.toString();
     } catch (e) {
+      print(e);
       return "502";
     }
   }
@@ -237,7 +249,6 @@ class DBServices {
 
       return response.statusCode.toString();
     } catch (e) {
-      print(e);
       return "502";
     }
   }

@@ -26,190 +26,205 @@ class ResetPassword extends StatelessWidget {
     final user = provider.user;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
+      body: Padding(
+        padding:
+            const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  "Bodah",
+                  "Réinitialisation de mot de passe",
                   style: TextStyle(
-                      color: MyColors.secondary,
+                      color: function.convertHexToColor("#222523"),
+                      fontFamily: "Poppins",
                       fontWeight: FontWeight.bold,
-                      fontFamily: "Poppins",
-                      fontSize: 17),
+                      fontSize: 20),
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    "Réinitialisation de mot de passe",
-                    style: TextStyle(
-                        color: function.convertHexToColor("#222523"),
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  "Entrez puis confirmez le nouveau mot de passe",
+                  style: TextStyle(
+                    color: function.convertHexToColor("#79747E"),
+                    fontFamily: "Poppins",
+                    fontSize: 15,
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    "Entrez puis confirmez le nouveau mot de passe",
-                    style: TextStyle(
-                      color: function.convertHexToColor("#79747E"),
-                      fontFamily: "Poppins",
-                      fontSize: 15,
-                    ),
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: SizedBox(
+                height: 40,
+                child: TextField(
+                  controller: Password,
+                  obscureText: hide_password,
+                  onChanged: (value) => provider.change_password(value),
+                  decoration: InputDecoration(
+                      suffixIcon:
+                          Password.text.isNotEmpty && password.length < 8
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                      labelText: "Nouveau mot de passe",
+                      hintText: "Nouveau mot de passe",
+                      labelStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: "Poppins"),
+                      hintStyle:
+                          TextStyle(fontSize: 14, fontFamily: "Poppins")),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    controller: Password,
-                    obscureText: hide_password,
-                    onChanged: (value) => provider.change_password(value),
-                    decoration: InputDecoration(
-                        suffixIcon:
-                            Password.text.isNotEmpty && password.length < 8
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Icon(Icons.error, color: Colors.red),
-                                  )
-                                : null,
-                        border: OutlineInputBorder(borderSide: BorderSide()),
-                        labelText: "Nouveau mot de passe",
-                        hintText: "Nouveau mot de passe",
-                        labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: "Poppins"),
-                        hintStyle:
-                            TextStyle(fontSize: 14, fontFamily: "Poppins")),
-                  ),
-                ),
-              ),
-              Password.text.isEmpty
-                  ? Container()
-                  : password.length < 8
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Mot de passe moins sécurisé",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins",
-                              ),
+            ),
+            Password.text.isEmpty
+                ? Container()
+                : password.length < 8
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Mot de passe moins sécurisé",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
                             ),
                           ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.28,
-                              child: Container(
-                                color: MyColors.secondary,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Mot de passe fort",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Poppins",
-                                  ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Container(
+                              color: MyColors.secondary,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Mot de passe fort",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Poppins",
                                 ),
                               ),
                             ),
                           ),
                         ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 13),
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    controller: ConfirmPassword,
-                    obscureText: hide_password,
-                    onChanged: (value) =>
-                        provider.change_confirm_password(value),
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              provider.change_hide_password();
-                            },
-                            icon: hide_password
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility)),
-                        border: OutlineInputBorder(borderSide: BorderSide()),
-                        labelText: "Confirmation",
-                        hintText: "Confirmez le mot de passe",
-                        labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: "Poppins"),
-                        hintStyle:
-                            TextStyle(fontSize: 14, fontFamily: "Poppins")),
-                  ),
+                      ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 13),
+              child: SizedBox(
+                height: 40,
+                child: TextField(
+                  controller: ConfirmPassword,
+                  obscureText: hide_password,
+                  onChanged: (value) => provider.change_confirm_password(value),
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            provider.change_hide_password();
+                          },
+                          icon: hide_password
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility)),
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                      labelText: "Confirmation",
+                      hintText: "Confirmez le mot de passe",
+                      labelStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: "Poppins"),
+                      hintStyle:
+                          TextStyle(fontSize: 14, fontFamily: "Poppins")),
                 ),
               ),
-              ConfirmPassword.text.isEmpty
-                  ? Container()
-                  : confirm_password != password
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Mot de passe mal confirmé",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins",
-                              ),
+            ),
+            ConfirmPassword.text.isEmpty
+                ? Container()
+                : confirm_password != password
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Mot de passe mal confirmé",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
                             ),
                           ),
-                        )
-                      : Container(),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                height: 40,
-                width: double.infinity,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: MyColors.secondary),
-                    onPressed: () async {
-                      provider.change_affiche(true);
+                        ),
+                      )
+                    : Container(),
+            SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              height: 40,
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: () async {
+                    provider.change_affiche(true);
 
-                      if (password.length < 8 || confirm_password.length < 8) {
+                    if (password.length < 8 || confirm_password.length < 8) {
+                      provider.change_affiche(false);
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          'Données invalides',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else if (password != confirm_password) {
+                      provider.change_affiche(false);
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          'Mot de passe mal confirmé',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      String statut_code = await service.change_password(
+                          user, password, confirm_password);
+
+                      if (statut_code == "422") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
-                            'Données invalides',
+                            "Erreur de validation",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -218,16 +233,40 @@ class ResetPassword extends StatelessWidget {
                           behavior: SnackBarBehavior.floating,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else if (password != confirm_password) {
+                      } else if (statut_code == "500") {
                         provider.change_affiche(false);
                         final snackBar = SnackBar(
-                          margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.9,
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              right: 20),
                           backgroundColor: Colors.redAccent,
                           content: Text(
-                            'Mot de passe mal confirmé',
+                            "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else if (statut_code == "404") {
+                        provider.change_affiche(false);
+                        final snackBar = SnackBar(
+                          backgroundColor: Colors.redAccent,
+                          content: Text(
+                            "Compte non retrouvé",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else if (statut_code == "101") {
+                        provider.change_affiche(false);
+                        final snackBar = SnackBar(
+                          backgroundColor: Colors.redAccent,
+                          content: Text(
+                            "Le code est expiré",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -237,159 +276,73 @@ class ResetPassword extends StatelessWidget {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
-                        String statut_code = await service.change_password(
-                            user, password, confirm_password);
+                        provider.change_affiche(false);
+                        provider.reset();
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 500),
+                            pageBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation) {
+                              return SignIn();
+                            },
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(1.0, 0.0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
 
-                        if (statut_code == "422") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.8,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Erreur de validation",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "500") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.8,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "404") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.8,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Compte non retrouvé",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "101") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.8,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Le code est expiré",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else {
-                          provider.change_affiche(false);
-                          provider.reset();
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return SignIn();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.8,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.green,
-                            content: Text(
-                              "Votre mot de passe a été modifié avec succès",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
+                        final snackBar = SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text(
+                            "Votre mot de passe a été modifié avec succès",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        affiche
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: SizedBox(
-                                  height: 30,
-                                  width: 30,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      affiche
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
                                 ),
-                              )
-                            : Container(),
-                        Text(
-                          "Enregistrez",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
-          ),
+                              ),
+                            )
+                          : Container(),
+                      Text(
+                        "Enregistrez",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )),
+            ),
+          ],
         ),
       ),
     );

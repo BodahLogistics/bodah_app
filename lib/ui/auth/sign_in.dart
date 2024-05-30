@@ -41,18 +41,9 @@ class SignIn extends StatelessWidget {
         padding:
             const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Bodah",
-                style: TextStyle(
-                    color: MyColors.secondary,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Poppins",
-                    fontSize: 17),
-              ),
-            ),
             Container(
               alignment: Alignment.centerLeft,
               child: Padding(

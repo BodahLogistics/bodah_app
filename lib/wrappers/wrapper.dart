@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters, prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: use_super_parameters, prefer_const_constructors, non_constant_identifier_names, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +30,7 @@ class _WrappersState extends State<Wrappers> {
     final function = Provider.of<Functions>(context);
     final apiProvider = Provider.of<ApiProvider>(context);
     bool loading = apiProvider.loading;
+
     if (loading) {
       return Scaffold(
         body: Center(

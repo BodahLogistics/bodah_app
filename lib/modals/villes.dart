@@ -4,29 +4,21 @@ import 'dart:convert';
 class Villes {
   final int id;
   final String name;
-  final double? lat;
-  final double? long;
   final int country_id;
   Villes({
     required this.id,
     required this.name,
-    this.lat,
-    this.long,
     required this.country_id,
   });
 
   Villes copyWith({
     int? id,
     String? name,
-    double? lat,
-    double? long,
     int? country_id,
   }) {
     return Villes(
       id: id ?? this.id,
       name: name ?? this.name,
-      lat: lat ?? this.lat,
-      long: long ?? this.long,
       country_id: country_id ?? this.country_id,
     );
   }
@@ -35,8 +27,6 @@ class Villes {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'lat': lat,
-      'long': long,
       'country_id': country_id,
     };
   }
@@ -45,8 +35,6 @@ class Villes {
     return Villes(
       id: map['id'] as int,
       name: map['name'] as String,
-      lat: map['lat'] != null ? map['lat'] as double : null,
-      long: map['long'] != null ? map['long'] as double : null,
       country_id: map['country_id'] as int,
     );
   }
@@ -57,9 +45,7 @@ class Villes {
       Villes.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() {
-    return 'Villes(id: $id, name: $name, lat: $lat, long: $long, country_id: $country_id)';
-  }
+  String toString() => 'Villes(id: $id, name: $name, country_id: $country_id)';
 
   @override
   bool operator ==(covariant Villes other) {
@@ -67,17 +53,9 @@ class Villes {
 
     return other.id == id &&
         other.name == name &&
-        other.lat == lat &&
-        other.long == long &&
         other.country_id == country_id;
   }
 
   @override
-  int get hashCode {
-    return id.hashCode ^
-        name.hashCode ^
-        lat.hashCode ^
-        long.hashCode ^
-        country_id.hashCode;
-  }
+  int get hashCode => id.hashCode ^ name.hashCode ^ country_id.hashCode;
 }
