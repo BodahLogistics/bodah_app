@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:bodah/modals/rules.dart';
+import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
@@ -54,6 +55,7 @@ class DBServices {
 
       return [
         Users(
+            dark_mode: 0,
             id: 0,
             name: "",
             country_id: 0,
@@ -68,6 +70,7 @@ class DBServices {
 
     return [
       Users(
+          dark_mode: 0,
           id: 0,
           name: "",
           country_id: 0,
@@ -98,6 +101,27 @@ class DBServices {
       }
     } catch (error) {
       return <Pays>[];
+    }
+  }
+
+  Future<List<Unites>> getUnites() async {
+    try {
+      var url = "${api_url}unites";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Unites.fromMap(json)).toList();
+      } else {
+        return <Unites>[];
+      }
+    } catch (error) {
+      return <Unites>[];
     }
   }
 
@@ -174,8 +198,6 @@ class DBServices {
         'AUTH-TOKEN': auth_token
       });
 
-      print(response.statusCode);
-
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Villes.fromMap(json)).toList();
@@ -224,7 +246,6 @@ class DBServices {
 
       return response.statusCode.toString();
     } catch (e) {
-      print(e);
       return "502";
     }
   }

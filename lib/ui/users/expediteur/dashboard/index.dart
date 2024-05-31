@@ -1,9 +1,12 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_local_variable, prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_local_variable, prefer_adjacent_string_concatenation, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
 import '../../../../providers/api/api_data.dart';
+import '../drawer/index.dart';
+import '../marchandises/dashboard/index.dart';
 
 class ExpediteurDashBoard extends StatelessWidget {
   const ExpediteurDashBoard({
@@ -17,6 +20,7 @@ class ExpediteurDashBoard extends StatelessWidget {
     final user = api_provider.user;
 
     return Scaffold(
+      drawer: DrawerExpediteur(),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
@@ -26,14 +30,6 @@ class ExpediteurDashBoard extends StatelessWidget {
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.black,
-              ))
-        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -47,7 +43,7 @@ class ExpediteurDashBoard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Bienvenue,",
+                  "Bienvenue, " + user.name,
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: "Poppins",
@@ -56,10 +52,13 @@ class ExpediteurDashBoard extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  user.name,
+                  "Faites votre choix ",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: function.convertHexToColor("#8A8A8A"),
@@ -69,7 +68,216 @@ class ExpediteurDashBoard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: 30,
+              ),
+              Image.asset(
+                "images/exp_choix.png",
+                height: 250,
+                width: MediaQuery.of(context).size.width * 0.7,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                  style: BorderStyle.solid,
+                                  width: 1,
+                                  color: MyColors.textColor)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 3, right: 10, left: 10, bottom: 20),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.favorite,
+                                      color: MyColors.secondary,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      'Marchandises',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Image.asset(
+                                  "images/marchandise.png",
+                                  height: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          style: BorderStyle.solid,
+                                          width: 1,
+                                          color: MyColors.secondary)),
+                                  child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 500),
+                                            pageBuilder: (BuildContext context,
+                                                Animation<double> animation,
+                                                Animation<double>
+                                                    secondaryAnimation) {
+                                              return DashMarchExp();
+                                            },
+                                            transitionsBuilder:
+                                                (BuildContext context,
+                                                    Animation<double> animation,
+                                                    Animation<double>
+                                                        secondaryAnimation,
+                                                    Widget child) {
+                                              return SlideTransition(
+                                                position: Tween<Offset>(
+                                                  begin: Offset(1.0, 0.0),
+                                                  end: Offset.zero,
+                                                ).animate(animation),
+                                                child: child,
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Expédiez",
+                                        style: TextStyle(
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.bold,
+                                            color: MyColors.secondary,
+                                            fontSize: 20),
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                  style: BorderStyle.solid,
+                                  width: 1,
+                                  color: MyColors.textColor)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 3, right: 10, left: 10, bottom: 20),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.favorite,
+                                      color: MyColors.secondary,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Text(
+                                      'Colis',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Image.asset(
+                                  "images/colis.png",
+                                  height: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          style: BorderStyle.solid,
+                                          width: 1,
+                                          color: MyColors.secondary)),
+                                  child: TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "Expédiez",
+                                        style: TextStyle(
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.bold,
+                                            color: MyColors.secondary,
+                                            fontSize: 20),
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

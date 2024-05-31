@@ -47,7 +47,7 @@ class TransporteurDashboard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Bienvenue,",
+                  "Bienvenue " + user.name,
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: "Poppins",
@@ -59,7 +59,7 @@ class TransporteurDashboard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  user.name,
+                  "Faites ",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: function.convertHexToColor("#8A8A8A"),

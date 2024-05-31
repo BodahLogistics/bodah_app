@@ -21,7 +21,6 @@ class _WrappersState extends State<Wrappers> {
   @override
   void initState() {
     super.initState();
-
     Provider.of<ApiProvider>(context, listen: false).InitData(context);
   }
 
@@ -45,13 +44,13 @@ class _WrappersState extends State<Wrappers> {
 
     if (user.id > 0) {
       List<Rules> rules = apiProvider.roles;
-      bool is_transporteur = function.hasRole(rules, "Expéditeur");
+      bool is_expediteur = function.hasRole(rules, "Expéditeur");
 
-      if (is_transporteur) {
-        return TransporteurDashboard();
+      if (is_expediteur) {
+        return ExpediteurDashBoard();
       }
 
-      return ExpediteurDashBoard();
+      return TransporteurDashboard();
     }
     return SignIn();
   }

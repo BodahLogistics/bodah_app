@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
 import 'package:bodah/modals/statuts.dart';
+import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/users.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/auth/prov_sign_up.dart';
@@ -19,6 +20,8 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<Unites> _unites = [];
+  List<Unites> get unites => _unites;
   List<Villes> _villes = [];
   List<Villes> get villes => _villes;
   List<Pays> _pays = [];
@@ -37,6 +40,7 @@ class ApiProvider with ChangeNotifier {
   List<Users> get users => _users;
 
   Users _user = Users(
+      dark_mode: 0,
       id: 0,
       name: "",
       country_id: 0,
@@ -54,6 +58,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_users = await apiService.getUsers(context);
     _users = response_users;
+    final response_unites = await apiService.getUnites();
+    _unites = response_unites;
     final response = await apiService.user(context);
     _user = response[0];
     _roles = response[1];
