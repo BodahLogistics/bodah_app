@@ -1,5 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, unnecessary_cast, prefer_interpolation_to_compose_strings
 import 'dart:convert';
+
 
 class AnnoncePhotos {
   final int id;
@@ -39,7 +40,7 @@ class AnnoncePhotos {
   factory AnnoncePhotos.fromMap(Map<String, dynamic> map) {
     return AnnoncePhotos(
       id: map['id'] as int,
-      image_path: map['image_path'] as String,
+      image_path: "https://test.bodah.bj/storage/" + map['image_path'] as String,
       marchandise_id: map['marchandise_id'] as int,
       deleted: map['deleted'] as int,
     );

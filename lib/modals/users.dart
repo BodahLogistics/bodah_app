@@ -13,7 +13,6 @@ class Users {
   final int deleted;
   final int is_verified;
   final int is_active;
-  final String? code_sended;
   final int dark_mode;
   Users({
     required this.id,
@@ -27,7 +26,6 @@ class Users {
     required this.deleted,
     required this.is_verified,
     required this.is_active,
-    required this.code_sended,
     required this.dark_mode,
   });
 
@@ -43,7 +41,6 @@ class Users {
     int? deleted,
     int? is_verified,
     int? is_active,
-    String? code_sended,
     int? dark_mode,
   }) {
     return Users(
@@ -58,7 +55,6 @@ class Users {
       deleted: deleted ?? this.deleted,
       is_verified: is_verified ?? this.is_verified,
       is_active: is_active ?? this.is_active,
-      code_sended: code_sended ?? this.code_sended,
       dark_mode: dark_mode ?? this.dark_mode,
     );
   }
@@ -76,7 +72,6 @@ class Users {
       'deleted': deleted,
       'is_verified': is_verified,
       'is_active': is_active,
-      'code_sended': code_sended,
       'dark_mode': dark_mode,
     };
   }
@@ -94,8 +89,6 @@ class Users {
       deleted: map['deleted'] as int,
       is_verified: map['is_verified'] as int,
       is_active: map['is_active'] as int,
-      code_sended:
-          map['code_sended'] != null ? map['code_sended'] as String : null,
       dark_mode: map['dark_mode'] as int,
     );
   }
@@ -107,7 +100,7 @@ class Users {
 
   @override
   String toString() {
-    return 'Users(id: $id, name: $name, prenom: $prenom, email: $email, adresse: $adresse, country_id: $country_id, city_id: $city_id, telephone: $telephone, deleted: $deleted, is_verified: $is_verified, is_active: $is_active, code_sended: $code_sended, dark_mode: $dark_mode)';
+    return 'Users(id: $id, name: $name, prenom: $prenom, email: $email, adresse: $adresse, country_id: $country_id, city_id: $city_id, telephone: $telephone, deleted: $deleted, is_verified: $is_verified, is_active: $is_active, dark_mode: $dark_mode)';
   }
 
   @override
@@ -125,7 +118,6 @@ class Users {
         other.deleted == deleted &&
         other.is_verified == is_verified &&
         other.is_active == is_active &&
-        other.code_sended == code_sended &&
         other.dark_mode == dark_mode;
   }
 
@@ -142,7 +134,6 @@ class Users {
         deleted.hashCode ^
         is_verified.hashCode ^
         is_active.hashCode ^
-        code_sended.hashCode ^
         dark_mode.hashCode;
   }
 }

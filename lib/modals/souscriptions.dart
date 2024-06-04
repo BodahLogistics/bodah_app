@@ -58,8 +58,8 @@ class Souscriptions {
       transporteur_id: map['transporteur_id'] as int,
       deleted: map['deleted'] as int,
       marchandise_id: map['marchandise_id'] as int,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 

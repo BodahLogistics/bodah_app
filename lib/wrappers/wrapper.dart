@@ -21,7 +21,7 @@ class _WrappersState extends State<Wrappers> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitData(context);
+    Provider.of<ApiProvider>(context, listen: false).InitData();
   }
 
   @override

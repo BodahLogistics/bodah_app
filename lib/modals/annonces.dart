@@ -1,8 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class Annonces {
-  final String id;
+  final int id;
   final String numero_annonce;
   final int is_active;
   final int user_id;
@@ -11,6 +12,7 @@ class Annonces {
   final String? numero_bl;
   final DateTime created_at;
   final DateTime updated_at;
+
   Annonces({
     required this.id,
     required this.numero_annonce,
@@ -18,13 +20,13 @@ class Annonces {
     required this.user_id,
     required this.deleted,
     required this.expediteur_id,
-    required this.numero_bl,
+    this.numero_bl,
     required this.created_at,
     required this.updated_at,
   });
 
   Annonces copyWith({
-    String? id,
+    int? id,
     String? numero_annonce,
     int? is_active,
     int? user_id,
@@ -56,22 +58,22 @@ class Annonces {
       'deleted': deleted,
       'expediteur_id': expediteur_id,
       'numero_bl': numero_bl,
-      'created_at': created_at.millisecondsSinceEpoch,
-      'updated_at': updated_at.millisecondsSinceEpoch,
+      'created_at': created_at.toIso8601String(),
+      'updated_at': updated_at.toIso8601String(),
     };
   }
 
   factory Annonces.fromMap(Map<String, dynamic> map) {
     return Annonces(
-      id: map['id'] as String,
+      id: map['id'] as int,
       numero_annonce: map['numero_annonce'] as String,
       is_active: map['is_active'] as int,
       user_id: map['user_id'] as int,
       deleted: map['deleted'] as int,
       expediteur_id: map['expediteur_id'] as int,
       numero_bl: map['numero_bl'] != null ? map['numero_bl'] as String : null,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 

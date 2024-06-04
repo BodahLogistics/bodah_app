@@ -4,7 +4,7 @@ import 'dart:convert';
 class Localisations {
   final int id;
   final int pays_exp_id;
-  final int payes_liv_id;
+  final int pays_liv_id;
   final int city_exp_id;
   final int city_liv_id;
   final int marchandise_id;
@@ -13,7 +13,7 @@ class Localisations {
   Localisations({
     required this.id,
     required this.pays_exp_id,
-    required this.payes_liv_id,
+    required this.pays_liv_id,
     required this.city_exp_id,
     required this.city_liv_id,
     required this.marchandise_id,
@@ -24,7 +24,7 @@ class Localisations {
   Localisations copyWith({
     int? id,
     int? pays_exp_id,
-    int? payes_liv_id,
+    int? pays_liv_id,
     int? city_exp_id,
     int? city_liv_id,
     int? marchandise_id,
@@ -34,7 +34,7 @@ class Localisations {
     return Localisations(
       id: id ?? this.id,
       pays_exp_id: pays_exp_id ?? this.pays_exp_id,
-      payes_liv_id: payes_liv_id ?? this.payes_liv_id,
+      pays_liv_id: pays_liv_id ?? this.pays_liv_id,
       city_exp_id: city_exp_id ?? this.city_exp_id,
       city_liv_id: city_liv_id ?? this.city_liv_id,
       marchandise_id: marchandise_id ?? this.marchandise_id,
@@ -47,7 +47,7 @@ class Localisations {
     return <String, dynamic>{
       'id': id,
       'pays_exp_id': pays_exp_id,
-      'payes_liv_id': payes_liv_id,
+      'pays_liv_id': pays_liv_id,
       'city_exp_id': city_exp_id,
       'city_liv_id': city_liv_id,
       'marchandise_id': marchandise_id,
@@ -60,7 +60,7 @@ class Localisations {
     return Localisations(
       id: map['id'] as int,
       pays_exp_id: map['pays_exp_id'] as int,
-      payes_liv_id: map['payes_liv_id'] as int,
+      pays_liv_id: map['pays_liv_id'] as int,
       city_exp_id: map['city_exp_id'] as int,
       city_liv_id: map['city_liv_id'] as int,
       marchandise_id: map['marchandise_id'] as int,
@@ -78,7 +78,7 @@ class Localisations {
 
   @override
   String toString() {
-    return 'Localisations(id: $id, pays_exp_id: $pays_exp_id, payes_liv_id: $payes_liv_id, city_exp_id: $city_exp_id, city_liv_id: $city_liv_id, marchandise_id: $marchandise_id, address_exp: $address_exp, address_liv: $address_liv)';
+    return 'Localisations(id: $id, pays_exp_id: $pays_exp_id, pays_liv_id: $pays_liv_id, city_exp_id: $city_exp_id, city_liv_id: $city_liv_id, marchandise_id: $marchandise_id, address_exp: $address_exp, address_liv: $address_liv)';
   }
 
   @override
@@ -87,7 +87,7 @@ class Localisations {
 
     return other.id == id &&
         other.pays_exp_id == pays_exp_id &&
-        other.payes_liv_id == payes_liv_id &&
+        other.pays_liv_id == pays_liv_id &&
         other.city_exp_id == city_exp_id &&
         other.city_liv_id == city_liv_id &&
         other.marchandise_id == marchandise_id &&
@@ -99,7 +99,7 @@ class Localisations {
   int get hashCode {
     return id.hashCode ^
         pays_exp_id.hashCode ^
-        payes_liv_id.hashCode ^
+        pays_liv_id.hashCode ^
         city_exp_id.hashCode ^
         city_liv_id.hashCode ^
         marchandise_id.hashCode ^

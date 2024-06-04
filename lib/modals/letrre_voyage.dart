@@ -59,8 +59,8 @@ class LetreVoitures {
       deleted: map['deleted'] as int,
       signature_id:
           map['signature_id'] != null ? map['signature_id'] as int : null,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 

@@ -25,7 +25,7 @@ class DashMarchExp extends StatelessWidget {
     final user = api_provider.user;
 
     PageController _pageController =
-        PageController(viewportFraction: 0.6, initialPage: 0);
+        PageController(viewportFraction: 0.25, initialPage: 0);
     final pages = [
       HomeMarchExp(),
       PublishAnnonceExp(),
@@ -70,7 +70,7 @@ class DashMarchExp extends StatelessWidget {
                   child: ListView.builder(
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 6,
+                    itemCount: pages.length,
                     itemBuilder: (context, index) {
                       double screen = MediaQuery.of(context).size.height;
                       int data = screen.toInt();

@@ -71,8 +71,8 @@ class Recus {
       commentaire:
           map['commentaire'] != null ? map['commentaire'] as String : null,
       doc_id: map['doc_id'] != null ? map['doc_id'] as String : null,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 

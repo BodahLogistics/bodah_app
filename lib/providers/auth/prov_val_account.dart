@@ -6,15 +6,15 @@ import '../../modals/users.dart';
 
 class ProvValiAccount with ChangeNotifier {
   Users _user = Users(
-      dark_mode: 0,
-      id: 0,
-      name: "",
-      country_id: 0,
-      telephone: "",
-      deleted: 0,
-      is_verified: 0,
-      is_active: 0,
-      code_sended: "");
+    dark_mode: 0,
+    id: 0,
+    name: "",
+    country_id: 0,
+    telephone: "",
+    deleted: 0,
+    is_verified: 0,
+    is_active: 0,
+  );
   Users get user => _user;
 
   void change_user(Users user) {

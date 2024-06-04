@@ -50,6 +50,7 @@ dependencies:
   flutter_iconpicker_plus: ^3.2.3
   dotted_border: ^2.0.0
   image_picker: ^1.1.1
+  
 
   
   

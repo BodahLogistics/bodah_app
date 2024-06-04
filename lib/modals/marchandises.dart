@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
 class Marchandises {
@@ -17,6 +16,7 @@ class Marchandises {
   final int nombre_camions;
   final DateTime? date_chargement;
   final int? devise_id;
+
   Marchandises({
     required this.id,
     required this.nom,
@@ -113,7 +113,7 @@ class Marchandises {
           map['destinataire_id'] != null ? map['destinataire_id'] as int : null,
       nombre_camions: map['nombre_camions'] as int,
       date_chargement: map['date_chargement'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_chargement'] as int)
+          ? DateTime.parse(map['date_chargement'] as String)
           : null,
       devise_id: map['devise_id'] != null ? map['devise_id'] as int : null,
     );

@@ -103,8 +103,8 @@ class BonCommandes {
       donneur_ordre_id: map['donneur_ordre_id'] as int,
       entite_facture_id: map['entite_facture_id'] as int,
       deleted: map['deleted'] as int,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 

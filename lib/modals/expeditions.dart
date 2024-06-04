@@ -7,7 +7,7 @@ class Expeditions {
   final int transporteur_id;
   final int statu_expedition_id;
   final int marchandise_id;
-  final double montant_paye;
+  final double? montant_paye;
   final int deleted;
   final String? description;
   final DateTime date_depart;
@@ -98,20 +98,23 @@ class Expeditions {
       transporteur_id: map['transporteur_id'] as int,
       statu_expedition_id: map['statu_expedition_id'] as int,
       marchandise_id: map['marchandise_id'] as int,
-      montant_paye: map['montant_paye'] as double,
+      montant_paye: map['montant_paye'] != null
+          ? double.tryParse(map['montant_paye'].toString())
+          : null,
       deleted: map['deleted'] as int,
       description:
           map['description'] != null ? map['description'] as String : null,
-      date_depart:
-          DateTime.fromMillisecondsSinceEpoch(map['date_depart'] as int),
+      date_depart: DateTime.parse(map['date_depart'] as String),
       date_arrivee: map['date_arrivee'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_arrivee'] as int)
+          ? DateTime.parse(map['date_arrivee'] as String)
           : null,
-      caution: map['caution'] != null ? map['caution'] as double : null,
+      caution: map['caution'] != null
+          ? double.tryParse(map['caution'].toString())
+          : null,
       type_paiement_id: map['type_paiement_id'] as int,
       vehicule_id: map['vehicule_id'] as int,
-      created_at: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updated_at: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
+      created_at: DateTime.parse(map['created_at'] as String),
+      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 
