@@ -82,135 +82,60 @@ class _ListExpExpState extends State<ListExpExp> {
                     Villes ville_dest =
                         function.ville(all_villes, localisation.city_liv_id);
 
-                    return TextButton(
-                      onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, bottom: 20),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: pictures.isEmpty
-                                  ? Container()
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: pictures.last.image_path,
-                                        fit: BoxFit.cover,
-                                        height: 120,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.textColor,
+                                  width: 1,
+                                  style: BorderStyle.solid)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 10, top: 5),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  child: pictures.isEmpty
+                                      ? Container()
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: pictures.last.image_path,
+                                            fit: BoxFit.cover,
+                                            height: 120,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
                                                 CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          color: MyColors.secondary,
+                                              value: downloadProgress.progress,
+                                              color: MyColors.secondary,
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.error,
+                                              color: Colors.red,
+                                            ),
+                                          ),
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(
-                                          Icons.error,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.51,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      marchandise.nom,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 35),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Poids : ",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.primary,
-                                                fontFamily: "Poppins",
-                                                fontSize: 11),
-                                          ),
-                                          Text(
-                                            marchandise.poids.toString() +
-                                                " " +
-                                                unite.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 11),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Tarif : ",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.primary,
-                                                fontFamily: "Poppins",
-                                                fontSize: 11),
-                                          ),
-                                          Text(
-                                            function.formatAmount(tarification
-                                                    .prix_expedition) +
-                                                " XOF",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 11),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          pay_depart.name.toUpperCase() +
-                                              " , " +
-                                              ville_dep.name,
+                                          marchandise.nom,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -218,29 +143,112 @@ class _ListExpExpState extends State<ListExpExp> {
                                                 ? MyColors.light
                                                 : MyColors.black,
                                             fontFamily: "Poppins",
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        "- " +
-                                            pay_dest.name.toUpperCase() +
-                                            " , " +
-                                            ville_dest.name,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: user.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                          fontFamily: "Poppins",
-                                        ),
+                                      SizedBox(height: 35),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Poids : ",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.primary,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 11),
+                                              ),
+                                              Text(
+                                                "${marchandise.poids} ${unite.name}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 11),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(width: 5),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Tarif : ",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.primary,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 11),
+                                              ),
+                                              Text(
+                                                "${function.formatAmount(tarification.prix_expedition)} XOF",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 11),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                "${pay_depart.name.toUpperCase()}, ${ville_dep.name}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.black,
+                                                  fontFamily: "Poppins",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "- ${pay_dest.name.toUpperCase()}, ${ville_dest.name}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.black,
+                                                fontFamily: "Poppins",
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     );

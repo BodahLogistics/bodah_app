@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
 import '../../../../providers/api/api_data.dart';
+import '../../../../services/data_base_service.dart';
+import '../../../auth/sign_in.dart';
+import '../marchandises/dashboard/index.dart';
 
 class DrawerExpediteur extends StatelessWidget {
   @override
@@ -18,8 +21,10 @@ class DrawerExpediteur extends StatelessWidget {
     final user = api_provider.user;
     final provider = Provider.of<ProvDrawExpediteur>(context);
     int current_index = provider.current_index;
+    final service = Provider.of<DBServices>(context);
 
     return Drawer(
+      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(45))),
       child: ListView(
@@ -35,7 +40,7 @@ class DrawerExpediteur extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.bold,
                     fontFamily: "Poppins",
                     fontSize: 17,
@@ -59,10 +64,36 @@ class DrawerExpediteur extends StatelessWidget {
             child: ListTile(
               onTap: () {
                 provider.change_index(2);
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return DashMarchExp();
+                    },
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
               leading: Icon(
                 FontAwesomeIcons.truck,
-                color: current_index == 2 ? Colors.white : null,
+                color: current_index == 2
+                    ? Colors.white
+                    : user.dark_mode == 1
+                        ? MyColors.light
+                        : null,
               ),
               tileColor: current_index == 2 ? MyColors.secondary : null,
               title: Text(
@@ -70,7 +101,9 @@ class DrawerExpediteur extends StatelessWidget {
                 style: TextStyle(
                     color: current_index == 2
                         ? Colors.white
-                        : function.convertHexToColor("#222523"),
+                        : user.dark_mode == 1
+                            ? MyColors.light
+                            : function.convertHexToColor("#222523"),
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.w400),
               ),
@@ -82,7 +115,11 @@ class DrawerExpediteur extends StatelessWidget {
             },
             leading: Icon(
               FontAwesomeIcons.box,
-              color: current_index == 1 ? Colors.white : null,
+              color: current_index == 1
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
             ),
             tileColor: current_index == 1 ? MyColors.secondary : null,
             title: Text(
@@ -90,7 +127,9 @@ class DrawerExpediteur extends StatelessWidget {
               style: TextStyle(
                   color: current_index == 1
                       ? Colors.white
-                      : function.convertHexToColor("#222523"),
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w400),
             ),
@@ -120,7 +159,11 @@ class DrawerExpediteur extends StatelessWidget {
               },
               leading: Icon(
                 Icons.dashboard,
-                color: current_index == 0 ? Colors.white : null,
+                color: current_index == 0
+                    ? Colors.white
+                    : user.dark_mode == 1
+                        ? MyColors.light
+                        : null,
               ),
               tileColor: current_index == 0 ? MyColors.secondary : null,
               title: Text(
@@ -128,7 +171,9 @@ class DrawerExpediteur extends StatelessWidget {
                 style: TextStyle(
                     color: current_index == 0
                         ? Colors.white
-                        : function.convertHexToColor("#222523"),
+                        : user.dark_mode == 1
+                            ? MyColors.light
+                            : function.convertHexToColor("#222523"),
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.w400),
               ),
@@ -140,7 +185,11 @@ class DrawerExpediteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.share,
-              color: current_index == 3 ? Colors.white : null,
+              color: current_index == 3
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
             ),
             tileColor: current_index == 3 ? MyColors.secondary : null,
             title: Text(
@@ -148,7 +197,9 @@ class DrawerExpediteur extends StatelessWidget {
               style: TextStyle(
                   color: current_index == 3
                       ? Colors.white
-                      : function.convertHexToColor("#222523"),
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w400),
             ),
@@ -161,18 +212,87 @@ class DrawerExpediteur extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
               trailing: IconButton(
-                  onPressed: () async {},
-                  icon: Icon(
-                    Icons.toggle_on,
-                    color: MyColors.secondary,
-                  )),
+                  onPressed: () async {
+                    String statut_code = await service.darkMode();
+                    if (statut_code == "202") {
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          "Une erreur s'est produite",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else if (statut_code == "500") {
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          "Vérifiez votre connection  internet",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      await api_provider.InitUser();
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: MyColors.secondary,
+                        content: Text(
+                          "Effectué avec succès",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  },
+                  icon: user.dark_mode == 1
+                      ? Icon(
+                          Icons.toggle_on,
+                          color: MyColors.secondary,
+                        )
+                      : Icon(
+                          Icons.toggle_off,
+                          color: user.dark_mode == 1 ? MyColors.light : null,
+                        )),
               leading: Icon(
                 Icons.brightness_6,
+                color: user.dark_mode == 1 ? MyColors.light : null,
               ),
               title: Text(
                 "Mode sombre",
                 style: TextStyle(
-                    color: function.convertHexToColor("#222523"),
+                    color: user.dark_mode == 1
+                        ? MyColors.light
+                        : function.convertHexToColor("#222523"),
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.w400),
               ),
@@ -184,7 +304,11 @@ class DrawerExpediteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.settings,
-              color: current_index == 4 ? Colors.white : null,
+              color: current_index == 4
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
             ),
             tileColor: current_index == 4 ? MyColors.secondary : null,
             title: Text(
@@ -192,7 +316,9 @@ class DrawerExpediteur extends StatelessWidget {
               style: TextStyle(
                   color: current_index == 4
                       ? Colors.white
-                      : function.convertHexToColor("#222523"),
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w400),
             ),
@@ -203,6 +329,7 @@ class DrawerExpediteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(5);
+              logOut(context);
             },
             leading: Icon(
               Icons.logout,
@@ -224,4 +351,159 @@ class DrawerExpediteur extends StatelessWidget {
       ),
     );
   }
+}
+
+void logOut(BuildContext context) {
+  Future.delayed(Duration(milliseconds: 500), () {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext dialogContext) {
+        final apiProvider =
+            Provider.of<ApiProvider>(dialogContext, listen: false);
+        final user = apiProvider.user;
+        final service = Provider.of<DBServices>(dialogContext);
+
+        return AlertDialog(
+          backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+          title: Text(
+            "Déconnexion",
+            style: TextStyle(
+              color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            "Voulez-vous vraiment vous déconnecter ?",
+            style: TextStyle(
+              color: user.dark_mode == 1 ? MyColors.light : MyColors.textColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: Text(
+                    "Annuler",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () async {
+                    String statut_code = await service.logout();
+                    if (statut_code == "202") {
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          "Une erreur s'est produite",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogContext)
+                          .showSnackBar(snackBar);
+                    } else if (statut_code == "500") {
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: Colors.redAccent,
+                        content: Text(
+                          "Vérifiez votre connection  internet",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogContext)
+                          .showSnackBar(snackBar);
+                    } else {
+                      Navigator.of(dialogContext).pop();
+                      final snackBar = SnackBar(
+                        margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.8,
+                          left: MediaQuery.of(context).size.width * 0.5,
+                          right: 20,
+                        ),
+                        backgroundColor: MyColors.secondary,
+                        content: Text(
+                          "Vous avez été déconnecté avec succès",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogContext)
+                          .showSnackBar(snackBar);
+
+                      Navigator.of(dialogContext).pushAndRemoveUntil(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return SignIn();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                        ModalRoute.withName("/login"),
+                      );
+                    }
+                  },
+                  child: Text(
+                    "Validez",
+                    style: TextStyle(
+                      color: MyColors.secondary,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  });
 }

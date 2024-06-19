@@ -1,6 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors
 
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/annonces.dart';
@@ -16,6 +18,9 @@ import 'package:bodah/modals/vgms.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import '../apis/bodah/infos.dart';
 import '../modals/bon_commandes.dart';
 import '../modals/destinataires.dart';
@@ -34,6 +39,7 @@ import '../modals/type_chargements.dart';
 import '../modals/users.dart';
 import 'package:http/http.dart' as http;
 import 'secure_storage.dart';
+import 'package:path/path.dart' as path; //
 
 class DBServices {
   var api_url = ApiInfos.baseUrl;
@@ -718,6 +724,127 @@ class DBServices {
       }
     } catch (error) {
       return <AnnoncePhotos>[];
+    }
+  }
+
+  Future<String> logout() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}logout";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> darkMode() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}darkmode";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<void> saveFileLocally(String filename, List<int> bytes) async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    String filePath = path.join(directory.path, filename);
+    File file = File(filePath);
+    await file.writeAsBytes(bytes);
+  }
+
+  Future<String> saveFile(String fileUrl) async {
+    try {
+      final originalFileName = path.basename(fileUrl);
+      final fileExtension = path.extension(originalFileName);
+      final now = DateTime.now();
+      final formattedDate = DateFormat('yyyyMMdd_HHmmss').format(now);
+      final newFileName = 'Bodah_document_$formattedDate$fileExtension';
+
+      // Déterminer le chemin du fichier à partir de l'URL
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = path.join(directory.path, newFileName);
+
+      final response = await http.get(Uri.parse(fileUrl));
+      if (response.statusCode == 200) {
+        await saveFileLocally(newFileName, response.bodyBytes);
+        return "200";
+      } else {
+        return "203";
+        print("Error downloading file: ${response.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+  }
+
+  Future<String> publishAnnonce(
+      String date_chargement,
+      String nom,
+      Unites unite,
+      int poids,
+      int quantite,
+      int tarif,
+      Pays pay_exp,
+      Pays pay_liv,
+      String adress_exp,
+      String adress_liv,
+      Villes ville_exp,
+      Villes ville_liv,
+      File? file) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}annonce/publish";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      }, body: {
+        'date_chargement': date_chargement,
+        'nom': nom,
+        'unite': unite.id.toString(),
+        'poids': poids.toString(),
+        'quantite': quantite.toString(),
+        'tarif': tarif.toString(),
+        'city_exp': ville_exp.id.toString(),
+        'pays_exp': pay_exp.id.toString(),
+        'city_liv': ville_liv.id.toString(),
+        'pays_liv': pay_liv.id.toString(),
+        'address_exp': adress_exp,
+        'address_liv': adress_liv,
+      });
+
+      if (date_chargement.isEmpty ||
+          nom.isEmpty ||
+          unite.name.isEmpty ||
+          poids <= 0 ||
+          pay_exp.name.isEmpty ||
+          pay_liv.name.isEmpty ||
+          ville_exp.name.isEmpty ||
+          ville_liv.name.isEmpty) {
+        return "100";
+      } else {
+        return response.statusCode.toString();
+      }
+    } catch (e) {
+      return "202";
     }
   }
 

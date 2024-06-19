@@ -154,8 +154,6 @@ class ApiProvider with ChangeNotifier {
     _user = response[0];
     final response_expedition = await apiService.getExpeditions();
     _expeditions = response_expedition;
-    final response_bordereaux = await apiService.getBordereaux();
-    _bordereaux = response_bordereaux;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
     final response_photo = await apiService.getAnnoncePhotos();
@@ -170,11 +168,89 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitDocuments() async {
+    _isLoading = true;
+    final response_bordereaux = await apiService.getBordereaux();
+    _bordereaux = response_bordereaux;
+    final response_recues = await apiService.getRecus();
+    _recus = response_recues;
+    final response_apeles = await apiService.getApeles();
+    _appeles = response_apeles;
+    final response_interchange = await apiService.getInterchanges();
+    _interchanges = response_interchange;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitBordereaux() async {
+    _isLoading = true;
+    final response_bordereaux = await apiService.getBordereaux();
+    _bordereaux = response_bordereaux;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitInterchanges() async {
+    _isLoading = true;
+    final response_interchanges = await apiService.getInterchanges();
+    _interchanges = response_interchanges;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitRecus() async {
+    _isLoading = true;
+    final response_recus = await apiService.getRecus();
+    _recus = response_recus;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitApeles() async {
+    _isLoading = true;
+    final response_apeles = await apiService.getApeles();
+    _appeles = response_apeles;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> getAllVilles(int country_id) async {
     _isLoading = true;
     notifyListeners();
     final response = await apiService.getVilles(country_id);
     _villes = response;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitUser() async {
+    _isLoading = true;
+    final response = await apiService.user();
+    _user = response[0];
     _isLoading = false;
     notifyListeners();
   }

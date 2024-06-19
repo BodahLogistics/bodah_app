@@ -1,0 +1,246 @@
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../../../colors/color.dart';
+import '../../../../../../functions/function.dart';
+import '../../../../../../modals/bordereau_livraisons.dart';
+import '../../../../../../modals/expeditions.dart';
+import '../../../../../../modals/localisations.dart';
+import '../../../../../../modals/marchandises.dart';
+import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/villes.dart';
+import '../../../../../../providers/api/api_data.dart';
+import '../../../drawer/index.dart';
+import '../../nav_bottom/index.dart';
+
+class MesBordereaux extends StatefulWidget {
+  const MesBordereaux({super.key});
+
+  @override
+  State<MesBordereaux> createState() => _MesBordereauxState();
+}
+
+class _MesBordereauxState extends State<MesBordereaux> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ApiProvider>(context, listen: false).InitBordereaux();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final function = Provider.of<Functions>(context);
+    final api_provider = Provider.of<ApiProvider>(context);
+    List<Expeditions> expeditions = api_provider.expeditions;
+    final user = api_provider.user;
+    List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
+    bool loading = api_provider.loading;
+    List<Marchandises> marchandises = api_provider.marchandises;
+    List<Localisations> localisations = api_provider.localisations;
+    List<Pays> pays = api_provider.pays;
+    List<Villes> all_villes = api_provider.all_villes;
+
+    return Scaffold(
+      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      bottomNavigationBar: NavigBot(),
+      drawer: DrawerExpediteur(),
+      appBar: AppBar(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        iconTheme: IconThemeData(
+            color: user.dark_mode == 1 ? MyColors.light : Colors.black),
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Mes bordereaux de livraison",
+          style: TextStyle(
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              ))
+        ],
+      ),
+      body: loading
+          ? Center(
+              child: CircularProgressIndicator(
+                color: MyColors.secondary,
+              ),
+            )
+          : bordereaux.isEmpty
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: MyColors.secondary,
+                  ),
+                )
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        BordereauLivraisons bordereau = bordereaux[index];
+                        Expeditions expedition = function.expedition(
+                            expeditions, bordereau.expedition_id);
+                        Marchandises marchandise = function.marchandise(
+                            marchandises, expedition.marchandise_id);
+                        Localisations localisation =
+                            function.marchandise_localisation(
+                                localisations, marchandise.id);
+                        Pays pay_depart =
+                            function.pay(pays, localisation.pays_exp_id);
+                        Pays pay_dest =
+                            function.pay(pays, localisation.pays_liv_id);
+                        Villes ville_dep = function.ville(
+                            all_villes, localisation.city_exp_id);
+                        Villes ville_dest = function.ville(
+                            all_villes, localisation.city_liv_id);
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: user.dark_mode == 0
+                                    ? MyColors.textColor.withOpacity(.5)
+                                    : null,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.textColor,
+                                    width: 1,
+                                    style: BorderStyle.solid)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: ListTile(
+                                leading: Icon(Icons.file_present,
+                                    size: 50,
+                                    color: user.dark_mode == 1
+                                        ? MyColors.secondary
+                                        : function.convertHexToColor(
+                                            function.couleurs[
+                                                function.randomInt(
+                                                    function.couleurs.length)],
+                                          )),
+                                title: Text(
+                                  bordereau.numero_borderau +
+                                      " " +
+                                      marchandise.nom,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                                trailing: IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : null,
+                                    )),
+                                subtitle: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              "${pay_depart.name.toUpperCase()}, ${ville_dep.name}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.black,
+                                                fontFamily: "Poppins",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "- ${pay_dest.name.toUpperCase()}, ${ville_dest.name}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              function
+                                                  .date(expedition.date_depart),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.black,
+                                                fontFamily: "Poppins",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "- " +
+                                                function.date(
+                                                    expedition.date_arrivee),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: bordereaux.length,
+                    ),
+                  ),
+                ),
+    );
+  }
+}

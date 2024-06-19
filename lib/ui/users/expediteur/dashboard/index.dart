@@ -20,15 +20,21 @@ class ExpediteurDashBoard extends StatelessWidget {
     final user = api_provider.user;
 
     return Scaffold(
+      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: DrawerExpediteur(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        iconTheme: IconThemeData(
+            color: user.dark_mode == 1 ? MyColors.light : Colors.black),
         centerTitle: true,
         elevation: 0,
         title: Text(
           "Accueil",
           style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: "Poppins",
+              fontSize: 14),
         ),
       ),
       body: SingleChildScrollView(
@@ -45,7 +51,8 @@ class ExpediteurDashBoard extends StatelessWidget {
                 child: Text(
                   "Bienvenue, " + user.name,
                   style: TextStyle(
-                      color: Colors.black,
+                      color:
+                          user.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontFamily: "Poppins",
                       fontSize:
                           MediaQuery.of(context).size.width > 520 ? 20 : 17,
@@ -61,7 +68,9 @@ class ExpediteurDashBoard extends StatelessWidget {
                   "Faites votre choix ",
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: function.convertHexToColor("#8A8A8A"),
+                      color: user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#8A8A8A"),
                       fontFamily: "Poppins",
                       fontSize: 17,
                       fontWeight: FontWeight.w500),
@@ -119,7 +128,9 @@ class ExpediteurDashBoard extends StatelessWidget {
                                       'Marchandises',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          color: MyColors.black,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
                                           fontFamily: "Poppins",
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
@@ -230,7 +241,9 @@ class ExpediteurDashBoard extends StatelessWidget {
                                       'Colis',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          color: MyColors.black,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
                                           fontFamily: "Poppins",
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
