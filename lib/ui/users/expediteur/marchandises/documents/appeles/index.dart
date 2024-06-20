@@ -3,6 +3,7 @@
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/services/data_base_service.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../colors/color.dart';
@@ -122,6 +123,34 @@ class _MesApelesState extends State<MesApeles> {
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      pageBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return DetailAppele(
+                                          id: apele.id,
+                                        );
+                                      },
+                                      transitionsBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double> secondaryAnimation,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                                 leading: Icon(Icons.file_present,
                                     size: 50,
                                     color: user.dark_mode == 1
@@ -145,7 +174,10 @@ class _MesApelesState extends State<MesApeles> {
                                 ),
                                 trailing: IconButton(
                                     onPressed: () {
-                                      downloadAppele(context, apele);
+                                      String url =
+                                          "https://test.bodah.bj/storage/" +
+                                              apele.path;
+                                      downloadDocument(context, url);
                                     },
                                     icon: Icon(
                                       Icons.more_vert,
@@ -246,7 +278,7 @@ class _MesApelesState extends State<MesApeles> {
   }
 }
 
-void downloadAppele(BuildContext context, Appeles apele) {
+void downloadDocument(BuildContext context, String url) {
   Future.delayed(Duration(milliseconds: 500), () {
     showDialog(
       barrierDismissible: false,
@@ -293,8 +325,6 @@ void downloadAppele(BuildContext context, Appeles apele) {
                     style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () async {
                       provider.change_affiche(true);
-                      String url =
-                          "https://test.bodah.bj/storage/" + apele.path;
                       String statut_code = await service.saveFile(url);
                       if (statut_code == "203") {
                         provider.change_affiche(false);
@@ -316,7 +346,7 @@ void downloadAppele(BuildContext context, Appeles apele) {
                         final snackBar = SnackBar(
                           backgroundColor: Colors.green,
                           content: Text(
-                            "Appelé téléchargé avec suucès",
+                            "Téléchargé avec suucès",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -329,7 +359,6 @@ void downloadAppele(BuildContext context, Appeles apele) {
                         Navigator.of(dialogcontext).pop();
                       } else {
                         provider.change_affiche(false);
-                        print(statut_code);
                         final snackBar = SnackBar(
                           backgroundColor: Colors.redAccent,
                           content: Text(

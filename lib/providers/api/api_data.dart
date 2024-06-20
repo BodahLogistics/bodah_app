@@ -17,6 +17,7 @@ import 'package:bodah/providers/auth/prov_sign_up.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:flutter/material.dart';
 import '../../modals/annonces.dart';
+import '../../modals/camions.dart';
 import '../../modals/destinataires.dart';
 import '../../modals/donneur_ordres.dart';
 import '../../modals/entite_factures.dart';
@@ -82,6 +83,8 @@ class ApiProvider with ChangeNotifier {
   List<Entreprises> _entreprises = [];
   List<DonneurOrdres> _donneur_ordres = [];
   List<EntiteFactures> _entite_factures = [];
+  List<Camions> _camions = [];
+  List<Camions> get camions => _camions;
   List<Expediteurs> get expediteurs => _expediteurs;
   List<Transporteurs> get transporteurs => _transporteurs;
   List<Destinataires> get destinataires => _destinataires;
@@ -150,8 +153,6 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitAnnonce() async {
     _isLoading = true;
-    final response = await apiService.user();
-    _user = response[0];
     final response_expedition = await apiService.getExpeditions();
     _expeditions = response_expedition;
     final response_marchandise = await apiService.getMarchandises();
@@ -164,6 +165,30 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_annonce = await apiService.getAnnonces();
     _annonces = response_annonce;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitExpedition() async {
+    _isLoading = true;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_photo = await apiService.getAnnoncePhotos();
+    _annonce_photos = response_photo;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    final response_transporteur = await apiService.getTransporteurs();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getCamions();
+    _camions = response_camions;
     _isLoading = false;
     notifyListeners();
   }
@@ -192,6 +217,12 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    final response_transporteur = await apiService.getTransporteurs();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getCamions();
+    _camions = response_camions;
     _isLoading = false;
     notifyListeners();
   }
@@ -206,6 +237,40 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTdos() async {
+    _isLoading = true;
+    final response_tdo = await apiService.getTdos();
+    _tdos = response_tdo;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitVgms() async {
+    _isLoading = true;
+    final response_vgm = await apiService.getVgms();
+    _vgms = response_vgm;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
     _isLoading = false;
     notifyListeners();
   }
@@ -220,6 +285,8 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
     _isLoading = false;
     notifyListeners();
   }
@@ -234,6 +301,8 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
     _isLoading = false;
     notifyListeners();
   }

@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/annonces.dart';
@@ -18,11 +17,11 @@ import 'package:bodah/modals/vgms.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import '../apis/bodah/infos.dart';
 import '../modals/bon_commandes.dart';
+import '../modals/camions.dart';
 import '../modals/destinataires.dart';
 import '../modals/donneur_ordres.dart';
 import '../modals/entreprises.dart';
@@ -295,6 +294,27 @@ class DBServices {
       }
     } catch (error) {
       return <Destinataires>[];
+    }
+  }
+
+  Future<List<Camions>> getCamions() async {
+    try {
+      var url = "${api_url}camions";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Camions.fromMap(json)).toList();
+      } else {
+        return <Camions>[];
+      }
+    } catch (error) {
+      return <Camions>[];
     }
   }
 
@@ -778,7 +798,7 @@ class DBServices {
 
       // Déterminer le chemin du fichier à partir de l'URL
       final directory = await getApplicationDocumentsDirectory();
-      final filePath = path.join(directory.path, newFileName);
+      path.join(directory.path, newFileName);
 
       final response = await http.get(Uri.parse(fileUrl));
       if (response.statusCode == 200) {
@@ -786,10 +806,8 @@ class DBServices {
         return "200";
       } else {
         return "203";
-        print("Error downloading file: ${response.statusCode}");
       }
     } catch (e) {
-      print(e);
       return e.toString();
     }
   }

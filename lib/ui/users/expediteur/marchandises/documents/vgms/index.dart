@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
-import 'package:bodah/ui/users/expediteur/marchandises/documents/bordereaux/detail.dart';
+import 'package:bodah/modals/vgms.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
-import '../../../../../../modals/bordereau_livraisons.dart';
 import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
@@ -16,18 +15,18 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
 import '../../nav_bottom/index.dart';
 
-class MesBordereaux extends StatefulWidget {
-  const MesBordereaux({super.key});
+class MesVgms extends StatefulWidget {
+  const MesVgms({super.key});
 
   @override
-  State<MesBordereaux> createState() => _MesBordereauxState();
+  State<MesVgms> createState() => _MesVgmsState();
 }
 
-class _MesBordereauxState extends State<MesBordereaux> {
+class _MesVgmsState extends State<MesVgms> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitBordereaux();
+    Provider.of<ApiProvider>(context, listen: false).InitInterchanges();
   }
 
   @override
@@ -36,7 +35,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
-    List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
+    List<Vgms> vgms = api_provider.vgms;
     bool loading = api_provider.loading;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -54,7 +53,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes bordereaux de livraison",
+          "Mes VGM",
           style: TextStyle(
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
               fontWeight: FontWeight.bold,
@@ -75,7 +74,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
                 color: MyColors.secondary,
               ),
             )
-          : bordereaux.isEmpty
+          : vgms.isEmpty
               ? Center(
                   child: CircularProgressIndicator(
                     color: MyColors.secondary,
@@ -88,9 +87,9 @@ class _MesBordereauxState extends State<MesBordereaux> {
                         const EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        BordereauLivraisons bordereau = bordereaux[index];
-                        Expeditions expedition = function.expedition(
-                            expeditions, bordereau.expedition_id);
+                        Vgms vgm = vgms[index];
+                        Expeditions expedition =
+                            function.expedition(expeditions, vgm.expedition_id);
                         Marchandises marchandise = function.marchandise(
                             marchandises, expedition.marchandise_id);
                         Localisations localisation =
@@ -131,8 +130,8 @@ class _MesBordereauxState extends State<MesBordereaux> {
                                           Animation<double> animation,
                                           Animation<double>
                                               secondaryAnimation) {
-                                        return DetailBordereau(
-                                          id: bordereau.id,
+                                        return DetailVgm(
+                                          id: vgm.id,
                                         );
                                       },
                                       transitionsBuilder: (BuildContext context,
@@ -160,9 +159,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
                                                     function.couleurs.length)],
                                           )),
                                 title: Text(
-                                  bordereau.numero_borderau +
-                                      " " +
-                                      marchandise.nom,
+                                  vgm.reference + " " + marchandise.nom,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -266,7 +263,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
                           ),
                         );
                       },
-                      itemCount: bordereaux.length,
+                      itemCount: vgms.length,
                     ),
                   ),
                 ),

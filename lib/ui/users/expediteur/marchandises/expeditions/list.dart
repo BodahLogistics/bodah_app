@@ -6,6 +6,7 @@ import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/expeditions/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class _ListExpExpState extends State<ListExpExp> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
+    Provider.of<ApiProvider>(context, listen: false).InitExpedition();
   }
 
   @override
@@ -85,7 +86,32 @@ class _ListExpExpState extends State<ListExpExp> {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 500),
+                              pageBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation) {
+                                return DetailExpedition(
+                                  id: expedition.id,
+                                );
+                              },
+                              transitionsBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),

@@ -3,15 +3,23 @@
 import 'dart:math';
 
 import 'package:bodah/modals/annonce_photos.dart';
+import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/destinataires.dart';
+import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
+import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/unites.dart';
+import 'package:bodah/modals/vgms.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../modals/annonces.dart';
+import '../modals/appeles.dart';
+import '../modals/camions.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
+import '../modals/interchanges.dart';
 import '../modals/localisations.dart';
 import '../modals/marchandises.dart';
 import '../modals/pays.dart';
@@ -21,6 +29,142 @@ import '../modals/users.dart';
 import '../modals/villes.dart';
 
 class Functions {
+  Appeles apele(List<Appeles> appeles, int id) {
+    return appeles.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Appeles(
+          id: id,
+          path: "",
+          expedition_id: 0,
+          deleted: 0,
+          commentaire: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Interchanges interchange(List<Interchanges> interchanges, int id) {
+    return interchanges.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Interchanges(
+          id: id,
+          path: "",
+          expedition_id: 0,
+          deleted: 0,
+          commentaire: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Vgms vgm(List<Vgms> vgms, int id) {
+    return vgms.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Vgms(
+          id: id,
+          path: "",
+          expedition_id: 0,
+          deleted: 0,
+          commentaire: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Tdos tdo(List<Tdos> tdos, int id) {
+    return tdos.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Tdos(
+          id: id,
+          path: "",
+          expedition_id: 0,
+          deleted: 0,
+          commentaire: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Recus recu(List<Recus> recus, int id) {
+    return recus.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Recus(
+          id: id,
+          path: "",
+          expedition_id: 0,
+          deleted: 0,
+          commentaire: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  BordereauLivraisons bordereau(List<BordereauLivraisons> bordereaux, int id) {
+    return bordereaux.firstWhere(
+      (data) => data.id == id,
+      orElse: () => BordereauLivraisons(
+        id: id,
+        expedition_id: 0,
+        numero_borderau: '',
+        observation_id: 0,
+      ),
+    );
+  }
+
+  String immatriculation(String? num_immatricualtion) {
+    if (num_immatricualtion!.isEmpty) {
+      return "";
+    } else {
+      return num_immatricualtion;
+    }
+  }
+
+  Annonces marchandise_annonce(
+      List<Annonces> annonces, Marchandises marchandise) {
+    return annonces.firstWhere(
+      (data) => data.id == marchandise.annonce_id,
+      orElse: () => Annonces(
+          id: 0,
+          numero_annonce: "",
+          is_active: 0,
+          user_id: 0,
+          deleted: 0,
+          expediteur_id: 0,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Destinataires marchandise_destinataire(
+      List<Destinataires> destinataires, Marchandises marchandise) {
+    return destinataires.firstWhere(
+      (data) => data.id == marchandise.destinataire_id,
+      orElse: () =>
+          Destinataires(id: 0, numero_destinataire: "", user_id: 0, deleted: 0),
+    );
+  }
+
+  Camions expedition_camion(List<Camions> camions, Expeditions expedition) {
+    return camions.firstWhere(
+      (data) => data.id == expedition.vehicule_id,
+      orElse: () => Camions(id: 0, type_vehicule_id: 0),
+    );
+  }
+
+  Transporteurs expedition_transporteur(
+      List<Transporteurs> transporteurs, Expeditions expedition) {
+    return transporteurs.firstWhere(
+      (data) => data.id == expedition.transporteur_id,
+      orElse: () =>
+          Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+    );
+  }
+
   List<String> couleurs = [
     '#FF0000',
     '#00FF00',

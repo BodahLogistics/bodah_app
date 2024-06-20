@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/recus.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../colors/color.dart';
@@ -120,6 +121,34 @@ class _MesRecusState extends State<MesRecus> {
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      pageBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return DetailRecu(
+                                          id: recu.id,
+                                        );
+                                      },
+                                      transitionsBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double> secondaryAnimation,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                                 leading: Icon(Icons.file_present,
                                     size: 50,
                                     color: user.dark_mode == 1
