@@ -3,7 +3,6 @@
 import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/localisations.dart';
 import 'package:bodah/modals/marchandises.dart';
-import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/expeditions/detail.dart';
@@ -39,7 +38,6 @@ class _ListExpExpState extends State<ListExpExp> {
     List<Expeditions> expeditions = api_provider.expeditions;
     List<AnnoncePhotos> annonce_photos = api_provider.photos;
     List<Marchandises> marchandises = api_provider.marchandises;
-    List<Tarifications> tarifications = api_provider.tarifications;
     List<Localisations> localisations = api_provider.localisations;
     List<Unites> unites = api_provider.unites;
     List<Pays> pays = api_provider.pays;
@@ -68,9 +66,6 @@ class _ListExpExpState extends State<ListExpExp> {
                     Localisations localisation =
                         function.marchandise_localisation(
                             localisations, marchandise.id);
-                    Tarifications tarification =
-                        function.marchandise_tarification(
-                            tarifications, marchandise.id);
                     List<AnnoncePhotos> pictures = function.marchandise_photos(
                         annonce_photos, marchandise.id);
                     Unites unite = function.unite(unites, marchandise.unite_id);
@@ -178,58 +173,27 @@ class _ListExpExpState extends State<ListExpExp> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Poids : ",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.primary,
-                                                    fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                              Text(
-                                                "${marchandise.poids} ${unite.name}",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.textColor,
-                                                    fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                            ],
+                                          Text(
+                                            "Poids : ",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.primary,
+                                                fontFamily: "Poppins",
+                                                fontSize: 11),
                                           ),
-                                          SizedBox(width: 5),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Tarif : ",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.primary,
-                                                    fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                              Text(
-                                                "${function.formatAmount(tarification.prix_expedition)} XOF",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.textColor,
-                                                    fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                            ],
+                                          Text(
+                                            "${marchandise.poids} ${unite.name}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 11),
                                           ),
                                         ],
                                       ),

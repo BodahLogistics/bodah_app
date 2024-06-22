@@ -23,6 +23,7 @@ import '../apis/bodah/infos.dart';
 import '../modals/bon_commandes.dart';
 import '../modals/camions.dart';
 import '../modals/destinataires.dart';
+import '../modals/devises.dart';
 import '../modals/donneur_ordres.dart';
 import '../modals/entreprises.dart';
 import '../modals/expediteurs.dart';
@@ -173,7 +174,7 @@ class DBServices {
 
   Future<List<Statuts>> getStatuts() async {
     try {
-      var url = "${api_url}statuts";
+      var url = "${api_url}expeditions/statuts";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -315,6 +316,27 @@ class DBServices {
       }
     } catch (error) {
       return <Camions>[];
+    }
+  }
+
+  Future<List<Devises>> getDevises() async {
+    try {
+      var url = "${api_url}devises";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Devises.fromMap(json)).toList();
+      } else {
+        return <Devises>[];
+      }
+    } catch (error) {
+      return <Devises>[];
     }
   }
 
@@ -857,6 +879,81 @@ class DBServices {
           pay_liv.name.isEmpty ||
           ville_exp.name.isEmpty ||
           ville_liv.name.isEmpty) {
+        return "100";
+      } else {
+        return response.statusCode.toString();
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> publishMarchandise(
+      String date_chargement,
+      String nom,
+      Unites unite,
+      int poids,
+      int quantite,
+      int tarif,
+      Pays pay_exp,
+      Pays pay_liv,
+      String adress_exp,
+      String adress_liv,
+      Villes ville_exp,
+      Villes ville_liv,
+      File? file,
+      Annonces annonce) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}annonce/marchandise/publish/${annonce.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      }, body: {
+        'date_chargement': date_chargement,
+        'nom': nom,
+        'unite': unite.id.toString(),
+        'poids': poids.toString(),
+        'quantite': quantite.toString(),
+        'tarif': tarif.toString(),
+        'city_exp': ville_exp.id.toString(),
+        'pays_exp': pay_exp.id.toString(),
+        'city_liv': ville_liv.id.toString(),
+        'pays_liv': pay_liv.id.toString(),
+        'address_exp': adress_exp,
+        'address_liv': adress_liv,
+      });
+
+      if (date_chargement.isEmpty ||
+          nom.isEmpty ||
+          unite.name.isEmpty ||
+          poids <= 0 ||
+          pay_exp.name.isEmpty ||
+          pay_liv.name.isEmpty ||
+          ville_exp.name.isEmpty ||
+          ville_liv.name.isEmpty) {
+        return "100";
+      } else {
+        return response.statusCode.toString();
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteAnnonce(Annonces annonce, String token) async {
+    try {
+      var url = "${api_url}annonce/delete/${annonce.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      if (annonce.id <= 0) {
         return "100";
       } else {
         return response.statusCode.toString();

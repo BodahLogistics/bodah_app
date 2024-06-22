@@ -66,7 +66,7 @@ class DashMarchExp extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 75,
                   child: ListView.builder(
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,

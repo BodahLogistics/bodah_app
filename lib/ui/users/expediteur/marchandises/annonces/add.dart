@@ -50,6 +50,7 @@ class PublishAnnonceExp extends StatelessWidget {
     Pays pay_liv = provider.pay_liv;
     File? file = provider.file_selected;
     bool upload = provider.upload;
+    bool affiche = provider.affiche;
     if (tarif > 0) {
       Tarif.text = tarif.toString();
     }
@@ -78,172 +79,9 @@ class PublishAnnonceExp extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
-                Container(
-                  color: MyColors.secondary,
-                  height: 40,
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: IconButton(
-                            onPressed: () async {
-                              String statut_code = await service.publishAnnonce(
-                                  date_chargement,
-                                  nom,
-                                  unite,
-                                  poids,
-                                  quantite,
-                                  tarif,
-                                  pay_exp,
-                                  pay_liv,
-                                  adress_exp,
-                                  adress_liv,
-                                  ville_exp,
-                                  ville_liv,
-                                  file);
-
-                              if (statut_code == "100") {
-                                final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
-                                  backgroundColor: Colors.redAccent,
-                                  content: Text(
-                                    "Données invalides",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else if (statut_code == "202") {
-                                final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
-                                  backgroundColor: Colors.redAccent,
-                                  content: Text(
-                                    "Une erreur inattendue s'est produite",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else if (statut_code == "422") {
-                                final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
-                                  backgroundColor: Colors.redAccent,
-                                  content: Text(
-                                    "Erreur de validation",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else if (statut_code == "500") {
-                                final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
-                                  backgroundColor: Colors.redAccent,
-                                  content: Text(
-                                    "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                provider.reset();
-                                changeProvider.change_index(0);
-                                double screen =
-                                    MediaQuery.of(context).size.height;
-                                int data = screen.toInt();
-                                _pageController.animateToPage(
-                                  0 * data,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-
-                                final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
-                                  backgroundColor: Colors.green,
-                                  content: Text(
-                                    "Votre annonce a été publiée avec succès",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 14, right: 10, left: 15, bottom: 50),
+                      top: 5, right: 10, left: 15, bottom: 50),
                   child: Column(
                     children: [
                       user.dark_mode == 1
@@ -259,7 +97,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             )
                           : Container(),
                       SizedBox(
-                        height: 40,
+                        height: user.dark_mode == 1 ? 40 : 35,
                         child: TextField(
                           controller: Name,
                           onChanged: (value) => provider.change_nom(value),
@@ -287,7 +125,6 @@ class PublishAnnonceExp extends StatelessWidget {
                               labelText: user.dark_mode == 0
                                   ? "Marchandise: Riz, Haricot"
                                   : "",
-                              hintText: "Nom de la marchandise",
                               labelStyle: TextStyle(
                                   color: user.dark_mode == 1
                                       ? MyColors.light
@@ -335,7 +172,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             )
                           : Container(),
                       SizedBox(
-                        height: 40,
+                        height: user.dark_mode == 1 ? 40 : 35,
                         child: TextField(
                           controller: Tarif,
                           onTap: () {
@@ -351,7 +188,6 @@ class PublishAnnonceExp extends StatelessWidget {
                               labelText: user.dark_mode == 0
                                   ? "Tarif d'expédition"
                                   : "",
-                              hintText: "Tarif d'expédition",
                               filled: user.dark_mode == 1 ? true : false,
                               fillColor: user.dark_mode == 1
                                   ? MyColors.filedDark
@@ -393,7 +229,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: 48,
+                                    height: user.dark_mode == 1 ? 48 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -413,14 +249,9 @@ class PublishAnnonceExp extends StatelessWidget {
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
-                                                labelText: "Pays d'expédition",
-                                                hintText: "Pays d'expédition",
-                                                filled: user.dark_mode == 1
-                                                    ? true
-                                                    : false,
-                                                fillColor: user.dark_mode == 1
-                                                    ? MyColors.filedDark
-                                                    : null,
+                                                labelText: user.dark_mode == 1
+                                                    ? ""
+                                                    : "Pays d'expédition",
                                                 labelStyle: TextStyle(
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
@@ -432,12 +263,25 @@ class PublishAnnonceExp extends StatelessWidget {
                                                     fontFamily: "Poppins",
                                                     color: MyColors.black)),
                                       ),
+                                      dropdownBuilder: (context, selectedItem) {
+                                        return Text(
+                                          selectedItem ?? '',
+                                          style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                          ),
+                                        );
+                                      },
 
                                       onChanged: (String? selectedType) async {
                                         if (selectedType != null) {
                                           final pay_selected = pays.firstWhere(
-                                              (element) =>
-                                                  element.name == selectedType);
+                                            (element) =>
+                                                element.name == selectedType,
+                                            orElse: () => Pays(id: 0, name: ""),
+                                          );
                                           provider
                                               .change_pays_exp(pay_selected);
                                           await provider.getAllVillesExpedition(
@@ -453,7 +297,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
@@ -471,7 +315,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: 48,
+                                    height: user.dark_mode == 1 ? 48 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -491,14 +335,10 @@ class PublishAnnonceExp extends StatelessWidget {
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
-                                                labelText: "Ville d'expédition",
+                                                labelText: user.dark_mode == 1
+                                                    ? ""
+                                                    : "Ville d'expédition",
                                                 hintText: "Ville d'expédition",
-                                                filled: user.dark_mode == 1
-                                                    ? true
-                                                    : false,
-                                                fillColor: user.dark_mode == 1
-                                                    ? MyColors.filedDark
-                                                    : null,
                                                 labelStyle: TextStyle(
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
@@ -510,14 +350,27 @@ class PublishAnnonceExp extends StatelessWidget {
                                                     fontFamily: "Poppins",
                                                     color: MyColors.black)),
                                       ),
+                                      dropdownBuilder: (context, selectedItem) {
+                                        return Text(
+                                          selectedItem ?? '',
+                                          style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                          ),
+                                        );
+                                      },
 
                                       onChanged: (String? selectedType) {
                                         if (selectedType != null) {
                                           final ville_selected =
                                               villes_livraison.firstWhere(
-                                                  (element) =>
-                                                      element.name ==
-                                                      selectedType);
+                                            (element) =>
+                                                element.name == selectedType,
+                                            orElse: () => Villes(
+                                                id: 0, name: "", country_id: 0),
+                                          );
                                           provider
                                               .change_ville_exp(ville_selected);
                                         }
@@ -533,13 +386,13 @@ class PublishAnnonceExp extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
@@ -557,7 +410,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: 48,
+                                    height: user.dark_mode == 1 ? 48 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -577,14 +430,9 @@ class PublishAnnonceExp extends StatelessWidget {
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
-                                                labelText: "Pays de livraison",
-                                                hintText: "Pays de livraison",
-                                                filled: user.dark_mode == 1
-                                                    ? true
-                                                    : false,
-                                                fillColor: user.dark_mode == 1
-                                                    ? MyColors.filedDark
-                                                    : null,
+                                                labelText: user.dark_mode == 1
+                                                    ? ""
+                                                    : "Pays de livraison",
                                                 labelStyle: TextStyle(
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
@@ -596,12 +444,25 @@ class PublishAnnonceExp extends StatelessWidget {
                                                     fontFamily: "Poppins",
                                                     color: MyColors.black)),
                                       ),
+                                      dropdownBuilder: (context, selectedItem) {
+                                        return Text(
+                                          selectedItem ?? '',
+                                          style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                          ),
+                                        );
+                                      },
 
                                       onChanged: (String? selectedType) async {
                                         if (selectedType != null) {
                                           final pay_selected = pays.firstWhere(
-                                              (element) =>
-                                                  element.name == selectedType);
+                                            (element) =>
+                                                element.name == selectedType,
+                                            orElse: () => Pays(id: 0, name: ""),
+                                          );
                                           provider
                                               .change_pays_liv(pay_selected);
                                           await provider.getAllVillesLivraison(
@@ -617,7 +478,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
@@ -635,7 +496,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: 48,
+                                    height: user.dark_mode == 1 ? 48 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -655,14 +516,9 @@ class PublishAnnonceExp extends StatelessWidget {
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
-                                                labelText: "Ville de livraison",
-                                                hintText: "Ville de livraison",
-                                                filled: user.dark_mode == 1
-                                                    ? true
-                                                    : false,
-                                                fillColor: user.dark_mode == 1
-                                                    ? MyColors.filedDark
-                                                    : null,
+                                                labelText: user.dark_mode == 1
+                                                    ? ""
+                                                    : "Ville de livraison",
                                                 labelStyle: TextStyle(
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
@@ -674,14 +530,27 @@ class PublishAnnonceExp extends StatelessWidget {
                                                     fontFamily: "Poppins",
                                                     color: MyColors.black)),
                                       ),
+                                      dropdownBuilder: (context, selectedItem) {
+                                        return Text(
+                                          selectedItem ?? '',
+                                          style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                          ),
+                                        );
+                                      },
 
                                       onChanged: (String? selectedType) {
                                         if (selectedType != null) {
                                           final ville_selected =
                                               villes_livraison.firstWhere(
-                                                  (element) =>
-                                                      element.name ==
-                                                      selectedType);
+                                            (element) =>
+                                                element.name == selectedType,
+                                            orElse: () => Villes(
+                                                id: 0, name: "", country_id: 0),
+                                          );
                                           provider
                                               .change_ville_liv(ville_selected);
                                         }
@@ -697,139 +566,115 @@ class PublishAnnonceExp extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: Column(
-                              children: [
-                                user.dark_mode == 1
-                                    ? Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "Adresse d'expédition",
-                                          style: TextStyle(
-                                            color: MyColors.light,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: SizedBox(
-                                    height: 40,
-                                    child: TextField(
-                                      controller: AdresseExp,
-                                      onChanged: (value) {
-                                        provider.change_adress_exp(value);
-                                      },
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                            color: AdresseExp.text.isEmpty
-                                                ? function.convertHexToColor(
-                                                    "#79747E")
-                                                : MyColors.secondary,
-                                          )),
-                                          filled: user.dark_mode == 1
-                                              ? true
-                                              : false,
-                                          fillColor: user.dark_mode == 1
-                                              ? MyColors.filedDark
-                                              : null,
-                                          labelText: user.dark_mode == 0
-                                              ? "Adresse d'expédition"
-                                              : "",
-                                          hintText: "Adresse d'expédition",
-                                          labelStyle: TextStyle(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                              fontSize: 14,
-                                              fontFamily: "Poppins"),
-                                          hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: "Poppins",
-                                              color: MyColors.black)),
-                                    ),
-                                  ),
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Adresse d'expédition  (Facultatif)",
+                                style: TextStyle(
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ],
-                            ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: AdresseExp,
+                            onChanged: (value) {
+                              provider.change_adress_exp(value);
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: AdresseExp.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText: user.dark_mode == 0
+                                    ? "Adresse d'expédition (Facultatif)"
+                                    : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: Column(
-                              children: [
-                                user.dark_mode == 1
-                                    ? Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "Adresse de livraison",
-                                          style: TextStyle(
-                                            color: MyColors.light,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: SizedBox(
-                                    height: 40,
-                                    child: TextField(
-                                      controller: AdresseLiv,
-                                      onChanged: (value) {
-                                        provider.change_adress_liv(value);
-                                      },
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                            color: AdresseLiv.text.isEmpty
-                                                ? function.convertHexToColor(
-                                                    "#79747E")
-                                                : MyColors.secondary,
-                                          )),
-                                          filled: user.dark_mode == 1
-                                              ? true
-                                              : false,
-                                          fillColor: user.dark_mode == 1
-                                              ? MyColors.filedDark
-                                              : null,
-                                          labelText: user.dark_mode == 0
-                                              ? "Adresse de livraison"
-                                              : "",
-                                          hintText: "Adresse de livraison",
-                                          labelStyle: TextStyle(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                              fontSize: 14,
-                                              fontFamily: "Poppins"),
-                                          hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: "Poppins",
-                                              color: MyColors.black)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 25,
+                      ),
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Adresse de livraison (Facultatif)",
+                                style: TextStyle(
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: AdresseLiv,
+                            onChanged: (value) {
+                              provider.change_adress_liv(value);
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: AdresseLiv.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText: user.dark_mode == 0
+                                    ? "Adresse de livraison (Facultatif)"
+                                    : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
@@ -844,57 +689,61 @@ class PublishAnnonceExp extends StatelessWidget {
                                         ),
                                       )
                                     : Container(),
-                                SizedBox(
-                                  height: 40,
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      provider.change_poids(value);
-                                    },
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    controller: Poids,
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                          color: Poids.text.isEmpty
-                                              ? function
-                                                  .convertHexToColor("#79747E")
-                                              : MyColors.secondary,
-                                        )),
-                                        filled:
-                                            user.dark_mode == 1 ? true : false,
-                                        fillColor: user.dark_mode == 1
-                                            ? MyColors.filedDark
-                                            : null,
-                                        labelText: user.dark_mode == 0
-                                            ? "Poids (Facultatif)"
-                                            : "",
-                                        hintText: "Poids (Facultatif)",
-                                        labelStyle: TextStyle(
-                                            color: user.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                            fontSize: 14,
-                                            fontFamily: "Poppins"),
-                                        hintStyle: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: "Poppins",
-                                            color: MyColors.black)),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: TextField(
+                                      onChanged: (value) {
+                                        provider.change_poids(value);
+                                      },
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      keyboardType: TextInputType.number,
+                                      controller: Poids,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                            color: Poids.text.isEmpty
+                                                ? function.convertHexToColor(
+                                                    "#79747E")
+                                                : MyColors.secondary,
+                                          )),
+                                          filled: user.dark_mode == 1
+                                              ? true
+                                              : false,
+                                          fillColor: user.dark_mode == 1
+                                              ? MyColors.filedDark
+                                              : null,
+                                          labelText: user.dark_mode == 0
+                                              ? "Poids (Facultatif)"
+                                              : "",
+                                          labelStyle: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontSize: 14,
+                                              fontFamily: "Poppins"),
+                                          hintStyle: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: "Poppins",
+                                              color: MyColors.black)),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
                                     ? Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Unité de chargement",
+                                          "Unité",
                                           style: TextStyle(
                                             color: MyColors.light,
                                             fontWeight: FontWeight.w500,
@@ -905,7 +754,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: 40,
+                                    height: user.dark_mode == 1 ? 40 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -925,15 +774,10 @@ class PublishAnnonceExp extends StatelessWidget {
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
-                                                labelText:
-                                                    "Unité de chargement",
-                                                hintText: "Unité de chargement",
-                                                filled: user.dark_mode == 1
-                                                    ? true
-                                                    : false,
-                                                fillColor: user.dark_mode == 1
-                                                    ? MyColors.filedDark
-                                                    : null,
+                                                labelText: user.dark_mode == 1
+                                                    ? ""
+                                                    : "Unité",
+                                                hintText: "Unité",
                                                 labelStyle: TextStyle(
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
@@ -941,10 +785,24 @@ class PublishAnnonceExp extends StatelessWidget {
                                                     fontSize: 14,
                                                     fontFamily: "Poppins"),
                                                 hintStyle: TextStyle(
-                                                    fontSize: 14,
-                                                    fontFamily: "Poppins",
-                                                    color: MyColors.black)),
+                                                  fontSize: 14,
+                                                  fontFamily: "Poppins",
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.black,
+                                                )),
                                       ),
+                                      dropdownBuilder: (context, selectedItem) {
+                                        return Text(
+                                          selectedItem ?? '',
+                                          style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                          ),
+                                        );
+                                      },
 
                                       onChanged: (String? selectedType) {
                                         if (selectedType != null) {
@@ -965,13 +823,13 @@ class PublishAnnonceExp extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
@@ -980,6 +838,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                         child: Text(
                                           "Quantité (Facultatif)",
                                           style: TextStyle(
+                                            fontSize: 13,
                                             color: MyColors.light,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -995,6 +854,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                     inputFormatters: [
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
+                                    keyboardType: TextInputType.number,
                                     controller: Quantite,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -1012,7 +872,6 @@ class PublishAnnonceExp extends StatelessWidget {
                                         labelText: user.dark_mode == 0
                                             ? "Quantité (Facultatif)"
                                             : "",
-                                        hintText: "Quantité (Facultatif)",
                                         labelStyle: TextStyle(
                                             color: user.dark_mode == 1
                                                 ? MyColors.light
@@ -1029,15 +888,16 @@ class PublishAnnonceExp extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Column(
                               children: [
                                 user.dark_mode == 1
                                     ? Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Date de chargement",
+                                          "Date",
                                           style: TextStyle(
+                                            fontSize: 13,
                                             color: MyColors.light,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -1085,7 +945,6 @@ class PublishAnnonceExp extends StatelessWidget {
                                           labelText: user.dark_mode == 0
                                               ? "Date de chargement"
                                               : "",
-                                          hintText: "Date de chargement",
                                           labelStyle: TextStyle(
                                               color: user.dark_mode == 1
                                                   ? MyColors.light
@@ -1110,7 +969,7 @@ class PublishAnnonceExp extends StatelessWidget {
                       TextButton(
                         onPressed: () async {},
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
+                          width: MediaQuery.of(context).size.width,
                           child: Container(
                             color: MyColors.secondary.withOpacity(.2),
                             child: DottedBorder(
@@ -1124,7 +983,7 @@ class PublishAnnonceExp extends StatelessWidget {
                               radius: Radius.circular(
                                   4), // Si vous voulez des coins arrondis
                               child: Padding(
-                                padding: const EdgeInsets.all(14.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -1139,7 +998,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                       height: 10,
                                     ),
                                     Text(
-                                      "Cliquez pour importer l'image de la marchandise",
+                                      "Joindre l'image de la marchandise",
                                       style: TextStyle(
                                         color: MyColors.secondary,
                                         fontWeight: FontWeight.w400,
@@ -1175,7 +1034,186 @@ class PublishAnnonceExp extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 25,
+                      ),
+                      SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: MyColors.secondary),
+                            onPressed: () async {
+                              provider.change_affiche(true);
+
+                              String statut_code = await service.publishAnnonce(
+                                  date_chargement,
+                                  nom,
+                                  unite,
+                                  poids,
+                                  quantite,
+                                  tarif,
+                                  pay_exp,
+                                  pay_liv,
+                                  adress_exp,
+                                  adress_liv,
+                                  ville_exp,
+                                  ville_liv,
+                                  file);
+
+                              if (statut_code == "100") {
+                                provider.change_affiche(false);
+                                final snackBar = SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      left: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      right: 5),
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text(
+                                    "Données invalides",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Poppins"),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else if (statut_code == "202") {
+                                provider.change_affiche(false);
+                                final snackBar = SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      left: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      right: 5),
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text(
+                                    "Une erreur inattendue s'est produite",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Poppins"),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else if (statut_code == "422") {
+                                provider.change_affiche(false);
+                                final snackBar = SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      left: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      right: 5),
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text(
+                                    "Erreur de validation",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Poppins"),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else if (statut_code == "500") {
+                                provider.change_affiche(false);
+                                final snackBar = SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      left: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      right: 5),
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text(
+                                    "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Poppins"),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else {
+                                provider.change_affiche(false);
+                                provider.reset();
+                                changeProvider.change_index(0);
+                                double screen =
+                                    MediaQuery.of(context).size.height;
+                                int data = screen.toInt();
+                                _pageController.animateToPage(
+                                  0 * data,
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
+
+                                final snackBar = SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      left: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      right: 5),
+                                  backgroundColor: Colors.green,
+                                  content: Text(
+                                    "Votre annonce a été publiée avec succès",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Poppins"),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                affiche
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15),
+                                        child: SizedBox(
+                                          height: 30,
+                                          width: 30,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                                Text(
+                                  "Publiez l'annonce",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                      ),
+                      SizedBox(
+                        height: 20,
                       )
                     ],
                   ),

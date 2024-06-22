@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import '../../modals/annonces.dart';
 import '../../modals/camions.dart';
 import '../../modals/destinataires.dart';
+import '../../modals/devises.dart';
 import '../../modals/donneur_ordres.dart';
 import '../../modals/entite_factures.dart';
 import '../../modals/entreprises.dart';
@@ -31,9 +32,11 @@ import '../../modals/rules.dart';
 import '../../modals/transporteurs.dart';
 import '../../modals/type_chargements.dart';
 import '../../modals/vgms.dart';
+import '../../services/secure_storage.dart';
 
 class ApiProvider with ChangeNotifier {
   final apiService = DBServices();
+  SecureStorage secure = SecureStorage();
   final sign_uo_provider = ProvSignUp();
   bool _isLoading = false;
   bool get loading => _isLoading;
@@ -122,6 +125,8 @@ class ApiProvider with ChangeNotifier {
   List<Localisations> get localisations => _localisations;
   List<AnnoncePhotos> _annonce_photos = [];
   List<AnnoncePhotos> get photos => _annonce_photos;
+  List<Devises> _devises = [];
+  List<Devises> get devises => _devises;
 
   Future<void> InitData() async {
     _isLoading = true;
@@ -142,6 +147,10 @@ class ApiProvider with ChangeNotifier {
     _statuts = response_statuts;
     final response_type_chargement = await apiService.getTypeChargements();
     _type_chargements = response_type_chargement;
+    final response_devises = await apiService.getDevises();
+    _devises = response_devises;
+    _token = await secure.readSecureData('token');
+
     _isLoading = false;
     notifyListeners();
   }
@@ -189,6 +198,33 @@ class ApiProvider with ChangeNotifier {
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
     _camions = response_camions;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitForSomeAnnonce() async {
+    _isLoading = true;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_photo = await apiService.getAnnoncePhotos();
+    _annonce_photos = response_photo;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    final response_expediteur = await apiService.getExpediteurs();
+    _expediteurs = response_expediteur;
+    final response_transporteur = await apiService.getTransporteurs();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getCamions();
+    _camions = response_camions;
+    final response_ordres = await apiService.getOrdres();
+    _ordres = response_ordres;
+
     _isLoading = false;
     notifyListeners();
   }

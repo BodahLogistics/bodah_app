@@ -3,8 +3,10 @@
 import 'dart:math';
 
 import 'package:bodah/modals/annonce_photos.dart';
+import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/destinataires.dart';
+import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tdos.dart';
@@ -24,11 +26,21 @@ import '../modals/localisations.dart';
 import '../modals/marchandises.dart';
 import '../modals/pays.dart';
 import '../modals/rules.dart';
+import '../modals/statuts.dart';
 import '../modals/transporteurs.dart';
+import '../modals/type_chargements.dart';
 import '../modals/users.dart';
 import '../modals/villes.dart';
 
 class Functions {
+  bool cant_delete_annonce(List<Expeditions> expeditions, BonCommandes ordre) {
+    if (expeditions.isNotEmpty || ordre.id > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   Appeles apele(List<Appeles> appeles, int id) {
     return appeles.firstWhere(
       (data) => data.id == id,
@@ -117,11 +129,85 @@ class Functions {
   }
 
   String immatriculation(String? num_immatricualtion) {
-    if (num_immatricualtion!.isEmpty) {
-      return "";
-    } else {
-      return num_immatricualtion;
+    return num_immatricualtion ?? "Non défini";
+  }
+
+  TypeChargements type_chargement(
+      List<TypeChargements> type_chargements, int? id) {
+    return type_chargements.firstWhere(
+      (data) => data.id == id,
+      orElse: () => TypeChargements(id: 0, name: ""),
+    );
+  }
+
+  Statuts statut(List<Statuts> statuts, int id) {
+    return statuts.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Statuts(id: 0, name: ""),
+    );
+  }
+
+  Expeditions marchandise_expedition(
+      List<Expeditions> expeditions, Marchandises marchandise) {
+    return expeditions.firstWhere(
+      (data) => data.marchandise_id == marchandise.id,
+      orElse: () => Expeditions(
+          id: 0,
+          numero_expedition: "",
+          transporteur_id: 0,
+          statu_expedition_id: 0,
+          marchandise_id: 0,
+          montant_paye: 0,
+          deleted: 0,
+          date_depart: DateTime.now(),
+          type_paiement_id: 0,
+          vehicule_id: 0,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Devises devise(List<Devises> devises, int? id) {
+    return devises.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Devises(id: 0, nom: ""),
+    );
+  }
+
+  BonCommandes annonce_bon_commande(
+      List<BonCommandes> ordres, Annonces annonce) {
+    return ordres.firstWhere(
+      (data) => data.annonce_id == annonce.id,
+      orElse: () => BonCommandes(
+          id: 0,
+          numero_bon_commande: "",
+          is_validated: 0,
+          description: "",
+          delai_chargement: 0,
+          amende_delai_chargement: 0,
+          amende_dechargement: 0,
+          montant_paye: 0,
+          annonce_id: 0,
+          donneur_ordre_id: 0,
+          entite_facture_id: 0,
+          deleted: 0,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  List<Expeditions> annonce_expeditions(List<Expeditions> expeditions,
+      List<Marchandises> marchandises, Annonces annonce) {
+    List<Expeditions> datas = [];
+    List<Marchandises> marchs = annonce_marchandises(marchandises, annonce.id);
+    for (var element in marchs) {
+      Expeditions expedition = marchandise_expedition(expeditions, element);
+      if (expedition.id > 0) {
+        datas.add(expedition);
+      }
     }
+
+    return datas;
   }
 
   Annonces marchandise_annonce(

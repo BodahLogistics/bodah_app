@@ -216,11 +216,6 @@ class DrawerExpediteur extends StatelessWidget {
                     String statut_code = await service.darkMode();
                     if (statut_code == "202") {
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Une erreur s'est produite",
@@ -235,11 +230,6 @@ class DrawerExpediteur extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else if (statut_code == "500") {
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
                         backgroundColor: Colors.redAccent,
                         content: Text(
                           "Vérifiez votre connection  internet",
@@ -255,11 +245,6 @@ class DrawerExpediteur extends StatelessWidget {
                     } else {
                       await api_provider.InitUser();
                       final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
                         backgroundColor: MyColors.secondary,
                         content: Text(
                           "Effectué avec succès",

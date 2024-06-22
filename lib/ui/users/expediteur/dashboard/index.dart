@@ -36,6 +36,14 @@ class ExpediteurDashBoard extends StatelessWidget {
               fontFamily: "Poppins",
               fontSize: 14),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              ))
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -79,11 +87,14 @@ class ExpediteurDashBoard extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Image.asset(
-                "images/exp_choix.png",
-                height: 250,
-                width: MediaQuery.of(context).size.width * 0.7,
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.asset(
+                  "images/exp_choix.png",
+                  height: 250,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(
                 height: 40,
@@ -124,16 +135,20 @@ class ExpediteurDashBoard extends StatelessWidget {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                      'Marchandises',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          color: user.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                                    Expanded(
+                                      child: Text(
+                                        'Marchandises',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -245,7 +260,7 @@ class ExpediteurDashBoard extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 14,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ],

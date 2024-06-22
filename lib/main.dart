@@ -10,6 +10,8 @@ import 'package:bodah/providers/calculator/index.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/add.dart';
+import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
+import 'package:bodah/providers/users/expediteur/marchandises/annoces/odres/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/prov_dash_march.dart';
 import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/foundation.dart';
@@ -90,7 +92,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvDownloadDocument(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddOrdre(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddMarchandise(),
+        ),
       ],
       child: MaterialApp(
         routes: {"/login": (context) => SignIn()},

@@ -88,33 +88,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesBordereaux();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesBordereaux();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -148,7 +148,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.secondary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -179,10 +179,10 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {},
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -216,7 +216,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.secondary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -255,33 +255,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesApeles();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesApeles();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -315,7 +315,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.primary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -346,33 +346,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesInterchanges();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesInterchanges();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -406,7 +406,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.primary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -445,33 +445,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesTdos();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesTdos();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -505,7 +505,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.secondary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -536,33 +536,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesVgms();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesVgms();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -596,7 +596,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.secondary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -635,33 +635,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesRecus();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesRecus();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -695,7 +695,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.primary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -726,33 +726,33 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return MesRecus();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.49,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesRecus();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -786,7 +786,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: MyColors.primary,
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w500,
                                   ),

@@ -246,7 +246,10 @@ class DetailAppele extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    color: MyColors.secondary,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: MyColors.secondary,
+                    ),
                     height: 40,
                     width: double.infinity,
                     child: Text(
