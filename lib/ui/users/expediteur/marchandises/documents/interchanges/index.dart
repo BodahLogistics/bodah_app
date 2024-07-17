@@ -156,7 +156,8 @@ class _MesInterchangesState extends State<MesInterchanges> {
                                         : function.convertHexToColor(
                                             function.couleurs[
                                                 function.randomInt(
-                                                    function.couleurs.length)],
+                                                    function.couleurs.length -
+                                                        1)],
                                           )),
                                 title: Text(
                                   interchange.reference + " " + marchandise.nom,

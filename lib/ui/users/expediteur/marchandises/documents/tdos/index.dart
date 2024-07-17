@@ -156,7 +156,8 @@ class _MesTdosState extends State<MesTdos> {
                                         : function.convertHexToColor(
                                             function.couleurs[
                                                 function.randomInt(
-                                                    function.couleurs.length)],
+                                                    function.couleurs.length -
+                                                        1)],
                                           )),
                                 title: Text(
                                   tdo.reference + " " + marchandise.nom,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
 import '../../../../../../modals/annonces.dart';
@@ -24,10 +25,11 @@ class AddOrdreTransport extends StatelessWidget {
   TextEditingController Entreprise = TextEditingController();
   TextEditingController Ifu = TextEditingController();
   TextEditingController NomEntite = TextEditingController();
-  TextEditingController EmailEntite = TextEditingController();
   TextEditingController TelephoneEntite = TextEditingController();
   TextEditingController EntrepriseEntite = TextEditingController();
   TextEditingController IfuEntite = TextEditingController();
+  TextEditingController Adress = TextEditingController();
+  TextEditingController EntiteAdress = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +47,24 @@ class AddOrdreTransport extends StatelessWidget {
     String entreprise = provider.entreprise;
     String ifu = provider.ifu;
     String entite_nom = provider.entite_name;
-    String entite_email = provider.entite_email;
     String entite_phone_number = provider.entite_phone_number;
     String entite_entreprise = provider.entite_entreprise;
     String entite_ifu = provider.entite_ifu;
+    String address = provider.address;
+    String entite_adress = provider.entite_address;
     final service = Provider.of<DBServices>(context);
+
+    if (DelaiChargement.text.isEmpty && delai_chargement > 0) {
+      DelaiChargement.text = delai_chargement.toString();
+    }
+
+    if (AmendeDelaiChargement.text.isEmpty && amende_delai_chargement > 0) {
+      AmendeDelaiChargement.text = amende_delai_chargement.toStringAsFixed(0);
+    }
+
+    if (AmendeDechargement.text.isEmpty && amende_dechargement > 0) {
+      AmendeDechargement.text = amende_dechargement.toStringAsFixed(0);
+    }
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -101,7 +116,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -127,9 +142,9 @@ class AddOrdreTransport extends StatelessWidget {
                           filled: user.dark_mode == 1 ? true : false,
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
-                          labelText:
-                              user.dark_mode == 0 ? "Franchise (Facultatif)" : "",
-                          hintText: "Franchise (Facultatif)",
+                          labelText: user.dark_mode == 0
+                              ? "Franchise (Facultatif)"
+                              : "",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -150,7 +165,7 @@ class AddOrdreTransport extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  "Franchise invalid",
+                                  "Franchise invalide",
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: 12,
@@ -180,7 +195,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -209,7 +224,6 @@ class AddOrdreTransport extends StatelessWidget {
                           labelText: user.dark_mode == 0
                               ? "Frais de stationnement"
                               : "",
-                          hintText: "Frais de stationnement",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -241,7 +255,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -270,7 +284,6 @@ class AddOrdreTransport extends StatelessWidget {
                           labelText: user.dark_mode == 0
                               ? "Frais de déchargement"
                               : "",
-                          hintText: "Frais de déchargement",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -317,7 +330,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       controller: Nom,
                       onChanged: (value) => provider.change_name(value),
@@ -340,7 +353,6 @@ class AddOrdreTransport extends StatelessWidget {
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
                           labelText: user.dark_mode == 0 ? "Nom" : "",
-                          hintText: "Nom",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -410,7 +422,6 @@ class AddOrdreTransport extends StatelessWidget {
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
                           labelText: user.dark_mode == 0 ? "Téléphone" : "",
-                          hintText: "Téléphone",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -432,7 +443,7 @@ class AddOrdreTransport extends StatelessWidget {
                           child: Container(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Adresse électronique (Facultatif)",
+                              "Email (Facultatif)",
                               style: TextStyle(
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
@@ -442,7 +453,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       controller: Email,
                       onChanged: (value) => provider.change_email(value),
@@ -467,7 +478,6 @@ class AddOrdreTransport extends StatelessWidget {
                               user.dark_mode == 1 ? MyColors.filedDark : null,
                           labelText:
                               user.dark_mode == 0 ? "Email (Facultatif)" : "",
-                          hintText: "Email (Facultatif)",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -502,6 +512,80 @@ class AddOrdreTransport extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
+                  user.dark_mode == 1
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Adresse de résidence",
+                              style: TextStyle(
+                                color: MyColors.light,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                    child: TextField(
+                      controller: Adress,
+                      onChanged: (value) => provider.change_adress(value),
+                      decoration: InputDecoration(
+                          suffixIcon: Adress.text.isNotEmpty &&
+                                  (address.length < 3)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Adress.text.isEmpty
+                                ? function.convertHexToColor("#79747E")
+                                : (address.length > 3)
+                                    ? MyColors.secondary
+                                    : Colors.red,
+                          )),
+                          filled: user.dark_mode == 1 ? true : false,
+                          fillColor:
+                              user.dark_mode == 1 ? MyColors.filedDark : null,
+                          labelText: user.dark_mode == 0 ? "Adresse" : "",
+                          labelStyle: TextStyle(
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontSize: 14,
+                              fontFamily: "Poppins"),
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              color: MyColors.black)),
+                    ),
+                  ),
+                  Adress.text.isEmpty
+                      ? Container()
+                      : address.length < 3
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 3),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Adresse de résidence invalide",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins",
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -515,7 +599,7 @@ class AddOrdreTransport extends StatelessWidget {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "Non de l'entreprise (Facultatif)",
+                                        "Entreprise (Facultatif)",
                                         style: TextStyle(
                                           color: MyColors.light,
                                           fontWeight: FontWeight.w500,
@@ -525,7 +609,7 @@ class AddOrdreTransport extends StatelessWidget {
                                   )
                                 : Container(),
                             SizedBox(
-                              height: user.dark_mode == 1 ? 40 : 35,
+                              height: 40,
                               child: TextField(
                                 controller: Entreprise,
                                 onChanged: (value) =>
@@ -554,10 +638,8 @@ class AddOrdreTransport extends StatelessWidget {
                                         ? MyColors.filedDark
                                         : null,
                                     labelText: user.dark_mode == 0
-                                        ? "Non de l'entreprise (Facultatif)"
+                                        ? "Entreprise (Facultatif)"
                                         : "",
-                                    hintText:
-                                        "Non de l'entreprise (Facultatif)",
                                     labelStyle: TextStyle(
                                         color: user.dark_mode == 1
                                             ? MyColors.light
@@ -593,7 +675,7 @@ class AddOrdreTransport extends StatelessWidget {
                                   )
                                 : Container(),
                             SizedBox(
-                              height: user.dark_mode == 1 ? 40 : 35,
+                              height: 40,
                               child: TextField(
                                 controller: Ifu,
                                 onChanged: (value) =>
@@ -624,7 +706,6 @@ class AddOrdreTransport extends StatelessWidget {
                                     labelText: user.dark_mode == 0
                                         ? "IFU/Numéro Fiscal (Facultatif)"
                                         : "",
-                                    hintText: "IFU/Numéro Fiscal",
                                     labelStyle: TextStyle(
                                         color: user.dark_mode == 1
                                             ? MyColors.light
@@ -676,7 +757,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
                       controller: NomEntite,
                       onChanged: (value) => provider.change_entite_name(value),
@@ -700,7 +781,6 @@ class AddOrdreTransport extends StatelessWidget {
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
                           labelText: user.dark_mode == 0 ? "Nom" : "",
-                          hintText: "Nom",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -770,7 +850,6 @@ class AddOrdreTransport extends StatelessWidget {
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
                           labelText: user.dark_mode == 0 ? "Téléphone" : "",
-                          hintText: "Téléphone",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -783,14 +862,16 @@ class AddOrdreTransport extends StatelessWidget {
                               color: MyColors.black)),
                     ),
                   ),
-                  SizedBox(height: 7),
+                  SizedBox(
+                    height: 15,
+                  ),
                   user.dark_mode == 1
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 5),
                           child: Container(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Adresse électronique (Facultatif)",
+                              "Adresse de résidence",
                               style: TextStyle(
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
@@ -800,13 +881,14 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: user.dark_mode == 1 ? 40 : 35,
+                    height: 40,
                     child: TextField(
-                      controller: EmailEntite,
-                      onChanged: (value) => provider.change_entite_email(value),
+                      controller: EntiteAdress,
+                      onChanged: (value) =>
+                          provider.change_entite_adress(value),
                       decoration: InputDecoration(
-                          suffixIcon: EmailEntite.text.isNotEmpty &&
-                                  (!entite_email.contains("@"))
+                          suffixIcon: EntiteAdress.text.isNotEmpty &&
+                                  (entite_adress.length < 3)
                               ? Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Icon(Icons.error, color: Colors.red),
@@ -814,18 +896,16 @@ class AddOrdreTransport extends StatelessWidget {
                               : null,
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
-                            color: EmailEntite.text.isEmpty
+                            color: EntiteAdress.text.isEmpty
                                 ? function.convertHexToColor("#79747E")
-                                : (entite_email.contains("@"))
+                                : (entite_adress.length > 3)
                                     ? MyColors.secondary
                                     : Colors.red,
                           )),
                           filled: user.dark_mode == 1 ? true : false,
                           fillColor:
                               user.dark_mode == 1 ? MyColors.filedDark : null,
-                          labelText:
-                              user.dark_mode == 0 ? "Email (Facultatif)" : "",
-                          hintText: "Email (Facultatif)",
+                          labelText: user.dark_mode == 0 ? "Adresse" : "",
                           labelStyle: TextStyle(
                               color: user.dark_mode == 1
                                   ? MyColors.light
@@ -838,15 +918,15 @@ class AddOrdreTransport extends StatelessWidget {
                               color: MyColors.black)),
                     ),
                   ),
-                  EmailEntite.text.isEmpty
+                  EntiteAdress.text.isEmpty
                       ? Container()
-                      : !entite_email.contains("@")
+                      : entite_adress.length < 3
                           ? Padding(
                               padding: const EdgeInsets.only(top: 3),
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  "Email invalid",
+                                  "Adresse de résidence invalide",
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: 12,
@@ -873,7 +953,7 @@ class AddOrdreTransport extends StatelessWidget {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "Non de l'entreprise (Facultatif)",
+                                        "Entreprise (Facultatif)",
                                         style: TextStyle(
                                           color: MyColors.light,
                                           fontWeight: FontWeight.w500,
@@ -883,7 +963,7 @@ class AddOrdreTransport extends StatelessWidget {
                                   )
                                 : Container(),
                             SizedBox(
-                              height: user.dark_mode == 1 ? 40 : 35,
+                              height: 40,
                               child: TextField(
                                 controller: EntrepriseEntite,
                                 onChanged: (value) =>
@@ -913,10 +993,8 @@ class AddOrdreTransport extends StatelessWidget {
                                         ? MyColors.filedDark
                                         : null,
                                     labelText: user.dark_mode == 0
-                                        ? "Non de l'entreprise (Facultatif)"
+                                        ? "Entreprise (Facultatif)"
                                         : "",
-                                    hintText:
-                                        "Non de l'entreprise (Facultatif)",
                                     labelStyle: TextStyle(
                                         color: user.dark_mode == 1
                                             ? MyColors.light
@@ -952,7 +1030,7 @@ class AddOrdreTransport extends StatelessWidget {
                                   )
                                 : Container(),
                             SizedBox(
-                              height: user.dark_mode == 1 ? 40 : 35,
+                              height: 40,
                               child: TextField(
                                 controller: IfuEntite,
                                 onChanged: (value) =>
@@ -983,7 +1061,6 @@ class AddOrdreTransport extends StatelessWidget {
                                     labelText: user.dark_mode == 0
                                         ? "IFU/Numéro Fiscal (Facultatif)"
                                         : "",
-                                    hintText: "IFU/Numéro Fiscal",
                                     labelStyle: TextStyle(
                                         color: user.dark_mode == 1
                                             ? MyColors.light
@@ -1014,6 +1091,148 @@ class AddOrdreTransport extends StatelessWidget {
                             backgroundColor: MyColors.secondary),
                         onPressed: () async {
                           provider.change_affiche(true);
+
+                          String statut_code = await service.addOrdre(
+                              delai_chargement,
+                              amende_delai_chargement,
+                              amende_dechargement,
+                              email,
+                              nom,
+                              phone_number,
+                              address,
+                              entreprise,
+                              entite_nom,
+                              entite_phone_number,
+                              entite_adress,
+                              entite_entreprise,
+                              ifu,
+                              entite_ifu,
+                              annonce);
+
+                          if (statut_code == "100") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "Données invalides",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "202") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "Une erreur inattendue s'est produite",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "422") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "Erreur de validation",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "500") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "Unerreur est survenue",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "404") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "L'annonce a égé supprimée",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "403") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "L'ordre de commande pour l'annonce cette annonce existe déjà",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "500") {
+                            provider.change_affiche(false);
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text(
+                                "Une erreur inattendu est survenue",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else if (statut_code == "200") {
+                            await api_provider.InitForSomeAnnonce();
+                            provider.change_affiche(false);
+                            provider.reset();
+                            Navigator.of(context).pop();
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                "L'ordre de transport a été ajouté avec succès",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

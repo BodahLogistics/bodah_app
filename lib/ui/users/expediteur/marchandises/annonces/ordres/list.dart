@@ -1,14 +1,13 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
-import 'package:bodah/modals/appeles.dart';
-import 'package:bodah/providers/documents/appele.dart';
-import 'package:bodah/services/data_base_service.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/detail.dart';
+import 'package:bodah/modals/bon_commandes.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
-import '../../../../../../modals/expeditions.dart';
+import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
@@ -17,27 +16,27 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
 import '../../nav_bottom/index.dart';
 
-class MesApeles extends StatefulWidget {
-  const MesApeles({super.key});
+class MesOrdreTransport extends StatefulWidget {
+  const MesOrdreTransport({super.key});
 
   @override
-  State<MesApeles> createState() => _MesApelesState();
+  State<MesOrdreTransport> createState() => _MesOrdreTransportState();
 }
 
-class _MesApelesState extends State<MesApeles> {
+class _MesOrdreTransportState extends State<MesOrdreTransport> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitApeles();
+    Provider.of<ApiProvider>(context, listen: false).InitOrdres();
   }
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    List<Expeditions> expeditions = api_provider.expeditions;
+    List<BonCommandes> ordres = api_provider.ordres;
+    List<Annonces> annonces = api_provider.annonces;
     final user = api_provider.user;
-    List<Appeles> apeles = api_provider.appeles;
     bool loading = api_provider.loading;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -55,7 +54,7 @@ class _MesApelesState extends State<MesApeles> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes apélés",
+          "Ordres de transport",
           style: TextStyle(
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
               fontWeight: FontWeight.bold,
@@ -76,7 +75,7 @@ class _MesApelesState extends State<MesApeles> {
                 color: MyColors.secondary,
               ),
             )
-          : apeles.isEmpty
+          : ordres.isEmpty
               ? Center(
                   child: CircularProgressIndicator(
                     color: MyColors.secondary,
@@ -89,11 +88,13 @@ class _MesApelesState extends State<MesApeles> {
                         const EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        Appeles apele = apeles[index];
-                        Expeditions expedition = function.expedition(
-                            expeditions, apele.expedition_id);
-                        Marchandises marchandise = function.marchandise(
-                            marchandises, expedition.marchandise_id);
+                        BonCommandes ordre = ordres[index];
+                        Annonces annonce =
+                            function.annonce(annonces, ordre.annonce_id);
+                        List<Marchandises> annonce_marchandises = function
+                            .annonce_marchandises(marchandises, annonce.id);
+
+                        Marchandises marchandise = annonce_marchandises.first;
                         Localisations localisation =
                             function.marchandise_localisation(
                                 localisations, marchandise.id);
@@ -132,9 +133,7 @@ class _MesApelesState extends State<MesApeles> {
                                           Animation<double> animation,
                                           Animation<double>
                                               secondaryAnimation) {
-                                        return DetailAppele(
-                                          id: apele.id,
-                                        );
+                                        return DetailOrdre(id: ordre.id);
                                       },
                                       transitionsBuilder: (BuildContext context,
                                           Animation<double> animation,
@@ -162,7 +161,9 @@ class _MesApelesState extends State<MesApeles> {
                                                         1)],
                                           )),
                                 title: Text(
-                                  apele.reference + " " + marchandise.nom,
+                                  ordre.numero_bon_commande +
+                                      " " +
+                                      marchandise.nom,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -173,19 +174,6 @@ class _MesApelesState extends State<MesApeles> {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16),
                                 ),
-                                trailing: IconButton(
-                                    onPressed: () {
-                                      String url =
-                                          "https://test.bodah.bj/storage/" +
-                                              apele.path;
-                                      downloadDocument(context, url);
-                                    },
-                                    icon: Icon(
-                                      Icons.more_vert,
-                                      color: user.dark_mode == 1
-                                          ? MyColors.light
-                                          : null,
-                                    )),
                                 subtitle: Column(
                                   children: [
                                     Row(
@@ -234,8 +222,8 @@ class _MesApelesState extends State<MesApeles> {
                                           child: Container(
                                             alignment: Alignment.centerLeft,
                                             child: Text(
-                                              function
-                                                  .date(expedition.date_depart),
+                                              function.date(
+                                                  marchandise.date_chargement),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -244,21 +232,6 @@ class _MesApelesState extends State<MesApeles> {
                                                     : MyColors.black,
                                                 fontFamily: "Poppins",
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "- " +
-                                                function.date(
-                                                    expedition.date_arrivee),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                              fontFamily: "Poppins",
                                             ),
                                           ),
                                         ),
@@ -271,139 +244,10 @@ class _MesApelesState extends State<MesApeles> {
                           ),
                         );
                       },
-                      itemCount: apeles.length,
+                      itemCount: ordres.length,
                     ),
                   ),
                 ),
     );
   }
-}
-
-void downloadDocument(BuildContext context, String url) {
-  Future.delayed(Duration(milliseconds: 500), () {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext dialogcontext) {
-        final provider = Provider.of<ProvDownloadDocument>(dialogcontext);
-        final api_provider = Provider.of<ApiProvider>(dialogcontext);
-        final user = api_provider.user;
-        bool affiche = provider.affiche;
-        final service = Provider.of<DBServices>(dialogcontext);
-
-        return AlertDialog(
-          backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
-          title: Text(
-            "Téléchargement",
-            style: TextStyle(
-                color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
-                fontWeight: FontWeight.bold),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                affiche
-                    ? Center(
-                        child: SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(
-                            color: user.dark_mode == 1
-                                ? MyColors.light
-                                : MyColors.secondary,
-                          ),
-                        ),
-                      )
-                    : Container(),
-              ],
-            ),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () async {
-                      provider.change_affiche(true);
-                      String statut_code = await service.saveFile(url);
-                      if (statut_code == "203") {
-                        provider.change_affiche(false);
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.redAccent,
-                          content: Text(
-                            "Une erreur s'est produite",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(dialogcontext)
-                            .showSnackBar(snackBar);
-                      } else if (statut_code == "200") {
-                        provider.change_affiche(false);
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text(
-                            "Téléchargé avec suucès",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(dialogcontext)
-                            .showSnackBar(snackBar);
-                        Navigator.of(dialogcontext).pop();
-                      } else {
-                        provider.change_affiche(false);
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.redAccent,
-                          content: Text(
-                            statut_code,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(dialogcontext)
-                            .showSnackBar(snackBar);
-                      }
-                    },
-                    child: Text(
-                      "Téléchargez",
-                      style: TextStyle(
-                          color: MyColors.secondary,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          letterSpacing: 1),
-                    )),
-                TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      provider.change_affiche(false);
-                      Navigator.of(dialogcontext).pop();
-                    },
-                    child: Text(
-                      "Fermez",
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          letterSpacing: 1),
-                    )),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  });
 }

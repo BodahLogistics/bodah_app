@@ -157,7 +157,8 @@ class _MesBordereauxState extends State<MesBordereaux> {
                                         : function.convertHexToColor(
                                             function.couleurs[
                                                 function.randomInt(
-                                                    function.couleurs.length)],
+                                                    function.couleurs.length -
+                                                        1)],
                                           )),
                                 title: Text(
                                   bordereau.numero_borderau +

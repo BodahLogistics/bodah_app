@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class BonCommandes {
@@ -16,6 +17,7 @@ class BonCommandes {
   final int deleted;
   final DateTime created_at;
   final DateTime updated_at;
+
   BonCommandes({
     required this.id,
     required this.numero_bon_commande,
@@ -95,10 +97,17 @@ class BonCommandes {
       description:
           map['description'] != null ? map['description'] as String : null,
       delai_chargement: map['delai_chargement'] as int,
-      amende_delai_chargement: map['amende_delai_chargement'] as double,
-      amende_dechargement: map['amende_dechargement'] as double,
-      montant_paye:
-          map['montant_paye'] != null ? map['montant_paye'] as double : null,
+      amende_delai_chargement: (map['amende_delai_chargement'] is String)
+          ? double.parse(map['amende_delai_chargement'])
+          : map['amende_delai_chargement'] as double,
+      amende_dechargement: (map['amende_dechargement'] is String)
+          ? double.parse(map['amende_dechargement'])
+          : map['amende_dechargement'] as double,
+      montant_paye: map['montant_paye'] != null
+          ? (map['montant_paye'] is String)
+              ? double.parse(map['montant_paye'])
+              : map['montant_paye'] as double
+          : null,
       annonce_id: map['annonce_id'] as int,
       donneur_ordre_id: map['donneur_ordre_id'] as int,
       entite_facture_id: map['entite_facture_id'] as int,

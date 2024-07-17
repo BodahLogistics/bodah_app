@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_local_variable, prefer_adjacent_string_concatenation, prefer_const_literals_to_create_immutables
 
+import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
 import '../../../../providers/api/api_data.dart';
@@ -18,6 +20,7 @@ class ExpediteurDashBoard extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     final user = api_provider.user;
+    List<Villes> villes = api_provider.all_villes;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -29,7 +32,7 @@ class ExpediteurDashBoard extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Accueil",
+          "Accueil ${villes.length}",
           style: TextStyle(
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
               fontWeight: FontWeight.bold,

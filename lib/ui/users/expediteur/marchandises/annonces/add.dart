@@ -6,17 +6,18 @@ import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/add.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/annonces/plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../providers/calculator/index.dart';
-import '../../../../../providers/users/expediteur/marchandises/prov_dash_march.dart';
 import '../../../../../services/data_base_service.dart';
 
 class PublishAnnonceExp extends StatelessWidget {
@@ -48,7 +49,7 @@ class PublishAnnonceExp extends StatelessWidget {
     Villes ville_liv = provider.ville_liv;
     Pays pay_exp = provider.pay_exp;
     Pays pay_liv = provider.pay_liv;
-    File? file = provider.file_selected;
+    List<File> files = provider.files_selected;
     bool upload = provider.upload;
     bool affiche = provider.affiche;
     if (tarif > 0) {
@@ -65,9 +66,6 @@ class PublishAnnonceExp extends StatelessWidget {
     List<Villes> villes_livraison = provider.villes_livraison;
     Unites unite = provider.unite;
     final service = Provider.of<DBServices>(context);
-    final changeProvider = Provider.of<ProvChangeDashMarch>(context);
-    PageController _pageController =
-        PageController(viewportFraction: 0.25, initialPage: 0);
 
     return loading
         ? Center(
@@ -97,7 +95,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             )
                           : Container(),
                       SizedBox(
-                        height: user.dark_mode == 1 ? 40 : 35,
+                        height: 40,
                         child: TextField(
                           controller: Name,
                           onChanged: (value) => provider.change_nom(value),
@@ -172,7 +170,7 @@ class PublishAnnonceExp extends StatelessWidget {
                             )
                           : Container(),
                       SizedBox(
-                        height: user.dark_mode == 1 ? 40 : 35,
+                        height: 40,
                         child: TextField(
                           controller: Tarif,
                           onTap: () {
@@ -754,7 +752,7 @@ class PublishAnnonceExp extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                    height: user.dark_mode == 1 ? 40 : 50,
+                                    height: user.dark_mode == 1 ? 50 : 50,
                                     child: DropdownSearch<String>(
                                       popupProps: PopupProps.dialog(
                                         showSearchBox: true,
@@ -967,7 +965,9 @@ class PublishAnnonceExp extends StatelessWidget {
                         height: 15,
                       ),
                       TextButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          takeAnnonceImages(context);
+                        },
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Container(
@@ -1060,18 +1060,11 @@ class PublishAnnonceExp extends StatelessWidget {
                                   adress_liv,
                                   ville_exp,
                                   ville_liv,
-                                  file);
+                                  files);
 
                               if (statut_code == "100") {
                                 provider.change_affiche(false);
                                 final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
                                   backgroundColor: Colors.redAccent,
                                   content: Text(
                                     "Données invalides",
@@ -1087,13 +1080,6 @@ class PublishAnnonceExp extends StatelessWidget {
                               } else if (statut_code == "202") {
                                 provider.change_affiche(false);
                                 final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
                                   backgroundColor: Colors.redAccent,
                                   content: Text(
                                     "Une erreur inattendue s'est produite",
@@ -1109,13 +1095,6 @@ class PublishAnnonceExp extends StatelessWidget {
                               } else if (statut_code == "422") {
                                 provider.change_affiche(false);
                                 final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
                                   backgroundColor: Colors.redAccent,
                                   content: Text(
                                     "Erreur de validation",
@@ -1130,17 +1109,11 @@ class PublishAnnonceExp extends StatelessWidget {
                                     .showSnackBar(snackBar);
                               } else if (statut_code == "500") {
                                 provider.change_affiche(false);
+
                                 final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
                                   backgroundColor: Colors.redAccent,
                                   content: Text(
-                                    "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                                    "Taille des images trop lourdes",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -1150,27 +1123,13 @@ class PublishAnnonceExp extends StatelessWidget {
                                 );
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
-                              } else {
+                              } else if (statut_code == "200") {
+                                await api_provider.InitAnnonce();
                                 provider.change_affiche(false);
                                 provider.reset();
-                                changeProvider.change_index(0);
-                                double screen =
-                                    MediaQuery.of(context).size.height;
-                                int data = screen.toInt();
-                                _pageController.animateToPage(
-                                  0 * data,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-
+                                calculatrice.change_montant("");
+                                Navigator.of(context).pop();
                                 final snackBar = SnackBar(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      left: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      right: 5),
                                   backgroundColor: Colors.green,
                                   content: Text(
                                     "Votre annonce a été publiée avec succès",
@@ -1245,19 +1204,11 @@ Future<dynamic> Calculator(BuildContext context) {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '7'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '8'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '9'),
-                  ),
+                  buildButton(dialogcontext, '7'),
+                  buildButton(dialogcontext, '8'),
+                  buildButton(dialogcontext, '9'),
                   buildButton(dialogcontext, '/'),
                 ],
               ),
@@ -1267,18 +1218,9 @@ Future<dynamic> Calculator(BuildContext context) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '4'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '5'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '6'),
-                  ),
+                  buildButton(dialogcontext, '4'),
+                  buildButton(dialogcontext, '5'),
+                  buildButton(dialogcontext, '6'),
                   buildButton(dialogcontext, '*'),
                 ],
               ),
@@ -1288,18 +1230,9 @@ Future<dynamic> Calculator(BuildContext context) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '1'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '2'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '3'),
-                  ),
+                  buildButton(dialogcontext, '1'),
+                  buildButton(dialogcontext, '2'),
+                  buildButton(dialogcontext, '3'),
                   buildButton(dialogcontext, '-'),
                 ],
               ),
@@ -1309,18 +1242,9 @@ Future<dynamic> Calculator(BuildContext context) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, 'C'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '0'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: buildButton(dialogcontext, '='),
-                  ),
+                  buildButton(dialogcontext, 'C'),
+                  buildButton(dialogcontext, '0'),
+                  buildButton(dialogcontext, '='),
                   buildButton(dialogcontext, '+'),
                 ],
               ),
@@ -1330,54 +1254,51 @@ Future<dynamic> Calculator(BuildContext context) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  height: 30,
-                  child: TextButton(
-                      onPressed: () {
-                        provider.delete();
-                      },
-                      child: Text(
-                        "Supprimer",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontFamily: "Poppins",
-                        ),
-                      )),
-                ),
-                SizedBox(
-                  height: 30,
-                  child: TextButton(
-                      onPressed: () {
-                        provider.clearAll();
-                        Navigator.of(dialogcontext).pop();
-                      },
-                      child: Text(
-                        "Annulez",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: MyColors.secondDark,
-                          fontFamily: "Poppins",
-                        ),
-                      )),
-                ),
-                SizedBox(
-                  height: 30,
-                  child: TextButton(
-                      onPressed: () {
-                        provider.change_montant(display);
-                        provider.clearAll();
-                        Navigator.of(dialogcontext).pop();
-                      },
-                      child: Text(
-                        "Insérez",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: MyColors.secondary,
-                          fontFamily: "Poppins",
-                        ),
-                      )),
-                ),
+                TextButton(
+                    style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      provider.delete();
+                    },
+                    child: Text(
+                      "Supprimer",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: MyColors.secondary,
+                        fontFamily: "Poppins",
+                      ),
+                    )),
+                TextButton(
+                    style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      provider.clearAll();
+                      Navigator.of(dialogcontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: MyColors.secondDark,
+                        fontFamily: "Poppins",
+                      ),
+                    )),
+                TextButton(
+                    style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      provider.change_montant(display);
+                      provider.clearAll();
+                      Navigator.of(dialogcontext).pop();
+                    },
+                    child: Text(
+                      "Insérez",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: MyColors.primary,
+                        fontFamily: "Poppins",
+                      ),
+                    )),
               ],
             ),
           ],
@@ -1387,21 +1308,23 @@ Future<dynamic> Calculator(BuildContext context) {
 
 Widget buildButton(BuildContext context, String text) {
   final provider = Provider.of<ProvCalculator>(context);
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-        backgroundColor: MyColors.light,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-    onPressed: () {
-      if (text == 'C') {
-        provider.clearAll();
-      } else if (text == "=") {
-        provider.evaluate();
-      } else {
-        provider.addDigit(text);
-      }
-    },
-    child: Padding(
-      padding: const EdgeInsets.all(2.0),
+  return SizedBox(
+    width: 50,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: MyColors.light,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+      onPressed: () {
+        if (text == 'C') {
+          provider.clearAll();
+        } else if (text == "=") {
+          provider.evaluate();
+        } else {
+          provider.addDigit(text);
+        }
+      },
       child: Text(
         text,
         style: TextStyle(

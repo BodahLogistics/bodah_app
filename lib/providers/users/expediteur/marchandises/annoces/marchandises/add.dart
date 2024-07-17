@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -7,7 +7,7 @@ import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -42,7 +42,7 @@ class ProvAddMarchandise with ChangeNotifier {
   }
 
   void reset() {
-    _file_selected = null;
+    _files_selected = [];
     _nom = "";
     _unite = Unites(id: 0, name: "");
     _poids = 0;
@@ -58,10 +58,10 @@ class ProvAddMarchandise with ChangeNotifier {
     notifyListeners();
   }
 
-  File? _file_selected;
-  File? get file_selected => _file_selected;
-  void change_file(File file) {
-    _file_selected = file;
+  List<File> _files_selected = [];
+  List<File> get files_selected => _files_selected;
+  void change_files(List<File> files) {
+    _files_selected = files;
     notifyListeners();
   }
 
@@ -102,29 +102,87 @@ class ProvAddMarchandise with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> selectImageFromGallery() async {
-    _upload = true;
-    notifyListeners();
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> selectImagesFromGallery(BuildContext context) async {
+    try {
+      if (_files_selected.length >= 3) {
+        final snackBar = SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            "Vous devez ajouter au maximum trois images",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"),
+          ),
+          behavior: SnackBarBehavior.floating,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
 
-    if (pickedFile != null) {
-      _file_selected = File(pickedFile.path);
+      _upload = true;
+      notifyListeners();
+
+      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
+
+      if (pickedFiles != null) {
+        for (var pickedFile in pickedFiles) {
+          if (_files_selected.length < 3) {
+            _files_selected.add(File(pickedFile.path));
+          } else {
+            break;
+          }
+        }
+
+        final snackBar = SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            "Images ajoutées avec succès",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"),
+          ),
+          behavior: SnackBarBehavior.floating,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
+      _upload = false;
+      notifyListeners();
+    } catch (e) {
+      _upload = false;
+      notifyListeners();
     }
-
-    _upload = false;
-    notifyListeners();
   }
 
-  Future<void> takeImageWithCamera() async {
-    _upload = true;
-    notifyListeners();
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+  Future<void> takeImageWithCamera(BuildContext context) async {
+    try {
+      _upload = true;
+      notifyListeners();
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
-    if (pickedFile != null) {
-      _file_selected = File(pickedFile.path);
+      if (pickedFile != null) {
+        _files_selected.add(File(pickedFile.path));
+        final snackBar = SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            "Image ajoutée avec succès",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"),
+          ),
+          behavior: SnackBarBehavior.floating,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
+      notifyListeners();
+    } catch (e) {
+      _upload = false;
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   String _nom = "";

@@ -156,7 +156,8 @@ class _MesVgmsState extends State<MesVgms> {
                                         : function.convertHexToColor(
                                             function.couleurs[
                                                 function.randomInt(
-                                                    function.couleurs.length)],
+                                                    function.couleurs.length -
+                                                        1)],
                                           )),
                                 title: Text(
                                   vgm.reference + " " + marchandise.nom,

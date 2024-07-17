@@ -5,6 +5,7 @@ import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entite_factures.dart';
 import 'package:bodah/modals/entreprises.dart';
 import 'package:flutter/foundation.dart';
+
 import '../../../../../../modals/users.dart';
 
 class ProvAddOrdre with ChangeNotifier {
@@ -29,14 +30,18 @@ class ProvAddOrdre with ChangeNotifier {
     _entite_name = entite_facture_user.name;
     _entite_phone_number = entite_facture_user.telephone;
     _entite_entreprise = entite_facture_entreprise.name;
+    _entite_address = entite_facture_user.adresse ?? "";
+    _address = donneur_ordre_user.adresse ?? "";
     notifyListeners();
   }
 
   void reset() {
     _entite_ifu = "";
+    _address = "";
+    _entite_address = '';
     _delai_chargement = 72;
-    _amende_delai_chargement = 72;
-    _amende_dechargement = 72;
+    _amende_delai_chargement = 25000;
+    _amende_dechargement = 25000;
     _email = "";
     _entite_email = "";
     _name = "";
@@ -47,6 +52,21 @@ class ProvAddOrdre with ChangeNotifier {
     _entite_phone_number = "";
     _entite_entreprise = "";
     _affiche = false;
+    notifyListeners();
+  }
+
+  String _address = "";
+  String _entite_address = "";
+  String get address => _address;
+  String get entite_address => _entite_address;
+
+  void change_adress(String? value) {
+    _address = value!;
+    notifyListeners();
+  }
+
+  void change_entite_adress(String? value) {
+    _entite_address = value!;
     notifyListeners();
   }
 

@@ -35,7 +35,7 @@ class ProvCalculator extends ChangeNotifier {
     Expression exp = p.parse(_display);
     ContextModel cm = ContextModel();
     double result = exp.evaluate(EvaluationType.REAL, cm);
-    _display = result.toString();
+    _display = result.toStringAsFixed(0);
     notifyListeners();
   }
 

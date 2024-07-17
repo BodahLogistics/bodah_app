@@ -1,23 +1,35 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 
+import 'package:bodah/modals/annonce_colis.dart';
 import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/coli_photos.dart';
+import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/expeditions.dart';
+import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/notifications.dart';
+import 'package:bodah/modals/statut_operations.dart';
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tdos.dart';
+import 'package:bodah/modals/trajets.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/users.dart';
 import 'package:bodah/modals/villes.dart';
+import 'package:bodah/modals/voiture_photos.dart';
+import 'package:bodah/modals/voitures.dart';
 import 'package:bodah/providers/auth/prov_sign_up.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:flutter/material.dart';
+
 import '../../modals/annonces.dart';
+import '../../modals/arrondissements.dart';
 import '../../modals/camions.dart';
+import '../../modals/coli_tarifs.dart';
+import '../../modals/departements.dart';
 import '../../modals/destinataires.dart';
 import '../../modals/devises.dart';
 import '../../modals/donneur_ordres.dart';
@@ -27,6 +39,8 @@ import '../../modals/expediteurs.dart';
 import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
 import '../../modals/pays.dart';
+import '../../modals/quartiers.dart';
+import '../../modals/recepteurs.dart';
 import '../../modals/recus.dart';
 import '../../modals/rules.dart';
 import '../../modals/transporteurs.dart';
@@ -51,6 +65,34 @@ class ApiProvider with ChangeNotifier {
   List<Villes> get villes => _villes;
   List<Pays> _pays = [];
   List<Pays> get pays => _pays;
+
+  List<Departements> _departements = [];
+  List<Departements> get departements => _departements;
+  List<Arrondissements> _arrondissements = [];
+  List<Arrondissements> get arrondissements => _arrondissements;
+  List<Quartiers> _quartiers = [];
+  List<Quartiers> get quartiers => _quartiers;
+
+  List<AnnonceColis> _annonce_colis = [];
+  List<AnnonceColis> get annonce_colis => _annonce_colis;
+  List<ColiPhotos> _coli_photos = [];
+  List<ColiPhotos> get coli_photos => _coli_photos;
+  List<ColiTarifs> _coli_tarifs = [];
+  List<ColiTarifs> get coli_tarifs => _coli_tarifs;
+  List<LocationColis> _location_colis = [];
+  List<LocationColis> get location_colis => _location_colis;
+  List<Recepteurs> _recepteurs = [];
+  List<Recepteurs> get recepteurs => _recepteurs;
+  List<StatutOperations> _statut_operations = [];
+  List<StatutOperations> get statut_operations => _statut_operations;
+  List<Trajets> _trajets = [];
+  List<Trajets> get trajets => _trajets;
+  List<Voitures> _voitures = [];
+  List<Voitures> get voitures => _voitures;
+  List<VoiturePhotos> _voiture_photos = [];
+  List<VoiturePhotos> get voiture_photos => _voiture_photos;
+  List<EnvoiColis> _envoi_colis = [];
+  List<EnvoiColis> get envoi_colis => _envoi_colis;
 
   List<Rules> _rules = [];
   List<Rules> get rules => _rules;
@@ -132,8 +174,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_users = await apiService.getUsers();
     _users = response_users;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
     final response_unites = await apiService.getUnites();
     _unites = response_unites;
     final response = await apiService.user();
@@ -162,6 +202,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitAnnonce() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_expedition = await apiService.getExpeditions();
     _expeditions = response_expedition;
     final response_marchandise = await apiService.getMarchandises();
@@ -180,6 +222,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitExpedition() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_expedition = await apiService.getExpeditions();
     _expeditions = response_expedition;
     final response_marchandise = await apiService.getMarchandises();
@@ -204,6 +248,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitForSomeAnnonce() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_expedition = await apiService.getExpeditions();
     _expeditions = response_expedition;
     final response_marchandise = await apiService.getMarchandises();
@@ -216,15 +262,22 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_destinataire = await apiService.getDestinataires();
     _destinataires = response_destinataire;
+    final response_entite = await apiService.getEntiteFactures();
+    _entite_factures = response_entite;
+    final response_donneur = await apiService.getDonneurOrdres();
+    _donneur_ordres = response_donneur;
+    final response_entreprise = await apiService.getEntreprises();
+    _entreprises = response_entreprise;
     final response_expediteur = await apiService.getExpediteurs();
     _expediteurs = response_expediteur;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
     final response_transporteur = await apiService.getTransporteurs();
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
     _camions = response_camions;
     final response_ordres = await apiService.getOrdres();
     _ordres = response_ordres;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -239,12 +292,16 @@ class ApiProvider with ChangeNotifier {
     _appeles = response_apeles;
     final response_interchange = await apiService.getInterchanges();
     _interchanges = response_interchange;
+    final response_ordre = await apiService.getOrdres();
+    _ordres = response_ordre;
     _isLoading = false;
     notifyListeners();
   }
 
   Future<void> InitBordereaux() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_bordereaux = await apiService.getBordereaux();
     _bordereaux = response_bordereaux;
     final response_expedition = await apiService.getExpeditions();
@@ -265,6 +322,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitInterchanges() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_interchanges = await apiService.getInterchanges();
     _interchanges = response_interchanges;
     final response_expedition = await apiService.getExpeditions();
@@ -281,6 +340,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitTdos() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_tdo = await apiService.getTdos();
     _tdos = response_tdo;
     final response_expedition = await apiService.getExpeditions();
@@ -297,6 +358,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitVgms() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_vgm = await apiService.getVgms();
     _vgms = response_vgm;
     final response_expedition = await apiService.getExpeditions();
@@ -313,6 +376,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitRecus() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_recus = await apiService.getRecus();
     _recus = response_recus;
     final response_expedition = await apiService.getExpeditions();
@@ -329,6 +394,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitApeles() async {
     _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
     final response_apeles = await apiService.getApeles();
     _appeles = response_apeles;
     final response_expedition = await apiService.getExpeditions();
@@ -339,6 +406,56 @@ class ApiProvider with ChangeNotifier {
     _marchandises = response_marchandise;
     final response_destinataire = await apiService.getDestinataires();
     _destinataires = response_destinataire;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitOrdres() async {
+    _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_ordre = await apiService.getOrdres();
+    _ordres = response_ordre;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitForSomeOrdre() async {
+    _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_ordres = await apiService.getOrdres();
+    _ordres = response_ordres;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_destinataire = await apiService.getDestinataires();
+    _destinataires = response_destinataire;
+    final response_entite = await apiService.getEntiteFactures();
+    _entite_factures = response_entite;
+    final response_donneur = await apiService.getDonneurOrdres();
+    _donneur_ordres = response_donneur;
+    final response_entreprise = await apiService.getEntreprises();
+    _entreprises = response_entreprise;
+    final response_expediteur = await apiService.getExpediteurs();
+    _expediteurs = response_expediteur;
+    final response_transporteur = await apiService.getTransporteurs();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getCamions();
+    _camions = response_camions;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
     _isLoading = false;
     notifyListeners();
   }

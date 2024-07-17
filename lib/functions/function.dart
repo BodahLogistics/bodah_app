@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes
 
 import 'dart:math';
 
@@ -7,6 +7,8 @@ import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
+import 'package:bodah/modals/donneur_ordres.dart';
+import 'package:bodah/modals/entreprises.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tdos.dart';
@@ -19,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../modals/annonces.dart';
 import '../modals/appeles.dart';
 import '../modals/camions.dart';
+import '../modals/entite_factures.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
 import '../modals/interchanges.dart';
@@ -601,9 +604,136 @@ class Functions {
     );
   }
 
+  BonCommandes ordre(List<BonCommandes> ordres, int id) {
+    return ordres.firstWhere(
+      (data) => data.id == id,
+      orElse: () => BonCommandes(
+          id: id,
+          numero_bon_commande: "",
+          is_validated: 0,
+          description: "",
+          delai_chargement: 0,
+          amende_delai_chargement: 0,
+          amende_dechargement: 0,
+          montant_paye: 0,
+          annonce_id: 0,
+          donneur_ordre_id: 0,
+          entite_facture_id: 0,
+          deleted: 0,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  EntiteFactures entite_facture(List<EntiteFactures> entite_factures, int id) {
+    return entite_factures.firstWhere(
+      (data) => data.id == id,
+      orElse: () => EntiteFactures(id: id, user_id: 0, reference: ""),
+    );
+  }
+
+  DonneurOrdres donneur_ordres(List<DonneurOrdres> donneur_ordres, int id) {
+    return donneur_ordres.firstWhere(
+      (data) => data.id == id,
+      orElse: () => DonneurOrdres(id: id, user_id: 0, reference: ""),
+    );
+  }
+
+  Entreprises entite_entreprise(
+      List<Entreprises> entreprises, int entite_facture_id) {
+    return entreprises.firstWhere(
+      (data) =>
+          data.entreprise_able_id == entite_facture_id &&
+          data.entrepriseable_type == "App\Models\EntiteFacture",
+      orElse: () => Entreprises(
+          id: 0,
+          name: "",
+          numero_entreprise: "",
+          entrepriseable_type: "",
+          entreprise_able_id: 0),
+    );
+  }
+
+  Entreprises expediteur_entreprise(
+      List<Entreprises> entreprises, int expediteur_id) {
+    return entreprises.firstWhere(
+      (data) =>
+          data.entreprise_able_id == expediteur_id &&
+          data.entrepriseable_type == "App\Models\Expediteur",
+      orElse: () => Entreprises(
+          id: 0,
+          name: "",
+          numero_entreprise: "",
+          entrepriseable_type: "",
+          entreprise_able_id: 0),
+    );
+  }
+
+  Entreprises transporteur_entreprise(
+      List<Entreprises> entreprises, int transporteur_id) {
+    return entreprises.firstWhere(
+      (data) =>
+          data.entreprise_able_id == transporteur_id &&
+          data.entrepriseable_type == "App\Models\Transporteur",
+      orElse: () => Entreprises(
+          id: 0,
+          name: "",
+          numero_entreprise: "",
+          entrepriseable_type: "",
+          entreprise_able_id: 0),
+    );
+  }
+
+  Entreprises destinataire_entreprise(
+      List<Entreprises> entreprises, int destinataire_id) {
+    return entreprises.firstWhere(
+      (data) =>
+          data.entreprise_able_id == destinataire_id &&
+          data.entrepriseable_type == "App\Models\Destinataire",
+      orElse: () => Entreprises(
+          id: 0,
+          name: "",
+          numero_entreprise: "",
+          entrepriseable_type: "",
+          entreprise_able_id: 0),
+    );
+  }
+
+  Entreprises donneur_entreprise(
+      List<Entreprises> entreprises, int donneur_id) {
+    return entreprises.firstWhere(
+      (data) =>
+          data.entreprise_able_id == donneur_id &&
+          data.entrepriseable_type == "App\Models\DonneurOrdre",
+      orElse: () => Entreprises(
+          id: 0,
+          name: "",
+          numero_entreprise: "",
+          entrepriseable_type: "",
+          entreprise_able_id: 0),
+    );
+  }
+
   List<Marchandises> annonce_marchandises(
       List<Marchandises> marchandises, int annonce_id) {
-    return marchandises.where((data) => data.annonce_id == annonce_id).toList();
+    List<Marchandises> datas =
+        marchandises.where((data) => data.annonce_id == annonce_id).toList();
+    if (datas.isEmpty) {
+      return [
+        Marchandises(
+            id: 0,
+            nom: "",
+            annonce_id: annonce_id,
+            numero_marchandise: "",
+            deleted: 0,
+            quantite: 0,
+            unite_id: 0,
+            poids: 0,
+            nombre_camions: 0)
+      ];
+    } else {
+      return datas;
+    }
   }
 
   Unites unite(List<Unites> unites, int id) {

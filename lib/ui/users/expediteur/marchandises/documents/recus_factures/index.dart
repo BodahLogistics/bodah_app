@@ -156,7 +156,8 @@ class _MesRecusState extends State<MesRecus> {
                                         : function.convertHexToColor(
                                             function.couleurs[
                                                 function.randomInt(
-                                                    function.couleurs.length)],
+                                                    function.couleurs.length -
+                                                        1)],
                                           )),
                                 title: Text(
                                   recu.reference + " " + marchandise.nom,

@@ -6,6 +6,7 @@ import 'package:bodah/modals/interchanges.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
@@ -13,6 +14,7 @@ import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart
 import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
@@ -182,7 +184,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesOrdreTransport();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
