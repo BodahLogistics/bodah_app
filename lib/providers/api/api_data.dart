@@ -59,6 +59,13 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _delete = false;
+  bool get delete => _delete;
+  void change_delete(bool value) {
+    _delete = value;
+    notifyListeners();
+  }
+
   List<Unites> _unites = [];
   List<Unites> get unites => _unites;
   List<Villes> _villes = [];
@@ -189,9 +196,23 @@ class ApiProvider with ChangeNotifier {
     _type_chargements = response_type_chargement;
     final response_devises = await apiService.getDevises();
     _devises = response_devises;
-    _token = await secure.readSecureData('token');
-
+    await InitAnnonce();
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void addAnnonce(Annonces annonce, Marchandises marchandise,
+      Localisations localisation, Tarifications tarif) {
+    _annonces.insert(0, annonce);
+    _marchandises.insert(0, marchandise);
+    _tarifications.insert(0, tarif);
+    _localisations.insert(0, localisation);
+
+    notifyListeners();
+  }
+
+  void addPhotos(List<AnnoncePhotos> photos) {
+    _annonce_photos.addAll(photos);
     notifyListeners();
   }
 

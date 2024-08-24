@@ -46,8 +46,9 @@ class DashMarchExp extends StatelessWidget {
         title: Text(
           "Annonces",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w400,
               fontSize: 14),
         ),
         actions: [

@@ -2,19 +2,35 @@
 
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/ui/auth/reset_password.dart';
+import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../services/data_base_service.dart';
 
-class VerificationOTP extends StatelessWidget {
+class VerificationOTP extends StatefulWidget {
   const VerificationOTP({
     super.key,
     required this.telephone,
   });
 
   final String telephone;
+
+  @override
+  State<VerificationOTP> createState() => _VerificationOTPState();
+}
+
+class _VerificationOTPState extends State<VerificationOTP> {
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvResetPassword>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +62,7 @@ class VerificationOTP extends StatelessWidget {
                       color: function.convertHexToColor("#222523"),
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 17),
                 ),
               ),
             ),
@@ -56,14 +72,14 @@ class VerificationOTP extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Entrez le code de vérification envoyé par sms au numéro " +
-                      telephone.substring(0, 5) +
+                      widget.telephone.substring(0, 5) +
                       "****" +
-                      telephone.substring(
-                          telephone.length - 4, telephone.length),
+                      widget.telephone.substring(
+                          widget.telephone.length - 4, widget.telephone.length),
                   style: TextStyle(
                       color: function.convertHexToColor("#79747E"),
                       fontFamily: "Poppins",
-                      fontSize: 16),
+                      fontSize: 12),
                 ),
               ),
             ),
@@ -93,182 +109,93 @@ class VerificationOTP extends StatelessWidget {
                         backgroundColor: MyColors.secondary,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () async {
-                      String code_taped =
-                          first + second + third + fourth + fifth + sixth;
+                    onPressed: affiche
+                        ? null
+                        : () async {
+                            String code_taped =
+                                first + second + third + fourth + fifth + sixth;
 
-                      if (code_taped.isEmpty) {
-                        ShowErrorMessage(
-                            context,
-                            "Vous devez saisir le code qui vous a été envoyé par sms",
-                            "Vérification OTP");
-                      } else if (code_taped.length != 6) {
-                        ShowErrorMessage(context, "Le code saisi est invalid",
-                            "Vérification OTP");
-                      } else {
-                        provider.change_affiche(true);
-                        final statut_code =
-                            await service.validateResetCode(code_taped, user);
+                            if (code_taped.isEmpty) {
+                              ShowErrorMessage(
+                                  context,
+                                  "Vous devez saisir le code qui vous a été envoyé par sms",
+                                  "Vérification OTP");
+                            } else if (code_taped.length != 6) {
+                              ShowErrorMessage(
+                                  context,
+                                  "Le code saisi est invalid",
+                                  "Vérification OTP");
+                            } else {
+                              provider.change_affiche(true);
+                              final statut_code = await service
+                                  .validateResetCode(code_taped, user);
 
-                        if (statut_code == "502") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Une erreur s'est produite",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "404") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Compte non retrouvé",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "422") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Erreur de validation",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "500") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Vérifiez votre connection internet et réessayez",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "101") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Code déja expiré. Cliquez pour recevoir un nouveau code",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "201") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Le code saisi est invalid",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "200") {
-                          provider.change_affiche(false);
-                          provider.reset();
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.green,
-                            content: Text(
-                              "Vérification OTP réussie. Procédez au changement du mot de passe",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return ResetPassword();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
+                              if (statut_code == "502") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Une erreur s'est produite",
+                                    Colors.redAccent);
+                              } else if (statut_code == "404") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context,
+                                    "Compte non retrouvé", Colors.redAccent);
+                              } else if (statut_code == "422") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context,
+                                    "Erreur de validation", Colors.redAccent);
+                              } else if (statut_code == "500") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Vérifiez votre connection internet et réessayez",
+                                    Colors.redAccent);
+                              } else if (statut_code == "101") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Code déja expiré. Cliquez pour recevoir un nouveau code",
+                                    Colors.redAccent);
+                              } else if (statut_code == "201") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Le code saisi est invalid",
+                                    Colors.redAccent);
+                              } else if (statut_code == "200") {
+                                provider.change_affiche(false);
+                                provider.reset();
+                                showCustomSnackBar(
+                                    context,
+                                    "Vérification OTP réussie. Procédez au changement du mot de passe",
+                                    Colors.green);
+
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation) {
+                                      return ResetPassword();
+                                    },
+                                    transitionsBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation,
+                                        Widget child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
                                 );
-                              },
-                            ),
-                          );
-                        }
-                      }
-                    },
+                              }
+                            }
+                          },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

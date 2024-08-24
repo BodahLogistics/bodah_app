@@ -59,6 +59,12 @@ class Functions {
     );
   }
 
+  double calculateHeight(
+      int itemCount, int crossAxisCount, double aspectRatio) {
+    final rows = (itemCount / crossAxisCount).ceil();
+    return rows * (180 / aspectRatio); // Ajustez 200 selon la hauteur estimée
+  }
+
   Interchanges interchange(List<Interchanges> interchanges, int id) {
     return interchanges.firstWhere(
       (data) => data.id == id,

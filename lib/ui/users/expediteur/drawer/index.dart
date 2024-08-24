@@ -101,6 +101,7 @@ class DrawerExpediteur extends StatelessWidget {
               title: Text(
                 "Envoi de marchandise",
                 style: TextStyle(
+                    fontSize: 12,
                     color: current_index == 2
                         ? Colors.white
                         : user.dark_mode == 1
@@ -127,6 +128,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Envoi de colis",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 1
                       ? Colors.white
                       : user.dark_mode == 1
@@ -171,6 +173,7 @@ class DrawerExpediteur extends StatelessWidget {
               title: Text(
                 "Accueil",
                 style: TextStyle(
+                    fontSize: 12,
                     color: current_index == 0
                         ? Colors.white
                         : user.dark_mode == 1
@@ -219,6 +222,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Mes annonces",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 3
                       ? Colors.white
                       : user.dark_mode == 1
@@ -266,6 +270,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Mes documents",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 4
                       ? Colors.white
                       : user.dark_mode == 1
@@ -291,6 +296,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Partagez",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 5
                       ? Colors.white
                       : user.dark_mode == 1
@@ -311,48 +317,17 @@ class DrawerExpediteur extends StatelessWidget {
                   onPressed: () async {
                     String statut_code = await service.darkMode();
                     if (statut_code == "202") {
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
-                          "Une erreur s'est produite",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      showCustomSnackBar(context, "Une erreur s'est produite",
+                          Colors.redAccent);
                     } else if (statut_code == "500") {
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
+                      showCustomSnackBar(
+                          context,
                           "Vérifiez votre connection  internet",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Colors.redAccent);
                     } else {
                       await api_provider.InitUser();
-                      final snackBar = SnackBar(
-                        backgroundColor: MyColors.secondary,
-                        content: Text(
-                          "Effectué avec succès",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      showCustomSnackBar(
+                          context, "Effectué avec succès", Colors.green);
                     }
                   },
                   icon: user.dark_mode == 1
@@ -371,6 +346,7 @@ class DrawerExpediteur extends StatelessWidget {
               title: Text(
                 "Mode sombre",
                 style: TextStyle(
+                    fontSize: 12,
                     color: user.dark_mode == 1
                         ? MyColors.light
                         : function.convertHexToColor("#222523"),
@@ -395,6 +371,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Paramètres",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 6
                       ? Colors.white
                       : user.dark_mode == 1
@@ -420,6 +397,7 @@ class DrawerExpediteur extends StatelessWidget {
             title: Text(
               "Déconnexion",
               style: TextStyle(
+                  fontSize: 12,
                   color: current_index == 7 ? Colors.white : Colors.red,
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w400),
@@ -444,12 +422,15 @@ void logOut(BuildContext context) {
             Provider.of<ApiProvider>(dialogContext, listen: false);
         final user = apiProvider.user;
         final service = Provider.of<DBServices>(dialogContext);
+        bool delete = apiProvider.delete;
 
         return AlertDialog(
           backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
           title: Text(
             "Déconnexion",
+            textAlign: TextAlign.center,
             style: TextStyle(
+              fontSize: 16,
               color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
               fontWeight: FontWeight.bold,
             ),
@@ -457,127 +438,112 @@ void logOut(BuildContext context) {
           content: Text(
             "Voulez-vous vraiment vous déconnecter ?",
             style: TextStyle(
+              fontSize: 12,
               color: user.dark_mode == 1 ? MyColors.light : MyColors.textColor,
               fontWeight: FontWeight.w500,
             ),
           ),
           actions: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: Text(
-                    "Annuler",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      letterSpacing: 1,
-                    ),
-                  ),
+                SizedBox(
+                  width: 80,
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7)),
+                          padding: EdgeInsets.only(left: 7, right: 7),
+                          backgroundColor: Colors.redAccent),
+                      onPressed: () {
+                        apiProvider.change_delete(false);
+                        Navigator.of(dialogContext).pop();
+                      },
+                      child: Text(
+                        "Annulez",
+                        style: TextStyle(
+                            color: MyColors.light,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 10,
+                            letterSpacing: 1),
+                      )),
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () async {
-                    String statut_code = await service.logout();
-                    if (statut_code == "202") {
-                      final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
-                          "Une erreur s'est produite",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(dialogContext)
-                          .showSnackBar(snackBar);
-                    } else if (statut_code == "500") {
-                      final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
-                          "Vérifiez votre connection  internet",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(dialogContext)
-                          .showSnackBar(snackBar);
-                    } else {
-                      Navigator.of(dialogContext).pop();
-                      final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.8,
-                          left: MediaQuery.of(context).size.width * 0.5,
-                          right: 20,
-                        ),
-                        backgroundColor: MyColors.secondary,
-                        content: Text(
-                          "Vous avez été déconnecté avec succès",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(dialogContext)
-                          .showSnackBar(snackBar);
+                SizedBox(
+                  width: 100,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: MyColors.secondary),
+                    onPressed: delete
+                        ? null
+                        : () async {
+                            apiProvider.change_delete(true);
+                            String statut = await service.logout();
+                            if (statut == "202") {
+                              showCustomSnackBar(
+                                  dialogContext,
+                                  "Une erreur s'est produite",
+                                  Colors.redAccent);
+                              apiProvider.change_delete(false);
+                            } else if (statut == "500") {
+                              showCustomSnackBar(
+                                  dialogContext,
+                                  "Vérifiez votre connection  internet",
+                                  Colors.redAccent);
+                            } else {
+                              showCustomSnackBar(
+                                  dialogContext,
+                                  "Vous avez été déconnecté avec succès",
+                                  Colors.green);
+                              apiProvider.change_delete(false);
+                              Navigator.of(dialogContext).pop();
 
-                      Navigator.of(dialogContext).pushAndRemoveUntil(
-                        PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 500),
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return SignIn();
+                              Navigator.of(dialogContext).pushAndRemoveUntil(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 500),
+                                  pageBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation) {
+                                    return SignIn();
+                                  },
+                                  transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                                ModalRoute.withName("/login"),
+                              );
+                            }
                           },
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                        ),
-                        ModalRoute.withName("/login"),
-                      );
-                    }
-                  },
-                  child: Text(
-                    "Validez",
-                    style: TextStyle(
-                      color: MyColors.secondary,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      letterSpacing: 1,
-                    ),
+                    child: delete
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: MyColors.light,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            "Confirmez",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: MyColors.light,
+                                fontFamily: "Poppins",
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold),
+                          ),
                   ),
                 ),
               ],

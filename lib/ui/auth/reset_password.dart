@@ -4,15 +4,31 @@ import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import 'sign_in.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends StatefulWidget {
   ResetPassword({super.key});
 
+  @override
+  State<ResetPassword> createState() => _ResetPasswordState();
+}
+
+class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController Password = TextEditingController();
+
   TextEditingController ConfirmPassword = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvResetPassword>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +58,7 @@ class ResetPassword extends StatelessWidget {
                       color: function.convertHexToColor("#222523"),
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 17),
                 ),
               ),
             ),
@@ -55,7 +71,7 @@ class ResetPassword extends StatelessWidget {
                   style: TextStyle(
                     color: function.convertHexToColor("#79747E"),
                     fontFamily: "Poppins",
-                    fontSize: 15,
+                    fontSize: 12,
                   ),
                 ),
               ),

@@ -2,8 +2,10 @@
 
 import 'package:bodah/services/data_base_service.dart';
 import 'package:bodah/ui/auth/account_created.dart';
+import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../providers/auth/prov_val_account.dart';
@@ -47,7 +49,7 @@ class ValidateAccount extends StatelessWidget {
                       color: function.convertHexToColor("#222523"),
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 17),
                 ),
               ),
             ),
@@ -64,7 +66,7 @@ class ValidateAccount extends StatelessWidget {
                   style: TextStyle(
                       color: function.convertHexToColor("#79747E"),
                       fontFamily: "Poppins",
-                      fontSize: 16),
+                      fontSize: 12),
                 ),
               ),
             ),
@@ -94,120 +96,80 @@ class ValidateAccount extends StatelessWidget {
                         backgroundColor: MyColors.secondary,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () async {
-                      String code_taped =
-                          first + second + third + fourth + fifth + sixth;
+                    onPressed: affiche
+                        ? null
+                        : () async {
+                            String code_taped =
+                                first + second + third + fourth + fifth + sixth;
 
-                      if (code_taped.isEmpty) {
-                        ShowErrorMessage(
-                            context,
-                            "Vous devez saisir le code qui vous a été envoyé par sms",
-                            "Validation du compte");
-                      } else if (code_taped.length != 6) {
-                        ShowErrorMessage(context, "Le code saisi est invalid",
-                            "Validation du compte");
-                      } else {
-                        provider.change_affiche(true);
-                        String statut_code =
-                            await service.validateAccount(code_taped, user);
+                            if (code_taped.isEmpty) {
+                              ShowErrorMessage(
+                                  context,
+                                  "Vous devez saisir le code qui vous a été envoyé par sms",
+                                  "Validation du compte");
+                            } else if (code_taped.length != 6) {
+                              ShowErrorMessage(
+                                  context,
+                                  "Le code saisi est invalid",
+                                  "Validation du compte");
+                            } else {
+                              provider.change_affiche(true);
+                              String statut_code = await service
+                                  .validateAccount(code_taped, user);
 
-                        if (statut_code == "404") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Compte non retrouvé",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "500") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "101") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Le code saisi est incorrect ou est expiré",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (statut_code == "201") {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              "Le code saisi est invalid",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else {
-                          provider.change_affiche(false);
-                          provider.reset();
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return AccountCreated();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
+                              if (statut_code == "404") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context,
+                                    "Compte non retrouvé", Colors.redAccent);
+                              } else if (statut_code == "500") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                                    Colors.redAccent);
+                              } else if (statut_code == "101") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Le code saisi est incorrect ou est expiré",
+                                    Colors.redAccent);
+                              } else if (statut_code == "201") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Le code saisi est invalid",
+                                    Colors.redAccent);
+                              } else {
+                                provider.change_affiche(false);
+                                provider.reset();
+                                showCustomSnackBar(context,
+                                    "Votre compte a été validé", Colors.green);
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation) {
+                                      return AccountCreated();
+                                    },
+                                    transitionsBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation,
+                                        Widget child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
                                 );
-                              },
-                            ),
-                          );
-
-                          final snackBar = SnackBar(
-                            backgroundColor: Colors.green,
-                            content: Text(
-                              "Votre compte a été validé",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      }
-                    },
+                              }
+                            }
+                          },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

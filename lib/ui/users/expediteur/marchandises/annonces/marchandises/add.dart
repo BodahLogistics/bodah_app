@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors, use_build_context_synchronously, non_constant_identifier_names, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
+// ignore_for_file: must_be_immutable, prefer_const_constructors, use_build_context_synchronously, non_constant_identifier_names, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, prefer_const_constructors_in_immutables
 
 import 'dart:io';
 
@@ -19,20 +19,42 @@ import '../../../../../../modals/annonces.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../providers/calculator/index.dart';
 import '../../../../../../services/data_base_service.dart';
+import '../../../../../auth/sign_in.dart';
 import '../../../drawer/index.dart';
 import '../../expeditions/detail.dart';
 import '../add.dart';
 
-class PublishMarchandise extends StatelessWidget {
+class PublishMarchandise extends StatefulWidget {
   final Annonces annonce;
   PublishMarchandise({super.key, required this.annonce});
+
+  @override
+  State<PublishMarchandise> createState() => _PublishMarchandiseState();
+}
+
+class _PublishMarchandiseState extends State<PublishMarchandise> {
   TextEditingController Tarif = TextEditingController();
+
   TextEditingController Quantite = TextEditingController();
+
   TextEditingController Name = TextEditingController();
+
   TextEditingController Poids = TextEditingController();
+
   TextEditingController AdresseExp = TextEditingController();
+
   TextEditingController AdresseLiv = TextEditingController();
+
   TextEditingController DateChargement = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvAddMarchandise>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +103,11 @@ class PublishMarchandise extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Nouvelle marchandise à expédier",
+          "Nouvelle marchandise",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -104,6 +127,7 @@ class PublishMarchandise extends StatelessWidget {
             )
           : SingleChildScrollView(
               scrollDirection: Axis.vertical,
+              reverse: false,
               child: Column(
                 children: [
                   Padding(
@@ -117,6 +141,7 @@ class PublishMarchandise extends StatelessWidget {
                                 child: Text(
                                   "Que voulez-vous expédier ?",
                                   style: TextStyle(
+                                    fontFamily: "Poppins",
                                     color: MyColors.light,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -153,7 +178,6 @@ class PublishMarchandise extends StatelessWidget {
                                 labelText: user.dark_mode == 0
                                     ? "Marchandise: Riz, Engrais"
                                     : "",
-                                hintText: "Marchandise: Riz, Engrais",
                                 labelStyle: TextStyle(
                                     color: user.dark_mode == 1
                                         ? MyColors.light
@@ -194,6 +218,7 @@ class PublishMarchandise extends StatelessWidget {
                                 child: Text(
                                   "Tarif d'expédition (Facultatif)",
                                   style: TextStyle(
+                                    fontFamily: "Poppins",
                                     color: MyColors.light,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -207,6 +232,9 @@ class PublishMarchandise extends StatelessWidget {
                             onTap: () {
                               Calculator(context);
                             },
+                            onChanged: (value) {
+                              calculatrice.change_montant(value);
+                            },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -217,7 +245,6 @@ class PublishMarchandise extends StatelessWidget {
                                 labelText: user.dark_mode == 0
                                     ? "Tarif d'expédition"
                                     : "",
-                                hintText: "Tarif d'expédition",
                                 filled: user.dark_mode == 1 ? true : false,
                                 fillColor: user.dark_mode == 1
                                     ? MyColors.filedDark
@@ -241,7 +268,7 @@ class PublishMarchandise extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -250,6 +277,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Pays d'expédition",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -259,7 +287,7 @@ class PublishMarchandise extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: user.dark_mode == 1 ? 48 : 40,
+                                      height: user.dark_mode == 1 ? 48 : 50,
                                       child: DropdownSearch<String>(
                                         popupProps: PopupProps.dialog(
                                           showSearchBox: true,
@@ -282,7 +310,6 @@ class PublishMarchandise extends StatelessWidget {
                                                   labelText: user.dark_mode == 1
                                                       ? ""
                                                       : "Pays d'expédition",
-                                                  hintText: "Pays d'expédition",
                                                   labelStyle:
                                                       TextStyle(
                                                           color:
@@ -317,9 +344,12 @@ class PublishMarchandise extends StatelessWidget {
                                             (String? selectedType) async {
                                           if (selectedType != null) {
                                             final pay_selected =
-                                                pays.firstWhere((element) =>
-                                                    element.name ==
-                                                    selectedType);
+                                                pays.firstWhere(
+                                              (element) =>
+                                                  element.name == selectedType,
+                                              orElse: () =>
+                                                  Pays(id: 0, name: ""),
+                                            );
                                             provider
                                                 .change_pays_exp(pay_selected);
                                             await provider
@@ -336,7 +366,7 @@ class PublishMarchandise extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -345,6 +375,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Ville d'expédition",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -354,7 +385,7 @@ class PublishMarchandise extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: user.dark_mode == 1 ? 48 : 40,
+                                      height: user.dark_mode == 1 ? 48 : 50,
                                       child: DropdownSearch<String>(
                                         popupProps: PopupProps.dialog(
                                           showSearchBox: true,
@@ -374,21 +405,21 @@ class PublishMarchandise extends StatelessWidget {
                                             DropDownDecoratorProps(
                                           dropdownSearchDecoration:
                                               InputDecoration(
-                                                  labelText: user
-                                                              .dark_mode ==
-                                                          1
+                                                  labelText: user.dark_mode == 1
                                                       ? ""
                                                       : "Ville d'expédition",
-                                                  hintText:
-                                                      "Ville d'expédition",
-                                                  labelStyle: TextStyle(
-                                                      color: user
-                                                                  .dark_mode ==
-                                                              1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontSize: 14,
-                                                      fontFamily: "Poppins"),
+                                                  labelStyle:
+                                                      TextStyle(
+                                                          color:
+                                                              user.dark_mode ==
+                                                                      1
+                                                                  ? MyColors
+                                                                      .light
+                                                                  : MyColors
+                                                                      .black,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              "Poppins"),
                                                   hintStyle: TextStyle(
                                                       fontSize: 14,
                                                       fontFamily: "Poppins",
@@ -411,9 +442,13 @@ class PublishMarchandise extends StatelessWidget {
                                           if (selectedType != null) {
                                             final ville_selected =
                                                 villes_livraison.firstWhere(
-                                                    (element) =>
-                                                        element.name ==
-                                                        selectedType);
+                                              (element) =>
+                                                  element.name == selectedType,
+                                              orElse: () => Villes(
+                                                  id: 0,
+                                                  name: "",
+                                                  country_id: 0),
+                                            );
                                             provider.change_ville_exp(
                                                 ville_selected);
                                           }
@@ -435,7 +470,7 @@ class PublishMarchandise extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -444,6 +479,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Pays de livraison",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -453,7 +489,7 @@ class PublishMarchandise extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: user.dark_mode == 1 ? 48 : 40,
+                                      height: user.dark_mode == 1 ? 48 : 50,
                                       child: DropdownSearch<String>(
                                         popupProps: PopupProps.dialog(
                                           showSearchBox: true,
@@ -476,7 +512,6 @@ class PublishMarchandise extends StatelessWidget {
                                                   labelText: user.dark_mode == 1
                                                       ? ""
                                                       : "Pays de livraison",
-                                                  hintText: "Pays de livraison",
                                                   labelStyle:
                                                       TextStyle(
                                                           color:
@@ -511,9 +546,12 @@ class PublishMarchandise extends StatelessWidget {
                                             (String? selectedType) async {
                                           if (selectedType != null) {
                                             final pay_selected =
-                                                pays.firstWhere((element) =>
-                                                    element.name ==
-                                                    selectedType);
+                                                pays.firstWhere(
+                                              (element) =>
+                                                  element.name == selectedType,
+                                              orElse: () =>
+                                                  Pays(id: 0, name: ""),
+                                            );
                                             provider
                                                 .change_pays_liv(pay_selected);
                                             await provider
@@ -530,7 +568,7 @@ class PublishMarchandise extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -539,6 +577,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Ville de livraison",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -548,7 +587,7 @@ class PublishMarchandise extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: user.dark_mode == 1 ? 48 : 40,
+                                      height: user.dark_mode == 1 ? 48 : 50,
                                       child: DropdownSearch<String>(
                                         popupProps: PopupProps.dialog(
                                           showSearchBox: true,
@@ -568,21 +607,21 @@ class PublishMarchandise extends StatelessWidget {
                                             DropDownDecoratorProps(
                                           dropdownSearchDecoration:
                                               InputDecoration(
-                                                  labelText: user
-                                                              .dark_mode ==
-                                                          1
+                                                  labelText: user.dark_mode == 1
                                                       ? ""
                                                       : "Ville de livraison",
-                                                  hintText:
-                                                      "Ville de livraison",
-                                                  labelStyle: TextStyle(
-                                                      color: user
-                                                                  .dark_mode ==
-                                                              1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontSize: 14,
-                                                      fontFamily: "Poppins"),
+                                                  labelStyle:
+                                                      TextStyle(
+                                                          color:
+                                                              user.dark_mode ==
+                                                                      1
+                                                                  ? MyColors
+                                                                      .light
+                                                                  : MyColors
+                                                                      .black,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              "Poppins"),
                                                   hintStyle: TextStyle(
                                                       fontSize: 14,
                                                       fontFamily: "Poppins",
@@ -605,9 +644,13 @@ class PublishMarchandise extends StatelessWidget {
                                           if (selectedType != null) {
                                             final ville_selected =
                                                 villes_livraison.firstWhere(
-                                                    (element) =>
-                                                        element.name ==
-                                                        selectedType);
+                                              (element) =>
+                                                  element.name == selectedType,
+                                              orElse: () => Villes(
+                                                  id: 0,
+                                                  name: "",
+                                                  country_id: 0),
+                                            );
                                             provider.change_ville_liv(
                                                 ville_selected);
                                           }
@@ -631,6 +674,7 @@ class PublishMarchandise extends StatelessWidget {
                                 child: Text(
                                   "Adresse d'expédition (Facultatif)",
                                   style: TextStyle(
+                                    fontFamily: "Poppins",
                                     color: MyColors.light,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -660,7 +704,6 @@ class PublishMarchandise extends StatelessWidget {
                                   labelText: user.dark_mode == 0
                                       ? "Adresse d'expédition (Facultatif)"
                                       : "",
-                                  hintText: "Adresse d'expédition (Facultatif)",
                                   labelStyle: TextStyle(
                                       color: user.dark_mode == 1
                                           ? MyColors.light
@@ -683,6 +726,7 @@ class PublishMarchandise extends StatelessWidget {
                                 child: Text(
                                   "Adresse de livraison (Facultatif)",
                                   style: TextStyle(
+                                    fontFamily: "Poppins",
                                     color: MyColors.light,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -712,7 +756,6 @@ class PublishMarchandise extends StatelessWidget {
                                   labelText: user.dark_mode == 0
                                       ? "Adresse de livraison (Facultatif)"
                                       : "",
-                                  hintText: "Adresse de livraison (Facultatif)",
                                   labelStyle: TextStyle(
                                       color: user.dark_mode == 1
                                           ? MyColors.light
@@ -733,7 +776,7 @@ class PublishMarchandise extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -742,6 +785,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Poids (Facultatif)",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -754,6 +798,7 @@ class PublishMarchandise extends StatelessWidget {
                                       onChanged: (value) {
                                         provider.change_poids(value);
                                       },
+                                      keyboardType: TextInputType.number,
                                       inputFormatters: [
                                         FilteringTextInputFormatter.digitsOnly
                                       ],
@@ -775,7 +820,6 @@ class PublishMarchandise extends StatelessWidget {
                                           labelText: user.dark_mode == 0
                                               ? "Poids (Facultatif)"
                                               : "",
-                                          hintText: "Poids (Facultatif)",
                                           labelStyle: TextStyle(
                                               color: user.dark_mode == 1
                                                   ? MyColors.light
@@ -792,7 +836,7 @@ class PublishMarchandise extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -801,6 +845,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Unité",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -810,7 +855,7 @@ class PublishMarchandise extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: 40,
+                                      height: 50,
                                       child: DropdownSearch<String>(
                                         popupProps: PopupProps.dialog(
                                           showSearchBox: true,
@@ -833,8 +878,6 @@ class PublishMarchandise extends StatelessWidget {
                                                   labelText: user.dark_mode == 1
                                                       ? ""
                                                       : "Unité de chargement",
-                                                  hintText:
-                                                      "Unité de chargement",
                                                   labelStyle: TextStyle(
                                                       color: user.dark_mode == 1
                                                           ? MyColors.light
@@ -865,9 +908,12 @@ class PublishMarchandise extends StatelessWidget {
                                         onChanged: (String? selectedType) {
                                           if (selectedType != null) {
                                             final unite_selected =
-                                                unites.firstWhere((element) =>
-                                                    element.name ==
-                                                    selectedType);
+                                                unites.firstWhere(
+                                              (element) =>
+                                                  element.name == selectedType,
+                                              orElse: () =>
+                                                  Unites(id: 0, name: ""),
+                                            );
                                             provider
                                                 .change_unite(unite_selected);
                                           }
@@ -889,7 +935,7 @@ class PublishMarchandise extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -898,6 +944,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Quantité (Facultatif)",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -914,6 +961,7 @@ class PublishMarchandise extends StatelessWidget {
                                         FilteringTextInputFormatter.digitsOnly
                                       ],
                                       controller: Quantite,
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                               borderSide: BorderSide(
@@ -931,7 +979,6 @@ class PublishMarchandise extends StatelessWidget {
                                           labelText: user.dark_mode == 0
                                               ? "Quantité (Facultatif)"
                                               : "",
-                                          hintText: "Quantité (Facultatif)",
                                           labelStyle: TextStyle(
                                               color: user.dark_mode == 1
                                                   ? MyColors.light
@@ -948,7 +995,7 @@ class PublishMarchandise extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               child: Column(
                                 children: [
                                   user.dark_mode == 1
@@ -957,6 +1004,7 @@ class PublishMarchandise extends StatelessWidget {
                                           child: Text(
                                             "Date de chargement",
                                             style: TextStyle(
+                                              fontFamily: "Poppins",
                                               color: MyColors.light,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -1004,7 +1052,6 @@ class PublishMarchandise extends StatelessWidget {
                                             labelText: user.dark_mode == 0
                                                 ? "Date de chargement"
                                                 : "",
-                                            hintText: "Date de chargement",
                                             labelStyle: TextStyle(
                                                 color: user.dark_mode == 1
                                                     ? MyColors.light
@@ -1062,6 +1109,7 @@ class PublishMarchandise extends StatelessWidget {
                                       Text(
                                         "Joindre l'image de la marchandise",
                                         style: TextStyle(
+                                          fontFamily: "Poppins",
                                           color: MyColors.secondary,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -1084,6 +1132,7 @@ class PublishMarchandise extends StatelessWidget {
                                       Text(
                                         "Seulement que des fichiers png, jpg, pdf",
                                         style: TextStyle(
+                                          fontFamily: "Poppins",
                                           color: MyColors.textColor,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -1106,122 +1155,64 @@ class PublishMarchandise extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   backgroundColor: MyColors.secondary),
-                              onPressed: () async {
-                                provider.change_affiche(true);
+                              onPressed: affiche
+                                  ? null
+                                  : () async {
+                                      provider.change_affiche(true);
 
-                                String statut_code =
-                                    await service.publishMarchandise(
-                                        date_chargement,
-                                        nom,
-                                        unite,
-                                        poids,
-                                        quantite,
-                                        tarif,
-                                        pay_exp,
-                                        pay_liv,
-                                        adress_exp,
-                                        adress_liv,
-                                        ville_exp,
-                                        ville_liv,
-                                        files,
-                                        annonce);
+                                      String statut_code =
+                                          await service.publishMarchandise(
+                                              date_chargement,
+                                              nom,
+                                              unite,
+                                              poids,
+                                              quantite,
+                                              tarif,
+                                              pay_exp,
+                                              pay_liv,
+                                              adress_exp,
+                                              adress_liv,
+                                              ville_exp,
+                                              ville_liv,
+                                              files,
+                                              widget.annonce);
 
-                                if (statut_code == "100") {
-                                  provider.change_affiche(false);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      "Données invalides",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (statut_code == "202") {
-                                  provider.change_affiche(false);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      "Une erreur inattendue s'est produite",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (statut_code == "422") {
-                                  provider.change_affiche(false);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      "Erreur de validation",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (statut_code == "404") {
-                                  provider.change_affiche(false);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      "L'annonce a été supprimée",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (statut_code == "500") {
-                                  provider.change_affiche(false);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      "Taille des images trop lourdes",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else if (statut_code == "200") {
-                                  await api_provider.InitForSomeAnnonce();
-                                  provider.change_affiche(false);
-                                  provider.reset();
-                                  calculatrice.change_montant("");
-                                  Navigator.of(context).pop();
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.green,
-                                    content: Text(
-                                      "Votre marchandise a été ajoutée avec succès",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Poppins"),
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                }
-                              },
+                                      if (statut_code == "202") {
+                                        provider.change_affiche(false);
+                                        showCustomSnackBar(
+                                            context,
+                                            "Une erreur inattendue s'est produite",
+                                            Colors.redAccent);
+                                      } else if (statut_code == "422") {
+                                        provider.change_affiche(false);
+                                        showCustomSnackBar(
+                                            context,
+                                            "Erreur de validation",
+                                            Colors.redAccent);
+                                      } else if (statut_code == "500") {
+                                        provider.change_affiche(false);
+                                        showCustomSnackBar(
+                                            context,
+                                            "Une erreur s'est produite. Vérifiez votre connection internet et réessayer",
+                                            Colors.redAccent);
+                                      } else if (statut_code == "404") {
+                                        provider.change_affiche(false);
+                                        showCustomSnackBar(
+                                            context,
+                                            "L'annonce a été supprimée",
+                                            Colors.redAccent);
+                                      } else if (statut_code == "200") {
+                                        await api_provider.InitForSomeAnnonce();
+                                        provider.change_affiche(false);
+                                        provider.reset();
+                                        calculatrice.change_montant("");
+                                        Navigator.of(context).pop();
+                                        showCustomSnackBar(
+                                            context,
+                                            "Votre marcahndise a été enregistrée avec succès",
+                                            Colors.green);
+                                      }
+                                    },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

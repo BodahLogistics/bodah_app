@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:io';
 
@@ -8,8 +8,10 @@ import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 import '../../../../../../services/data_base_service.dart';
 
@@ -47,7 +49,7 @@ class ProvAddMarchandise with ChangeNotifier {
     _unite = Unites(id: 0, name: "");
     _poids = 0;
     _quantite = 0;
-    _date_chargement = "";
+    _date_chargement = DateFormat("yyyy-MM-dd").format(DateTime.now());
     _pay_exp = Pays(id: 0, name: "");
     _ville_exp = Villes(id: 0, name: "", country_id: 0);
     _adress_exp = "";
@@ -128,7 +130,27 @@ class ProvAddMarchandise with ChangeNotifier {
       if (pickedFiles != null) {
         for (var pickedFile in pickedFiles) {
           if (_files_selected.length < 3) {
-            _files_selected.add(File(pickedFile.path));
+            String extension = path.extension(pickedFile.path).toLowerCase();
+            List<String> allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
+
+            if (allowedExtensions.contains(extension)) {
+              File resizedFile = await resizeImage(File(pickedFile.path));
+              _files_selected.add(resizedFile);
+            } else {
+              final snackBar = SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(
+                  "Seuls les fichiers JPEG, JPG, PNG et GIF sont autorisés.",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Poppins"),
+                ),
+                behavior: SnackBarBehavior.floating,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              continue; // Skip adding this file
+            }
           } else {
             break;
           }
@@ -138,6 +160,19 @@ class ProvAddMarchandise with ChangeNotifier {
           backgroundColor: Colors.green,
           content: Text(
             "Images ajoutées avec succès",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"),
+          ),
+          behavior: SnackBarBehavior.floating,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        final snackBar = SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            "Aucune image selectionnée",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -156,18 +191,79 @@ class ProvAddMarchandise with ChangeNotifier {
     }
   }
 
+  Future<File> resizeImage(File file) async {
+    final bytes = await file.readAsBytes();
+    img.Image image = img.decodeImage(bytes)!;
+
+    // Redimensionne l'image à 800x800 pixels (ou n'importe quelle taille que tu préfères)
+    img.Image resizedImage = img.copyResize(image, width: 800, height: 800);
+
+    final resizedFile = File(file.path);
+    await resizedFile.writeAsBytes(img.encodeJpg(resizedImage));
+    return resizedFile;
+  }
+
   Future<void> takeImageWithCamera(BuildContext context) async {
     try {
+      if (_files_selected.length >= 3) {
+        final snackBar = SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            "Vous devez ajouter au maximum trois images",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"),
+          ),
+          behavior: SnackBarBehavior.floating,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+
       _upload = true;
       notifyListeners();
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
       if (pickedFile != null) {
-        _files_selected.add(File(pickedFile.path));
+        String extension = path.extension(pickedFile.path).toLowerCase();
+        List<String> allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
+
+        if (allowedExtensions.contains(extension)) {
+          File resizedFile = await resizeImage(File(pickedFile.path));
+          _files_selected.add(resizedFile);
+
+          final snackBar = SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              "Image ajoutée avec succès",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Poppins"),
+            ),
+            behavior: SnackBarBehavior.floating,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        } else {
+          final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              "Seuls les fichiers JPEG, JPG, PNG et GIF sont autorisés.",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Poppins"),
+            ),
+            behavior: SnackBarBehavior.floating,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      } else {
         final snackBar = SnackBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.redAccent,
           content: Text(
-            "Image ajoutée avec succès",
+            "Aucune image selectionnée",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -178,6 +274,7 @@ class ProvAddMarchandise with ChangeNotifier {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
 
+      _upload = false;
       notifyListeners();
     } catch (e) {
       _upload = false;

@@ -19,19 +19,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
 
-class AnnonceMarchandises extends StatefulWidget {
+class AnnonceMarchandises extends StatelessWidget {
   const AnnonceMarchandises({super.key});
-
-  @override
-  State<AnnonceMarchandises> createState() => _AnnonceMarchandisesState();
-}
-
-class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +28,6 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
     final api_provider = Provider.of<ApiProvider>(context);
     final user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
-    bool loading = api_provider.loading;
     List<AnnoncePhotos> annonce_photos = api_provider.photos;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -87,8 +75,9 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
         title: Text(
           "Mes annonces",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -100,235 +89,207 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
               ))
         ],
       ),
-      body: loading
+      body: annonces.isEmpty
           ? Center(
               child: CircularProgressIndicator(
                 color: MyColors.secondary,
               ),
             )
-          : annonces.isEmpty
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: MyColors.secondary,
-                  ),
-                )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 70),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: GridView.count(
-                        shrinkWrap: true,
-                        crossAxisCount: 1,
-                        childAspectRatio: 2,
-                        children: annonces.map((annonce) {
-                          Marchandises marchandise = function
-                              .annonce_marchandises(marchandises, annonce.id)
-                              .first;
-                          Localisations localisation =
-                              function.marchandise_localisation(
-                                  localisations, marchandise.id);
-                          List<AnnoncePhotos> pictures =
-                              function.annonce_pictures(
-                                  annonce, marchandises, annonce_photos);
-                          Unites unite =
-                              function.unite(unites, marchandise.unite_id);
-                          Pays pay_depart =
-                              function.pay(pays, localisation.pays_exp_id);
-                          Pays pay_dest =
-                              function.pay(pays, localisation.pays_liv_id);
-                          Villes ville_dep = function.ville(
-                              all_villes, localisation.city_exp_id);
-                          Villes ville_dest = function.ville(
-                              all_villes, localisation.city_liv_id);
+          : SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                  physics: ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    Annonces annonce = annonces[index];
+                    Marchandises marchandise = function
+                        .annonce_marchandises(marchandises, annonce.id)
+                        .first;
+                    Localisations localisation =
+                        function.marchandise_localisation(
+                            localisations, marchandise.id);
+                    List<AnnoncePhotos> pictures = function.annonce_pictures(
+                        annonce, marchandises, annonce_photos);
+                    Unites unite = function.unite(unites, marchandise.unite_id);
+                    Pays pay_depart =
+                        function.pay(pays, localisation.pays_exp_id);
+                    Pays pay_dest =
+                        function.pay(pays, localisation.pays_liv_id);
+                    Villes ville_dep =
+                        function.ville(all_villes, localisation.city_exp_id);
+                    Villes ville_dest =
+                        function.ville(all_villes, localisation.city_liv_id);
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    pageBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation) {
-                                      return DetailAnnonce(
-                                        id: annonce.id,
-                                      );
-                                    },
-                                    transitionsBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation,
-                                        Widget child) {
-                                      return SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 500),
+                              pageBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation) {
+                                return DetailAnnonce(
+                                  id: annonce.id,
                                 );
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.textColor,
-                                        width: 1,
-                                        style: BorderStyle.solid)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 5, top: 5),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.35,
-                                        child: pictures.isEmpty
-                                            ? Container()
-                                            : ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      pictures.last.image_path,
-                                                  fit: BoxFit.cover,
-                                                  height: 120,
-                                                  progressIndicatorBuilder: (context,
-                                                          url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress,
-                                                    color: MyColors.secondary,
-                                                  ),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(
-                                                    Icons.error,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 8),
-                                              child: Container(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  marchandise.nom,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.black,
-                                                    fontFamily: "Poppins",
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
+                              transitionsBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.textColor,
+                                  width: 1,
+                                  style: BorderStyle.solid)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 5, top: 5),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  child: pictures.isEmpty
+                                      ? Container()
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: pictures.last.image_path,
+                                            fit: BoxFit.cover,
+                                            height: 120,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: MyColors.secondary,
                                             ),
-                                            SizedBox(height: 35),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Poids : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.primary,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                Text(
-                                                  "${marchandise.poids} ${unite.name}",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.textColor,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                              ],
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.error,
+                                              color: Colors.red,
                                             ),
-                                            SizedBox(height: 5),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      "${pay_depart.name.toUpperCase()}, ${ville_dep.name}",
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        color: user.dark_mode ==
-                                                                1
-                                                            ? MyColors.light
-                                                            : MyColors.black,
-                                                        fontFamily: "Poppins",
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    "- ${pay_dest.name.toUpperCase()}, ${ville_dest.name}",
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                          ),
                                         ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            marchandise.nom,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 35),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Poids : ",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.primary,
+                                                fontFamily: "Poppins",
+                                                fontSize: 10),
+                                          ),
+                                          Text(
+                                            "${marchandise.poids} ${unite.name}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                "${pay_depart.name.toUpperCase()}, ${ville_dep.name}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.black,
+                                                  fontFamily: "Poppins",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "- ${pay_dest.name.toUpperCase()}, ${ville_dest.name}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.black,
+                                                fontFamily: "Poppins",
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          );
-                        }).toList(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  },
+                  itemCount: annonces.length),
+            ),
     );
   }
 }

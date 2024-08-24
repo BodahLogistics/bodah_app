@@ -14,15 +14,21 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../providers/auth/prov_sign_up.dart';
 import 'sign_in.dart';
 import 'validate_account.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   SignUp({super.key});
 
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   TextEditingController Password = TextEditingController();
 
   TextEditingController Adresse = TextEditingController();
@@ -32,6 +38,15 @@ class SignUp extends StatelessWidget {
   TextEditingController Number = TextEditingController();
 
   TextEditingController ConfirmPassword = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvSignUp>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +89,7 @@ class SignUp extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+        reverse: false,
         child: Padding(
           padding:
               const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
@@ -154,7 +169,7 @@ class SignUp extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 17),
                 child: SizedBox(
-                  height: 60,
+                  height: 70,
                   child: IntlPhoneField(
                     initialCountryCode: 'BJ',
                     controller: Number,
@@ -168,8 +183,7 @@ class SignUp extends StatelessWidget {
                               )
                             : null,
                         border: OutlineInputBorder(borderSide: BorderSide()),
-                        labelText: "Numéro de téléphone",
-                        hintText: "Numéro de téléphone",
+                        labelText: "Téléphone",
                         labelStyle: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -197,10 +211,7 @@ class SignUp extends StatelessWidget {
                     )
                   : Container(),
               SizedBox(
-                height: 7,
-              ),
-              SizedBox(
-                height: 48,
+                height: 54,
                 child: DropdownSearch<String>(
                   popupProps: PopupProps.dialog(
                     showSearchBox: true,
@@ -214,8 +225,7 @@ class SignUp extends StatelessWidget {
 
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                        labelText: "Pays de résidence",
-                        hintText: "Pays de résidence",
+                        labelText: "Pays",
                         labelStyle: TextStyle(
                             color: MyColors.black,
                             fontSize: 14,
@@ -242,7 +252,7 @@ class SignUp extends StatelessWidget {
                 height: 10,
               ),
               SizedBox(
-                height: 48,
+                height: 54,
                 child: DropdownSearch<String>(
                   popupProps: PopupProps.dialog(
                     showSearchBox: true,
@@ -256,8 +266,7 @@ class SignUp extends StatelessWidget {
 
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                        labelText: "Ville de résidence",
-                        hintText: "Ville de résidence",
+                        labelText: "Ville",
                         labelStyle: TextStyle(
                             color: MyColors.black,
                             fontSize: 14,
@@ -283,7 +292,7 @@ class SignUp extends StatelessWidget {
                 height: 10,
               ),
               SizedBox(
-                height: 48,
+                height: 54,
                 child: DropdownSearch<String>(
                   popupProps: PopupProps.dialog(
                     showSearchBox: true,
@@ -297,8 +306,7 @@ class SignUp extends StatelessWidget {
 
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                        labelText: "Rôle de l'utilisateur",
-                        hintText: "Rôle de l'utilisateur",
+                        labelText: "Rôle",
                         labelStyle: TextStyle(
                             color: MyColors.black,
                             fontSize: 14,
@@ -324,7 +332,7 @@ class SignUp extends StatelessWidget {
                 height: 10,
               ),
               SizedBox(
-                height: 48,
+                height: 54,
                 child: DropdownSearch<String>(
                   popupProps: PopupProps.dialog(
                     showSearchBox: true,
@@ -338,8 +346,7 @@ class SignUp extends StatelessWidget {
 
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                        labelText: "Statut de l'utilisateur",
-                        hintText: "Statut de l'utilisateur",
+                        labelText: "Statut",
                         labelStyle: TextStyle(
                             color: MyColors.black,
                             fontSize: 14,
@@ -379,7 +386,6 @@ class SignUp extends StatelessWidget {
                                 : null,
                         border: OutlineInputBorder(borderSide: BorderSide()),
                         labelText: "Mot de passe",
-                        hintText: "Votre mot de passe",
                         labelStyle: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -445,7 +451,6 @@ class SignUp extends StatelessWidget {
                                 ? Icon(Icons.visibility_off)
                                 : Icon(Icons.visibility)),
                         border: OutlineInputBorder(borderSide: BorderSide()),
-                        labelText: "Confirmation",
                         hintText: "Confirmez le mot de passe",
                         labelStyle: TextStyle(
                             color: Colors.black,
@@ -499,23 +504,10 @@ class SignUp extends StatelessWidget {
                         if (await canLaunch(url)) {
                           await launch(url);
                         } else {
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.9,
-                                left: MediaQuery.of(context).size.width * 0.5,
-                                right: 20),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
+                          showCustomSnackBar(
+                              context,
                               "Vous devez vous connecter à internet. Une erreur s'est produite",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              Colors.redAccent);
                         }
                       },
                       child: Text(
@@ -541,200 +533,105 @@ class SignUp extends StatelessWidget {
                         backgroundColor: accepte
                             ? MyColors.secondary
                             : MyColors.secondary.withOpacity(.4)),
-                    onPressed: () async {
-                      if (!accepte) {
-                        ShowErrorMessage(
-                          context,
-                          "Vous devez avant tout accepter les termes et conditions d'utilisation de notre application",
-                          "Termes d'utilisation",
-                        );
-                      } else {
-                        provider.change_affiche(true);
+                    onPressed: affiche
+                        ? null
+                        : () async {
+                            if (!accepte) {
+                              ShowErrorMessage(
+                                context,
+                                "Vous devez avant tout accepter les termes et conditions d'utilisation de notre application",
+                                "Termes d'utilisation",
+                              );
+                            } else {
+                              provider.change_affiche(true);
 
-                        if (nom.length < 3 ||
-                            number.length < 8 ||
-                            pay.id < 1 ||
-                            ville.id < 1 ||
-                            rule.id < 1 ||
-                            statut.id < 1 ||
-                            password.length < 8 ||
-                            confirm_password.length < 8) {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.88,
-                                left: MediaQuery.of(context).size.width * 0.3,
-                                right: 5),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              'Données invalides',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (password != confirm_password) {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.88,
-                                left: MediaQuery.of(context).size.width * 0.3,
-                                right: 5),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              'Mot de passe mal confirmé',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else if (existing_number) {
-                          provider.change_affiche(false);
-                          final snackBar = SnackBar(
-                            margin: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.88,
-                                left: MediaQuery.of(context).size.width * 0.3,
-                                right: 5),
-                            backgroundColor: Colors.redAccent,
-                            content: Text(
-                              'Numéro de téléphone déjà utilisé',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Poppins"),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else {
-                          String statut_code = await service.register(
-                              nom,
-                              number,
-                              statut,
-                              rule,
-                              password,
-                              confirm_password,
-                              ville,
-                              pay,
-                              prov_val_ac);
+                              if (nom.length < 3 ||
+                                  number.length < 8 ||
+                                  pay.id < 1 ||
+                                  ville.id < 1 ||
+                                  rule.id < 1 ||
+                                  statut.id < 1 ||
+                                  password.length < 8 ||
+                                  confirm_password.length < 8) {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context, 'Données invalides',
+                                    Colors.redAccent);
+                              } else if (password != confirm_password) {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    'Mot de passe mal confirmé',
+                                    Colors.redAccent);
+                              } else if (existing_number) {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    'Numéro de téléphone déjà utilisé',
+                                    Colors.redAccent);
+                              } else {
+                                String statut_code = await service.register(
+                                    nom,
+                                    number,
+                                    statut,
+                                    rule,
+                                    password,
+                                    confirm_password,
+                                    ville,
+                                    pay,
+                                    prov_val_ac);
 
-                          if (statut_code == "422") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height * 0.88,
-                                  left: MediaQuery.of(context).size.width * 0.3,
-                                  right: 5),
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Erreur de validation",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "500") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height * 0.88,
-                                  left: MediaQuery.of(context).size.width * 0.3,
-                                  right: 5),
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "502") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height * 0.88,
-                                  left: MediaQuery.of(context).size.width * 0.3,
-                                  right: 5),
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Une erreur s'est produite",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == '200') {
-                            provider.change_affiche(false);
-                            provider.reset();
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return ValidateAccount(telephone: number);
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
+                                if (statut_code == "422") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(context,
+                                      "Erreur de validation", Colors.redAccent);
+                                } else if (statut_code == "500") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                                      Colors.redAccent);
+                                } else if (statut_code == "502") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreur s'est produite",
+                                      Colors.redAccent);
+                                } else if (statut_code == '200') {
+                                  provider.change_affiche(false);
+                                  provider.reset();
+                                  showCustomSnackBar(
+                                      context,
+                                      "Un code de validation vous a été envoyé. Procédez à l validation de votre compte",
+                                      Colors.green);
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      pageBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return ValidateAccount(
+                                            telephone: number);
+                                      },
+                                      transitionsBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double> secondaryAnimation,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
                                   );
-                                },
-                              ),
-                            );
-
-                            final snackBar = SnackBar(
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height * 0.88,
-                                  left: MediaQuery.of(context).size.width * 0.3,
-                                  right: 5),
-                              backgroundColor: Colors.green,
-                              content: Text(
-                                "Un code de validation vous a été envoyé. Procédez à l validation de votre compte",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        }
-                      }
-                    },
+                                }
+                              }
+                            }
+                          },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

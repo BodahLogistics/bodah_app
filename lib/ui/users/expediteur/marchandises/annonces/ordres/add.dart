@@ -1,6 +1,7 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors, use_build_context_synchronously, non_constant_identifier_names, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
+// ignore_for_file: must_be_immutable, prefer_const_constructors, use_build_context_synchronously, non_constant_identifier_names, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, prefer_const_constructors_in_immutables
 
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/odres/add.dart';
+import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -13,23 +14,51 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../services/data_base_service.dart';
 import '../../../drawer/index.dart';
 
-class AddOrdreTransport extends StatelessWidget {
+class AddOrdreTransport extends StatefulWidget {
   final Annonces annonce;
   AddOrdreTransport({super.key, required this.annonce});
+
+  @override
+  State<AddOrdreTransport> createState() => _AddOrdreTransportState();
+}
+
+class _AddOrdreTransportState extends State<AddOrdreTransport> {
   TextEditingController DelaiChargement = TextEditingController();
+
   TextEditingController AmendeDelaiChargement = TextEditingController();
+
   TextEditingController AmendeDechargement = TextEditingController();
+
   TextEditingController Nom = TextEditingController();
+
   TextEditingController Email = TextEditingController();
+
   TextEditingController Telephone = TextEditingController();
+
   TextEditingController Entreprise = TextEditingController();
+
   TextEditingController Ifu = TextEditingController();
+
   TextEditingController NomEntite = TextEditingController();
+
   TextEditingController TelephoneEntite = TextEditingController();
+
   TextEditingController EntrepriseEntite = TextEditingController();
+
   TextEditingController IfuEntite = TextEditingController();
+
   TextEditingController Adress = TextEditingController();
+
   TextEditingController EntiteAdress = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvAddOrdre>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +107,9 @@ class AddOrdreTransport extends StatelessWidget {
         title: Text(
           "Ordre de transport",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -93,6 +123,7 @@ class AddOrdreTransport extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+        reverse: false,
         child: Column(
           children: [
             Padding(
@@ -108,6 +139,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Franchise (Facultatif)",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -187,6 +219,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Frais de stationnement au chargement ",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -247,6 +280,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Frais de stationnement au déchargement ",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -304,6 +338,7 @@ class AddOrdreTransport extends StatelessWidget {
                     child: Text(
                       "Informations du donneiur d'ordre",
                       style: TextStyle(
+                        fontFamily: "Poppins",
                         color: user.dark_mode == 1
                             ? MyColors.light
                             : MyColors.black,
@@ -322,6 +357,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Nom",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -395,6 +431,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Téléphone",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -403,7 +440,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: 65,
+                    height: 70,
                     child: IntlPhoneField(
                       initialCountryCode: 'BJ',
                       controller: Telephone,
@@ -445,6 +482,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Email (Facultatif)",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -520,6 +558,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Adresse de résidence",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -586,142 +625,117 @@ class AddOrdreTransport extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: Column(
-                          children: [
-                            user.dark_mode == 1
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Entreprise (Facultatif)",
-                                        style: TextStyle(
-                                          color: MyColors.light,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                controller: Entreprise,
-                                onChanged: (value) =>
-                                    provider.change_entreprise(value),
-                                decoration: InputDecoration(
-                                    suffixIcon: Entreprise.text.isNotEmpty &&
-                                            (entreprise.length < 3)
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15),
-                                            child: Icon(Icons.error,
-                                                color: Colors.red),
-                                          )
-                                        : null,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: Entreprise.text.isEmpty
-                                          ? function
-                                              .convertHexToColor("#79747E")
-                                          : (entreprise.length > 3)
-                                              ? MyColors.secondary
-                                              : Colors.red,
-                                    )),
-                                    filled: user.dark_mode == 1 ? true : false,
-                                    fillColor: user.dark_mode == 1
-                                        ? MyColors.filedDark
-                                        : null,
-                                    labelText: user.dark_mode == 0
-                                        ? "Entreprise (Facultatif)"
-                                        : "",
-                                    labelStyle: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontSize: 14,
-                                        fontFamily: "Poppins"),
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Poppins",
-                                        color: MyColors.black)),
+                  user.dark_mode == 1
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Entreprise (Facultatif)",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: MyColors.light,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: Column(
-                          children: [
-                            user.dark_mode == 1
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "IFU/Numéro Fiscal (Facultatif) ",
-                                        style: TextStyle(
-                                          color: MyColors.light,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                controller: Ifu,
-                                onChanged: (value) =>
-                                    provider.change_ifu(value),
-                                decoration: InputDecoration(
-                                    suffixIcon:
-                                        Ifu.text.isNotEmpty && (ifu.length < 3)
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 15),
-                                                child: Icon(Icons.error,
-                                                    color: Colors.red),
-                                              )
-                                            : null,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: Ifu.text.isEmpty
-                                          ? function
-                                              .convertHexToColor("#79747E")
-                                          : (ifu.length > 3)
-                                              ? MyColors.secondary
-                                              : Colors.red,
-                                    )),
-                                    filled: user.dark_mode == 1 ? true : false,
-                                    fillColor: user.dark_mode == 1
-                                        ? MyColors.filedDark
-                                        : null,
-                                    labelText: user.dark_mode == 0
-                                        ? "IFU/Numéro Fiscal (Facultatif)"
-                                        : "",
-                                    labelStyle: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontSize: 14,
-                                        fontFamily: "Poppins"),
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Poppins",
-                                        color: MyColors.black)),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                    child: TextField(
+                      controller: Entreprise,
+                      onChanged: (value) => provider.change_entreprise(value),
+                      decoration: InputDecoration(
+                          suffixIcon: Entreprise.text.isNotEmpty &&
+                                  (entreprise.length < 3)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Entreprise.text.isEmpty
+                                ? function.convertHexToColor("#79747E")
+                                : (entreprise.length > 3)
+                                    ? MyColors.secondary
+                                    : Colors.red,
+                          )),
+                          filled: user.dark_mode == 1 ? true : false,
+                          fillColor:
+                              user.dark_mode == 1 ? MyColors.filedDark : null,
+                          labelText: user.dark_mode == 0
+                              ? "Entreprise (Facultatif)"
+                              : "",
+                          labelStyle: TextStyle(
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontSize: 14,
+                              fontFamily: "Poppins"),
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              color: MyColors.black)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  user.dark_mode == 1
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "IFU/Numéro Fiscal (Facultatif) ",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: MyColors.light,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                    child: TextField(
+                      controller: Ifu,
+                      onChanged: (value) => provider.change_ifu(value),
+                      decoration: InputDecoration(
+                          suffixIcon: Ifu.text.isNotEmpty && (ifu.length < 3)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Ifu.text.isEmpty
+                                ? function.convertHexToColor("#79747E")
+                                : (ifu.length > 3)
+                                    ? MyColors.secondary
+                                    : Colors.red,
+                          )),
+                          filled: user.dark_mode == 1 ? true : false,
+                          fillColor:
+                              user.dark_mode == 1 ? MyColors.filedDark : null,
+                          labelText: user.dark_mode == 0
+                              ? "IFU/Numéro Fiscal (Facultatif)"
+                              : "",
+                          labelStyle: TextStyle(
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontSize: 14,
+                              fontFamily: "Poppins"),
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              color: MyColors.black)),
+                    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -731,6 +745,7 @@ class AddOrdreTransport extends StatelessWidget {
                     child: Text(
                       "Informations de l'entité à facturer ",
                       style: TextStyle(
+                        fontFamily: "Poppins",
                         color: user.dark_mode == 1
                             ? MyColors.light
                             : MyColors.black,
@@ -749,6 +764,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Nom",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -823,6 +839,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Téléphone",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -831,7 +848,7 @@ class AddOrdreTransport extends StatelessWidget {
                         )
                       : Container(),
                   SizedBox(
-                    height: 65,
+                    height: 70,
                     child: IntlPhoneField(
                       initialCountryCode: 'BJ',
                       controller: TelephoneEntite,
@@ -873,6 +890,7 @@ class AddOrdreTransport extends StatelessWidget {
                             child: Text(
                               "Adresse de résidence",
                               style: TextStyle(
+                                fontFamily: "Poppins",
                                 color: MyColors.light,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -940,143 +958,119 @@ class AddOrdreTransport extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: Column(
-                          children: [
-                            user.dark_mode == 1
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Entreprise (Facultatif)",
-                                        style: TextStyle(
-                                          color: MyColors.light,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                controller: EntrepriseEntite,
-                                onChanged: (value) =>
-                                    provider.change_entite_entreprise(value),
-                                decoration: InputDecoration(
-                                    suffixIcon:
-                                        EntrepriseEntite.text.isNotEmpty &&
-                                                (entite_entreprise.length < 3)
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 15),
-                                                child: Icon(Icons.error,
-                                                    color: Colors.red),
-                                              )
-                                            : null,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: EntrepriseEntite.text.isEmpty
-                                          ? function
-                                              .convertHexToColor("#79747E")
-                                          : (entite_entreprise.length > 3)
-                                              ? MyColors.secondary
-                                              : Colors.red,
-                                    )),
-                                    filled: user.dark_mode == 1 ? true : false,
-                                    fillColor: user.dark_mode == 1
-                                        ? MyColors.filedDark
-                                        : null,
-                                    labelText: user.dark_mode == 0
-                                        ? "Entreprise (Facultatif)"
-                                        : "",
-                                    labelStyle: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontSize: 14,
-                                        fontFamily: "Poppins"),
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Poppins",
-                                        color: MyColors.black)),
+                  user.dark_mode == 1
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Entreprise (Facultatif)",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: MyColors.light,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: Column(
-                          children: [
-                            user.dark_mode == 1
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "IFU/Numéro Fiscal (Facultatif) ",
-                                        style: TextStyle(
-                                          color: MyColors.light,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                controller: IfuEntite,
-                                onChanged: (value) =>
-                                    provider.change_entite_ifu(value),
-                                decoration: InputDecoration(
-                                    suffixIcon: IfuEntite.text.isNotEmpty &&
-                                            (entite_ifu.length < 3)
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15),
-                                            child: Icon(Icons.error,
-                                                color: Colors.red),
-                                          )
-                                        : null,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: IfuEntite.text.isEmpty
-                                          ? function
-                                              .convertHexToColor("#79747E")
-                                          : (entite_ifu.length > 3)
-                                              ? MyColors.secondary
-                                              : Colors.red,
-                                    )),
-                                    filled: user.dark_mode == 1 ? true : false,
-                                    fillColor: user.dark_mode == 1
-                                        ? MyColors.filedDark
-                                        : null,
-                                    labelText: user.dark_mode == 0
-                                        ? "IFU/Numéro Fiscal (Facultatif)"
-                                        : "",
-                                    labelStyle: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontSize: 14,
-                                        fontFamily: "Poppins"),
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Poppins",
-                                        color: MyColors.black)),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                    child: TextField(
+                      controller: EntrepriseEntite,
+                      onChanged: (value) =>
+                          provider.change_entite_entreprise(value),
+                      decoration: InputDecoration(
+                          suffixIcon: EntrepriseEntite.text.isNotEmpty &&
+                                  (entite_entreprise.length < 3)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: EntrepriseEntite.text.isEmpty
+                                ? function.convertHexToColor("#79747E")
+                                : (entite_entreprise.length > 3)
+                                    ? MyColors.secondary
+                                    : Colors.red,
+                          )),
+                          filled: user.dark_mode == 1 ? true : false,
+                          fillColor:
+                              user.dark_mode == 1 ? MyColors.filedDark : null,
+                          labelText: user.dark_mode == 0
+                              ? "Entreprise (Facultatif)"
+                              : "",
+                          labelStyle: TextStyle(
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontSize: 14,
+                              fontFamily: "Poppins"),
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              color: MyColors.black)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  user.dark_mode == 1
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "IFU/Numéro Fiscal (Facultatif) ",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: MyColors.light,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 40,
+                    child: TextField(
+                      controller: IfuEntite,
+                      onChanged: (value) => provider.change_entite_ifu(value),
+                      decoration: InputDecoration(
+                          suffixIcon: IfuEntite.text.isNotEmpty &&
+                                  (entite_ifu.length < 3)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Icon(Icons.error, color: Colors.red),
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: IfuEntite.text.isEmpty
+                                ? function.convertHexToColor("#79747E")
+                                : (entite_ifu.length > 3)
+                                    ? MyColors.secondary
+                                    : Colors.red,
+                          )),
+                          filled: user.dark_mode == 1 ? true : false,
+                          fillColor:
+                              user.dark_mode == 1 ? MyColors.filedDark : null,
+                          labelText: user.dark_mode == 0
+                              ? "IFU/Numéro Fiscal (Facultatif)"
+                              : "",
+                          labelStyle: TextStyle(
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontSize: 14,
+                              fontFamily: "Poppins"),
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              color: MyColors.black)),
+                    ),
                   ),
                   SizedBox(
                     height: 25,
@@ -1089,151 +1083,62 @@ class AddOrdreTransport extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             backgroundColor: MyColors.secondary),
-                        onPressed: () async {
-                          provider.change_affiche(true);
+                        onPressed: affiche
+                            ? null
+                            : () async {
+                                provider.change_affiche(true);
 
-                          String statut_code = await service.addOrdre(
-                              delai_chargement,
-                              amende_delai_chargement,
-                              amende_dechargement,
-                              email,
-                              nom,
-                              phone_number,
-                              address,
-                              entreprise,
-                              entite_nom,
-                              entite_phone_number,
-                              entite_adress,
-                              entite_entreprise,
-                              ifu,
-                              entite_ifu,
-                              annonce);
+                                String statut_code = await service.addOrdre(
+                                    delai_chargement,
+                                    amende_delai_chargement,
+                                    amende_dechargement,
+                                    email,
+                                    nom,
+                                    phone_number,
+                                    address,
+                                    entreprise,
+                                    entite_nom,
+                                    entite_phone_number,
+                                    entite_adress,
+                                    entite_entreprise,
+                                    ifu,
+                                    entite_ifu,
+                                    widget.annonce);
 
-                          if (statut_code == "100") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Données invalides",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "202") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Une erreur inattendue s'est produite",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "422") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Erreur de validation",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "500") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Unerreur est survenue",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "404") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "L'annonce a égé supprimée",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "403") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "L'ordre de commande pour l'annonce cette annonce existe déjà",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "500") {
-                            provider.change_affiche(false);
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.redAccent,
-                              content: Text(
-                                "Une erreur inattendu est survenue",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else if (statut_code == "200") {
-                            await api_provider.InitForSomeAnnonce();
-                            provider.change_affiche(false);
-                            provider.reset();
-                            Navigator.of(context).pop();
-                            final snackBar = SnackBar(
-                              backgroundColor: Colors.green,
-                              content: Text(
-                                "L'ordre de transport a été ajouté avec succès",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Poppins"),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
+                                if (statut_code == "202") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreur inattendue s'est produite",
+                                      Colors.redAccent);
+                                } else if (statut_code == "422") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(context,
+                                      "Erreur de validation", Colors.redAccent);
+                                } else if (statut_code == "500") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreur inattendue s'est produite. Vérifiez votre connection internet et réessayer",
+                                      Colors.redAccent);
+                                } else if (statut_code == "404" ||
+                                    statut_code == "403") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Vous ne pouvez pas ajouter l'ordrede transport",
+                                      Colors.redAccent);
+                                } else if (statut_code == "200") {
+                                  await api_provider.InitForSomeAnnonce();
+                                  provider.change_affiche(false);
+                                  provider.reset();
+                                  Navigator.of(context).pop();
+                                  showCustomSnackBar(
+                                      context,
+                                      "L'ordre de transport a été ajouté avec succès",
+                                      Colors.green);
+                                }
+                              },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

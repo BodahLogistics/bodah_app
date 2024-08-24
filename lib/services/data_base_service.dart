@@ -23,6 +23,7 @@ import 'package:bodah/modals/vgms.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/modals/voiture_photos.dart';
 import 'package:bodah/modals/voitures.dart';
+import 'package:bodah/providers/api/api_data.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:http/http.dart' as http;
@@ -1214,20 +1215,20 @@ class DBServices {
   }
 
   Future<String> publishAnnonce(
-    String date_chargement,
-    String nom,
-    Unites unite,
-    int poids,
-    int quantite,
-    int tarif,
-    Pays pay_exp,
-    Pays pay_liv,
-    String adress_exp,
-    String adress_liv,
-    Villes ville_exp,
-    Villes ville_liv,
-    List<File> files,
-  ) async {
+      String date_chargement,
+      String nom,
+      Unites unite,
+      int poids,
+      int quantite,
+      int tarif,
+      Pays pay_exp,
+      Pays pay_liv,
+      String adress_exp,
+      String adress_liv,
+      Villes ville_exp,
+      Villes ville_liv,
+      List<File> files,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/publish";
@@ -1262,18 +1263,7 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      if (date_chargement.isEmpty ||
-          nom.isEmpty ||
-          unite.name.isEmpty ||
-          poids <= 0 ||
-          pay_exp.name.isEmpty ||
-          pay_liv.name.isEmpty ||
-          ville_exp.name.isEmpty ||
-          ville_liv.name.isEmpty) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1328,18 +1318,7 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      if (date_chargement.isEmpty ||
-          nom.isEmpty ||
-          unite.name.isEmpty ||
-          poids <= 0 ||
-          pay_exp.name.isEmpty ||
-          pay_liv.name.isEmpty ||
-          ville_exp.name.isEmpty ||
-          ville_liv.name.isEmpty) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1393,18 +1372,7 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      if (date_chargement.isEmpty ||
-          nom.isEmpty ||
-          unite.name.isEmpty ||
-          poids <= 0 ||
-          pay_exp.name.isEmpty ||
-          pay_liv.name.isEmpty ||
-          ville_exp.name.isEmpty ||
-          ville_liv.name.isEmpty) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1422,11 +1390,7 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
-      if (annonce.id <= 0) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1445,11 +1409,7 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
-      if (marchandise.id <= 0) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1497,19 +1457,7 @@ class DBServices {
         'ifu': ifu
       });
 
-      if (delai_chargement <= 0 ||
-          amende_delai_chargement <= 0 ||
-          amende_dechargement <= 0 ||
-          name.isEmpty ||
-          entite_phone_number.length < 8 ||
-          phone_number.length < 8 ||
-          entite_name.isEmpty ||
-          (entreprise.isNotEmpty && ifu.isEmpty) ||
-          (entite_entreprise.isNotEmpty && entite_ifu.isEmpty)) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1557,20 +1505,7 @@ class DBServices {
         'ifu': ifu
       });
 
-      if (delai_chargement <= 0 ||
-          amende_delai_chargement <= 0 ||
-          amende_dechargement <= 0 ||
-          name.isEmpty ||
-          entite_phone_number.length < 8 ||
-          phone_number.length < 8 ||
-          entite_name.isEmpty ||
-          (entreprise.isNotEmpty && ifu.isEmpty) ||
-          (entite_entreprise.isNotEmpty && entite_ifu.isEmpty) ||
-          ordre.id <= 0) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1588,11 +1523,7 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
-      if (ordre.id <= 0) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1610,11 +1541,7 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
-      if (ordre.id <= 0) {
-        return "100";
-      } else {
-        return response.statusCode.toString();
-      }
+      return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
@@ -1639,10 +1566,10 @@ class DBServices {
       }, body: {
         'name': nom,
         'phone_number': number,
-        'statut': statut.id.toString(),
-        'role': rule.id.toString(),
-        'city': ville.id.toString(),
-        'country': pay.id,
+        'statut': statut.id.toString(), // Convertir en String
+        'role': rule.id.toString(), // Convertir en String
+        'city': ville.id.toString(), // Convertir en String
+        'country': pay.id.toString(), // Convertir en String
         'password': password,
         'confirm_password': confirm_password
       });
