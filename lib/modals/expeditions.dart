@@ -3,11 +3,11 @@ import 'dart:convert';
 
 class Expeditions {
   final int id;
+  final int annonce_id;
   final String numero_expedition;
   final int transporteur_id;
   final int statu_expedition_id;
   final int marchandise_id;
-  final double? montant_paye;
   final int deleted;
   final String? description;
   final DateTime date_depart;
@@ -19,11 +19,11 @@ class Expeditions {
   final DateTime updated_at;
   Expeditions({
     required this.id,
+    required this.annonce_id,
     required this.numero_expedition,
     required this.transporteur_id,
     required this.statu_expedition_id,
     required this.marchandise_id,
-    required this.montant_paye,
     required this.deleted,
     this.description,
     required this.date_depart,
@@ -37,11 +37,11 @@ class Expeditions {
 
   Expeditions copyWith({
     int? id,
+    int? annonce_id,
     String? numero_expedition,
     int? transporteur_id,
     int? statu_expedition_id,
     int? marchandise_id,
-    double? montant_paye,
     int? deleted,
     String? description,
     DateTime? date_depart,
@@ -54,11 +54,11 @@ class Expeditions {
   }) {
     return Expeditions(
       id: id ?? this.id,
+      annonce_id: annonce_id ?? this.annonce_id,
       numero_expedition: numero_expedition ?? this.numero_expedition,
       transporteur_id: transporteur_id ?? this.transporteur_id,
       statu_expedition_id: statu_expedition_id ?? this.statu_expedition_id,
       marchandise_id: marchandise_id ?? this.marchandise_id,
-      montant_paye: montant_paye ?? this.montant_paye,
       deleted: deleted ?? this.deleted,
       description: description ?? this.description,
       date_depart: date_depart ?? this.date_depart,
@@ -74,11 +74,11 @@ class Expeditions {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'annonce_id': annonce_id,
       'numero_expedition': numero_expedition,
       'transporteur_id': transporteur_id,
       'statu_expedition_id': statu_expedition_id,
       'marchandise_id': marchandise_id,
-      'montant_paye': montant_paye,
       'deleted': deleted,
       'description': description,
       'date_depart': date_depart.millisecondsSinceEpoch,
@@ -93,14 +93,12 @@ class Expeditions {
 
   factory Expeditions.fromMap(Map<String, dynamic> map) {
     return Expeditions(
+      annonce_id: map['annonce_id'] as int,
       id: map['id'] as int,
       numero_expedition: map['numero_expedition'] as String,
       transporteur_id: map['transporteur_id'] as int,
       statu_expedition_id: map['statu_expedition_id'] as int,
       marchandise_id: map['marchandise_id'] as int,
-      montant_paye: map['montant_paye'] != null
-          ? double.tryParse(map['montant_paye'].toString())
-          : null,
       deleted: map['deleted'] as int,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -125,7 +123,7 @@ class Expeditions {
 
   @override
   String toString() {
-    return 'Expeditions(id: $id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, marchandise_id: $marchandise_id, montant_paye: $montant_paye, deleted: $deleted, description: $description, date_depart: $date_depart, date_arrivee: $date_arrivee, caution: $caution, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'Expeditions(id: $id, annonce_id: $annonce_id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, marchandise_id: $marchandise_id, deleted: $deleted, description: $description, date_depart: $date_depart, date_arrivee: $date_arrivee, caution: $caution, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -133,11 +131,11 @@ class Expeditions {
     if (identical(this, other)) return true;
 
     return other.id == id &&
+        other.annonce_id == annonce_id &&
         other.numero_expedition == numero_expedition &&
         other.transporteur_id == transporteur_id &&
         other.statu_expedition_id == statu_expedition_id &&
         other.marchandise_id == marchandise_id &&
-        other.montant_paye == montant_paye &&
         other.deleted == deleted &&
         other.description == description &&
         other.date_depart == date_depart &&
@@ -152,11 +150,11 @@ class Expeditions {
   @override
   int get hashCode {
     return id.hashCode ^
+        annonce_id.hashCode ^
         numero_expedition.hashCode ^
         transporteur_id.hashCode ^
         statu_expedition_id.hashCode ^
         marchandise_id.hashCode ^
-        montant_paye.hashCode ^
         deleted.hashCode ^
         description.hashCode ^
         date_depart.hashCode ^

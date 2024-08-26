@@ -13,7 +13,7 @@ class Marchandises {
   final int quantite;
   final int unite_id;
   final int? type_chargement_id;
-  final int poids;
+  final double poids;
   final int? destinataire_id;
   final int nombre_camions;
   final DateTime? date_chargement;
@@ -65,7 +65,7 @@ class Marchandises {
       quantite: quantite ?? this.quantite,
       unite_id: unite_id ?? this.unite_id,
       type_chargement_id: type_chargement_id ?? this.type_chargement_id,
-      poids: poids ?? this.poids,
+      poids: this.poids,
       destinataire_id: destinataire_id ?? this.destinataire_id,
       nombre_camions: nombre_camions ?? this.nombre_camions,
       date_chargement: date_chargement ?? this.date_chargement,
@@ -110,7 +110,7 @@ class Marchandises {
       type_chargement_id: map['type_chargement_id'] != null
           ? map['type_chargement_id'] as int
           : null,
-      poids: map['poids'] as int,
+      poids: map['poids'] as double,
       destinataire_id:
           map['destinataire_id'] != null ? map['destinataire_id'] as int : null,
       nombre_camions: map['nombre_camions'] as int,

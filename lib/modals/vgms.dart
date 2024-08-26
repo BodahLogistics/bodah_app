@@ -4,9 +4,9 @@ import 'dart:convert';
 class Vgms {
   final int id;
   final String path;
-  final int expedition_id;
+  final int modele_id;
+  final String modele_type;
   final int deleted;
-  final String? commentaire;
   final String reference;
   final String? doc_id;
   final DateTime created_at;
@@ -14,9 +14,9 @@ class Vgms {
   Vgms({
     required this.id,
     required this.path,
-    required this.expedition_id,
+    required this.modele_id,
+    required this.modele_type,
     required this.deleted,
-    this.commentaire,
     required this.reference,
     this.doc_id,
     required this.created_at,
@@ -26,9 +26,9 @@ class Vgms {
   Vgms copyWith({
     int? id,
     String? path,
-    int? expedition_id,
+    int? modele_id,
+    String? modele_type,
     int? deleted,
-    String? commentaire,
     String? reference,
     String? doc_id,
     DateTime? created_at,
@@ -37,9 +37,9 @@ class Vgms {
     return Vgms(
       id: id ?? this.id,
       path: path ?? this.path,
-      expedition_id: expedition_id ?? this.expedition_id,
+      modele_id: modele_id ?? this.modele_id,
+      modele_type: modele_type ?? this.modele_type,
       deleted: deleted ?? this.deleted,
-      commentaire: commentaire ?? this.commentaire,
       reference: reference ?? this.reference,
       doc_id: doc_id ?? this.doc_id,
       created_at: created_at ?? this.created_at,
@@ -51,9 +51,9 @@ class Vgms {
     return <String, dynamic>{
       'id': id,
       'path': path,
-      'expedition_id': expedition_id,
+      'modele_id': modele_id,
+      'modele_type': modele_type,
       'deleted': deleted,
-      'commentaire': commentaire,
       'reference': reference,
       'doc_id': doc_id,
       'created_at': created_at.millisecondsSinceEpoch,
@@ -65,10 +65,9 @@ class Vgms {
     return Vgms(
       id: map['id'] as int,
       path: map['path'] as String,
-      expedition_id: map['expedition_id'] as int,
+      modele_id: map['modele_id'] as int,
+      modele_type: map['modele_type'] as String,
       deleted: map['deleted'] as int,
-      commentaire:
-          map['commentaire'] != null ? map['commentaire'] as String : null,
       reference: map['reference'] as String,
       doc_id: map['doc_id'] != null ? map['doc_id'] as String : null,
       created_at: DateTime.parse(map['created_at'] as String),
@@ -83,7 +82,7 @@ class Vgms {
 
   @override
   String toString() {
-    return 'Vgms(id: $id, path: $path, expedition_id: $expedition_id, deleted: $deleted, commentaire: $commentaire, reference: $reference, doc_id: $doc_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'Vgms(id: $id, path: $path, modele_id: $modele_id, modele_type: $modele_type, deleted: $deleted, reference: $reference, doc_id: $doc_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -92,9 +91,9 @@ class Vgms {
 
     return other.id == id &&
         other.path == path &&
-        other.expedition_id == expedition_id &&
+        other.modele_id == modele_id &&
+        other.modele_type == modele_type &&
         other.deleted == deleted &&
-        other.commentaire == commentaire &&
         other.reference == reference &&
         other.doc_id == doc_id &&
         other.created_at == created_at &&
@@ -105,9 +104,9 @@ class Vgms {
   int get hashCode {
     return id.hashCode ^
         path.hashCode ^
-        expedition_id.hashCode ^
+        modele_id.hashCode ^
+        modele_type.hashCode ^
         deleted.hashCode ^
-        commentaire.hashCode ^
         reference.hashCode ^
         doc_id.hashCode ^
         created_at.hashCode ^

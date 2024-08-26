@@ -1,21 +1,22 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
+
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 
 class Camions {
   final int id;
-  final String? num_immatriculation;
-  final String? name;
-  final int type_vehicule_id;
-  final int? transporteur_id;
+  final String num_immatriculation;
+  final int? type_vehicule_id;
+  final int? modele_id;
+  final String modele_type;
   final String? face_avant_image;
   final String? partie_arriere_image;
   final String? profil_image;
   Camions({
     required this.id,
-    this.num_immatriculation,
-    this.name,
-    required this.type_vehicule_id,
-    this.transporteur_id,
+    required this.num_immatriculation,
+    this.type_vehicule_id,
+    this.modele_id,
+    required this.modele_type,
     this.face_avant_image,
     this.partie_arriere_image,
     this.profil_image,
@@ -24,9 +25,9 @@ class Camions {
   Camions copyWith({
     int? id,
     String? num_immatriculation,
-    String? name,
     int? type_vehicule_id,
-    int? transporteur_id,
+    int? modele_id,
+    String? modele_type,
     String? face_avant_image,
     String? partie_arriere_image,
     String? profil_image,
@@ -34,9 +35,9 @@ class Camions {
     return Camions(
       id: id ?? this.id,
       num_immatriculation: num_immatriculation ?? this.num_immatriculation,
-      name: name ?? this.name,
       type_vehicule_id: type_vehicule_id ?? this.type_vehicule_id,
-      transporteur_id: transporteur_id ?? this.transporteur_id,
+      modele_id: modele_id ?? this.modele_id,
+      modele_type: modele_type ?? this.modele_type,
       face_avant_image: face_avant_image ?? this.face_avant_image,
       partie_arriere_image: partie_arriere_image ?? this.partie_arriere_image,
       profil_image: profil_image ?? this.profil_image,
@@ -47,9 +48,9 @@ class Camions {
     return <String, dynamic>{
       'id': id,
       'num_immatriculation': num_immatriculation,
-      'name': name,
       'type_vehicule_id': type_vehicule_id,
-      'transporteur_id': transporteur_id,
+      'modele_id': modele_id,
+      'modele_type': modele_type,
       'face_avant_image': face_avant_image,
       'partie_arriere_image': partie_arriere_image,
       'profil_image': profil_image,
@@ -59,13 +60,12 @@ class Camions {
   factory Camions.fromMap(Map<String, dynamic> map) {
     return Camions(
       id: map['id'] as int,
-      num_immatriculation: map['num_immatriculation'] != null
-          ? map['num_immatriculation'] as String
+      num_immatriculation: map['num_immatriculation'] as String,
+      type_vehicule_id: map['type_vehicule_id'] != null
+          ? map['type_vehicule_id'] as int
           : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      type_vehicule_id: map['type_vehicule_id'] as int,
-      transporteur_id:
-          map['transporteur_id'] != null ? map['transporteur_id'] as int : null,
+      modele_id: map['modele_id'] != null ? map['modele_id'] as int : null,
+      modele_type: map['modele_type'] as String,
       face_avant_image: map['face_avant_image'] != null
           ? map['face_avant_image'] as String
           : null,
@@ -84,7 +84,7 @@ class Camions {
 
   @override
   String toString() {
-    return 'Camions(id: $id, num_immatriculation: $num_immatriculation, name: $name, type_vehicule_id: $type_vehicule_id, transporteur_id: $transporteur_id, face_avant_image: $face_avant_image, partie_arriere_image: $partie_arriere_image, profil_image: $profil_image)';
+    return 'Camions(id: $id, num_immatriculation: $num_immatriculation, type_vehicule_id: $type_vehicule_id, modele_id: $modele_id, modele_type: $modele_type, face_avant_image: $face_avant_image, partie_arriere_image: $partie_arriere_image, profil_image: $profil_image)';
   }
 
   @override
@@ -93,9 +93,9 @@ class Camions {
 
     return other.id == id &&
         other.num_immatriculation == num_immatriculation &&
-        other.name == name &&
         other.type_vehicule_id == type_vehicule_id &&
-        other.transporteur_id == transporteur_id &&
+        other.modele_id == modele_id &&
+        other.modele_type == modele_type &&
         other.face_avant_image == face_avant_image &&
         other.partie_arriere_image == partie_arriere_image &&
         other.profil_image == profil_image;
@@ -105,9 +105,9 @@ class Camions {
   int get hashCode {
     return id.hashCode ^
         num_immatriculation.hashCode ^
-        name.hashCode ^
         type_vehicule_id.hashCode ^
-        transporteur_id.hashCode ^
+        modele_id.hashCode ^
+        modele_type.hashCode ^
         face_avant_image.hashCode ^
         partie_arriere_image.hashCode ^
         profil_image.hashCode;

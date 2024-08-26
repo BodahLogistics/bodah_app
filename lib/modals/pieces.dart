@@ -4,26 +4,30 @@ import 'dart:convert';
 class Pieces {
   final int id;
   final String num_piace;
-  final int type_piece_id;
-  final int transporteur_id;
+  final int? type_piece_id;
+  final int modele_id;
+  final String modele_type;
   Pieces({
     required this.id,
     required this.num_piace,
     required this.type_piece_id,
-    required this.transporteur_id,
+    required this.modele_id,
+    required this.modele_type,
   });
 
   Pieces copyWith({
     int? id,
     String? num_piace,
     int? type_piece_id,
-    int? transporteur_id,
+    int? modele_id,
+    String? modele_type,
   }) {
     return Pieces(
       id: id ?? this.id,
       num_piace: num_piace ?? this.num_piace,
       type_piece_id: type_piece_id ?? this.type_piece_id,
-      transporteur_id: transporteur_id ?? this.transporteur_id,
+      modele_id: modele_id ?? this.modele_id,
+      modele_type: modele_type ?? this.modele_type,
     );
   }
 
@@ -32,7 +36,8 @@ class Pieces {
       'id': id,
       'num_piace': num_piace,
       'type_piece_id': type_piece_id,
-      'transporteur_id': transporteur_id,
+      'modele_id': modele_id,
+      'modele_type': modele_type,
     };
   }
 
@@ -40,8 +45,10 @@ class Pieces {
     return Pieces(
       id: map['id'] as int,
       num_piace: map['num_piace'] as String,
-      type_piece_id: map['type_piece_id'] as int,
-      transporteur_id: map['transporteur_id'] as int,
+      type_piece_id:
+          map['type_piece_id'] != null ? map['type_piece_id'] as int : null,
+      modele_id: map['modele_id'] as int,
+      modele_type: map['modele_type'] as String,
     );
   }
 
@@ -52,7 +59,7 @@ class Pieces {
 
   @override
   String toString() {
-    return 'Pieces(id: $id, num_piace: $num_piace, type_piece_id: $type_piece_id, transporteur_id: $transporteur_id)';
+    return 'Pieces(id: $id, num_piace: $num_piace, type_piece_id: $type_piece_id, modele_id: $modele_id, modele_type: $modele_type)';
   }
 
   @override
@@ -62,7 +69,8 @@ class Pieces {
     return other.id == id &&
         other.num_piace == num_piace &&
         other.type_piece_id == type_piece_id &&
-        other.transporteur_id == transporteur_id;
+        other.modele_id == modele_id &&
+        other.modele_type == modele_type;
   }
 
   @override
@@ -70,6 +78,7 @@ class Pieces {
     return id.hashCode ^
         num_piace.hashCode ^
         type_piece_id.hashCode ^
-        transporteur_id.hashCode;
+        modele_id.hashCode ^
+        modele_type.hashCode;
   }
 }

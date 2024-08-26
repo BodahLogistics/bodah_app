@@ -4,21 +4,21 @@ import 'dart:convert';
 class Tdos {
   final int id;
   final String path;
-  final int expedition_id;
+  final int modele_id;
+  final String modele_type;
   final int deleted;
   final String reference;
   final String? doc_id;
-  final String? commentaire;
   final DateTime created_at;
   final DateTime updated_at;
   Tdos({
     required this.id,
     required this.path,
-    required this.expedition_id,
+    required this.modele_id,
+    required this.modele_type,
     required this.deleted,
     required this.reference,
     this.doc_id,
-    this.commentaire,
     required this.created_at,
     required this.updated_at,
   });
@@ -26,22 +26,22 @@ class Tdos {
   Tdos copyWith({
     int? id,
     String? path,
-    int? expedition_id,
+    int? modele_id,
+    String? modele_type,
     int? deleted,
     String? reference,
     String? doc_id,
-    String? commentaire,
     DateTime? created_at,
     DateTime? updated_at,
   }) {
     return Tdos(
       id: id ?? this.id,
       path: path ?? this.path,
-      expedition_id: expedition_id ?? this.expedition_id,
+      modele_id: modele_id ?? this.modele_id,
+      modele_type: modele_type ?? this.modele_type,
       deleted: deleted ?? this.deleted,
       reference: reference ?? this.reference,
       doc_id: doc_id ?? this.doc_id,
-      commentaire: commentaire ?? this.commentaire,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
     );
@@ -51,11 +51,11 @@ class Tdos {
     return <String, dynamic>{
       'id': id,
       'path': path,
-      'expedition_id': expedition_id,
+      'modele_id': modele_id,
+      'modele_type': modele_type,
       'deleted': deleted,
       'reference': reference,
       'doc_id': doc_id,
-      'commentaire': commentaire,
       'created_at': created_at.millisecondsSinceEpoch,
       'updated_at': updated_at.millisecondsSinceEpoch,
     };
@@ -65,12 +65,11 @@ class Tdos {
     return Tdos(
       id: map['id'] as int,
       path: map['path'] as String,
-      expedition_id: map['expedition_id'] as int,
+      modele_id: map['modele_id'] as int,
+      modele_type: map['modele_type'] as String,
       deleted: map['deleted'] as int,
       reference: map['reference'] as String,
       doc_id: map['doc_id'] != null ? map['doc_id'] as String : null,
-      commentaire:
-          map['commentaire'] != null ? map['commentaire'] as String : null,
       created_at: DateTime.parse(map['created_at'] as String),
       updated_at: DateTime.parse(map['updated_at'] as String),
     );
@@ -83,7 +82,7 @@ class Tdos {
 
   @override
   String toString() {
-    return 'Tdos(id: $id, path: $path, expedition_id: $expedition_id, deleted: $deleted, reference: $reference, doc_id: $doc_id, commentaire: $commentaire, created_at: $created_at, updated_at: $updated_at)';
+    return 'Tdos(id: $id, path: $path, modele_id: $modele_id, modele_type: $modele_type, deleted: $deleted, reference: $reference, doc_id: $doc_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -92,11 +91,11 @@ class Tdos {
 
     return other.id == id &&
         other.path == path &&
-        other.expedition_id == expedition_id &&
+        other.modele_id == modele_id &&
+        other.modele_type == modele_type &&
         other.deleted == deleted &&
         other.reference == reference &&
         other.doc_id == doc_id &&
-        other.commentaire == commentaire &&
         other.created_at == created_at &&
         other.updated_at == updated_at;
   }
@@ -105,11 +104,11 @@ class Tdos {
   int get hashCode {
     return id.hashCode ^
         path.hashCode ^
-        expedition_id.hashCode ^
+        modele_id.hashCode ^
+        modele_type.hashCode ^
         deleted.hashCode ^
         reference.hashCode ^
         doc_id.hashCode ^
-        commentaire.hashCode ^
         created_at.hashCode ^
         updated_at.hashCode;
   }
