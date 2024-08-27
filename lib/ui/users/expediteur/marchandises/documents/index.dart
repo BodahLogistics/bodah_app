@@ -1,8 +1,17 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/appeles.dart';
+import 'package:bodah/modals/autre_docs.dart';
+import 'package:bodah/modals/avds.dart';
+import 'package:bodah/modals/bfus.dart';
+import 'package:bodah/modals/bl.dart';
 import 'package:bodah/modals/bon_commandes.dart';
+import 'package:bodah/modals/cartificat_origine.dart';
+import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
+import 'package:bodah/modals/declaration.dart';
+import 'package:bodah/modals/fiche_technique.dart';
 import 'package:bodah/modals/interchanges.dart';
+import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
@@ -47,6 +56,15 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
     List<Tdos> tdos = api_provider.tdos;
     List<Vgms> vgms = api_provider.vgms;
     List<Recus> recus = api_provider.recus;
+    List<AutreDocs> autre_docs = api_provider.autre_docs;
+    List<Avd> avds = api_provider.avds;
+    List<Bl> bls = api_provider.bls;
+    List<Lta> ltas = api_provider.ltas;
+    List<Bfu> bfus = api_provider.bfus;
+    List<CO> cos = api_provider.cos;
+    List<CPS> cps = api_provider.cps;
+    List<Declaration> declarations = api_provider.declarations;
+    List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
     bool loading = api_provider.loading;
 
     return loading

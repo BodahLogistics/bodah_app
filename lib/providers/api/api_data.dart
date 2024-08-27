@@ -353,7 +353,6 @@ class ApiProvider with ChangeNotifier {
     _declarations = response_declaration;
     final response_fiche_technique = await apiService.getFicheTechniques();
     _fiche_techniques = response_fiche_technique;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -382,72 +381,236 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitInterchanges() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_interchanges = await apiService.getInterchanges();
-    _interchanges = response_interchanges;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
+    final response = await apiService.getInterchanges();
+    _interchanges = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitAutreDocs() async {
+    _isLoading = true;
+    final response = await apiService.getAutreDocs();
+    _autre_docs = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitBL() async {
+    _isLoading = true;
+    final response = await apiService.getBls();
+    _bls = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitLta() async {
+    _isLoading = true;
+    final response = await apiService.getLtas();
+    _ltas = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitAvd() async {
+    _isLoading = true;
+    final response = await apiService.getAvds();
+    _avds = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitBfu() async {
+    _isLoading = true;
+    final response = await apiService.getBfus();
+    _bfus = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitDeclaration() async {
+    _isLoading = true;
+    final response = await apiService.getDeclarations();
+    _declarations = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitFicheTechnique() async {
+    _isLoading = true;
+    final response = await apiService.getFicheTechniques();
+    _fiche_techniques = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitCo() async {
+    _isLoading = true;
+    final response = await apiService.getCOs();
+    _cos = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitCps() async {
+    _isLoading = true;
+    final response = await apiService.getCps();
+    _cps = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_marchandise = await apiService.getMarchandises();
+    _marchandises = response_marchandise;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
 
   Future<void> InitTdos() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tdo = await apiService.getTdos();
-    _tdos = response_tdo;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
+    final response = await apiService.getTdos();
+    _tdos = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+
     _isLoading = false;
     notifyListeners();
   }
 
   Future<void> InitVgms() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_vgm = await apiService.getVgms();
-    _vgms = response_vgm;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
+    final response = await apiService.getVgms();
+    _vgms = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
+
     _isLoading = false;
     notifyListeners();
   }
 
   Future<void> InitRecus() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_recus = await apiService.getRecus();
-    _recus = response_recus;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
+    final response = await apiService.getRecus();
+    _recus = response;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }

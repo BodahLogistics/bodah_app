@@ -15,7 +15,6 @@ import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/interchanges.dart';
 import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/notifications.dart';
-import 'package:bodah/modals/recepteurs.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/modals/unites.dart';
@@ -56,6 +55,7 @@ import '../modals/localisations.dart';
 import '../modals/lta.dart';
 import '../modals/marchandises.dart';
 import '../modals/pays.dart';
+import '../modals/pieces.dart';
 import '../modals/quartiers.dart';
 import '../modals/statuts.dart';
 import '../modals/tarifications.dart';
@@ -404,9 +404,11 @@ class DBServices {
 
   Future<List<Entreprises>> getEntreprises() async {
     try {
-      var url = "${api_url}entreprises";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/entreprises";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -420,27 +422,6 @@ class DBServices {
       }
     } catch (error) {
       return <Entreprises>[];
-    }
-  }
-
-  Future<List<Recepteurs>> getRecepteurs() async {
-    try {
-      var url = "${api_url}recepteurs";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Recepteurs.fromMap(json)).toList();
-      } else {
-        return <Recepteurs>[];
-      }
-    } catch (error) {
-      return <Recepteurs>[];
     }
   }
 
@@ -488,9 +469,11 @@ class DBServices {
 
   Future<List<Expediteurs>> getExpediteurs() async {
     try {
-      var url = "${api_url}expediteurs";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/expediteurs";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -509,9 +492,11 @@ class DBServices {
 
   Future<List<Transporteurs>> getTransporteurs() async {
     try {
-      var url = "${api_url}transporteurs";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/transporteurs";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -530,9 +515,11 @@ class DBServices {
 
   Future<List<Destinataires>> getDestinataires() async {
     try {
-      var url = "${api_url}destinataires";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/destinataires";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -551,9 +538,11 @@ class DBServices {
 
   Future<List<Camions>> getCamions() async {
     try {
-      var url = "${api_url}camions";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/vehicules";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -567,6 +556,29 @@ class DBServices {
       }
     } catch (error) {
       return <Camions>[];
+    }
+  }
+
+  Future<List<Pieces>> getPieces() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/pieces";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Pieces.fromMap(json)).toList();
+      } else {
+        return <Pieces>[];
+      }
+    } catch (error) {
+      return <Pieces>[];
     }
   }
 
@@ -593,9 +605,11 @@ class DBServices {
 
   Future<List<EntiteFactures>> getEntiteFactures() async {
     try {
-      var url = "${api_url}entitefactures";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/entite_factures";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
@@ -614,9 +628,11 @@ class DBServices {
 
   Future<List<DonneurOrdres>> getDonneurOrdres() async {
     try {
-      var url = "${api_url}donneurordres";
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/donneur_ordres";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
