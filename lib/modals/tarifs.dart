@@ -1,14 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
-class Tarifs {
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+
+class Tarif {
   final int id;
   final double montant;
   final double accompte;
   final String modele_type;
   final int modele_id;
   final int deleted;
-  Tarifs({
+  Tarif({
     required this.id,
     required this.montant,
     required this.accompte,
@@ -17,7 +18,7 @@ class Tarifs {
     required this.deleted,
   });
 
-  Tarifs copyWith({
+  Tarif copyWith({
     int? id,
     double? montant,
     double? accompte,
@@ -25,7 +26,7 @@ class Tarifs {
     int? modele_id,
     int? deleted,
   }) {
-    return Tarifs(
+    return Tarif(
       id: id ?? this.id,
       montant: montant ?? this.montant,
       accompte: accompte ?? this.accompte,
@@ -46,8 +47,8 @@ class Tarifs {
     };
   }
 
-  factory Tarifs.fromMap(Map<String, dynamic> map) {
-    return Tarifs(
+  factory Tarif.fromMap(Map<String, dynamic> map) {
+    return Tarif(
       id: map['id'] as int,
       montant: map['montant'] as double,
       accompte: map['accompte'] as double,
@@ -59,16 +60,16 @@ class Tarifs {
 
   String toJson() => json.encode(toMap());
 
-  factory Tarifs.fromJson(String source) =>
-      Tarifs.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Tarif.fromJson(String source) =>
+      Tarif.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Tarifs(id: $id, montant: $montant, accompte: $accompte, modele_type: $modele_type, modele_id: $modele_id, deleted: $deleted)';
+    return 'Tarif(id: $id, montant: $montant, accompte: $accompte, modele_type: $modele_type, modele_id: $modele_id, deleted: $deleted)';
   }
 
   @override
-  bool operator ==(covariant Tarifs other) {
+  bool operator ==(covariant Tarif other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

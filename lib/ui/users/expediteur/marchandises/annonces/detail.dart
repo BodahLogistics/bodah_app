@@ -2,13 +2,10 @@
 
 import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/bon_commandes.dart';
-import 'package:bodah/modals/camions.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/expediteurs.dart';
-import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
-import 'package:bodah/modals/transporteurs.dart';
 import 'package:bodah/modals/type_chargements.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
@@ -32,14 +29,11 @@ import '../../../../../../modals/pays.dart';
 import '../../../../../../modals/users.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
-import '../../../../../modals/donneur_ordres.dart';
-import '../../../../../modals/entite_factures.dart';
 import '../../../../../modals/entreprises.dart';
 import '../../../../../providers/calculator/index.dart';
 import '../../../../auth/sign_in.dart';
 import '../expeditions/detail.dart';
 import 'list.dart';
-import 'marchandises/add.dart';
 
 class DetailAnnonce extends StatefulWidget {
   const DetailAnnonce({super.key, required this.id});
@@ -72,41 +66,28 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
     List<Marchandises> marchandises = api_provider.marchandises;
     marchandises = function.annonce_marchandises(marchandises, annonce.id);
     List<Destinataires> destinataires = api_provider.destinataires;
-    List<Transporteurs> transporteurs = api_provider.transporteurs;
-    List<Camions> camions = api_provider.camions;
     List<AnnoncePhotos> photos = api_provider.photos;
     List<AnnoncePhotos> pictues =
         function.annonce_pictures(annonce, marchandises, photos);
     final CarouselController _controller = CarouselController();
-    List<DonneurOrdres> donneur_ordres = api_provider.donneur_ordres;
-    List<EntiteFactures> entite_factures = api_provider.entite_factures;
     List<Expediteurs> expediteurs = api_provider.expediteurs;
     Expediteurs expediteur =
         function.expediteur(expediteurs, annonce.expediteur_id);
     List<BonCommandes> ordres = api_provider.ordres;
     BonCommandes ordre = function.annonce_bon_commande(ordres, annonce);
-    EntiteFactures entite_facture =
-        function.entite_facture(entite_factures, ordre.entite_facture_id);
-    DonneurOrdres donneur_ordre =
-        function.donneur_ordres(donneur_ordres, ordre.donneur_ordre_id);
+
     List<Entreprises> entreprises = api_provider.entreprises;
-    Entreprises entite_facture_entreprise =
-        function.entite_entreprise(entreprises, entite_facture.id);
-    Entreprises donneur_ordre_entreprise =
-        function.donneur_entreprise(entreprises, donneur_ordre.id);
     Entreprises expediteur_entreprise =
         function.expediteur_entreprise(entreprises, expediteur.id);
     Users expediteur_user = function.user(users, expediteur.user_id);
     List<Devises> devises = api_provider.devises;
     List<TypeChargements> type_chargements = api_provider.type_chargements;
     List<Unites> unites = api_provider.unites;
-    List<Statuts> statuts = api_provider.statuts;
     bool loading = api_provider.loading;
     List<Expeditions> annonce_expeditions =
-        function.annonce_expeditions(expeditions, marchandises, annonce);
+        function.annonce_expeditions(expeditions, annonce);
     bool cant_delete = function.cant_delete_annonce(annonce_expeditions, ordre);
-    Users donneur_user = function.user(users, donneur_ordre.user_id);
-    Users entite_user = function.user(users, entite_facture.user_id);
+
     final provider = Provider.of<ProvAddMarchandise>(context);
     final calculatrice = Provider.of<ProvCalculator>(context);
     return Scaffold(
@@ -173,22 +154,7 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
                         IconButton(
                             onPressed: () {
                               showAllFromAnnonce(
-                                  context,
-                                  annonce,
-                                  cant_delete,
-                                  ordre,
-                                  ordre.id > 0 &&
-                                      user.id == donneur_user.id &&
-                                      ordre.is_validated == 0,
-                                  ordre.id > 0 &&
-                                      user.id == donneur_user.id &&
-                                      ordre.is_validated == 0,
-                                  entite_facture,
-                                  donneur_ordre,
-                                  entite_facture_entreprise,
-                                  donneur_ordre_entreprise,
-                                  entite_user,
-                                  donneur_user);
+                                  context, annonce, cant_delete, ordre);
                             },
                             icon: Icon(
                               Icons.more_vert,
@@ -804,11 +770,7 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
                                             marchandise.type_chargement_id);
                                     Devises devise = function.devise(
                                         devises, marchandise.devise_id);
-                                    Expeditions expedition =
-                                        function.marchandise_expedition(
-                                            expeditions, marchandise);
-                                    Statuts statut = function.statut(statuts,
-                                        expedition.statu_expedition_id);
+
                                     Localisations localisation =
                                         function.marchandise_localisation(
                                             localisations, marchandise.id);
@@ -829,19 +791,8 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
                                     Entreprises destinataire_entreprise =
                                         function.destinataire_entreprise(
                                             entreprises, destinataire.id);
-
                                     Users destinataire_user = function.user(
                                         users, destinataire.user_id);
-                                    Transporteurs transporteur =
-                                        function.expedition_transporteur(
-                                            transporteurs, expedition);
-                                    Users transporteur_user = function.user(
-                                        users, transporteur.user_id);
-                                    Entreprises transporteur_entreprise =
-                                        function.transporteur_entreprise(
-                                            entreprises, transporteur.id);
-                                    Camions camion = function.expedition_camion(
-                                        camions, expedition);
                                     Unites unite = function.unite(
                                         unites, marchandise.unite_id);
 
@@ -1691,428 +1642,6 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
                                                                 ),
                                                               )
                                                             : Container(),
-                                                        expedition.id > 0
-                                                            ? Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        bottom:
-                                                                            20),
-                                                                child:
-                                                                    Container(
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              15),
-                                                                      border: Border.all(
-                                                                          style: BorderStyle
-                                                                              .solid,
-                                                                          width:
-                                                                              1,
-                                                                          color: user.dark_mode == 1
-                                                                              ? MyColors.light
-                                                                              : MyColors.textColor)),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Container(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(15),
-                                                                          color:
-                                                                              MyColors.secondary,
-                                                                        ),
-                                                                        height:
-                                                                            40,
-                                                                        width: double
-                                                                            .infinity,
-                                                                        child:
-                                                                            Text(
-                                                                          "Expédition de la marchandise",
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                              color: MyColors.light,
-                                                                              fontFamily: "Poppins",
-                                                                              fontWeight: FontWeight.w500),
-                                                                        ),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            left:
-                                                                                10,
-                                                                            right:
-                                                                                10),
-                                                                        child:
-                                                                            Column(
-                                                                          children: [
-                                                                            SizedBox(
-                                                                              height: 15,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                "Référence",
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 4,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                expedition.numero_expedition,
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 15,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                "Lieu de chargement",
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 4,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                pay_depart.name + " - " + ville_dep.name,
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 15,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                "Date de chargement",
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 4,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                function.date(expedition.date_depart),
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 15,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                "Lieu de  déchargement",
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 4,
-                                                                            ),
-                                                                            Container(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                pay_dest.name + " - " + ville_dest.name,
-                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 15,
-                                                                            ),
-                                                                            function.date(expedition.date_arrivee).isNotEmpty
-                                                                                ? Column(
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        alignment: Alignment.centerLeft,
-                                                                                        child: Text(
-                                                                                          "Date de déchargement",
-                                                                                          style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 4,
-                                                                                      ),
-                                                                                      Container(
-                                                                                        alignment: Alignment.centerLeft,
-                                                                                        child: Text(
-                                                                                          function.date(expedition.date_arrivee),
-                                                                                          style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 15,
-                                                                                      ),
-                                                                                      Container(
-                                                                                        alignment: Alignment.centerLeft,
-                                                                                        child: Text(
-                                                                                          "Statut de l'expédition",
-                                                                                          style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 4,
-                                                                                      ),
-                                                                                      statut.name == "TERMINE"
-                                                                                          ? Container(
-                                                                                              alignment: Alignment.centerLeft,
-                                                                                              child: Text(
-                                                                                                "Expédition terminée".toUpperCase(),
-                                                                                                style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: Colors.green),
-                                                                                              ),
-                                                                                            )
-                                                                                          : statut.name == "EN COURS"
-                                                                                              ? Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Expédition en cours".toUpperCase(),
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: MyColors.primary),
-                                                                                                  ),
-                                                                                                )
-                                                                                              : Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Expédition non démarrée".toUpperCase(),
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: MyColors.secondary),
-                                                                                                  ),
-                                                                                                ),
-                                                                                      SizedBox(
-                                                                                        height: 15,
-                                                                                      ),
-                                                                                    ],
-                                                                                  )
-                                                                                : Container(),
-                                                                            transporteur.id > 0
-                                                                                ? Padding(
-                                                                                    padding: const EdgeInsets.only(bottom: 15),
-                                                                                    child: Container(
-                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(width: 1, style: BorderStyle.solid, color: user.dark_mode == 1 ? MyColors.light : MyColors.secondary)),
-                                                                                      child: Column(
-                                                                                        children: [
-                                                                                          Container(
-                                                                                            alignment: Alignment.center,
-                                                                                            decoration: BoxDecoration(
-                                                                                              borderRadius: BorderRadius.circular(15),
-                                                                                              color: MyColors.secondary,
-                                                                                            ),
-                                                                                            height: 40,
-                                                                                            width: double.infinity,
-                                                                                            child: Text(
-                                                                                              "Transporteur de la marchandise",
-                                                                                              maxLines: 1,
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: TextStyle(color: MyColors.light, fontFamily: "Poppins", fontWeight: FontWeight.w500),
-                                                                                            ),
-                                                                                          ),
-                                                                                          Padding(
-                                                                                            padding: const EdgeInsets.only(left: 10, right: 10),
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Référence",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 4,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    transporteur.numero_transporteur,
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Nom",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 4,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    transporteur_user.name,
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Contact",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 4,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    transporteur_user.telephone,
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Adresse électronique",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 4,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    transporteur_user.email ?? "Non définie",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    "Adresse de résidence",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 4,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  alignment: Alignment.centerLeft,
-                                                                                                  child: Text(
-                                                                                                    transporteur_user.adresse ?? "Non définie",
-                                                                                                    style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 15,
-                                                                                                ),
-                                                                                                transporteur_entreprise.id > 0
-                                                                                                    ? Column(
-                                                                                                        children: [
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              "Nom de l'entreprise",
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 4,
-                                                                                                          ),
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              transporteur_entreprise.name,
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 15,
-                                                                                                          ),
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              "IFU/Numéro Fiscal",
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 4,
-                                                                                                          ),
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              transporteur_entreprise.ifu ?? "Non définie",
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 15,
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      )
-                                                                                                    : Container(),
-                                                                                                camion.id > 0
-                                                                                                    ? Column(
-                                                                                                        children: [
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              "Immatriculation du camion",
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: 16, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 4,
-                                                                                                          ),
-                                                                                                          Container(
-                                                                                                            alignment: Alignment.centerLeft,
-                                                                                                            child: Text(
-                                                                                                              function.immatriculation(camion.num_immatriculation),
-                                                                                                              style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w300, color: user.dark_mode == 1 ? MyColors.light : MyColors.black),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(
-                                                                                                            height: 15,
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      )
-                                                                                                    : Container(),
-                                                                                              ],
-                                                                                            ),
-                                                                                          )
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                : Container()
-                                                                          ],
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : Container(),
                                                       ],
                                                     ),
                                                   ),
@@ -2140,18 +1669,11 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
 }
 
 void showAllFromAnnonce(
-    BuildContext context,
-    Annonces annonce,
-    bool cant_delete,
-    BonCommandes ordre,
-    bool can_delete_ordre,
-    bool can_validate,
-    EntiteFactures entite_facture,
-    DonneurOrdres donneur_ordre,
-    Entreprises entite_entreprise,
-    Entreprises donneur_entreprise,
-    Users entite_user,
-    Users donneur_user) {
+  BuildContext context,
+  Annonces annonce,
+  bool cant_delete,
+  BonCommandes ordre,
+) {
   if (cant_delete) {
     showDialog(
       context: context,
@@ -2215,46 +1737,7 @@ void showAllFromAnnonce(
     }
   });
 
-  Future.delayed(Duration(milliseconds: 800), () {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogcontext) {
-        return buildAlertDialog(
-          context: dialogcontext,
-          bottom: MediaQuery.of(dialogcontext).size.height * 0.7,
-          message: "Ajoutez de marchandise",
-          backgroundColor: MyColors.primary,
-          textColor: MyColors.light,
-          onPressed: () {
-            Navigator.of(dialogcontext).pop();
-            Navigator.of(dialogcontext).push(
-              PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 500),
-                pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) {
-                  return PublishMarchandise(
-                    annonce: annonce,
-                  );
-                },
-                transitionsBuilder: (BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child) {
-                  return ScaleTransition(
-                    scale:
-                        Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-        );
-      },
-    );
-  });
-
-  if (can_delete_ordre) {
+  if (ordre.is_validated == 0) {
     showDialog(
       context: context,
       builder: (BuildContext dialogcontext) {
@@ -2309,27 +1792,6 @@ void showAllFromAnnonce(
                   },
                 ),
               );
-            },
-          );
-        },
-      );
-    }
-  });
-
-  Future.delayed(Duration(milliseconds: 800), () {
-    if (can_validate) {
-      showDialog(
-        context: context,
-        builder: (BuildContext dialogcontext) {
-          return buildAlertDialog(
-            context: dialogcontext,
-            bottom: MediaQuery.of(dialogcontext).size.height * 0.65,
-            message: "Validez l'ordre",
-            backgroundColor: MyColors.primary,
-            textColor: MyColors.light,
-            onPressed: () {
-              Navigator.of(dialogcontext).pop();
-              ValidateOrdre(dialogcontext, ordre);
             },
           );
         },

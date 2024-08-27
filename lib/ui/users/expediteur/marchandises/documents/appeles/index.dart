@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously
 
+import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/services/data_base_service.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
 import '../../../../../../modals/expeditions.dart';
@@ -39,6 +40,7 @@ class _MesApelesState extends State<MesApeles> {
     final user = api_provider.user;
     List<Appeles> apeles = api_provider.appeles;
     bool loading = api_provider.loading;
+    List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
@@ -55,10 +57,11 @@ class _MesApelesState extends State<MesApeles> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes apélés",
+          "Apélés",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -90,10 +93,12 @@ class _MesApelesState extends State<MesApeles> {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         Appeles apele = apeles[index];
-                        Expeditions expedition = function.expedition(
-                            expeditions, apele.expedition_id);
-                        Marchandises marchandise = function.marchandise(
-                            marchandises, expedition.marchandise_id);
+                        Expeditions expedition =
+                            function.expedition(expeditions, apele.modele_id);
+
+                        Marchandises marchandise =
+                            function.expedition_marchandise(
+                                expedition, marchandises, annonces);
                         Localisations localisation =
                             function.marchandise_localisation(
                                 localisations, marchandise.id);
@@ -124,7 +129,7 @@ class _MesApelesState extends State<MesApeles> {
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
                                 onTap: () {
-                                  Navigator.of(context).push(
+                                  /* Navigator.of(context).push(
                                     PageRouteBuilder(
                                       transitionDuration:
                                           Duration(milliseconds: 500),
@@ -149,7 +154,7 @@ class _MesApelesState extends State<MesApeles> {
                                         );
                                       },
                                     ),
-                                  );
+                                  );*/
                                 },
                                 leading: Icon(Icons.file_present,
                                     size: 50,

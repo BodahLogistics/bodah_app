@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/tdos.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
+import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
@@ -41,6 +42,7 @@ class _MesTdosState extends State<MesTdos> {
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
+    List<Annonces> annonces = api_provider.annonces;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -53,10 +55,11 @@ class _MesTdosState extends State<MesTdos> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes TDOS",
+          "TDO",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -89,9 +92,10 @@ class _MesTdosState extends State<MesTdos> {
                       itemBuilder: (context, index) {
                         Tdos tdo = tdos[index];
                         Expeditions expedition =
-                            function.expedition(expeditions, tdo.expedition_id);
-                        Marchandises marchandise = function.marchandise(
-                            marchandises, expedition.marchandise_id);
+                            function.expedition(expeditions, tdo.modele_id);
+                        Marchandises marchandise =
+                            function.expedition_marchandise(
+                                expedition, marchandises, annonces);
                         Localisations localisation =
                             function.marchandise_localisation(
                                 localisations, marchandise.id);
@@ -122,7 +126,7 @@ class _MesTdosState extends State<MesTdos> {
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
                                 onTap: () {
-                                  Navigator.of(context).push(
+                                  /* Navigator.of(context).push(
                                     PageRouteBuilder(
                                       transitionDuration:
                                           Duration(milliseconds: 500),
@@ -147,7 +151,7 @@ class _MesTdosState extends State<MesTdos> {
                                         );
                                       },
                                     ),
-                                  );
+                                  );*/
                                 },
                                 leading: Icon(Icons.file_present,
                                     size: 50,

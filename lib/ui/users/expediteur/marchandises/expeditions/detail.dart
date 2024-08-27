@@ -8,6 +8,7 @@ import 'package:bodah/ui/users/expediteur/drawer/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
 import '../../../../../../modals/annonces.dart';
@@ -29,6 +30,7 @@ class DetailExpedition extends StatelessWidget {
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
+    List<Annonces> annonces = api_provider.annonces;
     List<Users> users = api_provider.users;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Tarifications> tarifications = api_provider.tarifications;
@@ -37,7 +39,7 @@ class DetailExpedition extends StatelessWidget {
     List<Villes> all_villes = api_provider.all_villes;
     Expeditions expedition = function.expedition(expeditions, id);
     Marchandises marchandise =
-        function.marchandise(marchandises, expedition.marchandise_id);
+        function.expedition_marchandise(expedition, marchandises, annonces);
     Localisations localisation =
         function.marchandise_localisation(localisations, marchandise.id);
     Pays pay_depart = function.pay(pays, localisation.pays_exp_id);
@@ -46,7 +48,6 @@ class DetailExpedition extends StatelessWidget {
     Villes ville_dest = function.ville(all_villes, localisation.city_liv_id);
     Tarifications tarification =
         function.marchandise_tarification(tarifications, marchandise.id);
-    List<Annonces> annonces = api_provider.annonces;
     Annonces annonce = function.marchandise_annonce(annonces, marchandise);
     List<Destinataires> destinataires = api_provider.destinataires;
     Destinataires destinataire =
@@ -740,8 +741,7 @@ class DetailExpedition extends StatelessWidget {
                                               Container(
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
-                                                  camion.num_immatriculation ??
-                                                      "Non définie",
+                                                  camion.num_immatriculation,
                                                   style: TextStyle(
                                                       fontFamily: "Poppins",
                                                       fontWeight:

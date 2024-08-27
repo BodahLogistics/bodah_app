@@ -9,8 +9,10 @@ import 'package:bodah/ui/users/expediteur/marchandises/expeditions/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
+import '../../../../../modals/annonces.dart';
 import '../../../../../modals/expeditions.dart';
 import '../../../../../modals/pays.dart';
 import '../../../../../providers/api/api_data.dart';
@@ -26,7 +28,7 @@ class _ListExpExpState extends State<ListExpExp> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitExpedition();
+    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
   }
 
   @override
@@ -42,6 +44,7 @@ class _ListExpExpState extends State<ListExpExp> {
     List<Unites> unites = api_provider.unites;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
+    List<Annonces> annonces = api_provider.annonces;
 
     return loading
         ? Center(
@@ -61,8 +64,8 @@ class _ListExpExpState extends State<ListExpExp> {
                   itemCount: expeditions.length,
                   itemBuilder: (context, index) {
                     Expeditions expedition = expeditions[index];
-                    Marchandises marchandise = function.marchandise(
-                        marchandises, expedition.marchandise_id);
+                    Marchandises marchandise = function.expedition_marchandise(
+                        expedition, marchandises, annonces);
                     Localisations localisation =
                         function.marchandise_localisation(
                             localisations, marchandise.id);

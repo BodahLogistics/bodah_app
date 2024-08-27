@@ -3,14 +3,18 @@
 import 'dart:math';
 
 import 'package:bodah/modals/annonce_photos.dart';
+import 'package:bodah/modals/avds.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
+import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
+import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
@@ -20,10 +24,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../modals/annonces.dart';
 import '../modals/appeles.dart';
+import '../modals/autre_docs.dart';
+import '../modals/bfus.dart';
+import '../modals/bl.dart';
 import '../modals/camions.dart';
+import '../modals/cartificat_origine.dart';
+import '../modals/charges.dart';
 import '../modals/entite_factures.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
+import '../modals/fiche_technique.dart';
 import '../modals/interchanges.dart';
 import '../modals/localisations.dart';
 import '../modals/marchandises.dart';
@@ -50,9 +60,9 @@ class Functions {
       orElse: () => Appeles(
           id: id,
           path: "",
-          expedition_id: 0,
+          modele_id: 0,
           deleted: 0,
-          commentaire: "",
+          modele_type: "",
           reference: "",
           created_at: DateTime.now(),
           updated_at: DateTime.now()),
@@ -71,9 +81,9 @@ class Functions {
       orElse: () => Interchanges(
           id: id,
           path: "",
-          expedition_id: 0,
+          modele_id: 0,
           deleted: 0,
-          commentaire: "",
+          modele_type: "",
           reference: "",
           created_at: DateTime.now(),
           updated_at: DateTime.now()),
@@ -86,9 +96,9 @@ class Functions {
       orElse: () => Vgms(
           id: id,
           path: "",
-          expedition_id: 0,
+          modele_id: 0,
           deleted: 0,
-          commentaire: "",
+          modele_type: "",
           reference: "",
           created_at: DateTime.now(),
           updated_at: DateTime.now()),
@@ -101,9 +111,9 @@ class Functions {
       orElse: () => Tdos(
           id: id,
           path: "",
-          expedition_id: 0,
+          modele_id: 0,
           deleted: 0,
-          commentaire: "",
+          modele_type: "",
           reference: "",
           created_at: DateTime.now(),
           updated_at: DateTime.now()),
@@ -116,9 +126,130 @@ class Functions {
       orElse: () => Recus(
           id: id,
           path: "",
-          expedition_id: 0,
+          modele_id: 0,
           deleted: 0,
-          commentaire: "",
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  AutreDocs autre_doc(List<AutreDocs> autre_docs, int id) {
+    return autre_docs.firstWhere(
+      (data) => data.id == id,
+      orElse: () => AutreDocs(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Avd avd(List<Avd> avds, int id) {
+    return avds.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Avd(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Bfu bfu(List<Bfu> bfus, int id) {
+    return bfus.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Bfu(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Bl bl(List<Bl> bls, int id) {
+    return bls.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Bl(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  CO co(List<CO> cos, int id) {
+    return cos.firstWhere(
+      (data) => data.id == id,
+      orElse: () => CO(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  CPS cps(List<CPS> cps, int id) {
+    return cps.firstWhere(
+      (data) => data.id == id,
+      orElse: () => CPS(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  FicheTechnique fiche_technique(
+      List<FicheTechnique> fiche_techniques, int id) {
+    return fiche_techniques.firstWhere(
+      (data) => data.id == id,
+      orElse: () => FicheTechnique(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
+          reference: "",
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
+    );
+  }
+
+  Lta lta(List<Lta> ltas, int id) {
+    return ltas.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Lta(
+          id: id,
+          path: "",
+          modele_id: 0,
+          deleted: 0,
+          modele_type: "",
           reference: "",
           created_at: DateTime.now(),
           updated_at: DateTime.now()),
@@ -135,6 +266,14 @@ class Functions {
         observation_id: 0,
       ),
     );
+  }
+
+  Marchandises expedition_marchandise(Expeditions expedition,
+      List<Marchandises> marchandises, List<Annonces> annonces) {
+    Annonces announce = annonce(annonces, expedition.annonce_id);
+    List<Marchandises> datas = annonce_marchandises(marchandises, announce.id);
+
+    return firstMarchandise(datas);
   }
 
   String immatriculation(String? num_immatricualtion) {
@@ -156,24 +295,42 @@ class Functions {
     );
   }
 
-  Expeditions marchandise_expedition(
-      List<Expeditions> expeditions, Marchandises marchandise) {
-    return expeditions.firstWhere(
-      (data) => data.marchandise_id == marchandise.id,
-      orElse: () => Expeditions(
+  List<Charge> expedition_charges(
+      List<Charge> charges, Expeditions expedition) {
+    return charges
+        .where((data) =>
+            data.chargement_type == "App\Models\Expedition" &&
+            data.chargement_id == expedition.id)
+        .toList();
+  }
+
+  List<Charge> marchandise_charges(
+      List<Charge> charges, Marchandises marchandise) {
+    return charges
+        .where((data) =>
+            data.cargaison_type == "App\Models\Marchandise" &&
+            data.cargaison_id == marchandise.id)
+        .toList();
+  }
+
+  Tarif charge_tarif(List<Tarif> tarifs, Charge charge) {
+    return tarifs.firstWhere(
+      (data) =>
+          data.modele_id == charge.id &&
+          data.modele_type == "App\Models\Charge",
+      orElse: () => Tarif(
           id: 0,
-          numero_expedition: "",
-          transporteur_id: 0,
-          statu_expedition_id: 0,
-          marchandise_id: 0,
-          montant_paye: 0,
-          deleted: 0,
-          date_depart: DateTime.now(),
-          type_paiement_id: 0,
-          vehicule_id: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+          montant: 0,
+          accompte: 0,
+          modele_type: "",
+          modele_id: 0,
+          deleted: 0),
     );
+  }
+
+  List<Expeditions> annonce_expeditions(
+      List<Expeditions> expeditions, Annonces annonce) {
+    return expeditions.where((data) => data.annonce_id == annonce.id).toList();
   }
 
   Devises devise(List<Devises> devises, int? id) {
@@ -205,20 +362,6 @@ class Functions {
     );
   }
 
-  List<Expeditions> annonce_expeditions(List<Expeditions> expeditions,
-      List<Marchandises> marchandises, Annonces annonce) {
-    List<Expeditions> datas = [];
-    List<Marchandises> marchs = annonce_marchandises(marchandises, annonce.id);
-    for (var element in marchs) {
-      Expeditions expedition = marchandise_expedition(expeditions, element);
-      if (expedition.id > 0) {
-        datas.add(expedition);
-      }
-    }
-
-    return datas;
-  }
-
   Annonces marchandise_annonce(
       List<Annonces> annonces, Marchandises marchandise) {
     return annonces.firstWhere(
@@ -247,7 +390,8 @@ class Functions {
   Camions expedition_camion(List<Camions> camions, Expeditions expedition) {
     return camions.firstWhere(
       (data) => data.id == expedition.vehicule_id,
-      orElse: () => Camions(id: 0, type_vehicule_id: 0),
+      orElse: () => Camions(
+          id: 0, type_vehicule_id: 0, modele_type: '', num_immatriculation: ''),
     );
   }
 
@@ -406,8 +550,7 @@ class Functions {
           numero_expedition: "",
           transporteur_id: 0,
           statu_expedition_id: 0,
-          marchandise_id: 0,
-          montant_paye: 0,
+          annonce_id: 0,
           deleted: 0,
           date_depart: DateTime.now(),
           type_paiement_id: 0,
@@ -525,6 +668,7 @@ class Functions {
     return tarifications.firstWhere(
       (data) => data.id == id,
       orElse: () => Tarifications(
+        accompte: 0,
         id: 0,
         marchandise_id: 0,
         prix_expedition: 0,
@@ -573,12 +717,29 @@ class Functions {
     return tarifications.firstWhere(
       (data) => data.marchandise_id == marchandise_id,
       orElse: () => Tarifications(
+        accompte: 0,
         id: 0,
         marchandise_id: 0,
         prix_expedition: 0,
         prix_transport: 0,
       ),
     );
+  }
+
+  Marchandises firstMarchandise(List<Marchandises> datas) {
+    if (datas.isNotEmpty) {
+      return datas.first;
+    }
+    return Marchandises(
+        id: 0,
+        nom: "",
+        annonce_id: 0,
+        numero_marchandise: "",
+        deleted: 0,
+        quantite: 0,
+        unite_id: 0,
+        poids: 0,
+        nombre_camions: 0);
   }
 
   Annonces annonce(List<Annonces> annonces, int annonce_id) {

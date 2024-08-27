@@ -68,7 +68,7 @@ class _PublishMarchandiseState extends State<PublishMarchandise> {
     String nom = provider.nom;
     int tarif = calculatrice.montant;
     int quantite = provider.quantite;
-    int poids = provider.poids;
+    double poids = provider.poids;
     String adress_exp = provider.adress_exp;
     String adress_liv = provider.adress_liv;
     Villes ville_exp = provider.ville_exp;

@@ -307,10 +307,10 @@ class ProvAddMarchandise with ChangeNotifier {
     notifyListeners();
   }
 
-  int _poids = 0;
-  int get poids => _poids;
+  double _poids = 0;
+  double get poids => _poids;
   void change_poids(String? value) {
-    _poids = value!.isEmpty ? 0 : int.parse(value);
+    _poids = value!.isEmpty ? 0 : double.parse(value);
     notifyListeners();
   }
 

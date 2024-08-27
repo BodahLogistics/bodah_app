@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/recus.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
+import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
@@ -41,6 +42,7 @@ class _MesRecusState extends State<MesRecus> {
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
+    List<Annonces> annonces = api_provider.annonces;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -53,10 +55,11 @@ class _MesRecusState extends State<MesRecus> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes reçues",
+          "Reçues",
           style: TextStyle(
+              fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -88,10 +91,11 @@ class _MesRecusState extends State<MesRecus> {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         Recus recu = recus[index];
-                        Expeditions expedition = function.expedition(
-                            expeditions, recu.expedition_id);
-                        Marchandises marchandise = function.marchandise(
-                            marchandises, expedition.marchandise_id);
+                        Expeditions expedition =
+                            function.expedition(expeditions, recu.modele_id);
+                        Marchandises marchandise =
+                            function.expedition_marchandise(
+                                expedition, marchandises, annonces);
                         Localisations localisation =
                             function.marchandise_localisation(
                                 localisations, marchandise.id);
@@ -122,7 +126,7 @@ class _MesRecusState extends State<MesRecus> {
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
                                 onTap: () {
-                                  Navigator.of(context).push(
+                                  /* Navigator.of(context).push(
                                     PageRouteBuilder(
                                       transitionDuration:
                                           Duration(milliseconds: 500),
@@ -147,7 +151,7 @@ class _MesRecusState extends State<MesRecus> {
                                         );
                                       },
                                     ),
-                                  );
+                                  );*/
                                 },
                                 leading: Icon(Icons.file_present,
                                     size: 50,

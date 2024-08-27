@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
-import 'package:bodah/ui/users/expediteur/marchandises/documents/bordereaux/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
+import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/bordereau_livraisons.dart';
 import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
@@ -42,6 +42,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
+    List<Annonces> annonces = api_provider.annonces;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -54,10 +55,11 @@ class _MesBordereauxState extends State<MesBordereaux> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mes bordereaux de livraison",
+          "Bordereaux de livraison",
           style: TextStyle(
+              fontFamily: "Poppin",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: 14),
         ),
         actions: [
@@ -91,8 +93,10 @@ class _MesBordereauxState extends State<MesBordereaux> {
                         BordereauLivraisons bordereau = bordereaux[index];
                         Expeditions expedition = function.expedition(
                             expeditions, bordereau.expedition_id);
-                        Marchandises marchandise = function.marchandise(
-                            marchandises, expedition.marchandise_id);
+
+                        Marchandises marchandise =
+                            function.expedition_marchandise(
+                                expedition, marchandises, annonces);
                         Localisations localisation =
                             function.marchandise_localisation(
                                 localisations, marchandise.id);
@@ -123,7 +127,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
                               padding: const EdgeInsets.all(4.0),
                               child: ListTile(
                                 onTap: () {
-                                  Navigator.of(context).push(
+                                  /*  Navigator.of(context).push(
                                     PageRouteBuilder(
                                       transitionDuration:
                                           Duration(milliseconds: 500),
@@ -148,7 +152,7 @@ class _MesBordereauxState extends State<MesBordereaux> {
                                         );
                                       },
                                     ),
-                                  );
+                                  );*/
                                 },
                                 leading: Icon(Icons.file_present,
                                     size: 50,

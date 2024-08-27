@@ -5,6 +5,7 @@ import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/cartificat_origine.dart';
 import 'package:bodah/modals/coli_photos.dart';
 import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/expeditions.dart';
@@ -27,8 +28,14 @@ import 'package:flutter/material.dart';
 
 import '../../modals/annonces.dart';
 import '../../modals/arrondissements.dart';
+import '../../modals/autre_docs.dart';
+import '../../modals/avds.dart';
+import '../../modals/bfus.dart';
+import '../../modals/bl.dart';
 import '../../modals/camions.dart';
+import '../../modals/certificat_phyto_sanitaire.dart';
 import '../../modals/coli_tarifs.dart';
+import '../../modals/declaration.dart';
 import '../../modals/departements.dart';
 import '../../modals/destinataires.dart';
 import '../../modals/devises.dart';
@@ -36,8 +43,10 @@ import '../../modals/donneur_ordres.dart';
 import '../../modals/entite_factures.dart';
 import '../../modals/entreprises.dart';
 import '../../modals/expediteurs.dart';
+import '../../modals/fiche_technique.dart';
 import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
+import '../../modals/lta.dart';
 import '../../modals/pays.dart';
 import '../../modals/quartiers.dart';
 import '../../modals/recepteurs.dart';
@@ -177,6 +186,25 @@ class ApiProvider with ChangeNotifier {
   List<Devises> _devises = [];
   List<Devises> get devises => _devises;
 
+  List<AutreDocs> _autre_docs = [];
+  List<AutreDocs> get autre_docs => _autre_docs;
+  List<Avd> _avds = [];
+  List<Avd> get avds => _avds;
+  List<Bfu> _bfus = [];
+  List<Bfu> get bfus => _bfus;
+  List<Bl> _bls = [];
+  List<Bl> get bls => _bls;
+  List<Lta> _ltas = [];
+  List<Lta> get ltas => _ltas;
+  List<Declaration> _declarations = [];
+  List<Declaration> get declarations => _declarations;
+  List<FicheTechnique> _fiche_techniques = [];
+  List<FicheTechnique> get fiche_techniques => _fiche_techniques;
+  List<CO> _cos = [];
+  List<CO> get cos => _cos;
+  List<CPS> _cps = [];
+  List<CPS> get cps => _cps;
+
   Future<void> InitData() async {
     _isLoading = true;
     final response_users = await apiService.getUsers();
@@ -283,20 +311,12 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_destinataire = await apiService.getDestinataires();
     _destinataires = response_destinataire;
-    final response_entite = await apiService.getEntiteFactures();
-    _entite_factures = response_entite;
-    final response_donneur = await apiService.getDonneurOrdres();
-    _donneur_ordres = response_donneur;
     final response_entreprise = await apiService.getEntreprises();
     _entreprises = response_entreprise;
     final response_expediteur = await apiService.getExpediteurs();
     _expediteurs = response_expediteur;
     final response_users = await apiService.getUsers();
     _users = response_users;
-    final response_transporteur = await apiService.getTransporteurs();
-    _transporteurs = response_transporteur;
-    final response_camions = await apiService.getCamions();
-    _camions = response_camions;
     final response_ordres = await apiService.getOrdres();
     _ordres = response_ordres;
     _isLoading = false;
@@ -315,6 +335,25 @@ class ApiProvider with ChangeNotifier {
     _interchanges = response_interchange;
     final response_ordre = await apiService.getOrdres();
     _ordres = response_ordre;
+    final response_autre_doc = await apiService.getAutreDocs();
+    _autre_docs = response_autre_doc;
+    final response_avd = await apiService.getAvds();
+    _avds = response_avd;
+    final response_bl = await apiService.getBls();
+    _bls = response_bl;
+    final response_lta = await apiService.getLtas();
+    _ltas = response_lta;
+    final response_bfu = await apiService.getBfus();
+    _bfus = response_bfu;
+    final response_co = await apiService.getCOs();
+    _cos = response_co;
+    final response_cps = await apiService.getCps();
+    _cps = response_cps;
+    final response_declaration = await apiService.getDeclarations();
+    _declarations = response_declaration;
+    final response_fiche_technique = await apiService.getFicheTechniques();
+    _fiche_techniques = response_fiche_technique;
+
     _isLoading = false;
     notifyListeners();
   }
@@ -415,18 +454,18 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitApeles() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
     final response_apeles = await apiService.getApeles();
     _appeles = response_apeles;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
+    final response_annonce = await apiService.getAnnonces();
+    _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_tarification = await apiService.getTarifications();
+    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }

@@ -7,7 +7,6 @@ class Expeditions {
   final String numero_expedition;
   final int transporteur_id;
   final int statu_expedition_id;
-  final int marchandise_id;
   final int deleted;
   final String? description;
   final DateTime date_depart;
@@ -23,7 +22,6 @@ class Expeditions {
     required this.numero_expedition,
     required this.transporteur_id,
     required this.statu_expedition_id,
-    required this.marchandise_id,
     required this.deleted,
     this.description,
     required this.date_depart,
@@ -41,7 +39,6 @@ class Expeditions {
     String? numero_expedition,
     int? transporteur_id,
     int? statu_expedition_id,
-    int? marchandise_id,
     int? deleted,
     String? description,
     DateTime? date_depart,
@@ -58,7 +55,6 @@ class Expeditions {
       numero_expedition: numero_expedition ?? this.numero_expedition,
       transporteur_id: transporteur_id ?? this.transporteur_id,
       statu_expedition_id: statu_expedition_id ?? this.statu_expedition_id,
-      marchandise_id: marchandise_id ?? this.marchandise_id,
       deleted: deleted ?? this.deleted,
       description: description ?? this.description,
       date_depart: date_depart ?? this.date_depart,
@@ -78,7 +74,6 @@ class Expeditions {
       'numero_expedition': numero_expedition,
       'transporteur_id': transporteur_id,
       'statu_expedition_id': statu_expedition_id,
-      'marchandise_id': marchandise_id,
       'deleted': deleted,
       'description': description,
       'date_depart': date_depart.millisecondsSinceEpoch,
@@ -98,7 +93,6 @@ class Expeditions {
       numero_expedition: map['numero_expedition'] as String,
       transporteur_id: map['transporteur_id'] as int,
       statu_expedition_id: map['statu_expedition_id'] as int,
-      marchandise_id: map['marchandise_id'] as int,
       deleted: map['deleted'] as int,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -123,7 +117,7 @@ class Expeditions {
 
   @override
   String toString() {
-    return 'Expeditions(id: $id, annonce_id: $annonce_id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, marchandise_id: $marchandise_id, deleted: $deleted, description: $description, date_depart: $date_depart, date_arrivee: $date_arrivee, caution: $caution, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'Expeditions(id: $id, annonce_id: $annonce_id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, deleted: $deleted, description: $description, date_depart: $date_depart, date_arrivee: $date_arrivee, caution: $caution, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -135,7 +129,6 @@ class Expeditions {
         other.numero_expedition == numero_expedition &&
         other.transporteur_id == transporteur_id &&
         other.statu_expedition_id == statu_expedition_id &&
-        other.marchandise_id == marchandise_id &&
         other.deleted == deleted &&
         other.description == description &&
         other.date_depart == date_depart &&
@@ -154,7 +147,6 @@ class Expeditions {
         numero_expedition.hashCode ^
         transporteur_id.hashCode ^
         statu_expedition_id.hashCode ^
-        marchandise_id.hashCode ^
         deleted.hashCode ^
         description.hashCode ^
         date_depart.hashCode ^
