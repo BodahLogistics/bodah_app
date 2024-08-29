@@ -7,6 +7,7 @@ import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/cargaison.dart';
 import 'package:bodah/modals/coli_photos.dart';
 import 'package:bodah/modals/coli_tarifs.dart';
 import 'package:bodah/modals/colis.dart';
@@ -15,7 +16,6 @@ import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/interchanges.dart';
 import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/notifications.dart';
-import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
@@ -39,9 +39,14 @@ import '../modals/bfus.dart';
 import '../modals/bl.dart';
 import '../modals/bon_commandes.dart';
 import '../modals/camions.dart';
+import '../modals/cargaison_client.dart';
 import '../modals/cartificat_origine.dart';
 import '../modals/certificat_phyto_sanitaire.dart';
+import '../modals/chargement.dart';
+import '../modals/chargement_effectues.dart';
+import '../modals/client.dart';
 import '../modals/communes.dart';
+import '../modals/conducteur.dart';
 import '../modals/declaration.dart';
 import '../modals/departements.dart';
 import '../modals/destinataires.dart';
@@ -50,15 +55,21 @@ import '../modals/donneur_ordres.dart';
 import '../modals/entreprises.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
+import '../modals/exports.dart';
 import '../modals/fiche_technique.dart';
+import '../modals/import.dart';
+import '../modals/livraison_cargaison.dart';
 import '../modals/localisations.dart';
 import '../modals/lta.dart';
 import '../modals/marchandises.dart';
 import '../modals/pays.dart';
 import '../modals/pieces.dart';
+import '../modals/positions.dart';
 import '../modals/quartiers.dart';
+import '../modals/recus.dart';
 import '../modals/statuts.dart';
 import '../modals/tarifications.dart';
+import '../modals/tarifs.dart';
 import '../modals/tdos.dart';
 import '../modals/transporteurs.dart';
 import '../modals/type_chargements.dart';
@@ -712,102 +723,12 @@ class DBServices {
     }
   }
 
-  Future<List<Recus>> getRecus() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/recus";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Recus.fromMap(json)).toList();
-      } else {
-        return <Recus>[];
-      }
-    } catch (error) {
-      return <Recus>[];
-    }
-  }
-
-  Future<List<Interchanges>> getInterchanges() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/interchanges";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Interchanges.fromMap(json)).toList();
-      } else {
-        return <Interchanges>[];
-      }
-    } catch (error) {
-      return <Interchanges>[];
-    }
-  }
-
-  Future<List<Vgms>> getVgms() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/vgms";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Vgms.fromMap(json)).toList();
-      } else {
-        return <Vgms>[];
-      }
-    } catch (error) {
-      return <Vgms>[];
-    }
-  }
-
-  Future<List<Tdos>> getTdos() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/tdos";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Tdos.fromMap(json)).toList();
-      } else {
-        return <Tdos>[];
-      }
-    } catch (error) {
-      return <Tdos>[];
-    }
-  }
+  /*  Appeles */
 
   Future<List<Appeles>> getApeles() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/apeles";
+      var url = "${api_url}home/expediteur/import/document/apele/list";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -826,6 +747,1754 @@ class DBServices {
       return <Appeles>[];
     }
   }
+
+  Future<String> AddImportApele(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/apele/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportApele(
+      String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/apele/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateApele(String doc_id, File file, Appeles apele) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/apele/update/${apele.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteApele(Appeles apele) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/apele/delete/${apele.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Appeles */
+
+  /*  Lta */
+
+  Future<List<Lta>> getLtas() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/lta/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Lta.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportLta(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/lta/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportLta(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/lta/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateLta(String doc_id, File file, Lta lta) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/lta/update/${lta.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteLta(Lta lta) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/lta/delete/${lta.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Lta */
+
+  /*  BL */
+
+  Future<List<Bl>> getBls() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/bl/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Bl.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportBl(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bl/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportBl(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/bl/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateBl(String doc_id, File file, Bl data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bl/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteBl(Bl data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bl/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Bl */
+
+  /*  TDO */
+
+  Future<List<Tdos>> getTdos() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/tdo/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Tdos.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportTdo(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/tdo/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportTdo(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/tdo/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateTdo(String doc_id, File file, Tdos data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/tdo/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteTdo(Tdos data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/tdo/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Tdo */
+
+  /* VGML */
+
+  Future<List<Vgms>> getVgms() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/vgm/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Vgms.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportVgm(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/vgm/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportVgm(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/vgm/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateVgm(String doc_id, File file, Vgms data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/vgm/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteVgm(Vgms data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/vgm/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End VGM */
+
+  /*  Interchanges */
+
+  Future<List<Interchanges>> getInterchanges() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/interchange/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Interchanges.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportInterchange(
+      String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/interchange/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportInterchange(
+      String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/interchange/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateInterchange(
+      String doc_id, File file, Interchanges data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/interchange/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteInterchange(Interchanges data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/interchange/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Interchanges */
+
+  /*  Reçu */
+
+  Future<List<Recus>> getRecus() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/recu/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Recus.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportRecu(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/recu/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportRecu(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/recu/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateRecu(String doc_id, File file, Recus data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/recu/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteRecu(Recus data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/recu/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Reçus */
+
+  /*  AVD */
+
+  Future<List<Avd>> getAvds() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/avd/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Avd.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportAvd(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/avd/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportAvd(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/avd/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateAvd(String doc_id, File file, Avd data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/avd/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteAvd(Avd data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/avd/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End AVD */
+
+  /*  BFU */
+
+  Future<List<Bfu>> getBfus() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/bfu/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Bfu.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportBfu(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bfu/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportBfu(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/bfu/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateBfu(String doc_id, File file, Bfu data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bfu/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteBfu(Bfu data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/bfu/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End BFU */
+
+  /*  Déclarations */
+
+  Future<List<Declaration>> getDeclarations() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/declaration/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Declaration.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportDeclaration(
+      String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/declaration/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportDeclaration(
+      String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/declaration/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateDeclaration(
+      String doc_id, File file, Declaration data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/declaration/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteDeclaration(Declaration data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/declaration/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Déclaration */
+
+  /*  Fiche techniques */
+
+  Future<List<FicheTechnique>> getFiches() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/fiche/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => FicheTechnique.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportFiche(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/fiche/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportFiche(
+      String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/fiche/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateFiche(
+      String doc_id, File file, FicheTechnique data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/fiche/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteFiche(FicheTechnique data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/fiche/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Fiche technique */
+
+  /*  CO */
+
+  Future<List<CO>> getCos() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/co/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => CO.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportCo(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/co/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportCo(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/co/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateCo(String doc_id, File file, CO data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/co/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteCo(CO data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/co/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End CO */
+
+  /*  CPS */
+
+  Future<List<CPS>> getCps() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/cps/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => CPS.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportCps(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/cps/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportCps(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/cps/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateCps(String doc_id, File file, CPS data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/cps/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteCps(CPS data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/cps/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End CPS */
+
+  /*  Autre Doc */
+
+  Future<List<AutreDocs>> getAutreDocs() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/document/doc/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => AutreDocs.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<String> AddImportDoc(String doc_id, File file, Import import) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/doc/publish/${import.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportDoc(String doc_id, File file, Exports export) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/doc/publish/${export.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> UpdateDoc(String doc_id, File file, AutreDocs data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/doc/update/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      if (file.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> DeleteDoc(AutreDocs data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/document/doc/delete/${data.id}";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  /*  End Autre Doc */
 
   Future<List<BonCommandes>> getOrdres() async {
     try {
@@ -850,213 +2519,6 @@ class DBServices {
     }
   }
 
-  Future<List<AutreDocs>> getAutreDocs() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/autre_docs";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => AutreDocs.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Avd>> getAvds() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/avds";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Avd.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Bl>> getBls() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/bls";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Bl.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Lta>> getLtas() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/ltas";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Lta.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Bfu>> getBfus() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/bfus";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Bfu.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Declaration>> getDeclarations() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/declarations";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Declaration.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<FicheTechnique>> getFicheTechniques() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/fiche_techniques";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => FicheTechnique.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<CO>> getCOs() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/cos";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => CO.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<CPS>> getCps() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonces/cps";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => CPS.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
   Future<List<Annonces>> getAnnonces() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -1077,6 +2539,345 @@ class DBServices {
       }
     } catch (error) {
       return <Annonces>[];
+    }
+  }
+
+  Future<List<Import>> getImports() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Import.fromMap(json)).toList();
+      } else {
+        return <Import>[];
+      }
+    } catch (error) {
+      return <Import>[];
+    }
+  }
+
+  Future<int> getImportRouteKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/route/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  Future<int> getImportMaritimeKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/maritime/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  Future<int> getImportAerienKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/aerien/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  Future<List<CargaisonClient>> getCargaisonClients() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/cargaison/clients";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => CargaisonClient.fromMap(json)).toList();
+      } else {
+        return <CargaisonClient>[];
+      }
+    } catch (error) {
+      return <CargaisonClient>[];
+    }
+  }
+
+  Future<List<Chargement>> getChargements() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/chargements";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Chargement.fromMap(json)).toList();
+      } else {
+        return <Chargement>[];
+      }
+    } catch (error) {
+      return <Chargement>[];
+    }
+  }
+
+  Future<List<Position>> getPositions() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/positions";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Position.fromMap(json)).toList();
+      } else {
+        return <Position>[];
+      }
+    } catch (error) {
+      return <Position>[];
+    }
+  }
+
+  Future<List<Tarif>> getTarifs() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/tarifs";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Tarif.fromMap(json)).toList();
+      } else {
+        return <Tarif>[];
+      }
+    } catch (error) {
+      return <Tarif>[];
+    }
+  }
+
+  Future<List<Conducteur>> getConducteurs() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/conducteurs";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Conducteur.fromMap(json)).toList();
+      } else {
+        return <Conducteur>[];
+      }
+    } catch (error) {
+      return <Conducteur>[];
+    }
+  }
+
+  Future<List<Client>> getClients() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/clients";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Client.fromMap(json)).toList();
+      } else {
+        return <Client>[];
+      }
+    } catch (error) {
+      return <Client>[];
+    }
+  }
+
+  Future<List<ChargementEffectue>> getChargementEffectues() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/list/transporteur";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList
+            .map((json) => ChargementEffectue.fromMap(json))
+            .toList();
+      } else {
+        return <ChargementEffectue>[];
+      }
+    } catch (error) {
+      return <ChargementEffectue>[];
+    }
+  }
+
+  Future<List<LivraisonCargaison>> getLivraisons() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/list/livraison";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList
+            .map((json) => LivraisonCargaison.fromMap(json))
+            .toList();
+      } else {
+        return <LivraisonCargaison>[];
+      }
+    } catch (error) {
+      return <LivraisonCargaison>[];
+    }
+  }
+
+  Future<List<Cargaison>> getCargaisons() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/list/marchandise";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Cargaison.fromMap(json)).toList();
+      } else {
+        return <Cargaison>[];
+      }
+    } catch (error) {
+      return <Cargaison>[];
     }
   }
 

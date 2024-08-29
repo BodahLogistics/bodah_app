@@ -345,13 +345,13 @@ class ApiProvider with ChangeNotifier {
     _ltas = response_lta;
     final response_bfu = await apiService.getBfus();
     _bfus = response_bfu;
-    final response_co = await apiService.getCOs();
+    final response_co = await apiService.getCos();
     _cos = response_co;
     final response_cps = await apiService.getCps();
     _cps = response_cps;
     final response_declaration = await apiService.getDeclarations();
     _declarations = response_declaration;
-    final response_fiche_technique = await apiService.getFicheTechniques();
+    final response_fiche_technique = await apiService.getFiches();
     _fiche_techniques = response_fiche_technique;
     _isLoading = false;
     notifyListeners();
@@ -507,7 +507,7 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitFicheTechnique() async {
     _isLoading = true;
-    final response = await apiService.getFicheTechniques();
+    final response = await apiService.getFiches();
     _fiche_techniques = response;
     final response_annonce = await apiService.getAnnonces();
     _annonces = response_annonce;
@@ -525,7 +525,7 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitCo() async {
     _isLoading = true;
-    final response = await apiService.getCOs();
+    final response = await apiService.getCos();
     _cos = response;
     final response_annonce = await apiService.getAnnonces();
     _annonces = response_annonce;
