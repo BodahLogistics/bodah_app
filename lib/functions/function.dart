@@ -7,15 +7,18 @@ import 'package:bodah/modals/avds.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
+import 'package:bodah/modals/client.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
 import 'package:bodah/modals/lta.dart';
+import 'package:bodah/modals/positions.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/tdos.dart';
+import 'package:bodah/modals/transport_mode.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +31,16 @@ import '../modals/autre_docs.dart';
 import '../modals/bfus.dart';
 import '../modals/bl.dart';
 import '../modals/camions.dart';
+import '../modals/cargaison.dart';
+import '../modals/cargaison_client.dart';
 import '../modals/cartificat_origine.dart';
+import '../modals/chargement.dart';
 import '../modals/charges.dart';
 import '../modals/entite_factures.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
 import '../modals/fiche_technique.dart';
+import '../modals/import.dart';
 import '../modals/interchanges.dart';
 import '../modals/localisations.dart';
 import '../modals/marchandises.dart';
@@ -401,6 +408,96 @@ class Functions {
       (data) => data.id == expedition.transporteur_id,
       orElse: () =>
           Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+    );
+  }
+
+  List<Cargaison> import_cargaisons(List<Cargaison> cargaisons, Import import) {
+    return cargaisons.isEmpty
+        ? [
+            Cargaison(
+                id: 0,
+                reference: "",
+                modele_type: "",
+                modele_id: 0,
+                nom: "",
+                deleted: 0)
+          ]
+        : cargaisons
+            .where((data) =>
+                data.modele_type == "App\Models\Import" &&
+                data.modele_id == import.id)
+            .toList();
+  }
+
+  List<CargaisonClient> cargaison_cargaison_clients(
+      Cargaison cargaison, List<CargaisonClient> cargaison_clients) {
+    return cargaison_clients.isEmpty
+        ? [
+            CargaisonClient(
+                id: 0, client_id: 0, cargaison_id: 0, quantite: 0, deleted: 0)
+          ]
+        : cargaison_clients
+            .where((data) => data.cargaison_id == cargaison.id)
+            .toList();
+  }
+
+  Client client(List<Client> clients, int id) {
+    return clients.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Client(
+          id: 0,
+          reference: "",
+          nom: "",
+          telephone: "",
+          country_id: 0,
+          deleted: 0),
+    );
+  }
+
+  Position cargaison_client_position(
+      List<Position> positions, CargaisonClient cargaison_client) {
+    return positions.firstWhere(
+      (data) =>
+          data.modele_type == "App\Models\CargaisonClient" &&
+          data.modele_id == cargaison_client.id,
+      orElse: () => Position(
+          id: 0,
+          pay_dep_id: 0,
+          pay_liv_id: 0,
+          city_dep_id: 0,
+          city_liv_id: 0,
+          modele_id: 0,
+          modele_type: "",
+          deleted: 0),
+    );
+  }
+
+  Chargement cargaison_client_chargement(
+      List<Chargement> chargements, CargaisonClient cargaison_client) {
+    return chargements.firstWhere(
+        (data) =>
+            data.modele_type == "App\Models\CargaisonClient" &&
+            data.modele_id == cargaison_client.id,
+        orElse: () => Chargement(
+            id: 0, modele_id: 0, modele_type: "", debut: DateTime.now()));
+  }
+
+  Import import(List<Import> imports, int id) {
+    return imports.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Import(
+          id: id,
+          reference: "",
+          transport_mode_id: 0,
+          expediteur_id: 0,
+          deleted: 0),
+    );
+  }
+
+  TransportMode transport_mode(List<TransportMode> type_transports, int id) {
+    return type_transports.firstWhere(
+      (data) => data.id == id,
+      orElse: () => TransportMode(id: 0, nom: ""),
     );
   }
 

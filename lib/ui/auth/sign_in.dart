@@ -205,80 +205,69 @@ class _SignInState extends State<SignIn> {
                             : () async {
                                 provider.change_affiche(true);
 
-                                if (phone_number.length < 8 ||
-                                    password.length < 8) {
+                                String statut_code =
+                                    await service.login(phone_number, password);
+
+                                if (statut_code == "422") {
                                   provider.change_affiche(false);
                                   showCustomSnackBar(context,
-                                      'Données invalides', Colors.redAccent);
-                                } else {
-                                  String statut_code = await service.login(
-                                      phone_number, password);
+                                      "Erreur de validation", Colors.redAccent);
+                                } else if (statut_code == "500") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreur s'est produite. Vérifiez votre connection internet et réessayez !",
+                                      Colors.redAccent);
+                                } else if (statut_code == "101") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Aucun n'est associé à ce numéro de téléphone",
+                                      Colors.redAccent);
+                                } else if (statut_code == "202") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Mot de passe incorrect",
+                                      Colors.redAccent);
+                                } else if (statut_code == "204") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      context,
+                                      "Une erreir s'est produite",
+                                      Colors.redAccent);
+                                } else if (statut_code == "200") {
+                                  provider.change_affiche(false);
+                                  provider.reset();
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      pageBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return Wrappers();
+                                      },
+                                      transitionsBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double> secondaryAnimation,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
 
-                                  if (statut_code == "422") {
-                                    provider.change_affiche(false);
-                                    showCustomSnackBar(
-                                        context,
-                                        "Erreur de validation",
-                                        Colors.redAccent);
-                                  } else if (statut_code == "500") {
-                                    provider.change_affiche(false);
-                                    showCustomSnackBar(
-                                        context,
-                                        "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                                        Colors.redAccent);
-                                  } else if (statut_code == "101") {
-                                    provider.change_affiche(false);
-                                    showCustomSnackBar(
-                                        context,
-                                        "Aucun n'est associé à ce numéro de téléphone",
-                                        Colors.redAccent);
-                                  } else if (statut_code == "202") {
-                                    provider.change_affiche(false);
-                                    showCustomSnackBar(
-                                        context,
-                                        "Mot de passe incorrect",
-                                        Colors.redAccent);
-                                  } else if (statut_code == "502") {
-                                    provider.change_affiche(false);
-                                    showCustomSnackBar(
-                                        context,
-                                        "Une erreir s'est produite",
-                                        Colors.redAccent);
-                                  } else {
-                                    provider.change_affiche(false);
-                                    provider.reset();
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        transitionDuration:
-                                            Duration(milliseconds: 500),
-                                        pageBuilder: (BuildContext context,
-                                            Animation<double> animation,
-                                            Animation<double>
-                                                secondaryAnimation) {
-                                          return Wrappers();
-                                        },
-                                        transitionsBuilder:
-                                            (BuildContext context,
-                                                Animation<double> animation,
-                                                Animation<double>
-                                                    secondaryAnimation,
-                                                Widget child) {
-                                          return SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: Offset(1.0, 0.0),
-                                              end: Offset.zero,
-                                            ).animate(animation),
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    );
-
-                                    showCustomSnackBar(
-                                        context,
-                                        "Vous avez été connecté avec suucès. Patientez pour la redirection",
-                                        MyColors.secondary);
-                                  }
+                                  showCustomSnackBar(
+                                      context,
+                                      "Vous avez été connecté avec suucès. Patientez pour la redirection",
+                                      Colors.green);
                                 }
                               },
                         child: Row(

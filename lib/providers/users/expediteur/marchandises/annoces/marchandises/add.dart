@@ -38,8 +38,9 @@ class ProvAddMarchandise with ChangeNotifier {
     _quantite = marchandise.quantite;
     _unite = unite;
     _poids = marchandise.poids;
-    _date_chargement =
-        DateFormat("yyyy-MM-dd").format(marchandise.date_chargement!);
+    _date_chargement = marchandise.id == 0
+        ? _date_chargement = DateFormat("yyyy-MM-dd").format(DateTime.now())
+        : DateFormat("yyyy-MM-dd").format(marchandise.date_chargement!);
     notifyListeners();
   }
 

@@ -5,16 +5,23 @@ import 'package:bodah/modals/annonce_photos.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/cargaison_client.dart';
 import 'package:bodah/modals/cartificat_origine.dart';
+import 'package:bodah/modals/chargement.dart';
+import 'package:bodah/modals/chargement_effectues.dart';
 import 'package:bodah/modals/coli_photos.dart';
+import 'package:bodah/modals/conducteur.dart';
 import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/expeditions.dart';
+import 'package:bodah/modals/import.dart';
+import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/notifications.dart';
 import 'package:bodah/modals/statut_operations.dart';
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
+import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/trajets.dart';
 import 'package:bodah/modals/unites.dart';
@@ -33,7 +40,9 @@ import '../../modals/avds.dart';
 import '../../modals/bfus.dart';
 import '../../modals/bl.dart';
 import '../../modals/camions.dart';
+import '../../modals/cargaison.dart';
 import '../../modals/certificat_phyto_sanitaire.dart';
+import '../../modals/client.dart';
 import '../../modals/coli_tarifs.dart';
 import '../../modals/declaration.dart';
 import '../../modals/departements.dart';
@@ -48,10 +57,12 @@ import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
 import '../../modals/lta.dart';
 import '../../modals/pays.dart';
+import '../../modals/positions.dart';
 import '../../modals/quartiers.dart';
 import '../../modals/recepteurs.dart';
 import '../../modals/recus.dart';
 import '../../modals/rules.dart';
+import '../../modals/transport_mode.dart';
 import '../../modals/transporteurs.dart';
 import '../../modals/type_chargements.dart';
 import '../../modals/vgms.dart';
@@ -186,6 +197,66 @@ class ApiProvider with ChangeNotifier {
   List<Devises> _devises = [];
   List<Devises> get devises => _devises;
 
+  List<Import> _imports = [];
+  List<Import> get imports => _imports;
+  List<TransportMode> _transport_modes = [];
+  List<TransportMode> get transport_modes => _transport_modes;
+  List<CargaisonClient> _cargaison_clients = [];
+  List<CargaisonClient> get cargaison_clients => _cargaison_clients;
+  List<Chargement> _chargements = [];
+  List<Chargement> get chargements => _chargements;
+  List<Position> _positions = [];
+  List<Position> get positions => _positions;
+  List<Tarif> _tarifs = [];
+  List<Tarif> get tarifs => _tarifs;
+  List<Conducteur> _conducteurs = [];
+  List<Conducteur> get conducteurs => _conducteurs;
+  List<Client> _clients = [];
+  List<Client> get clients => _clients;
+  List<LivraisonCargaison> _livraisons = [];
+  List<LivraisonCargaison> get livraisons => _livraisons;
+  List<Cargaison> _cargaisons = [];
+  List<Cargaison> get cargaisons => _cargaisons;
+  List<ChargementEffectue> _chargement_effectues = [];
+  List<ChargementEffectue> get chargement_effectues => _chargement_effectues;
+
+  Future<void> InitImport() async {
+    _isLoading = true;
+    final response_import = await apiService.getImports();
+    _imports = response_import;
+    final response_cargaison = await apiService.getCargaisons();
+    _cargaisons = response_cargaison;
+    final response_cargaison_client = await apiService.getCargaisonClients();
+    _cargaison_clients = response_cargaison_client;
+    final response_position = await apiService.getPositions();
+    _positions = response_position;
+    final response_chargement = await apiService.getChargements();
+    _chargements = response_chargement;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  int _import_route_key = 0;
+  int get import_route_key => _import_route_key;
+  void change_import_route_key(int value) {
+    _import_route_key = value;
+    notifyListeners();
+  }
+
+  int _import_maritime_key = 0;
+  int get import_maritime_key => _import_maritime_key;
+  void change_import_maritime_key(int value) {
+    _import_maritime_key = value;
+    notifyListeners();
+  }
+
+  int _import_aerien_key = 0;
+  int get import_aerien_key => _import_aerien_key;
+  void change_import_aerien_key(int value) {
+    _import_aerien_key = value;
+    notifyListeners();
+  }
+
   List<AutreDocs> _autre_docs = [];
   List<AutreDocs> get autre_docs => _autre_docs;
   List<Avd> _avds = [];
@@ -209,22 +280,28 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_users = await apiService.getUsers();
     _users = response_users;
-    final response_unites = await apiService.getUnites();
-    _unites = response_unites;
+
     final response = await apiService.user();
     _user = response[0];
-    _roles = response[1];
     final response_pays = await apiService.getPays();
     _pays = response_pays;
     final response_role = await apiService.getRules();
     _rules = response_role;
     final response_statuts = await apiService.getStatuts();
     _statuts = response_statuts;
+
+    _roles = response[1];
+    final response_unites = await apiService.getUnites();
+    _unites = response_unites;
     final response_type_chargement = await apiService.getTypeChargements();
     _type_chargements = response_type_chargement;
     final response_devises = await apiService.getDevises();
     _devises = response_devises;
+    final response_transport_mode = await apiService.getTransportMode();
+    _transport_modes = response_transport_mode;
     await InitAnnonce();
+    await InitImport();
+
     _isLoading = false;
     notifyListeners();
   }

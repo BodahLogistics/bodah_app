@@ -2,6 +2,7 @@
 
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
 import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
+import 'package:bodah/ui/users/expediteur/import/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/home.dart';
 import 'package:flutter/material.dart';
@@ -241,6 +242,102 @@ class DrawerExpediteur extends StatelessWidget {
                   pageBuilder: (BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation) {
+                    return MesImports();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            leading: Icon(
+              Icons.local_shipping,
+              color: current_index == 4
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
+            ),
+            tileColor: current_index == 4 ? MyColors.secondary : null,
+            title: Text(
+              "Mes importations",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: current_index == 4
+                      ? Colors.white
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              provider.change_index(5);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return AnnonceMarchandises();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            leading: Icon(
+              Icons.directions_boat,
+              color: current_index == 5
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
+            ),
+            tileColor: current_index == 5 ? MyColors.secondary : null,
+            title: Text(
+              "Mes exportations",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: current_index == 5
+                      ? Colors.white
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              provider.change_index(6);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
                     return MesDocuments();
                   },
                   transitionsBuilder: (BuildContext context,
@@ -260,18 +357,18 @@ class DrawerExpediteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.receipt,
-              color: current_index == 4
+              color: current_index == 6
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 4 ? MyColors.secondary : null,
+            tileColor: current_index == 6 ? MyColors.secondary : null,
             title: Text(
               "Mes documents",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 4
+                  color: current_index == 6
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -282,22 +379,22 @@ class DrawerExpediteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(5);
+              provider.change_index(7);
             },
             leading: Icon(
               Icons.share,
-              color: current_index == 5
+              color: current_index == 7
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 5 ? MyColors.secondary : null,
+            tileColor: current_index == 7 ? MyColors.secondary : null,
             title: Text(
               "Partagez",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 5
+                  color: current_index == 7
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -357,22 +454,22 @@ class DrawerExpediteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(6);
+              provider.change_index(8);
             },
             leading: Icon(
               Icons.settings,
-              color: current_index == 6
+              color: current_index == 8
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 6 ? MyColors.secondary : null,
+            tileColor: current_index == 8 ? MyColors.secondary : null,
             title: Text(
               "Paramètres",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 6
+                  color: current_index == 8
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -386,19 +483,19 @@ class DrawerExpediteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(7);
+              provider.change_index(9);
               logOut(context);
             },
             leading: Icon(
               Icons.logout,
-              color: current_index == 7 ? Colors.white : Colors.red,
+              color: current_index == 9 ? Colors.white : Colors.red,
             ),
-            tileColor: current_index == 7 ? MyColors.secondary : null,
+            tileColor: current_index == 9 ? MyColors.secondary : null,
             title: Text(
               "Déconnexion",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 7 ? Colors.white : Colors.red,
+                  color: current_index == 9 ? Colors.white : Colors.red,
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.w400),
             ),

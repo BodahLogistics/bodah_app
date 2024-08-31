@@ -9,6 +9,9 @@ import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/providers/calculator/index.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
+import 'package:bodah/providers/users/expediteur/import/liv/add.dart';
+import 'package:bodah/providers/users/expediteur/import/march/add.dart';
+import 'package:bodah/providers/users/expediteur/import/transp/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/odres/add.dart';
@@ -18,12 +21,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+
 import 'apis/bodah/infos.dart';
 import 'colors/color.dart';
 import 'functions/function.dart';
 import 'providers/auth/prov_reset_password.dart';
 import 'providers/auth/prov_sign_in.dart';
 import 'providers/auth/prov_sign_up.dart';
+import 'providers/users/expediteur/import/add.dart';
 import 'providers/users/expediteur/marchandises/nav_bottom/index.dart';
 import 'services/data_base_service.dart';
 import 'services/secure_storage.dart';
@@ -98,6 +103,21 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvAddMarchandise(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddImport(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddMarch(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddTransp(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddMarchandise(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddLiv(),
         ),
       ],
       child: MaterialApp(

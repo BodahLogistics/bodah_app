@@ -71,6 +71,7 @@ import '../modals/statuts.dart';
 import '../modals/tarifications.dart';
 import '../modals/tarifs.dart';
 import '../modals/tdos.dart';
+import '../modals/transport_mode.dart';
 import '../modals/transporteurs.dart';
 import '../modals/type_chargements.dart';
 import '../modals/users.dart';
@@ -2565,6 +2566,29 @@ class DBServices {
     }
   }
 
+  Future<List<TransportMode>> getTransportMode() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/types";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => TransportMode.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<int> getImportRouteKey() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -3641,7 +3665,7 @@ class DBServices {
 
       return response.statusCode.toString();
     } catch (e) {
-      return "502";
+      return "204";
     }
   }
 
