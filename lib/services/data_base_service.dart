@@ -3369,6 +3369,130 @@ class DBServices {
     }
   }
 
+  Future<String> addMarch(
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      String name,
+      String telephone,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      int quantite) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/route/publish/marchandise";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = marchandise
+        ..fields['cl_name'] = name
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> addLiv(
+      Cargaison cargaison,
+      String name,
+      String telephone,
+      Pays pay,
+      Villes city,
+      String adresse,
+      int quantite,
+      String superviseur) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/route/publish/livraison";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['march'] = cargaison.id.toString()
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['address'] = adresse
+        ..fields['sup'] = superviseur
+        ..fields['city'] = city.id.toString()
+        ..fields['pay'] = pay.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> UpdateMarch(
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      String name,
+      String telephone,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      int quantite,
+      CargaisonClient cargaison_client) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/marchandise/update/${cargaison_client.id}";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = marchandise
+        ..fields['cl_name'] = name
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> UpdateTransp(
       String name,
       String permis,
@@ -3545,6 +3669,25 @@ class DBServices {
     try {
       var url =
           "${api_url}home/expediteur/import/transporteur/delete/${chargement_effectue.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteCargaisonClient(CargaisonClient cargaison_client) async {
+    try {
+      var url =
+          "${api_url}home/expediteur/import/marchandise/delete/${cargaison_client.id}";
       final uri = Uri.parse(url);
       String? token = await secure.readSecureData('token');
 

@@ -1,14 +1,45 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages
 
+import 'package:bodah/modals/cargaison.dart';
+import 'package:bodah/modals/cargaison_client.dart';
 import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../modals/chargement.dart';
+import '../../../../../modals/client.dart';
 import '../../../../../services/data_base_service.dart';
 
 class ProvAddMarch with ChangeNotifier {
   final apiService = DBServices();
+
+  void change_cargaison_client(
+      Client client,
+      CargaisonClient cargaison_client,
+      Cargaison cargaison,
+      Pays pay_dep,
+      Pays pay_dest,
+      Villes ville_dep,
+      Villes ville_dest,
+      Chargement chargement) {
+    _marchandise = cargaison.nom;
+    _quantite = cargaison_client.quantite;
+    _pay_exp = pay_dep;
+    _pay_liv = pay_dest;
+    _ville_exp = ville_dep;
+    _ville_liv = ville_dest;
+    _client_name = client.nom;
+    _client_telepehone = client.telephone;
+    _date_debut = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    if (chargement.id > 0) {
+      _date_debut = DateFormat("yyyy-MM-dd").format(chargement.debut);
+      _date_fin = chargement.fin != null
+          ? DateFormat("yyyy-MM-dd").format(chargement.fin!)
+          : "";
+    }
+    notifyListeners();
+  }
 
   void reset() {
     _villes_exp = [];
@@ -17,12 +48,12 @@ class ProvAddMarch with ChangeNotifier {
     _quantite = 0;
     _date_debut = DateFormat("yyyy-MM-dd").format(DateTime.now());
     _date_fin = "";
-    _pay_exp = Pays(id: 0, name: "");
-    _ville_exp = Villes(id: 0, name: "", country_id: 0);
+    _pay_exp = Pays(id: 24, name: "");
+    _ville_exp = Villes(id: 9626, name: "", country_id: 0);
     _client_name = "";
     _client_telepehone = "";
-    _pay_liv = Pays(id: 0, name: "");
-    _ville_liv = Villes(id: 0, name: "", country_id: 0);
+    _pay_liv = Pays(id: 24, name: "");
+    _ville_liv = Villes(id: 9626, name: "", country_id: 0);
     _affiche = false;
     notifyListeners();
   }

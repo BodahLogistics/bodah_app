@@ -20,12 +20,15 @@ import '../../../../functions/function.dart';
 import '../../../../modals/cargaison.dart';
 import '../../../../modals/cargaison_client.dart';
 import '../../../../modals/chargement.dart';
+import '../../../../modals/client.dart';
 import '../../../../modals/pays.dart';
 import '../../../../modals/positions.dart';
 import '../../../../modals/users.dart';
 import '../../../../modals/villes.dart';
 import '../../../../providers/api/api_data.dart';
 import '../../../../providers/users/expediteur/import/add.dart';
+import '../../../../providers/users/expediteur/import/liv/add.dart';
+import '../../../../providers/users/expediteur/import/march/add.dart';
 import '../../../../services/data_base_service.dart';
 import '../drawer/index.dart';
 import '../marchandises/nav_bottom/index.dart';
@@ -2820,6 +2823,2459 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
   );
 }
 
+Future<dynamic> NewMarch(BuildContext context, int import_id) {
+  TextEditingController Marchandise = TextEditingController();
+  TextEditingController Quantite = TextEditingController();
+  TextEditingController DateDebut = TextEditingController();
+  TextEditingController ClientName = TextEditingController();
+  TextEditingController DateFin = TextEditingController();
+  TextEditingController ClientTelephone = TextEditingController();
+
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final api_provider = Provider.of<ApiProvider>(dialocontext);
+      final provider = Provider.of<ProvAddMarch>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool affiche = provider.affiche;
+      int quantite = provider.quantite;
+      String marchandise = provider.marchandise;
+      String date_debut = provider.date_debut;
+      String date_fin = provider.date_fin;
+      String client_name = provider.client_name;
+      String client_telephone = provider.client_telephone;
+      Villes ville_exp = provider.ville_exp;
+      Villes ville_liv = provider.ville_liv;
+      Pays pay_exp = provider.pay_exp;
+      Pays pay_liv = provider.pay_liv;
+
+      List<Pays> pays = api_provider.pays;
+      List<Villes> villes_expedition = provider.villes_expeditions;
+      List<Villes> villes_livraison = provider.villes_livraison;
+      final user = api_provider.user;
+
+      if (DateDebut.text.isEmpty) {
+        DateDebut.text = date_debut;
+      }
+
+      return AlertDialog(
+        title: Text(
+          "Marchandise importée",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: SingleChildScrollView(
+            child: ListBody(
+          children: [
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Nom du client",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                controller: ClientName,
+                maxLength: 18,
+                onChanged: (value) => provider.change_client_name(value),
+                decoration: InputDecoration(
+                    suffixIcon:
+                        ClientName.text.isNotEmpty && (client_name.length < 3)
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Icon(Icons.error, color: Colors.red),
+                              )
+                            : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: ClientName.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (client_name.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Nom du client" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            ClientName.text.isEmpty
+                ? Container()
+                : client_name.length < 3
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Nom invalid",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+            SizedBox(
+              height: 15,
+            ),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Contact du client",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 70,
+              child: IntlPhoneField(
+                initialCountryCode: 'BJ',
+                controller: ClientTelephone,
+                onChanged: (value) =>
+                    provider.change_client_telephone(value.completeNumber),
+                decoration: InputDecoration(
+                    suffixIcon: ClientTelephone.text.isNotEmpty &&
+                            client_telephone.length < 8
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(borderSide: BorderSide()),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Contact du client" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Marchandise",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                maxLength: 15,
+                controller: Marchandise,
+                onChanged: (value) => provider.change_marchandise(value),
+                decoration: InputDecoration(
+                    suffixIcon:
+                        Marchandise.text.isNotEmpty && (marchandise.length < 3)
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Icon(Icons.error, color: Colors.red),
+                              )
+                            : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Marchandise.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (marchandise.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Marchandise" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            Marchandise.text.isEmpty
+                ? Container()
+                : marchandise.length < 3
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Champ invalid",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Quantité",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                controller: Quantite,
+                onChanged: (value) => provider.change_quantite(value),
+                decoration: InputDecoration(
+                    suffixIcon: Quantite.text.isNotEmpty && (quantite < 1)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Quantite.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (quantite > 0)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Quantité" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pays départ",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: pays.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText:
+                                      user.dark_mode == 1 ? "" : "Pays départ",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) async {
+                              if (selectedType != null) {
+                                final pay_selected = pays.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () => Pays(id: 24, name: ""),
+                                );
+                                provider.change_pays_exp(pay_selected);
+                                await provider
+                                    .getAllVillesExpedition(pay_selected.id);
+                              }
+                            },
+                            selectedItem: pay_exp
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Ville départ",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: villes_expedition
+                                .map((type) => type.name)
+                                .toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText:
+                                      user.dark_mode == 1 ? "" : "Ville départ",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) {
+                              if (selectedType != null) {
+                                final ville_selected =
+                                    villes_livraison.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () =>
+                                      Villes(id: 9626, name: "", country_id: 0),
+                                );
+                                provider.change_ville_exp(ville_selected);
+                              }
+                            },
+                            selectedItem: ville_exp
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pays destination",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: pays.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText: user.dark_mode == 1
+                                      ? ""
+                                      : "Pays destination",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) async {
+                              if (selectedType != null) {
+                                final pay_selected = pays.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () => Pays(id: 24, name: ""),
+                                );
+                                provider.change_pays_liv(pay_selected);
+                                await provider
+                                    .getAllVillesLivraison(pay_selected.id);
+                              }
+                            },
+                            selectedItem: pay_liv
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Ville de destination",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: villes_livraison
+                                .map((type) => type.name)
+                                .toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText: user.dark_mode == 1
+                                      ? ""
+                                      : "Ville destination",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) {
+                              if (selectedType != null) {
+                                final ville_selected =
+                                    villes_livraison.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () =>
+                                      Villes(id: 9626, name: "", country_id: 0),
+                                );
+                                provider.change_ville_liv(ville_selected);
+                              }
+                            },
+                            selectedItem: ville_liv
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Début",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 13,
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: DateDebut,
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                locale: const Locale('fr', 'FR'),
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                String format =
+                                    DateFormat("yyyy-MM-dd").format(picked);
+                                DateDebut.text = format;
+                                provider.change_date_debut(format);
+                              }
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: DateDebut.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText:
+                                    user.dark_mode == 0 ? "Date de début" : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Fin",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 13,
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: DateFin,
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                locale: const Locale('fr', 'FR'),
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                String format =
+                                    DateFormat("yyyy-MM-dd").format(picked);
+                                DateFin.text = format;
+                                provider.change_date_fin(format);
+                              }
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: DateFin.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText:
+                                    user.dark_mode == 0 ? "Date de fin" : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+          ],
+        )),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_affiche(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Fermez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: affiche
+                      ? null
+                      : () async {
+                          provider.change_affiche(true);
+                          String statut_code = await service.addMarch(
+                              marchandise,
+                              date_debut,
+                              date_fin,
+                              client_name,
+                              client_telephone,
+                              pay_exp,
+                              ville_exp,
+                              pay_liv,
+                              ville_liv,
+                              quantite);
+
+                          if (statut_code == "202") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur est survenue", Colors.redAccent);
+                          } else if (statut_code == "422") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Certains champs sont mal renseignés",
+                                Colors.redAccent);
+                          } else if (statut_code == "500") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
+                                Colors.redAccent);
+                          } else {
+                            await api_provider.InitCargaison();
+                            provider.reset();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "La marchandise a été ajoutée avec succès",
+                                Colors.green);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: affiche
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Ajoutez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> NewLiv(BuildContext context, int import_id) {
+  TextEditingController Adresse = TextEditingController();
+  TextEditingController Quantite = TextEditingController();
+  TextEditingController Superviseur = TextEditingController();
+  TextEditingController Name = TextEditingController();
+  TextEditingController Contact = TextEditingController();
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final api_provider = Provider.of<ApiProvider>(dialocontext);
+      final provider = Provider.of<ProvAddLiv>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      List<Cargaison> cargaisons = api_provider.cargaisons;
+      Cargaison cargaion = provider.marchandise;
+      bool affiche = provider.affiche;
+      int quantite = provider.quantite;
+      String adresse = provider.adresse;
+      String sup = provider.superviseur;
+      String name = provider.name;
+      String telephone = provider.telephone;
+      Villes ville = provider.ville;
+      Pays pay = provider.pay;
+      List<Pays> pays = api_provider.pays;
+      List<Villes> villes = provider.villes;
+      final user = api_provider.user;
+
+      return AlertDialog(
+        title: Text(
+          "Livraison éffectuée",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: SingleChildScrollView(
+            child: ListBody(
+          children: [
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Nom du destinataire",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                controller: Name,
+                maxLength: 18,
+                onChanged: (value) => provider.change_name(value),
+                decoration: InputDecoration(
+                    suffixIcon: Name.text.isNotEmpty && (name.length < 3)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Name.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (name.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Nom du destinataire" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            Name.text.isEmpty
+                ? Container()
+                : name.length < 3
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Nom invalid",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+            SizedBox(
+              height: 10,
+            ),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Contact du destinataire",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 70,
+              child: IntlPhoneField(
+                initialCountryCode: 'BJ',
+                controller: Contact,
+                onChanged: (value) =>
+                    provider.change_telephone(value.completeNumber),
+                decoration: InputDecoration(
+                    suffixIcon: Contact.text.isNotEmpty && telephone.length < 8
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(borderSide: BorderSide()),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText:
+                        user.dark_mode == 0 ? "Contact du destinataire" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Marchandise",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                height: user.dark_mode == 1 ? 48 : 50,
+                child: DropdownSearch<String>(
+                  popupProps: PopupProps.dialog(
+                    showSearchBox: true,
+                    showSelectedItems: true,
+                    disabledItemFn: (String s) => s.startsWith('I'),
+                  ),
+
+                  items: cargaisons.map((type) => type.nom).toList(),
+                  filterFn: (user, filter) =>
+                      user.toLowerCase().contains(filter.toLowerCase()),
+
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        labelText: user.dark_mode == 1 ? "" : "Marchandise",
+                        labelStyle: TextStyle(
+                            color: user.dark_mode == 1
+                                ? MyColors.light
+                                : MyColors.black,
+                            fontSize: 14,
+                            fontFamily: "Poppins"),
+                        hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Poppins",
+                            color: MyColors.black)),
+                  ),
+                  dropdownBuilder: (context, selectedItem) {
+                    return Text(
+                      selectedItem ?? '',
+                      style: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontFamily: "Poppins",
+                      ),
+                    );
+                  },
+
+                  onChanged: (String? selectedType) async {
+                    if (selectedType != null) {
+                      final pay_selected = cargaisons.firstWhere(
+                        (element) => element.nom == selectedType,
+                        orElse: () => Cargaison(
+                            id: 0,
+                            reference: "",
+                            modele_type: "",
+                            modele_id: 0,
+                            nom: "",
+                            deleted: 0),
+                      );
+                      provider.change_marchandise(pay_selected);
+                    }
+                  },
+                  selectedItem: cargaion
+                      .nom, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                ),
+              ),
+            ),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Quantité",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                controller: Quantite,
+                onChanged: (value) => provider.change_quantite(value),
+                decoration: InputDecoration(
+                    suffixIcon: Quantite.text.isNotEmpty && (quantite < 1)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Quantite.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (quantite > 0)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Quantité" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pays",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: pays.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText:
+                                      user.dark_mode == 1 ? "" : "Pays départ",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) async {
+                              if (selectedType != null) {
+                                final pay_selected = pays.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () => Pays(id: 24, name: ""),
+                                );
+                                provider.change_pays(pay_selected);
+                                await provider.getAllVilles(pay_selected.id);
+                              }
+                            },
+                            selectedItem: pay
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Ville",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: villes.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText: user.dark_mode == 1 ? "" : "Ville",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) {
+                              if (selectedType != null) {
+                                final ville_selected = villes.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () =>
+                                      Villes(id: 9626, name: "", country_id: 0),
+                                );
+                                provider.change_ville(ville_selected);
+                              }
+                            },
+                            selectedItem: ville
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Adresse",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 13,
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                height: 60,
+                child: TextField(
+                  maxLength: 16,
+                  controller: Adresse,
+                  onChanged: (value) {
+                    provider.change_adresse(value);
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Adresse.text.isEmpty
+                            ? function.convertHexToColor("#79747E")
+                            : MyColors.secondary,
+                      )),
+                      filled: user.dark_mode == 1 ? true : false,
+                      fillColor:
+                          user.dark_mode == 1 ? MyColors.filedDark : null,
+                      labelText: user.dark_mode == 0 ? "Adresse" : "",
+                      labelStyle: TextStyle(
+                          color: user.dark_mode == 1
+                              ? MyColors.light
+                              : MyColors.black,
+                          fontSize: 14,
+                          fontFamily: "Poppins"),
+                      hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Poppins",
+                          color: MyColors.black)),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Superviseur",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 13,
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                height: 60,
+                child: TextField(
+                  maxLength: 16,
+                  controller: Superviseur,
+                  onChanged: (value) {
+                    provider.change_superviseur(value);
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Superviseur.text.isEmpty
+                            ? function.convertHexToColor("#79747E")
+                            : MyColors.secondary,
+                      )),
+                      filled: user.dark_mode == 1 ? true : false,
+                      fillColor:
+                          user.dark_mode == 1 ? MyColors.filedDark : null,
+                      labelText: user.dark_mode == 0 ? "Superviseur" : "",
+                      labelStyle: TextStyle(
+                          color: user.dark_mode == 1
+                              ? MyColors.light
+                              : MyColors.black,
+                          fontSize: 14,
+                          fontFamily: "Poppins"),
+                      hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Poppins",
+                          color: MyColors.black)),
+                ),
+              ),
+            ),
+          ],
+        )),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_affiche(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Fermez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: affiche
+                      ? null
+                      : () async {
+                          provider.change_affiche(true);
+                          String statut_code = await service.addLiv(
+                              cargaion,
+                              name,
+                              telephone,
+                              pay,
+                              ville,
+                              adresse,
+                              quantite,
+                              superviseur);
+
+                          if (statut_code == "202") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur est survenue", Colors.redAccent);
+                          } else if (statut_code == "422") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Certains champs sont mal renseignés",
+                                Colors.redAccent);
+                          } else if (statut_code == "500") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
+                                Colors.redAccent);
+                          } else {
+                            await api_provider.InitCargaison();
+                            provider.reset();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "La marchandise a été ajoutée avec succès",
+                                Colors.green);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: affiche
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Ajoutez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> UpdateMarch(
+    BuildContext context, CargaisonClient cargaison_client) {
+  TextEditingController Marchandise = TextEditingController();
+  TextEditingController Quantite = TextEditingController();
+  TextEditingController DateDebut = TextEditingController();
+  TextEditingController ClientName = TextEditingController();
+  TextEditingController DateFin = TextEditingController();
+  TextEditingController ClientTelephone = TextEditingController();
+
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final api_provider = Provider.of<ApiProvider>(dialocontext);
+      final provider = Provider.of<ProvAddMarch>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool affiche = provider.affiche;
+      int quantite = provider.quantite;
+      String marchandise = provider.marchandise;
+      String date_debut = provider.date_debut;
+      String date_fin = provider.date_fin;
+      String client_name = provider.client_name;
+      String client_telephone = provider.client_telephone;
+      Villes ville_exp = provider.ville_exp;
+      Villes ville_liv = provider.ville_liv;
+      Pays pay_exp = provider.pay_exp;
+      Pays pay_liv = provider.pay_liv;
+
+      List<Pays> pays = api_provider.pays;
+      List<Villes> villes_expedition = provider.villes_expeditions;
+      List<Villes> villes_livraison = provider.villes_livraison;
+      final user = api_provider.user;
+
+      if (DateDebut.text.isEmpty && date_debut.isNotEmpty) {
+        DateDebut.text = date_debut;
+      }
+
+      if (quantite > 0 && Quantite.text.isEmpty) {
+        Quantite.text = quantite.toString();
+      }
+
+      if (date_fin.isNotEmpty && DateFin.text.isEmpty) {
+        DateFin.text = date_fin;
+      }
+
+      if (client_name.isNotEmpty && ClientName.text.isEmpty) {
+        ClientName.text = client_name;
+      }
+
+      if (client_telephone.isNotEmpty && ClientTelephone.text.isEmpty) {
+        ClientTelephone.text =
+            client_telephone.substring(4, client_telephone.length);
+      }
+
+      return AlertDialog(
+        title: Text(
+          "Marchandise importée",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: SingleChildScrollView(
+            child: ListBody(
+          children: [
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Nom du client",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                controller: ClientName,
+                maxLength: 18,
+                onChanged: (value) => provider.change_client_name(value),
+                decoration: InputDecoration(
+                    suffixIcon:
+                        ClientName.text.isNotEmpty && (client_name.length < 3)
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Icon(Icons.error, color: Colors.red),
+                              )
+                            : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: ClientName.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (client_name.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Nom du client" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            ClientName.text.isEmpty
+                ? Container()
+                : client_name.length < 3
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Nom invalid",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+            SizedBox(
+              height: 15,
+            ),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Contact du client",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 70,
+              child: IntlPhoneField(
+                initialCountryCode: 'BJ',
+                controller: ClientTelephone,
+                onChanged: (value) =>
+                    provider.change_client_telephone(value.completeNumber),
+                decoration: InputDecoration(
+                    suffixIcon: ClientTelephone.text.isNotEmpty &&
+                            client_telephone.length < 8
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(borderSide: BorderSide()),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Contact du client" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            user.dark_mode == 1
+                ? Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Marchandise",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: MyColors.light,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                maxLength: 15,
+                controller: Marchandise,
+                onChanged: (value) => provider.change_marchandise(value),
+                decoration: InputDecoration(
+                    suffixIcon:
+                        Marchandise.text.isNotEmpty && (marchandise.length < 3)
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Icon(Icons.error, color: Colors.red),
+                              )
+                            : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Marchandise.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (marchandise.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Marchandise" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            Marchandise.text.isEmpty
+                ? Container()
+                : marchandise.length < 3
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Champ invalid",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+            user.dark_mode == 1
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Quantité",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 60,
+              child: TextField(
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                controller: Quantite,
+                onChanged: (value) => provider.change_quantite(value),
+                decoration: InputDecoration(
+                    suffixIcon: Quantite.text.isNotEmpty && (quantite < 1)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Quantite.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (quantite > 0)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: user.dark_mode == 0 ? "Quantité" : "",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pays départ",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: pays.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText:
+                                      user.dark_mode == 1 ? "" : "Pays départ",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) async {
+                              if (selectedType != null) {
+                                final pay_selected = pays.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () => Pays(id: 24, name: ""),
+                                );
+                                provider.change_pays_exp(pay_selected);
+                                await provider
+                                    .getAllVillesExpedition(pay_selected.id);
+                              }
+                            },
+                            selectedItem: pay_exp
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Ville départ",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: villes_expedition
+                                .map((type) => type.name)
+                                .toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText:
+                                      user.dark_mode == 1 ? "" : "Ville départ",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) {
+                              if (selectedType != null) {
+                                final ville_selected =
+                                    villes_livraison.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () =>
+                                      Villes(id: 9626, name: "", country_id: 0),
+                                );
+                                provider.change_ville_exp(ville_selected);
+                              }
+                            },
+                            selectedItem: ville_exp
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pays destination",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: pays.map((type) => type.name).toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText: user.dark_mode == 1
+                                      ? ""
+                                      : "Pays destination",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) async {
+                              if (selectedType != null) {
+                                final pay_selected = pays.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () => Pays(id: 24, name: ""),
+                                );
+                                provider.change_pays_liv(pay_selected);
+                                await provider
+                                    .getAllVillesLivraison(pay_selected.id);
+                              }
+                            },
+                            selectedItem: pay_liv
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Ville de destination",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: user.dark_mode == 1 ? 48 : 50,
+                          child: DropdownSearch<String>(
+                            popupProps: PopupProps.dialog(
+                              showSearchBox: true,
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+
+                            items: villes_livraison
+                                .map((type) => type.name)
+                                .toList(),
+                            filterFn: (user, filter) => user
+                                .toLowerCase()
+                                .contains(filter.toLowerCase()),
+
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  labelText: user.dark_mode == 1
+                                      ? ""
+                                      : "Ville destination",
+                                  labelStyle: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Poppins",
+                                      color: MyColors.black)),
+                            ),
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? '',
+                                style: TextStyle(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                ),
+                              );
+                            },
+
+                            onChanged: (String? selectedType) {
+                              if (selectedType != null) {
+                                final ville_selected =
+                                    villes_livraison.firstWhere(
+                                  (element) => element.name == selectedType,
+                                  orElse: () =>
+                                      Villes(id: 9626, name: "", country_id: 0),
+                                );
+                                provider.change_ville_liv(ville_selected);
+                              }
+                            },
+                            selectedItem: ville_liv
+                                .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Début",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 13,
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: DateDebut,
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                locale: const Locale('fr', 'FR'),
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                String format =
+                                    DateFormat("yyyy-MM-dd").format(picked);
+                                DateDebut.text = format;
+                                provider.change_date_debut(format);
+                              }
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: DateDebut.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText:
+                                    user.dark_mode == 0 ? "Date de début" : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Column(
+                    children: [
+                      user.dark_mode == 1
+                          ? Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Fin",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 13,
+                                  color: MyColors.light,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: DateFin,
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                locale: const Locale('fr', 'FR'),
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                String format =
+                                    DateFormat("yyyy-MM-dd").format(picked);
+                                DateFin.text = format;
+                                provider.change_date_fin(format);
+                              }
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: DateFin.text.isEmpty
+                                      ? function.convertHexToColor("#79747E")
+                                      : MyColors.secondary,
+                                )),
+                                filled: user.dark_mode == 1 ? true : false,
+                                fillColor: user.dark_mode == 1
+                                    ? MyColors.filedDark
+                                    : null,
+                                labelText:
+                                    user.dark_mode == 0 ? "Date de fin" : "",
+                                labelStyle: TextStyle(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins"),
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Poppins",
+                                    color: MyColors.black)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+          ],
+        )),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_affiche(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Fermez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: affiche
+                      ? null
+                      : () async {
+                          provider.change_affiche(true);
+                          String statut_code = await service.UpdateMarch(
+                              marchandise,
+                              date_debut,
+                              date_fin,
+                              client_name,
+                              client_telephone,
+                              pay_exp,
+                              ville_exp,
+                              pay_liv,
+                              ville_liv,
+                              quantite,
+                              cargaison_client);
+
+                          if (statut_code == "202") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur est survenue", Colors.redAccent);
+                          } else if (statut_code == "422") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Certains champs sont mal renseignés",
+                                Colors.redAccent);
+                          } else if (statut_code == "500") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
+                                Colors.redAccent);
+                          } else {
+                            await api_provider.InitCargaison();
+                            provider.reset();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "La marchandise a été modifiée avec succès",
+                                Colors.green);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: affiche
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Modifiez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future<dynamic> UpdateTransp(
     BuildContext context, ChargementEffectue chargement_effectue) {
   TextEditingController Tarif = TextEditingController();
@@ -4364,6 +6820,568 @@ Future<dynamic> showTransp(BuildContext context, int import_id) {
   );
 }
 
+Future<dynamic> showMarch(BuildContext context, int import_id) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final api_provider = Provider.of<ApiProvider>(dialocontext);
+      final provider = Provider.of<ProvAddMarch>(dialocontext);
+      List<Cargaison> cargaisons = api_provider.cargaisons;
+      cargaisons = function.import_cargaisons(cargaisons, import_id);
+      List<Client> clients = api_provider.clients;
+      List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
+      List<Chargement> chargements = api_provider.chargements;
+      List<Position> positions = api_provider.positions;
+      List<Tarif> tarifs = api_provider.tarifs;
+      List<Pays> pays = api_provider.pays;
+      List<Villes> all_villes = api_provider.all_villes;
+      Users user = api_provider.user;
+
+      return AlertDialog(
+        title: Text(
+          "Marchandises importées",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: cargaisons.isEmpty
+            ? Center(
+                child: Text(
+                "Vous n'avez encore pas ajouté de transporteurs",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14),
+              ))
+            : Container(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.5), //
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      Cargaison cargaison = cargaisons[index];
+
+                      List<CargaisonClient> cargaison_clients =
+                          function.cargaison_cargaison_clients(
+                              cargaison, cargaison_client);
+
+                      return ListView.builder(
+                        itemCount: cargaison_clients.length,
+                        itemBuilder: (context, carIdex) {
+                          CargaisonClient cargaison_client =
+                              cargaison_clients[carIdex];
+                          Chargement chargement =
+                              function.cargaison_client_chargement(
+                                  chargements, cargaison_client);
+                          Position position =
+                              function.cargaison_client_position(
+                                  positions, cargaison_client);
+                          Pays pay_depart =
+                              function.pay(pays, position.pay_dep_id);
+                          Pays pay_dest =
+                              function.pay(pays, position.pay_liv_id);
+                          Villes ville_dep =
+                              function.ville(all_villes, position.city_dep_id);
+                          Villes ville_dest =
+                              function.ville(all_villes, position.city_liv_id);
+                          Client client = function.client(
+                              clients, cargaison_client.client_id);
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.textColor,
+                                      width: 0.1,
+                                      style: BorderStyle.solid)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 5, top: 5),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Nom : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            cargaison.nom,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Client : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            client.nom,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Contact : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            client.telephone,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Quantité : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            cargaison_client.quantite
+                                                .toString(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Départ : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        pay_depart.id == 0
+                                            ? Container()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                                  fit: BoxFit.cover,
+                                                  height: 12,
+                                                  width: 17,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: MyColors.secondary,
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                    Icons.error,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                        Expanded(
+                                          child: Text(
+                                            ville_dep.name +
+                                                " , " +
+                                                pay_depart.name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Destination : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+                                        pay_dest.id == 0
+                                            ? Container()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                                  fit: BoxFit.cover,
+                                                  height: 12,
+                                                  width: 17,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: MyColors.secondary,
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                    Icons.error,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                        Expanded(
+                                          child: Text(
+                                            ville_dest.name +
+                                                " , " +
+                                                pay_dest.name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Chargement : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            function.date(chargement.debut),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Livraison : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            function.date(chargement.fin),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: user.dark_mode == 1
+                                                    ? MyColors.light
+                                                    : MyColors.textColor,
+                                                fontFamily: "Poppins",
+                                                fontSize: 9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Actions : ",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        IconButton(
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero),
+                                            onPressed: () {
+                                              provider.change_cargaison_client(
+                                                  client,
+                                                  cargaison_client,
+                                                  cargaison,
+                                                  pay_depart,
+                                                  pay_dest,
+                                                  ville_dep,
+                                                  ville_dest,
+                                                  chargement);
+                                              UpdateMarch(dialocontext,
+                                                  cargaison_client);
+                                            },
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 20,
+                                              color: MyColors.primary,
+                                            )),
+                                        IconButton(
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero),
+                                            onPressed: () {
+                                              DeleteMarch(dialocontext,
+                                                  cargaison_client, cargaison);
+                                            },
+                                            icon: Icon(
+                                              Icons.delete,
+                                              size: 20,
+                                              color: Colors.redAccent,
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    itemCount: cargaisons.length),
+              ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Fermez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: () {
+                    NewTransp(context, import_id);
+                  },
+                  child: Text(
+                    "Ajoutez",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: MyColors.light,
+                        fontFamily: "Poppins",
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future<dynamic> DeleteTransp(BuildContext context,
     ChargementEffectue chargement_effectue, Conducteur conducteur) {
   return showDialog(
@@ -4443,6 +7461,120 @@ Future<dynamic> DeleteTransp(BuildContext context,
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le transporteur a été supprimé avec succès",
+                                Colors.green);
+                            provider.change_delete(false);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: delete
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Supprimez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> DeleteMarch(BuildContext context,
+    CargaisonClient cargaison_client, Cargaison cargaison) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final provider = Provider.of<ApiProvider>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool delete = provider.delete;
+      return AlertDialog(
+        title: Text(
+          "Marchandise importée",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: Text(
+          "Voulez-vous vraiment supprimer la marchandise " +
+              cargaison.nom +
+              " ?",
+          style: TextStyle(
+              color: function.convertHexToColor("#79747E"),
+              fontFamily: "Poppins",
+              fontSize: 12,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_delete(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          provider.change_delete(true);
+                          final String statut = await service
+                              .deleteCargaisonClient(cargaison_client);
+                          if (statut == "202") {
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur s'est produite", Colors.redAccent);
+                            provider.change_delete(false);
+                          } else {
+                            await provider.InitCargaison();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "La marchandise a été supprimée avec succès",
                                 Colors.green);
                             provider.change_delete(false);
                             Navigator.of(dialocontext).pop();

@@ -245,6 +245,22 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitCargaison() async {
+    _isLoading = true;
+    final response_client = await apiService.getClients();
+    _clients = response_client;
+    final response_cargaison = await apiService.getCargaisons();
+    _cargaisons = response_cargaison;
+    final response_cargaison_client = await apiService.getCargaisonClients();
+    _cargaison_clients = response_cargaison_client;
+    final response_position = await apiService.getPositions();
+    _positions = response_position;
+    final response_chargement = await apiService.getChargements();
+    _chargements = response_chargement;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitImportData() async {
     _isLoading = true;
     await InitImport();
