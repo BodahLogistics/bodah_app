@@ -18,6 +18,7 @@ import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/notifications.dart';
+import 'package:bodah/modals/pieces.dart';
 import 'package:bodah/modals/statut_operations.dart';
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
@@ -197,6 +198,8 @@ class ApiProvider with ChangeNotifier {
   List<Devises> _devises = [];
   List<Devises> get devises => _devises;
 
+  List<Pieces> _pieces = [];
+  List<Pieces> get pieces => _pieces;
   List<Import> _imports = [];
   List<Import> get imports => _imports;
   List<TransportMode> _transport_modes = [];
@@ -224,6 +227,12 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_import = await apiService.getImports();
     _imports = response_import;
+    final response_route_key = await apiService.getImportRouteKey();
+    _import_route_key = response_route_key;
+    final response_maritime_key = await apiService.getImportMaritimeKey();
+    _import_maritime_key = response_maritime_key;
+    final response_aerien_key = await apiService.getImportAerienKey();
+    _import_aerien_key = response_aerien_key;
     final response_cargaison = await apiService.getCargaisons();
     _cargaisons = response_cargaison;
     final response_cargaison_client = await apiService.getCargaisonClients();
@@ -232,6 +241,47 @@ class ApiProvider with ChangeNotifier {
     _positions = response_position;
     final response_chargement = await apiService.getChargements();
     _chargements = response_chargement;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitImportData() async {
+    _isLoading = true;
+    await InitImport();
+    final response_chargement_effectues =
+        await apiService.getChargementEffectues();
+    _chargement_effectues = response_chargement_effectues;
+    final response_pieces = await apiService.getPieces();
+    _pieces = response_pieces;
+    final response_camion = await apiService.getCamions();
+    _camions = response_camion;
+    final response_conducteur = await apiService.getConducteurs();
+    _conducteurs = response_conducteur;
+    final response_tarif = await apiService.getTarifs();
+    _tarifs = response_tarif;
+    final response_ville = await apiService.getAllVilles();
+    _all_villes = response_ville;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitChargementEffectue() async {
+    _isLoading = true;
+    final response_position = await apiService.getPositions();
+    _positions = response_position;
+    final response_chargement_effectues =
+        await apiService.getChargementEffectues();
+    _chargement_effectues = response_chargement_effectues;
+    final response_pieces = await apiService.getPieces();
+    _pieces = response_pieces;
+    final response_camion = await apiService.getCamions();
+    _camions = response_camion;
+    final response_conducteur = await apiService.getConducteurs();
+    _conducteurs = response_conducteur;
+    final response_tarif = await apiService.getTarifs();
+    _tarifs = response_tarif;
+    final response_ville = await apiService.getAllVilles();
+    _all_villes = response_ville;
     _isLoading = false;
     notifyListeners();
   }
@@ -301,6 +351,15 @@ class ApiProvider with ChangeNotifier {
     _transport_modes = response_transport_mode;
     await InitAnnonce();
     await InitImport();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitImportRouteKey() async {
+    _isLoading = true;
+    final response = await apiService.getImportRouteKey();
+    _import_route_key = response;
 
     _isLoading = false;
     notifyListeners();

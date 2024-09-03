@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
 
 import 'package:bodah/modals/cargaison_client.dart';
 import 'package:bodah/modals/transport_mode.dart';
+import 'package:bodah/ui/users/expediteur/import/add.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +55,7 @@ class MesImports extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Importations" + transport_modes.length.toString(),
+          "Importations",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -71,10 +73,15 @@ class MesImports extends StatelessWidget {
       ),
       body: imports.isEmpty
           ? Center(
-              child: CircularProgressIndicator(
-                color: MyColors.secondary,
-              ),
-            )
+              child: Text(
+              "Vous n'avez encore pas ajouté d'importations",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "Poppins",
+                  color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14),
+            ))
           : SizedBox(
               height: MediaQuery.of(context).size.height,
               child: ListView.builder(
@@ -83,7 +90,7 @@ class MesImports extends StatelessWidget {
                   itemBuilder: (context, index) {
                     Import import = imports[index];
                     List<Cargaison> cargaisons =
-                        function.import_cargaisons(cargaison, import);
+                        function.import_cargaisons(cargaison, import.id);
                     List<CargaisonClient> cargaison_clients =
                         function.cargaison_cargaison_clients(
                             cargaisons.first, cargaison_client);
@@ -133,12 +140,13 @@ class MesImports extends StatelessWidget {
                         },
                         child: Container(
                           decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   color: user.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
-                                  width: 1,
+                                  width: 0.1,
                                   style: BorderStyle.solid)),
                           child: Padding(
                             padding: const EdgeInsets.only(
@@ -159,7 +167,10 @@ class MesImports extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 10),
+                                          fontSize: 12),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     Text(
                                       mode.nom,
@@ -190,7 +201,10 @@ class MesImports extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 10),
+                                          fontSize: 12),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     Text(
                                       import.reference,
@@ -221,9 +235,38 @@ class MesImports extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 10),
+                                          fontSize: 12),
                                     ),
-                                    position.address_dep!.isEmpty
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    pay_depart.id == 0
+                                        ? Container()
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                              fit: BoxFit.cover,
+                                              height: 15,
+                                              width: 20,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: MyColors.secondary,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                    position.address_dep?.isEmpty ?? true
                                         ? Text(
                                             ville_dep.name +
                                                 " , " +
@@ -238,12 +281,11 @@ class MesImports extends StatelessWidget {
                                                 fontSize: 10),
                                           )
                                         : Text(
-                                            position.address_dep ??
-                                                "" +
-                                                    " , " +
-                                                    ville_dep.name +
-                                                    " , " +
-                                                    pay_depart.name,
+                                            (position.address_dep ?? "") +
+                                                " , " +
+                                                ville_dep.name +
+                                                " , " +
+                                                pay_depart.name,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -252,7 +294,7 @@ class MesImports extends StatelessWidget {
                                                     : MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontSize: 10),
-                                          ),
+                                          )
                                   ],
                                 ),
                                 SizedBox(
@@ -271,9 +313,38 @@ class MesImports extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 10),
+                                          fontSize: 12),
                                     ),
-                                    position.address_liv!.isEmpty
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    pay_dest.id == 0
+                                        ? Container()
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                              fit: BoxFit.cover,
+                                              height: 15,
+                                              width: 20,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: MyColors.secondary,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                    position.address_liv?.isEmpty ?? true
                                         ? Text(
                                             ville_dest.name +
                                                 " , " +
@@ -321,7 +392,10 @@ class MesImports extends StatelessWidget {
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
-                                          fontSize: 10),
+                                          fontSize: 12),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     Text(
                                       function.date(chargement.debut),
@@ -354,39 +428,112 @@ Future<dynamic> ChooseMode(BuildContext context) {
     barrierDismissible: true,
     context: context,
     builder: (BuildContext dialocontext) {
-      final function = Provider.of<Functions>(dialocontext);
       final apiProvider = Provider.of<ApiProvider>(dialocontext);
       List<TransportMode> transport_modes = apiProvider.transport_modes;
 
       return AlertDialog(
-        title: Text(
-          "Mode de transport",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontFamily: "Poppins",
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
-        ),
-        content: ListView.separated(
-            itemBuilder: (context, index) {
-              TransportMode mode = transport_modes[index];
-              return ListTile(
-                title: Text(
-                  mode.nom,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: "Poppins",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-                trailing: Icon(Icons.track_changes),
-              );
-            },
-            separatorBuilder: (context, index) => Divider(),
-            itemCount: transport_modes.length),
-      );
+          title: Container(
+            decoration: BoxDecoration(
+                color: MyColors.secondary,
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Mode de transport",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: MyColors.light,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          content: Container(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height *
+                    0.6), // Limiter la hauteur du dialog
+            child: ListView.builder(
+              shrinkWrap: true, // Ajuste la taille du ListView à son contenu
+              itemBuilder: (context, index) {
+                TransportMode mode = transport_modes[index];
+                return TextButton(
+                  onPressed: () {
+                    Navigator.of(dialocontext).pop();
+
+                    if (mode.id == 1) {
+                      Navigator.of(dialocontext).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return NewImportRoute();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(.4),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10, bottom: 10, left: 7, right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              mode.nom,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ),
+                            mode.id == 1
+                                ? Icon(
+                                    Icons.local_shipping,
+                                    size: 20,
+                                    color: Colors.black.withOpacity(.5),
+                                  )
+                                : mode.id == 2
+                                    ? Icon(
+                                        Icons.sailing,
+                                        size: 20,
+                                        color: Colors.black.withOpacity(.5),
+                                      )
+                                    : Icon(
+                                        Icons.flight,
+                                        size: 20,
+                                        color: Colors.black.withOpacity(.5),
+                                      )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              itemCount: transport_modes.length,
+            ),
+          ));
     },
   );
 }

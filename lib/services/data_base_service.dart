@@ -2835,7 +2835,7 @@ class DBServices {
   Future<List<ChargementEffectue>> getChargementEffectues() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/import/list/transporteur";
+      var url = "${api_url}home/expediteur/import/chargement/effectues";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -2860,7 +2860,7 @@ class DBServices {
   Future<List<LivraisonCargaison>> getLivraisons() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/import/list/livraison";
+      var url = "${api_url}home/expediteur/import/livraison/list";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -2885,7 +2885,7 @@ class DBServices {
   Future<List<Cargaison>> getCargaisons() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/import/list/marchandise";
+      var url = "${api_url}home/expediteur/import/marchandise/list";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -3326,6 +3326,93 @@ class DBServices {
     }
   }
 
+  Future<String> addTransp(
+    String name,
+    String permis,
+    String telephone,
+    String imm,
+    Pays pay_dep,
+    Villes city_dep,
+    Pays pay_liv,
+    Villes city_liv,
+    double tarif,
+    double accompte,
+  ) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/route/publish/transporteur";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['permis'] = permis
+        ..fields['telephone'] = telephone
+        ..fields['imm'] = imm
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> UpdateTransp(
+      String name,
+      String permis,
+      String telephone,
+      String imm,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      double tarif,
+      double accompte,
+      ChargementEffectue chargement_effectue) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/transporteur/update/${chargement_effectue.id}";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['permis'] = permis
+        ..fields['telephone'] = telephone
+        ..fields['imm'] = imm
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> publishMarchandise(
       String date_chargement,
       String nom,
@@ -3438,6 +3525,26 @@ class DBServices {
   Future<String> deleteAnnonce(Annonces annonce) async {
     try {
       var url = "${api_url}home/expediteur/annonce/delete/${annonce.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteChargementEffectue(
+      ChargementEffectue chargement_effectue) async {
+    try {
+      var url =
+          "${api_url}home/expediteur/import/transporteur/delete/${chargement_effectue.id}";
       final uri = Uri.parse(url);
       String? token = await secure.readSecureData('token');
 

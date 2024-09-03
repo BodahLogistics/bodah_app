@@ -1,13 +1,40 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages
 
+import 'package:bodah/modals/camions.dart';
+import 'package:bodah/modals/conducteur.dart';
 import 'package:bodah/modals/pays.dart';
+import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../modals/pieces.dart';
 import '../../../../../services/data_base_service.dart';
 
 class ProvAddTransp with ChangeNotifier {
   final apiService = DBServices();
+
+  void change_transporteur(
+      Conducteur conducteur,
+      Camions camion,
+      Pieces piece,
+      Tarif tarif,
+      Pays pay_dep,
+      Pays pay_dest,
+      Villes ville_dep,
+      Villes ville_dest) {
+    _tarif = tarif.montant;
+    _accompte = tarif.accompte;
+    _solde = tarif.montant - tarif.accompte;
+    _pay_exp = pay_dep;
+    _pay_liv = pay_dest;
+    _ville_exp = ville_dep;
+    _ville_liv = ville_dest;
+    _cond_name = conducteur.nom;
+    _cond_telepehone = conducteur.telephone;
+    _permis = piece.num_piece;
+    _imm = camion.num_immatriculation;
+    notifyListeners();
+  }
 
   void reset() {
     _villes_exp = [];
@@ -15,14 +42,14 @@ class ProvAddTransp with ChangeNotifier {
     _tarif = 0;
     _accompte = 0;
     _solde = 0;
-    _pay_exp = Pays(id: 0, name: "");
-    _ville_exp = Villes(id: 0, name: "", country_id: 0);
+    _pay_exp = Pays(id: 24, name: "");
+    _ville_exp = Villes(id: 9626, name: "", country_id: 0);
     _cond_name = "";
     _cond_telepehone = "";
     _permis = "";
     _imm = "";
-    _pay_liv = Pays(id: 0, name: "");
-    _ville_liv = Villes(id: 0, name: "", country_id: 0);
+    _pay_liv = Pays(id: 24, name: "");
+    _ville_liv = Villes(id: 9626, name: "", country_id: 0);
     _affiche = false;
     notifyListeners();
   }
@@ -37,10 +64,10 @@ class ProvAddTransp with ChangeNotifier {
   double _tarif = 0;
   double _accompte = 0;
   double _solde = 0;
-  Pays _pay_exp = Pays(id: 0, name: "");
-  Villes _ville_exp = Villes(id: 0, name: "", country_id: 0);
-  Pays _pay_liv = Pays(id: 0, name: "");
-  Villes _ville_liv = Villes(id: 0, name: "", country_id: 0);
+  Pays _pay_exp = Pays(id: 24, name: "");
+  Villes _ville_exp = Villes(id: 9626, name: "", country_id: 0);
+  Pays _pay_liv = Pays(id: 24, name: "");
+  Villes _ville_liv = Villes(id: 9626, name: "", country_id: 0);
   bool _affiche = false;
 
   String get immatriculation => _imm;
@@ -82,7 +109,7 @@ class ProvAddTransp with ChangeNotifier {
 
   void change_tarif(String? value) {
     _tarif = value!.isNotEmpty ? double.parse(value) : 0;
-    if (tarif < accompte) {
+    if (tarif >= accompte) {
       _solde = _tarif - _accompte;
     }
     notifyListeners();
@@ -90,7 +117,7 @@ class ProvAddTransp with ChangeNotifier {
 
   void change_accompte(String? value) {
     _accompte = value!.isNotEmpty ? double.parse(value) : 0;
-    if (tarif < accompte) {
+    if (tarif >= accompte) {
       _solde = _tarif - _accompte;
     }
     notifyListeners();

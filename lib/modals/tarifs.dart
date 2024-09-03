@@ -8,14 +8,13 @@ class Tarif {
   final double accompte;
   final String modele_type;
   final int modele_id;
-  final int deleted;
+
   Tarif({
     required this.id,
     required this.montant,
     required this.accompte,
     required this.modele_type,
     required this.modele_id,
-    required this.deleted,
   });
 
   Tarif copyWith({
@@ -24,7 +23,6 @@ class Tarif {
     double? accompte,
     String? modele_type,
     int? modele_id,
-    int? deleted,
   }) {
     return Tarif(
       id: id ?? this.id,
@@ -32,7 +30,6 @@ class Tarif {
       accompte: accompte ?? this.accompte,
       modele_type: modele_type ?? this.modele_type,
       modele_id: modele_id ?? this.modele_id,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -43,18 +40,20 @@ class Tarif {
       'accompte': accompte,
       'modele_type': modele_type,
       'modele_id': modele_id,
-      'deleted': deleted,
     };
   }
 
   factory Tarif.fromMap(Map<String, dynamic> map) {
     return Tarif(
       id: map['id'] as int,
-      montant: map['montant'] as double,
-      accompte: map['accompte'] as double,
+      montant: map['montant'] is String
+          ? double.tryParse(map['montant']) ?? 0.0
+          : map['montant'] as double,
+      accompte: map['accompte'] is String
+          ? double.tryParse(map['accompte']) ?? 0.0
+          : map['accompte'] as double,
       modele_type: map['modele_type'] as String,
       modele_id: map['modele_id'] as int,
-      deleted: map['deleted'] as int,
     );
   }
 
@@ -65,7 +64,7 @@ class Tarif {
 
   @override
   String toString() {
-    return 'Tarif(id: $id, montant: $montant, accompte: $accompte, modele_type: $modele_type, modele_id: $modele_id, deleted: $deleted)';
+    return 'Tarif(id: $id, montant: $montant, accompte: $accompte, modele_type: $modele_type, modele_id: $modele_id)';
   }
 
   @override
@@ -76,8 +75,7 @@ class Tarif {
         other.montant == montant &&
         other.accompte == accompte &&
         other.modele_type == modele_type &&
-        other.modele_id == modele_id &&
-        other.deleted == deleted;
+        other.modele_id == modele_id;
   }
 
   @override
@@ -86,7 +84,6 @@ class Tarif {
         montant.hashCode ^
         accompte.hashCode ^
         modele_type.hashCode ^
-        modele_id.hashCode ^
-        deleted.hashCode;
+        modele_id.hashCode;
   }
 }

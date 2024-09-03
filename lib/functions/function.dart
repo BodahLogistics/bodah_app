@@ -7,12 +7,15 @@ import 'package:bodah/modals/avds.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
+import 'package:bodah/modals/chargement_effectues.dart';
 import 'package:bodah/modals/client.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
+import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/lta.dart';
+import 'package:bodah/modals/pieces.dart';
 import 'package:bodah/modals/positions.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tarifications.dart';
@@ -36,6 +39,7 @@ import '../modals/cargaison_client.dart';
 import '../modals/cartificat_origine.dart';
 import '../modals/chargement.dart';
 import '../modals/charges.dart';
+import '../modals/conducteur.dart';
 import '../modals/entite_factures.dart';
 import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
@@ -323,15 +327,9 @@ class Functions {
   Tarif charge_tarif(List<Tarif> tarifs, Charge charge) {
     return tarifs.firstWhere(
       (data) =>
-          data.modele_id == charge.id &&
-          data.modele_type == "App\Models\Charge",
-      orElse: () => Tarif(
-          id: 0,
-          montant: 0,
-          accompte: 0,
-          modele_type: "",
-          modele_id: 0,
-          deleted: 0),
+          data.modele_id == charge.id && data.modele_type.contains("Charge"),
+      orElse: () =>
+          Tarif(id: 0, montant: 0, accompte: 0, modele_type: "", modele_id: 0),
     );
   }
 
@@ -411,34 +409,68 @@ class Functions {
     );
   }
 
-  List<Cargaison> import_cargaisons(List<Cargaison> cargaisons, Import import) {
-    return cargaisons.isEmpty
-        ? [
-            Cargaison(
-                id: 0,
-                reference: "",
-                modele_type: "",
-                modele_id: 0,
-                nom: "",
-                deleted: 0)
-          ]
-        : cargaisons
-            .where((data) =>
-                data.modele_type == "App\Models\Import" &&
-                data.modele_id == import.id)
-            .toList();
+  List<Cargaison> import_cargaisons(List<Cargaison> cargaisons, int id) {
+    List<Cargaison> datas = cargaisons
+        .where((data) =>
+            data.modele_type.contains("Import") && data.modele_id == id)
+        .toList();
+    return datas;
+  }
+
+  List<ChargementEffectue> import_chargemnt_effectues(
+      List<ChargementEffectue> chargements, int id) {
+    List<ChargementEffectue> datas = chargements
+        .where((data) =>
+            data.modele_type.contains("Import") && data.modele_id == id)
+        .toList();
+    return datas;
+  }
+
+  List<LivraisonCargaison> import_livraisons(
+      List<LivraisonCargaison> livraisons, int id) {
+    List<LivraisonCargaison> datas = livraisons
+        .where((data) =>
+            data.modele_type.contains("Import") && data.modele_id == id)
+        .toList();
+    return datas;
+  }
+
+  Pieces conducteur_piece(List<Pieces> pieces, Conducteur conducteur) {
+    return pieces.firstWhere(
+      (data) => data.modele_id == conducteur.id,
+      orElse: () => Pieces(id: 0, num_piece: "", modele_id: 0, modele_type: ""),
+    );
+  }
+
+  Camions chargement_camion(
+      List<Camions> camions, ChargementEffectue chargement_effectue) {
+    return camions.firstWhere(
+      (data) => data.id == chargement_effectue.vehicule_id,
+      orElse: () => Camions(id: 0, num_immatriculation: "", modele_type: ""),
+    );
+  }
+
+  Conducteur chargement_chauffeur(
+      List<Conducteur> conducteurs, ChargementEffectue chargement_effectue) {
+    return conducteurs.firstWhere(
+      (data) => data.id == chargement_effectue.conducteur_id,
+      orElse: () => Conducteur(
+          id: 0,
+          reference: "",
+          nom: "",
+          telephone: "",
+          country_id: 0,
+          deleted: 0),
+    );
   }
 
   List<CargaisonClient> cargaison_cargaison_clients(
       Cargaison cargaison, List<CargaisonClient> cargaison_clients) {
-    return cargaison_clients.isEmpty
-        ? [
-            CargaisonClient(
-                id: 0, client_id: 0, cargaison_id: 0, quantite: 0, deleted: 0)
-          ]
-        : cargaison_clients
-            .where((data) => data.cargaison_id == cargaison.id)
-            .toList();
+    List<CargaisonClient> datas = cargaison_clients
+        .where((data) => data.cargaison_id == cargaison.id)
+        .toList();
+
+    return datas;
   }
 
   Client client(List<Client> clients, int id) {
@@ -458,7 +490,7 @@ class Functions {
       List<Position> positions, CargaisonClient cargaison_client) {
     return positions.firstWhere(
       (data) =>
-          data.modele_type == "App\Models\CargaisonClient" &&
+          data.modele_type.contains("CargaisonClient") &&
           data.modele_id == cargaison_client.id,
       orElse: () => Position(
           id: 0,
@@ -472,11 +504,44 @@ class Functions {
     );
   }
 
+  Position chargement_effectue_position(
+      List<Position> positions, ChargementEffectue chargement_effectue) {
+    return positions.firstWhere(
+      (data) =>
+          data.modele_type.contains("ChargementEffectue") &&
+          data.modele_id == chargement_effectue.id,
+      orElse: () => Position(
+          id: 0,
+          pay_dep_id: 0,
+          pay_liv_id: 0,
+          city_dep_id: 0,
+          city_liv_id: 0,
+          modele_id: 0,
+          modele_type: "",
+          deleted: 0),
+    );
+  }
+
+  Tarif chargement_effectue_tarif(
+      List<Tarif> tarifs, ChargementEffectue chargement_effecue) {
+    return tarifs.firstWhere(
+        (data) =>
+            data.modele_type.contains("ChargementEffectue") &&
+            data.modele_id == chargement_effecue.id,
+        orElse: () => Tarif(
+              id: 0,
+              montant: 0,
+              accompte: 0,
+              modele_type: "",
+              modele_id: 0,
+            ));
+  }
+
   Chargement cargaison_client_chargement(
       List<Chargement> chargements, CargaisonClient cargaison_client) {
     return chargements.firstWhere(
         (data) =>
-            data.modele_type == "App\Models\CargaisonClient" &&
+            data.modele_type.contains("CargaisonClient") &&
             data.modele_id == cargaison_client.id,
         orElse: () => Chargement(
             id: 0, modele_id: 0, modele_type: "", debut: DateTime.now()));

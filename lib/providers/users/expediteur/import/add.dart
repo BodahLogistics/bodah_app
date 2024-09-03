@@ -108,7 +108,7 @@ class ProvAddImport with ChangeNotifier {
 
   void change_tarif(String? value) {
     _tarif = value!.isNotEmpty ? double.parse(value) : 0;
-    if (tarif < accompte) {
+    if (tarif >= accompte) {
       _solde = _tarif - _accompte;
     }
     notifyListeners();
@@ -116,7 +116,7 @@ class ProvAddImport with ChangeNotifier {
 
   void change_accompte(String? value) {
     _accompte = value!.isNotEmpty ? double.parse(value) : 0;
-    if (tarif < accompte) {
+    if (tarif >= accompte) {
       _solde = _tarif - _accompte;
     }
     notifyListeners();

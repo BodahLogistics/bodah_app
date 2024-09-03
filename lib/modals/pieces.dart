@@ -3,30 +3,30 @@ import 'dart:convert';
 
 class Pieces {
   final int id;
-  final String num_piace;
-  final int? type_piece_id;
+  final String num_piece;
   final int modele_id;
+  final int? type_piece_id;
   final String modele_type;
   Pieces({
     required this.id,
-    required this.num_piace,
-    required this.type_piece_id,
+    required this.num_piece,
     required this.modele_id,
+    this.type_piece_id,
     required this.modele_type,
   });
 
   Pieces copyWith({
     int? id,
-    String? num_piace,
-    int? type_piece_id,
+    String? num_piece,
     int? modele_id,
+    int? type_piece_id,
     String? modele_type,
   }) {
     return Pieces(
       id: id ?? this.id,
-      num_piace: num_piace ?? this.num_piace,
-      type_piece_id: type_piece_id ?? this.type_piece_id,
+      num_piece: num_piece ?? this.num_piece,
       modele_id: modele_id ?? this.modele_id,
+      type_piece_id: type_piece_id ?? this.type_piece_id,
       modele_type: modele_type ?? this.modele_type,
     );
   }
@@ -34,9 +34,9 @@ class Pieces {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'num_piace': num_piace,
-      'type_piece_id': type_piece_id,
+      'num_piece': num_piece,
       'modele_id': modele_id,
+      'type_piece_id': type_piece_id,
       'modele_type': modele_type,
     };
   }
@@ -44,10 +44,10 @@ class Pieces {
   factory Pieces.fromMap(Map<String, dynamic> map) {
     return Pieces(
       id: map['id'] as int,
-      num_piace: map['num_piace'] as String,
+      num_piece: map['num_piece'] as String,
+      modele_id: map['modele_id'] as int,
       type_piece_id:
           map['type_piece_id'] != null ? map['type_piece_id'] as int : null,
-      modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
     );
   }
@@ -59,7 +59,7 @@ class Pieces {
 
   @override
   String toString() {
-    return 'Pieces(id: $id, num_piace: $num_piace, type_piece_id: $type_piece_id, modele_id: $modele_id, modele_type: $modele_type)';
+    return 'Pieces(id: $id, num_piece: $num_piece, modele_id: $modele_id, type_piece_id: $type_piece_id, modele_type: $modele_type)';
   }
 
   @override
@@ -67,18 +67,18 @@ class Pieces {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.num_piace == num_piace &&
-        other.type_piece_id == type_piece_id &&
+        other.num_piece == num_piece &&
         other.modele_id == modele_id &&
+        other.type_piece_id == type_piece_id &&
         other.modele_type == modele_type;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        num_piace.hashCode ^
-        type_piece_id.hashCode ^
+        num_piece.hashCode ^
         modele_id.hashCode ^
+        type_piece_id.hashCode ^
         modele_type.hashCode;
   }
 }
