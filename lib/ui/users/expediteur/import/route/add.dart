@@ -1631,7 +1631,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>

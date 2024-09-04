@@ -923,9 +923,10 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                     )
                                   : Container(),
                               SizedBox(
-                                height: 40,
+                                height: 60,
                                 child: TextField(
                                   controller: Bl,
+                                  maxLength: 14,
                                   onChanged: (value) =>
                                       provider.change_bl(value),
                                   decoration: InputDecoration(
@@ -1006,9 +1007,10 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                     )
                                   : Container(),
                               SizedBox(
-                                height: 40,
+                                height: 60,
                                 child: TextField(
                                   controller: Conteneur,
+                                  maxLength: 15,
                                   onChanged: (value) =>
                                       provider.change_conteneur(value),
                                   decoration: InputDecoration(
@@ -1075,7 +1077,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1536,7 +1538,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>

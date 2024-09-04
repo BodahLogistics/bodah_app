@@ -923,9 +923,10 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                     )
                                   : Container(),
                               SizedBox(
-                                height: 40,
+                                height: 60,
                                 child: TextField(
                                   controller: Lta,
+                                  maxLength: 15,
                                   onChanged: (value) =>
                                       provider.change_lta(value),
                                   decoration: InputDecoration(
@@ -1006,9 +1007,10 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                     )
                                   : Container(),
                               SizedBox(
-                                height: 40,
+                                height: 60,
                                 child: TextField(
                                   controller: NumeroMarchandise,
+                                  maxLength: 15,
                                   onChanged: (value) =>
                                       provider.change_numero_marchandise(value),
                                   decoration: InputDecoration(
@@ -1076,7 +1078,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1537,7 +1539,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>
