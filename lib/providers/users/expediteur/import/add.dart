@@ -54,10 +54,10 @@ class ProvAddImport with ChangeNotifier {
   int _quantite = 0;
   String _date_debut = DateFormat("yyyy-MM-dd").format(DateTime.now());
   String _date_fin = "";
-  Pays _pay_exp = Pays(id: 0, name: "");
-  Villes _ville_exp = Villes(id: 0, name: "", country_id: 0);
-  Pays _pay_liv = Pays(id: 0, name: "");
-  Villes _ville_liv = Villes(id: 0, name: "", country_id: 0);
+  Pays _pay_exp = Pays(id: 24, name: "");
+  Villes _ville_exp = Villes(id: 9626, name: "", country_id: 0);
+  Pays _pay_liv = Pays(id: 24, name: "");
+  Villes _ville_liv = Villes(id: 9626, name: "", country_id: 0);
   bool _affiche = false;
 
   String get observation => _obs;

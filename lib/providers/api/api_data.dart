@@ -265,6 +265,13 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  int _data_id = 0;
+  int get data_id => _data_id;
+  void change_data_id(int id) {
+    _data_id = id;
+    notifyListeners();
+  }
+
   Future<void> InitLivraison() async {
     _isLoading = true;
     final response_livraison = await apiService.getLivraisons();

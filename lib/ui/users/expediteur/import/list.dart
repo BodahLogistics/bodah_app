@@ -3,7 +3,7 @@
 import 'package:bodah/modals/cargaison_client.dart';
 import 'package:bodah/modals/transport_mode.dart';
 import 'package:bodah/ui/users/expediteur/import/add.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
+import 'package:bodah/ui/users/expediteur/import/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +110,7 @@ class MesImports extends StatelessWidget {
                         transport_modes, import.transport_mode_id);
 
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 0),
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
@@ -119,8 +119,8 @@ class MesImports extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return DetailAnnonce(
-                                  id: import.id,
+                                return DetailImport(
+                                  import_id: import.id,
                                 );
                               },
                               transitionsBuilder: (BuildContext context,
@@ -172,16 +172,18 @@ class MesImports extends StatelessWidget {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      mode.nom,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: user.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.textColor,
-                                          fontFamily: "Poppins",
-                                          fontSize: 10),
+                                    Expanded(
+                                      child: Text(
+                                        mode.nom,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 10),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -206,16 +208,18 @@ class MesImports extends StatelessWidget {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      import.reference,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: user.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.textColor,
-                                          fontFamily: "Poppins",
-                                          fontSize: 10),
+                                    Expanded(
+                                      child: Text(
+                                        import.reference,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 10),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -267,33 +271,37 @@ class MesImports extends StatelessWidget {
                                             ),
                                           ),
                                     position.address_dep?.isEmpty ?? true
-                                        ? Text(
-                                            ville_dep.name +
-                                                " , " +
-                                                pay_depart.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 10),
+                                        ? Expanded(
+                                            child: Text(
+                                              ville_dep.name +
+                                                  " , " +
+                                                  pay_depart.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 10),
+                                            ),
                                           )
-                                        : Text(
-                                            (position.address_dep ?? "") +
-                                                " , " +
-                                                ville_dep.name +
-                                                " , " +
-                                                pay_depart.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 10),
+                                        : Expanded(
+                                            child: Text(
+                                              (position.address_dep ?? "") +
+                                                  " , " +
+                                                  ville_dep.name +
+                                                  " , " +
+                                                  pay_depart.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 10),
+                                            ),
                                           )
                                   ],
                                 ),
@@ -345,34 +353,38 @@ class MesImports extends StatelessWidget {
                                             ),
                                           ),
                                     position.address_liv?.isEmpty ?? true
-                                        ? Text(
-                                            ville_dest.name +
-                                                " , " +
-                                                pay_dest.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 10),
+                                        ? Expanded(
+                                            child: Text(
+                                              ville_dest.name +
+                                                  " , " +
+                                                  pay_dest.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 10),
+                                            ),
                                           )
-                                        : Text(
-                                            position.address_liv ??
-                                                "" +
-                                                    " , " +
-                                                    ville_dest.name +
-                                                    " , " +
-                                                    pay_dest.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 10),
+                                        : Expanded(
+                                            child: Text(
+                                              position.address_liv ??
+                                                  "" +
+                                                      " , " +
+                                                      ville_dest.name +
+                                                      " , " +
+                                                      pay_dest.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 10),
+                                            ),
                                           ),
                                   ],
                                 ),
@@ -397,16 +409,18 @@ class MesImports extends StatelessWidget {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      function.date(chargement.debut),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: user.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.textColor,
-                                          fontFamily: "Poppins",
-                                          fontSize: 10),
+                                    Expanded(
+                                      child: Text(
+                                        function.date(chargement.debut),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 10),
+                                      ),
                                     ),
                                   ],
                                 ),
