@@ -2,8 +2,9 @@
 
 import 'package:bodah/modals/cargaison_client.dart';
 import 'package:bodah/modals/transport_mode.dart';
-import 'package:bodah/ui/users/expediteur/import/add.dart';
+import 'package:bodah/ui/users/expediteur/import/aerien/add.dart';
 import 'package:bodah/ui/users/expediteur/import/details/index.dart';
+import 'package:bodah/ui/users/expediteur/import/maritime/add.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ import '../../../../modals/import.dart';
 import '../../../../modals/positions.dart';
 import '../drawer/index.dart';
 import '../marchandises/nav_bottom/index.dart';
+import 'route/add.dart';
 
 class MesImports extends StatelessWidget {
   const MesImports({super.key});
@@ -483,6 +485,52 @@ Future<dynamic> ChooseMode(BuildContext context) {
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
                             return NewImportRoute();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    } else if (mode.id == 2) {
+                      Navigator.of(dialocontext).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return NewImportMaritime();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      Navigator.of(dialocontext).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return NewImportAerien();
                           },
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,

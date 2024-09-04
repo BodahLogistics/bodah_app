@@ -16,23 +16,23 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../colors/color.dart';
-import '../../../../functions/function.dart';
-import '../../../../modals/cargaison.dart';
-import '../../../../modals/cargaison_client.dart';
-import '../../../../modals/chargement.dart';
-import '../../../../modals/client.dart';
-import '../../../../modals/pays.dart';
-import '../../../../modals/positions.dart';
-import '../../../../modals/users.dart';
-import '../../../../modals/villes.dart';
-import '../../../../providers/api/api_data.dart';
-import '../../../../providers/users/expediteur/import/add.dart';
-import '../../../../providers/users/expediteur/import/liv/add.dart';
-import '../../../../providers/users/expediteur/import/march/add.dart';
-import '../../../../services/data_base_service.dart';
-import '../drawer/index.dart';
-import '../marchandises/nav_bottom/index.dart';
+import '../../../../../colors/color.dart';
+import '../../../../../functions/function.dart';
+import '../../../../../modals/cargaison.dart';
+import '../../../../../modals/cargaison_client.dart';
+import '../../../../../modals/chargement.dart';
+import '../../../../../modals/client.dart';
+import '../../../../../modals/pays.dart';
+import '../../../../../modals/positions.dart';
+import '../../../../../modals/users.dart';
+import '../../../../../modals/villes.dart';
+import '../../../../../providers/api/api_data.dart';
+import '../../../../../providers/users/expediteur/import/liv/add.dart';
+import '../../../../../providers/users/expediteur/import/march/add.dart';
+import '../../../../../providers/users/expediteur/import/routes/add.dart';
+import '../../../../../services/data_base_service.dart';
+import '../../drawer/index.dart';
+import '../../marchandises/nav_bottom/index.dart';
 
 class NewImportRoute extends StatefulWidget {
   NewImportRoute({super.key});
@@ -63,6 +63,9 @@ class _NewImportRouteState extends State<NewImportRoute> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.change_affiche(false);
       Provider.of<ApiProvider>(context, listen: false).InitImportData();
+      Provider.of<ProvAddMarch>(context, listen: false).reset();
+      Provider.of<ProvAddTransp>(context, listen: false).reset();
+      Provider.of<ProvAddLiv>(context, listen: false).reset();
     });
   }
 
@@ -2581,7 +2584,8 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                               pay_liv,
                               ville_liv,
                               tarif,
-                              accompte);
+                              accompte,
+                              import_id);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -3437,7 +3441,8 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                               ville_exp,
                               pay_liv,
                               ville_liv,
-                              quantite);
+                              quantite,
+                              import_id);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -4092,7 +4097,8 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                               ville,
                               adresse,
                               quantite,
-                              sup);
+                              sup,
+                              import_id);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
