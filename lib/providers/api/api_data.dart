@@ -241,6 +241,10 @@ class ApiProvider with ChangeNotifier {
     _positions = response_position;
     final response_chargement = await apiService.getChargements();
     _chargements = response_chargement;
+    final response_livraison = await apiService.getLivraisons();
+    _livraisons = response_livraison;
+    final response_client = await apiService.getClients();
+    _clients = response_client;
     _isLoading = false;
     notifyListeners();
   }
@@ -257,6 +261,20 @@ class ApiProvider with ChangeNotifier {
     _positions = response_position;
     final response_chargement = await apiService.getChargements();
     _chargements = response_chargement;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitLivraison() async {
+    _isLoading = true;
+    final response_livraison = await apiService.getLivraisons();
+    _livraisons = response_livraison;
+    final response_cargaison = await apiService.getCargaisons();
+    _cargaisons = response_cargaison;
+    final response_ville = await apiService.getAllVilles();
+    _villes = response_ville;
+    final response_client = await apiService.getClients();
+    _clients = response_client;
     _isLoading = false;
     notifyListeners();
   }

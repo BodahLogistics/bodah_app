@@ -537,6 +537,17 @@ class Functions {
             ));
   }
 
+  Cargaison cargaison(List<Cargaison> cargaisons, int id) {
+    return cargaisons.firstWhere((data) => data.id == id,
+        orElse: () => Cargaison(
+            id: 0,
+            reference: "",
+            modele_type: "",
+            modele_id: 0,
+            nom: "",
+            deleted: 0));
+  }
+
   Chargement cargaison_client_chargement(
       List<Chargement> chargements, CargaisonClient cargaison_client) {
     return chargements.firstWhere(

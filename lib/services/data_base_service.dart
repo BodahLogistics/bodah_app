@@ -3449,6 +3449,46 @@ class DBServices {
     }
   }
 
+  Future<String> updateLiv(
+      Cargaison cargaison,
+      String name,
+      String telephone,
+      Pays pay,
+      Villes city,
+      String adresse,
+      int quantite,
+      String superviseur,
+      LivraisonCargaison livraison) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/import/livraison/update/${livraison.id}";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['march'] = cargaison.id.toString()
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['address'] = adresse
+        ..fields['sup'] = superviseur
+        ..fields['city'] = city.id.toString()
+        ..fields['pay'] = pay.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> UpdateMarch(
       String marchandise,
       String date_debut,
@@ -3669,6 +3709,25 @@ class DBServices {
     try {
       var url =
           "${api_url}home/expediteur/import/transporteur/delete/${chargement_effectue.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteLiv(LivraisonCargaison livraison) async {
+    try {
+      var url =
+          "${api_url}home/expediteur/import/livraison/delete/${livraison.id}";
       final uri = Uri.parse(url);
       String? token = await secure.readSecureData('token');
 

@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages
 
 import 'package:bodah/modals/cargaison.dart';
+import 'package:bodah/modals/client.dart';
+import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,19 @@ import '../../../../../services/data_base_service.dart';
 
 class ProvAddLiv with ChangeNotifier {
   final apiService = DBServices();
+
+  void change_livraison(LivraisonCargaison livraison, Cargaison cargaison,
+      Client client, Pays pay, Villes ville) {
+    _pay = pay;
+    _ville = ville;
+    _adresse = livraison.address;
+    _telepehone = client.telephone;
+    _name = client.nom;
+    _marchandise = cargaison;
+    _quantite = livraison.quantite;
+    _superviseur = livraison.superviseur ?? "";
+    notifyListeners();
+  }
 
   void reset() {
     _adresse = "";

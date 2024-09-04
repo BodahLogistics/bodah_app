@@ -50,7 +50,7 @@ class Client {
     return Client(
       id: map['id'] as int,
       reference: map['reference'] as String,
-      nom: map['nom'] as String,
+      nom: map['nom'] != null ? map['nom'] as String : "",
       telephone: map['telephone'] as String,
       country_id: map['country_id'] as int,
       deleted: map['deleted'] as int,

@@ -11,9 +11,9 @@ class LivraisonCargaison {
   final int client_id;
   final int cargaison_id;
   final int deleted;
-  final DateTime? date;
   final String modele_type;
   final int modele_id;
+  final String? superviseur;
   LivraisonCargaison({
     required this.id,
     required this.reference,
@@ -24,9 +24,9 @@ class LivraisonCargaison {
     required this.client_id,
     required this.cargaison_id,
     required this.deleted,
-    this.date,
     required this.modele_type,
     required this.modele_id,
+    this.superviseur,
   });
 
   LivraisonCargaison copyWith({
@@ -39,9 +39,9 @@ class LivraisonCargaison {
     int? client_id,
     int? cargaison_id,
     int? deleted,
-    DateTime? date,
     String? modele_type,
     int? modele_id,
+    String? superviseur,
   }) {
     return LivraisonCargaison(
       id: id ?? this.id,
@@ -53,9 +53,9 @@ class LivraisonCargaison {
       client_id: client_id ?? this.client_id,
       cargaison_id: cargaison_id ?? this.cargaison_id,
       deleted: deleted ?? this.deleted,
-      date: date ?? this.date,
       modele_type: modele_type ?? this.modele_type,
       modele_id: modele_id ?? this.modele_id,
+      superviseur: superviseur ?? this.superviseur,
     );
   }
 
@@ -70,9 +70,9 @@ class LivraisonCargaison {
       'client_id': client_id,
       'cargaison_id': cargaison_id,
       'deleted': deleted,
-      'date': date?.millisecondsSinceEpoch,
       'modele_type': modele_type,
       'modele_id': modele_id,
+      'superviseur': superviseur,
     };
   }
 
@@ -87,11 +87,10 @@ class LivraisonCargaison {
       client_id: map['client_id'] as int,
       cargaison_id: map['cargaison_id'] as int,
       deleted: map['deleted'] as int,
-      date: map['date'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date'] as int)
-          : null,
       modele_type: map['modele_type'] as String,
       modele_id: map['modele_id'] as int,
+      superviseur:
+          map['superviseur'] != null ? map['superviseur'] as String : null,
     );
   }
 
@@ -102,7 +101,7 @@ class LivraisonCargaison {
 
   @override
   String toString() {
-    return 'LivraisonCargaison(id: $id, reference: $reference, country_id: $country_id, city_id: $city_id, address: $address, quantite: $quantite, client_id: $client_id, cargaison_id: $cargaison_id, deleted: $deleted, date: $date, modele_type: $modele_type, modele_id: $modele_id)';
+    return 'LivraisonCargaison(id: $id, reference: $reference, country_id: $country_id, city_id: $city_id, address: $address, quantite: $quantite, client_id: $client_id, cargaison_id: $cargaison_id, deleted: $deleted, modele_type: $modele_type, modele_id: $modele_id, superviseur: $superviseur)';
   }
 
   @override
@@ -118,9 +117,9 @@ class LivraisonCargaison {
         other.client_id == client_id &&
         other.cargaison_id == cargaison_id &&
         other.deleted == deleted &&
-        other.date == date &&
         other.modele_type == modele_type &&
-        other.modele_id == modele_id;
+        other.modele_id == modele_id &&
+        other.superviseur == superviseur;
   }
 
   @override
@@ -134,8 +133,8 @@ class LivraisonCargaison {
         client_id.hashCode ^
         cargaison_id.hashCode ^
         deleted.hashCode ^
-        date.hashCode ^
         modele_type.hashCode ^
-        modele_id.hashCode;
+        modele_id.hashCode ^
+        superviseur.hashCode;
   }
 }
