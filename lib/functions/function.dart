@@ -13,6 +13,7 @@ import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
+import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/pieces.dart';
@@ -409,28 +410,29 @@ class Functions {
     );
   }
 
-  List<Cargaison> import_cargaisons(List<Cargaison> cargaisons, int id) {
+  List<Cargaison> data_cargaisons(
+      List<Cargaison> cargaisons, int id, String modele) {
     List<Cargaison> datas = cargaisons
-        .where((data) =>
-            data.modele_type.contains("Import") && data.modele_id == id)
+        .where(
+            (data) => data.modele_type.contains(modele) && data.modele_id == id)
         .toList();
     return datas;
   }
 
-  List<ChargementEffectue> import_chargemnt_effectues(
-      List<ChargementEffectue> chargements, int id) {
+  List<ChargementEffectue> data_chargemnt_effectues(
+      List<ChargementEffectue> chargements, int id, String modele) {
     List<ChargementEffectue> datas = chargements
-        .where((data) =>
-            data.modele_type.contains("Import") && data.modele_id == id)
+        .where(
+            (data) => data.modele_type.contains(modele) && data.modele_id == id)
         .toList();
     return datas;
   }
 
-  List<LivraisonCargaison> import_livraisons(
-      List<LivraisonCargaison> livraisons, int id) {
+  List<LivraisonCargaison> data_livraisons(
+      List<LivraisonCargaison> livraisons, int id, String modele) {
     List<LivraisonCargaison> datas = livraisons
-        .where((data) =>
-            data.modele_type.contains("Import") && data.modele_id == id)
+        .where(
+            (data) => data.modele_type.contains(modele) && data.modele_id == id)
         .toList();
     return datas;
   }
@@ -562,6 +564,18 @@ class Functions {
     return imports.firstWhere(
       (data) => data.id == id,
       orElse: () => Import(
+          id: id,
+          reference: "",
+          transport_mode_id: 0,
+          expediteur_id: 0,
+          deleted: 0),
+    );
+  }
+
+  Exports export(List<Exports> exports, int id) {
+    return exports.firstWhere(
+      (data) => data.id == id,
+      orElse: () => Exports(
           id: id,
           reference: "",
           transport_mode_id: 0,

@@ -1,14 +1,15 @@
 // ignore_for_file: use_super_parameters, prefer_const_constructors, non_constant_identifier_names, unrelated_type_equality_checks
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../colors/color.dart';
-import '../providers/api/api_data.dart';
-import 'package:bodah/ui/auth/sign_in.dart';
-import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
-import '../ui/users/transporteur/dashboard/index.dart';
 import 'package:bodah/functions/function.dart';
 import 'package:bodah/modals/rules.dart';
+import 'package:bodah/ui/auth/sign_in.dart';
+import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
+import 'package:bodah/wrappers/load.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/api/api_data.dart';
+import '../ui/users/transporteur/dashboard/index.dart';
 
 class Wrappers extends StatefulWidget {
   const Wrappers({Key? key}) : super(key: key);
@@ -31,13 +32,7 @@ class _WrappersState extends State<Wrappers> {
     bool loading = apiProvider.loading;
 
     if (loading) {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            color: MyColors.secondary,
-          ),
-        ),
-      );
+      return LoadingPage();
     }
 
     final user = apiProvider.user;

@@ -392,7 +392,7 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
                                       onChanged: (String? selectedType) {
                                         if (selectedType != null) {
                                           final ville_selected =
-                                              villes_livraison.firstWhere(
+                                              villes_expedition.firstWhere(
                                             (element) =>
                                                 element.name == selectedType,
                                             orElse: () => Villes(

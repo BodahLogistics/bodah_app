@@ -30,6 +30,9 @@ import 'functions/function.dart';
 import 'providers/auth/prov_reset_password.dart';
 import 'providers/auth/prov_sign_in.dart';
 import 'providers/auth/prov_sign_up.dart';
+import 'providers/users/expediteur/export/aerien/add.dart';
+import 'providers/users/expediteur/export/maritime/add.dart';
+import 'providers/users/expediteur/export/routes/add.dart';
 import 'providers/users/expediteur/import/routes/add.dart';
 import 'providers/users/expediteur/marchandises/nav_bottom/index.dart';
 import 'services/data_base_service.dart';
@@ -110,10 +113,19 @@ class MyApp extends StatelessWidget {
           create: (context) => ProvAddImport(),
         ),
         ChangeNotifierProvider(
+          create: (context) => ProvAddExport(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => ProvAddImportMaritime(),
         ),
         ChangeNotifierProvider(
+          create: (context) => ProvAddExportMaritime(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => ProvAddImportAerien(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddExportAerien(),
         ),
         ChangeNotifierProvider(
           create: (context) => ProvAddMarch(),

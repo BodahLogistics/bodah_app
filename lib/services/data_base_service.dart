@@ -2566,6 +2566,29 @@ class DBServices {
     }
   }
 
+  Future<List<Exports>> getExports() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/list";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Exports.fromMap(json)).toList();
+      } else {
+        return <Exports>[];
+      }
+    } catch (error) {
+      return <Exports>[];
+    }
+  }
+
   Future<List<TransportMode>> getTransportMode() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -2593,6 +2616,41 @@ class DBServices {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/import/route/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  Future<int> getExportRouteKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/route/key";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -2659,10 +2717,80 @@ class DBServices {
     }
   }
 
+  Future<int> getExportMaritimeKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/maritime/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
   Future<int> getImportAerienKey() async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/import/aerien/key";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        // Vérifier et convertir en int si possible
+        if (data is int) {
+          return data;
+        } else if (data is String && int.tryParse(data) != null) {
+          return int.parse(data);
+        } else if (data is Map && data['key'] != null) {
+          return data['key'] is int
+              ? data['key']
+              : int.tryParse(data['key'].toString()) ?? 0;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  Future<int> getExportAerienKey() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/aerien/key";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -3370,6 +3498,50 @@ class DBServices {
     }
   }
 
+  Future<String> addTranspExport(
+      String name,
+      String permis,
+      String telephone,
+      String imm,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      double tarif,
+      double accompte,
+      int import_id) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/transporteur/publish/$import_id";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['permis'] = permis
+        ..fields['telephone'] = telephone
+        ..fields['imm'] = imm
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> addImportRoute(
       String client_name,
       String permis,
@@ -3391,6 +3563,76 @@ class DBServices {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/import/route/publish";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['march'] = marchandise
+        ..fields['permis'] = permis
+        ..fields['cl_name'] = client_name
+        ..fields['cl_telephone'] = client_telephone
+        ..fields['ch_name'] = conducteur_name
+        ..fields['ch_telephone'] = conducteur_telephone
+        ..fields['imm'] = imm
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['qte'] = quantite.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        if (data is int) {
+          api_provider.change_data_id(data);
+        } else if (data is String && int.tryParse(data) != null) {
+          api_provider.change_data_id(int.parse(data));
+        } else if (data is Map && data['key'] != null) {
+          data['key'] is int
+              ? api_provider.change_data_id(data['key'])
+              : api_provider
+                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> addExportRoute(
+      String client_name,
+      String permis,
+      String client_telephone,
+      String imm,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      double tarif,
+      double accompte,
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      String conducteur_name,
+      String conducteur_telephone,
+      int quantite,
+      ApiProvider api_provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/route/publish";
       final uri = Uri.parse(url);
 
       var request = http.MultipartRequest('POST', uri)
@@ -3506,6 +3748,72 @@ class DBServices {
     }
   }
 
+  Future<String> addExportMaritime(
+      String client_name,
+      String bl,
+      String conteneur,
+      String client_telephone,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      double tarif,
+      double accompte,
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      int quantite,
+      ApiProvider api_provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/maritime/publish";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['march'] = marchandise
+        ..fields['bl'] = bl
+        ..fields['name'] = client_name
+        ..fields['telephone'] = client_telephone
+        ..fields['ref'] = conteneur
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['qte'] = quantite.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        if (data is int) {
+          api_provider.change_data_id(data);
+        } else if (data is String && int.tryParse(data) != null) {
+          api_provider.change_data_id(int.parse(data));
+        } else if (data is Map && data['key'] != null) {
+          data['key'] is int
+              ? api_provider.change_data_id(data['key'])
+              : api_provider
+                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> addImportAerien(
       String client_name,
       String lta,
@@ -3572,9 +3880,93 @@ class DBServices {
     }
   }
 
+  Future<String> addExportAerien(
+      String client_name,
+      String lta,
+      String numero_marchandise,
+      String client_telephone,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      double tarif,
+      double accompte,
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      int quantite,
+      ApiProvider api_provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/aerien/publish";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['march'] = marchandise
+        ..fields['lta'] = lta
+        ..fields['name'] = client_name
+        ..fields['telephone'] = client_telephone
+        ..fields['ref'] = numero_marchandise
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['accompte'] = accompte.toString()
+        ..fields['tarif'] = tarif.toString()
+        ..fields['qte'] = quantite.toString()
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+
+        if (data is int) {
+          api_provider.change_data_id(data);
+        } else if (data is String && int.tryParse(data) != null) {
+          api_provider.change_data_id(int.parse(data));
+        } else if (data is Map && data['key'] != null) {
+          data['key'] is int
+              ? api_provider.change_data_id(data['key'])
+              : api_provider
+                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> deleteImport(Import import) async {
     try {
       var url = "${api_url}home/expediteur/import/delete/${import.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteExport(Exports export) async {
+    try {
+      var url = "${api_url}home/expediteur/export/delete/${export.id}";
       final uri = Uri.parse(url);
       String? token = await secure.readSecureData('token');
 
@@ -3634,6 +4026,50 @@ class DBServices {
     }
   }
 
+  Future<String> addMarchExport(
+      String marchandise,
+      String date_debut,
+      String date_fin,
+      String name,
+      String telephone,
+      Pays pay_dep,
+      Villes city_dep,
+      Pays pay_liv,
+      Villes city_liv,
+      int quantite,
+      int import_id) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/marchandise/publish/$import_id";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = marchandise
+        ..fields['cl_name'] = name
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['dep'] = date_debut
+        ..fields['liv'] = date_fin
+        ..fields['city_dep'] = city_dep.id.toString()
+        ..fields['pay_dep'] = pay_dep.id.toString()
+        ..fields['city_liv'] = city_liv.id.toString()
+        ..fields['pay_liv'] = pay_liv.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> addLiv(
       Cargaison cargaison,
       String name,
@@ -3646,8 +4082,46 @@ class DBServices {
       int import_id) async {
     try {
       String? token = await secure.readSecureData('token');
-      var url =
-          "${api_url}home/expediteur/import//livraison/publish/$import_id";
+      var url = "${api_url}home/expediteur/import/livraison/publish/$import_id";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['name'] = name
+        ..fields['march'] = cargaison.id.toString()
+        ..fields['telephone'] = telephone
+        ..fields['qte'] = quantite.toString()
+        ..fields['address'] = adresse
+        ..fields['sup'] = superviseur
+        ..fields['city'] = city.id.toString()
+        ..fields['pay'] = pay.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> addLivExport(
+      Cargaison cargaison,
+      String name,
+      String telephone,
+      Pays pay,
+      Villes city,
+      String adresse,
+      int quantite,
+      String superviseur,
+      int import_id) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/export/livraison/publish/$import_id";
       final uri = Uri.parse(url);
 
       var request = http.MultipartRequest('POST', uri)

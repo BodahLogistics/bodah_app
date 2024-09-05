@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
 
-import 'package:bodah/ui/users/expediteur/import/list.dart';
+import 'package:bodah/modals/exports.dart';
+import 'package:bodah/ui/users/expediteur/export/list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,6 @@ import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/cargaison.dart';
 import '../../../../../modals/chargement_effectues.dart';
-import '../../../../../modals/import.dart';
 import '../../../../../modals/livraison_cargaison.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../services/data_base_service.dart';
@@ -16,25 +16,25 @@ import '../../../../auth/sign_in.dart';
 import '../../drawer/index.dart';
 import '../../marchandises/nav_bottom/index.dart';
 
-class DetailImport extends StatelessWidget {
-  const DetailImport({super.key, required this.import_id});
-  final int import_id;
+class DetailExport extends StatelessWidget {
+  const DetailExport({super.key, required this.export_id});
+  final int export_id;
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     final user = api_provider.user;
-    List<Import> imports = api_provider.imports;
-    Import import = function.import(imports, import_id);
+    List<Exports> exports = api_provider.exports;
+    Exports export = function.export(exports, export_id);
     List<Cargaison> cargaisons = api_provider.cargaisons;
-    cargaisons = function.data_cargaisons(cargaisons, import_id, "Import");
+    cargaisons = function.data_cargaisons(cargaisons, export_id, "Export");
     List<ChargementEffectue> chargement_effectues =
         api_provider.chargement_effectues;
     chargement_effectues = function.data_chargemnt_effectues(
-        chargement_effectues, import_id, "Import");
+        chargement_effectues, export_id, "Export");
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
-    livraisons = function.data_livraisons(livraisons, import_id, "Import");
+    livraisons = function.data_livraisons(livraisons, export_id, "Export");
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -47,7 +47,7 @@ class DetailImport extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Mon importation",
+          "Mon exportation",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -84,7 +84,7 @@ class DetailImport extends StatelessWidget {
                         color: MyColors.light,
                       )),
                   Text(
-                    import.reference,
+                    export.reference,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -94,7 +94,7 @@ class DetailImport extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
-                        DeleteImport(context, import);
+                        DeleteExport(context, export);
                       },
                       icon: Icon(
                         Icons.delete,
@@ -117,7 +117,7 @@ class DetailImport extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Référence de l'importation",
+                      "Référence de l'exportation",
                       style: TextStyle(
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold,
@@ -133,7 +133,7 @@ class DetailImport extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      import.reference,
+                      export.reference,
                       style: TextStyle(
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w300,
@@ -155,7 +155,7 @@ class DetailImport extends StatelessWidget {
   }
 }
 
-Future<dynamic> DeleteImport(BuildContext context, Import import) {
+Future<dynamic> DeleteExport(BuildContext context, Exports export) {
   return showDialog(
     barrierDismissible: false,
     context: context,
@@ -166,7 +166,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
       bool delete = provider.delete;
       return AlertDialog(
         title: Text(
-          "Importation éffectuée",
+          "Exportation éffectuée",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: "Poppins",
@@ -175,8 +175,8 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
               fontSize: 16),
         ),
         content: Text(
-          "Voulez-vous vraiment supprimer l'importation " +
-              import.reference +
+          "Voulez-vous vraiment supprimer l'exportation " +
+              export.reference +
               " ?",
           style: TextStyle(
               color: function.convertHexToColor("#79747E"),
@@ -223,7 +223,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteImport(import);
+                              await service.deleteExport(export);
                           if (statut == "500") {
                             showCustomSnackBar(dialocontext,
                                 "Echec de suppression", Colors.redAccent);
@@ -236,7 +236,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                             await provider.InitImportData();
                             showCustomSnackBar(
                                 dialocontext,
-                                "L'importation a été supprimée avec succès",
+                                "L'exportation a été supprimée avec succès",
                                 Colors.green);
                             provider.change_delete(false);
                             Navigator.of(dialocontext).pop();
@@ -246,7 +246,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                                     (context, animation, secondaryAnimation) =>
                                         Align(
                                   alignment: Alignment.topLeft,
-                                  child: MesImports(),
+                                  child: MesExports(),
                                 ),
                                 transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) {

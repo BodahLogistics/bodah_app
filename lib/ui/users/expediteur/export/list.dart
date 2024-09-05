@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
 
 import 'package:bodah/modals/cargaison_client.dart';
+import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/transport_mode.dart';
-import 'package:bodah/ui/users/expediteur/import/aerien/add.dart';
-import 'package:bodah/ui/users/expediteur/import/details/index.dart';
-import 'package:bodah/ui/users/expediteur/import/maritime/add.dart';
+import 'package:bodah/ui/users/expediteur/export/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,21 +15,22 @@ import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../modals/cargaison.dart';
 import '../../../../modals/chargement.dart';
-import '../../../../modals/import.dart';
 import '../../../../modals/positions.dart';
 import '../drawer/index.dart';
 import '../marchandises/nav_bottom/index.dart';
+import 'aerien/add.dart';
+import 'maritime/add.dart';
 import 'route/add.dart';
 
-class MesImports extends StatelessWidget {
-  const MesImports({super.key});
+class MesExports extends StatelessWidget {
+  const MesExports({super.key});
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     final user = api_provider.user;
-    List<Import> imports = api_provider.imports;
+    List<Exports> exports = api_provider.exports;
     List<Cargaison> cargaison = api_provider.cargaisons;
     List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;
@@ -57,7 +57,7 @@ class MesImports extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Importations",
+          "Exportations",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -73,10 +73,10 @@ class MesImports extends StatelessWidget {
               ))
         ],
       ),
-      body: imports.isEmpty
+      body: exports.isEmpty
           ? Center(
               child: Text(
-              "Vous n'avez encore pas ajouté d'importations",
+              "Vous n'avez encore pas ajouté d'exportationss",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: "Poppins",
@@ -90,9 +90,9 @@ class MesImports extends StatelessWidget {
                   physics: ScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    Import import = imports[index];
+                    Exports export = exports[index];
                     List<Cargaison> cargaisons = function.data_cargaisons(
-                        cargaison, import.id, 'Import');
+                        cargaison, export.id, "Export");
                     if (cargaisons.isEmpty) {
                       cargaisons = [
                         Cargaison(
@@ -104,14 +104,9 @@ class MesImports extends StatelessWidget {
                             deleted: 0)
                       ];
                     }
-
                     List<CargaisonClient> cargaison_clients =
                         function.cargaison_cargaison_clients(
                             cargaisons.first, cargaison_client);
-                    Chargement chargement =
-                        function.cargaison_client_chargement(
-                            chargements, cargaison_clients.first);
-
                     if (cargaison_clients.isEmpty) {
                       cargaison_clients = [
                         CargaisonClient(
@@ -122,10 +117,11 @@ class MesImports extends StatelessWidget {
                             deleted: 0)
                       ];
                     }
-
+                    Chargement chargement =
+                        function.cargaison_client_chargement(
+                            chargements, cargaison_clients.first);
                     Position position = function.cargaison_client_position(
                         positions, cargaison_clients.first);
-
                     Pays pay_depart = function.pay(pays, position.pay_dep_id);
                     Pays pay_dest = function.pay(pays, position.pay_liv_id);
                     Villes ville_dep =
@@ -133,7 +129,7 @@ class MesImports extends StatelessWidget {
                     Villes ville_dest =
                         function.ville(all_villes, position.city_liv_id);
                     TransportMode mode = function.transport_mode(
-                        transport_modes, import.transport_mode_id);
+                        transport_modes, export.transport_mode_id);
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 0),
@@ -145,8 +141,8 @@ class MesImports extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return DetailImport(
-                                  import_id: import.id,
+                                return DetailExport(
+                                  export_id: export.id,
                                 );
                               },
                               transitionsBuilder: (BuildContext context,
@@ -236,7 +232,7 @@ class MesImports extends StatelessWidget {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        import.reference,
+                                        export.reference,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -453,7 +449,7 @@ class MesImports extends StatelessWidget {
                       ),
                     );
                   },
-                  itemCount: imports.length),
+                  itemCount: exports.length),
             ),
     );
   }
@@ -504,7 +500,7 @@ Future<dynamic> ChooseMode(BuildContext context) {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return NewImportRoute();
+                            return NewExportRoute();
                           },
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
@@ -527,7 +523,7 @@ Future<dynamic> ChooseMode(BuildContext context) {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return NewImportMaritime();
+                            return NewExportMaritime();
                           },
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
@@ -550,7 +546,7 @@ Future<dynamic> ChooseMode(BuildContext context) {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return NewImportAerien();
+                            return NewExportAerien();
                           },
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,

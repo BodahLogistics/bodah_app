@@ -2,6 +2,7 @@
 
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
 import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
+import 'package:bodah/ui/users/expediteur/export/list.dart';
 import 'package:bodah/ui/users/expediteur/import/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/home.dart';
@@ -290,7 +291,7 @@ class DrawerExpediteur extends StatelessWidget {
                   pageBuilder: (BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation) {
-                    return AnnonceMarchandises();
+                    return MesExports();
                   },
                   transitionsBuilder: (BuildContext context,
                       Animation<double> animation,

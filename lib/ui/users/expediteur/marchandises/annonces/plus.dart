@@ -440,7 +440,7 @@ class _NewAnnonceState extends State<NewAnnonce> {
                                         onChanged: (String? selectedType) {
                                           if (selectedType != null) {
                                             final ville_selected =
-                                                villes_livraison.firstWhere(
+                                                villes_expedition.firstWhere(
                                               (element) =>
                                                   element.name == selectedType,
                                               orElse: () => Villes(

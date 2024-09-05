@@ -108,13 +108,13 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
 
     int import_key = api_provider.import_maritime_key;
     List<Cargaison> cargaisons = api_provider.cargaisons;
-    cargaisons = function.import_cargaisons(cargaisons, import_key);
+    cargaisons = function.data_cargaisons(cargaisons, import_key, "Import");
     List<ChargementEffectue> chargement_effectues =
         api_provider.chargement_effectues;
-    chargement_effectues =
-        function.import_chargemnt_effectues(chargement_effectues, import_key);
+    chargement_effectues = function.data_chargemnt_effectues(
+        chargement_effectues, import_key, "Import");
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
-    livraisons = function.import_livraisons(livraisons, import_key);
+    livraisons = function.data_livraisons(livraisons, import_key, "Import");
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -552,7 +552,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                   onChanged: (String? selectedType) {
                                     if (selectedType != null) {
                                       final ville_selected =
-                                          villes_livraison.firstWhere(
+                                          villes_expedition.firstWhere(
                                         (element) =>
                                             element.name == selectedType,
                                         orElse: () => Villes(
@@ -1338,7 +1338,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                 if (chargement_effectues.isEmpty) {
                                   NewTransp(context, import_key);
                                 } else {
-                                  showTransp(context, import_key);
+                                  showTransp(context, import_key, "Import");
                                 }
                               },
                               child: chargement_effectues.isNotEmpty
@@ -1391,7 +1391,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                 if (cargaisons.isEmpty) {
                                   NewMarch(context, import_key);
                                 } else {
-                                  showMarch(context, import_key);
+                                  showMarch(context, import_key, "Import");
                                 }
                               },
                               child: cargaisons.isNotEmpty
@@ -1444,7 +1444,7 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                 if (livraisons.isEmpty) {
                                   NewLiv(context, import_key);
                                 } else {
-                                  showLiv(context, import_key);
+                                  showLiv(context, import_key, "Import");
                                 }
                               },
                               child: livraisons.isNotEmpty

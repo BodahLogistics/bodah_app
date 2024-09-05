@@ -32,6 +32,7 @@ import '../../../../../providers/users/expediteur/import/march/add.dart';
 import '../../../../../providers/users/expediteur/import/routes/add.dart';
 import '../../../../../services/data_base_service.dart';
 import '../../drawer/index.dart';
+import '../../export/route/add.dart';
 import '../../marchandises/nav_bottom/index.dart';
 
 class NewImportRoute extends StatefulWidget {
@@ -111,13 +112,13 @@ class _NewImportRouteState extends State<NewImportRoute> {
 
     int import_key = api_provider.import_route_key;
     List<Cargaison> cargaisons = api_provider.cargaisons;
-    cargaisons = function.import_cargaisons(cargaisons, import_key);
+    cargaisons = function.data_cargaisons(cargaisons, import_key, "Import");
     List<ChargementEffectue> chargement_effectues =
         api_provider.chargement_effectues;
-    chargement_effectues =
-        function.import_chargemnt_effectues(chargement_effectues, import_key);
+    chargement_effectues = function.data_chargemnt_effectues(
+        chargement_effectues, import_key, "Import");
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
-    livraisons = function.import_livraisons(livraisons, import_key);
+    livraisons = function.data_livraisons(livraisons, import_key, "Import");
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -555,7 +556,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                   onChanged: (String? selectedType) {
                                     if (selectedType != null) {
                                       final ville_selected =
-                                          villes_livraison.firstWhere(
+                                          villes_expedition.firstWhere(
                                         (element) =>
                                             element.name == selectedType,
                                         orElse: () => Villes(
@@ -1429,7 +1430,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                 if (chargement_effectues.isEmpty) {
                                   NewTransp(context, import_key);
                                 } else {
-                                  showTransp(context, import_key);
+                                  showTransp(context, import_key, "Import");
                                 }
                               },
                               child: chargement_effectues.isNotEmpty
@@ -1482,7 +1483,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                 if (cargaisons.isEmpty) {
                                   NewMarch(context, import_key);
                                 } else {
-                                  showMarch(context, import_key);
+                                  showMarch(context, import_key, "Import");
                                 }
                               },
                               child: cargaisons.isNotEmpty
@@ -1535,7 +1536,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                 if (livraisons.isEmpty) {
                                   NewLiv(context, import_key);
                                 } else {
-                                  showLiv(context, import_key);
+                                  showLiv(context, import_key, "Import");
                                 }
                               },
                               child: livraisons.isNotEmpty
@@ -1902,7 +1903,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                             onChanged: (String? selectedType) {
                               if (selectedType != null) {
                                 final ville_selected =
-                                    villes_livraison.firstWhere(
+                                    villes_expedition.firstWhere(
                                   (element) => element.name == selectedType,
                                   orElse: () =>
                                       Villes(id: 9626, name: "", country_id: 0),
@@ -3078,7 +3079,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                             onChanged: (String? selectedType) {
                               if (selectedType != null) {
                                 final ville_selected =
-                                    villes_livraison.firstWhere(
+                                    villes_expedition.firstWhere(
                                   (element) => element.name == selectedType,
                                   orElse: () =>
                                       Villes(id: 9626, name: "", country_id: 0),
@@ -3515,7 +3516,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
       final provider = Provider.of<ProvAddLiv>(dialocontext);
       final service = Provider.of<DBServices>(dialocontext);
       List<Cargaison> cargaisons = api_provider.cargaisons;
-      cargaisons = function.import_cargaisons(cargaisons, import_id);
+      cargaisons = function.data_cargaisons(cargaisons, import_id, "Import");
       Cargaison cargaion = provider.marchandise;
       bool affiche = provider.affiche;
       int quantite = provider.quantite;
@@ -4156,8 +4157,8 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
   );
 }
 
-Future<dynamic> UpdateLiv(
-    BuildContext context, LivraisonCargaison livraison, int import_id) {
+Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
+    int import_id, String modele) {
   TextEditingController Adresse = TextEditingController();
   TextEditingController Quantite = TextEditingController();
   TextEditingController Superviseur = TextEditingController();
@@ -4172,7 +4173,7 @@ Future<dynamic> UpdateLiv(
       final provider = Provider.of<ProvAddLiv>(dialocontext);
       final service = Provider.of<DBServices>(dialocontext);
       List<Cargaison> cargaisons = api_provider.cargaisons;
-      cargaisons = function.import_cargaisons(cargaisons, import_id);
+      cargaisons = function.data_cargaisons(cargaisons, import_id, modele);
       Cargaison cargaion = provider.marchandise;
       bool affiche = provider.affiche;
       int quantite = provider.quantite;
@@ -4891,7 +4892,7 @@ Future<dynamic> UpdateMarch(
 
       return AlertDialog(
         title: Text(
-          "Marchandise importée",
+          "Marchandise",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: "Poppins",
@@ -5287,7 +5288,7 @@ Future<dynamic> UpdateMarch(
                             onChanged: (String? selectedType) {
                               if (selectedType != null) {
                                 final ville_selected =
-                                    villes_livraison.firstWhere(
+                                    villes_expedition.firstWhere(
                                   (element) => element.name == selectedType,
                                   orElse: () =>
                                       Villes(id: 9626, name: "", country_id: 0),
@@ -5934,7 +5935,7 @@ Future<dynamic> UpdateTransp(
                             onChanged: (String? selectedType) {
                               if (selectedType != null) {
                                 final ville_selected =
-                                    villes_livraison.firstWhere(
+                                    villes_expedition.firstWhere(
                                   (element) => element.name == selectedType,
                                   orElse: () =>
                                       Villes(id: 9626, name: "", country_id: 0),
@@ -6675,7 +6676,7 @@ Future<dynamic> UpdateTransp(
   );
 }
 
-Future<dynamic> showTransp(BuildContext context, int import_id) {
+Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
   return showDialog(
     barrierDismissible: false,
     context: context,
@@ -6685,8 +6686,8 @@ Future<dynamic> showTransp(BuildContext context, int import_id) {
       final provider = Provider.of<ProvAddTransp>(dialocontext);
       List<ChargementEffectue> chargement_effectues =
           api_provider.chargement_effectues;
-      chargement_effectues =
-          function.import_chargemnt_effectues(chargement_effectues, import_id);
+      chargement_effectues = function.data_chargemnt_effectues(
+          chargement_effectues, data_id, modele);
       List<Camions> camions = api_provider.camions;
       List<Pieces> pieces = api_provider.pieces;
       List<Conducteur> conducteurs = api_provider.conducteurs;
@@ -7232,7 +7233,11 @@ Future<dynamic> showTransp(BuildContext context, int import_id) {
                       padding: EdgeInsets.only(left: 7, right: 7),
                       backgroundColor: MyColors.secondary),
                   onPressed: () {
-                    NewTransp(context, import_id);
+                    if (modele == "Import") {
+                      NewTransp(context, data_id);
+                    } else {
+                      NewTranspExp(context, data_id);
+                    }
                   },
                   child: Text(
                     "Ajoutez",
@@ -7253,7 +7258,7 @@ Future<dynamic> showTransp(BuildContext context, int import_id) {
   );
 }
 
-Future<dynamic> showMarch(BuildContext context, int import_id) {
+Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
   return showDialog(
     barrierDismissible: false,
     context: context,
@@ -7262,7 +7267,7 @@ Future<dynamic> showMarch(BuildContext context, int import_id) {
       final api_provider = Provider.of<ApiProvider>(dialocontext);
       final provider = Provider.of<ProvAddMarch>(dialocontext);
       List<Cargaison> cargaisons = api_provider.cargaisons;
-      cargaisons = function.import_cargaisons(cargaisons, import_id);
+      cargaisons = function.data_cargaisons(cargaisons, data_id, modele);
       List<Client> clients = api_provider.clients;
       List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
       List<Chargement> chargements = api_provider.chargements;
@@ -7273,7 +7278,7 @@ Future<dynamic> showMarch(BuildContext context, int import_id) {
 
       return AlertDialog(
         title: Text(
-          "Marchandises importées",
+          "Marchandises",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: "Poppins",
@@ -7863,7 +7868,11 @@ Future<dynamic> showMarch(BuildContext context, int import_id) {
                       padding: EdgeInsets.only(left: 7, right: 7),
                       backgroundColor: MyColors.secondary),
                   onPressed: () {
-                    NewMarch(dialocontext, import_id);
+                    if (modele == "Import") {
+                      NewMarch(dialocontext, data_id);
+                    } else {
+                      NewMarchExp(dialocontext, data_id);
+                    }
                   },
                   child: Text(
                     "Ajoutez",
@@ -7884,7 +7893,7 @@ Future<dynamic> showMarch(BuildContext context, int import_id) {
   );
 }
 
-Future<dynamic> showLiv(BuildContext context, int import_id) {
+Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
   return showDialog(
     barrierDismissible: false,
     context: context,
@@ -7893,7 +7902,7 @@ Future<dynamic> showLiv(BuildContext context, int import_id) {
       final api_provider = Provider.of<ApiProvider>(dialocontext);
       final provider = Provider.of<ProvAddLiv>(dialocontext);
       List<LivraisonCargaison> livraisons = api_provider.livraisons;
-      livraisons = function.import_livraisons(livraisons, import_id);
+      livraisons = function.data_livraisons(livraisons, data_id, modele);
       List<Cargaison> cargaisons = api_provider.cargaisons;
       List<Client> clients = api_provider.clients;
       List<Pays> pays = api_provider.pays;
@@ -8252,7 +8261,7 @@ Future<dynamic> showLiv(BuildContext context, int import_id) {
                                           provider.change_livraison(livraison,
                                               cargaison, client, pay, ville);
                                           UpdateLiv(dialocontext, livraison,
-                                              import_id);
+                                              data_id, modele);
                                         },
                                         icon: Icon(
                                           Icons.edit,
@@ -8315,7 +8324,11 @@ Future<dynamic> showLiv(BuildContext context, int import_id) {
                       padding: EdgeInsets.only(left: 7, right: 7),
                       backgroundColor: MyColors.secondary),
                   onPressed: () {
-                    NewLiv(dialocontext, import_id);
+                    if (modele == "Import") {
+                      NewLiv(dialocontext, data_id);
+                    } else {
+                      NewLivExp(dialocontext, data_id);
+                    }
                   },
                   child: Text(
                     "Ajoutez",

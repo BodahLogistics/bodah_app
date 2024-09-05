@@ -13,6 +13,7 @@ import 'package:bodah/modals/coli_photos.dart';
 import 'package:bodah/modals/conducteur.dart';
 import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/expeditions.dart';
+import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/import.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/location_colis.dart';
@@ -202,6 +203,8 @@ class ApiProvider with ChangeNotifier {
   List<Pieces> get pieces => _pieces;
   List<Import> _imports = [];
   List<Import> get imports => _imports;
+  List<Exports> _exports = [];
+  List<Exports> get exports => _exports;
   List<TransportMode> _transport_modes = [];
   List<TransportMode> get transport_modes => _transport_modes;
   List<CargaisonClient> _cargaison_clients = [];
@@ -227,12 +230,20 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_import = await apiService.getImports();
     _imports = response_import;
+    final response_export = await apiService.getExports();
+    _exports = response_export;
     final response_route_key = await apiService.getImportRouteKey();
     _import_route_key = response_route_key;
     final response_maritime_key = await apiService.getImportMaritimeKey();
     _import_maritime_key = response_maritime_key;
     final response_aerien_key = await apiService.getImportAerienKey();
     _import_aerien_key = response_aerien_key;
+    final response_route = await apiService.getExportRouteKey();
+    _export_route_key = response_route;
+    final response_maritime = await apiService.getExportMaritimeKey();
+    _export_maritime_key = response_maritime;
+    final response_aerien = await apiService.getExportAerienKey();
+    _export_aerien_key = response_aerien;
     final response_cargaison = await apiService.getCargaisons();
     _cargaisons = response_cargaison;
     final response_cargaison_client = await apiService.getCargaisonClients();
@@ -345,6 +356,27 @@ class ApiProvider with ChangeNotifier {
   int get import_aerien_key => _import_aerien_key;
   void change_import_aerien_key(int value) {
     _import_aerien_key = value;
+    notifyListeners();
+  }
+
+  int _export_route_key = 0;
+  int get export_route_key => _export_route_key;
+  void change_export_route_key(int value) {
+    _export_route_key = value;
+    notifyListeners();
+  }
+
+  int _export_maritime_key = 0;
+  int get export_maritime_key => _export_maritime_key;
+  void change_export_maritime_key(int value) {
+    _export_maritime_key = value;
+    notifyListeners();
+  }
+
+  int _export_aerien_key = 0;
+  int get export_aerien_key => _export_aerien_key;
+  void change_export_aerien_key(int value) {
+    _export_aerien_key = value;
     notifyListeners();
   }
 

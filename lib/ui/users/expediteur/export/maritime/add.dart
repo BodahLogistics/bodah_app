@@ -2,10 +2,11 @@
 
 import 'package:bodah/modals/chargement_effectues.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
-import 'package:bodah/providers/users/expediteur/import/aerien/add.dart';
+import 'package:bodah/providers/users/expediteur/import/maritime/add.dart';
 import 'package:bodah/providers/users/expediteur/import/transp/add.dart';
 import 'package:bodah/ui/auth/sign_in.dart';
-import 'package:bodah/ui/users/expediteur/import/details/index.dart';
+import 'package:bodah/ui/users/expediteur/export/details/index.dart';
+import 'package:bodah/ui/users/expediteur/export/route/add.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,21 +19,22 @@ import '../../../../../modals/cargaison.dart';
 import '../../../../../modals/pays.dart';
 import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
+import '../../../../../providers/users/expediteur/export/maritime/add.dart';
 import '../../../../../providers/users/expediteur/import/liv/add.dart';
 import '../../../../../providers/users/expediteur/import/march/add.dart';
 import '../../../../../services/data_base_service.dart';
 import '../../drawer/index.dart';
+import '../../import/route/add.dart';
 import '../../marchandises/nav_bottom/index.dart';
-import '../route/add.dart';
 
-class NewImportAerien extends StatefulWidget {
-  NewImportAerien({super.key});
+class NewExportMaritime extends StatefulWidget {
+  NewExportMaritime({super.key});
 
   @override
-  State<NewImportAerien> createState() => _NewImportAerienState();
+  State<NewExportMaritime> createState() => _NewExportMaritimeState();
 }
 
-class _NewImportAerienState extends State<NewImportAerien> {
+class _NewExportMaritimeState extends State<NewExportMaritime> {
   TextEditingController Tarif = TextEditingController();
 
   TextEditingController Accompte = TextEditingController();
@@ -49,16 +51,16 @@ class _NewImportAerienState extends State<NewImportAerien> {
 
   TextEditingController DateFin = TextEditingController();
 
-  TextEditingController Lta = TextEditingController();
+  TextEditingController Bl = TextEditingController();
 
-  TextEditingController NumeroMarchandise = TextEditingController();
+  TextEditingController Conteneur = TextEditingController();
 
   TextEditingController ClientTelephone = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<ProvAddImportAerien>(context, listen: false);
+    final provider = Provider.of<ProvAddExportMaritime>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.change_affiche(false);
       Provider.of<ApiProvider>(context, listen: false).InitImportData();
@@ -70,7 +72,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProvAddImportAerien>(context);
+    final provider = Provider.of<ProvAddImportMaritime>(context);
 
     String date_deut = provider.date_debut;
     String date_fin = provider.date_fin;
@@ -86,8 +88,8 @@ class _NewImportAerienState extends State<NewImportAerien> {
     int quantite = provider.quantite;
     String client_name = provider.client_name;
     String client_telephone = provider.client_telephone;
-    String lta = provider.lta;
-    String numero_marchandise = provider.numero_marchandise;
+    String bl = provider.bl;
+    String conteneur = provider.conteneur;
     Villes ville_exp = provider.ville_exp;
     Villes ville_liv = provider.ville_liv;
     Pays pay_exp = provider.pay_exp;
@@ -106,15 +108,15 @@ class _NewImportAerienState extends State<NewImportAerien> {
       Solde.text = solde.toString();
     }
 
-    int import_key = api_provider.import_aerien_key;
+    int import_key = api_provider.export_maritime_key;
     List<Cargaison> cargaisons = api_provider.cargaisons;
-    cargaisons = function.data_cargaisons(cargaisons, import_key, "Import");
+    cargaisons = function.data_cargaisons(cargaisons, import_key, "Export");
     List<ChargementEffectue> chargement_effectues =
         api_provider.chargement_effectues;
     chargement_effectues = function.data_chargemnt_effectues(
-        chargement_effectues, import_key, "Import");
+        chargement_effectues, import_key, "Export");
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
-    livraisons = function.data_livraisons(livraisons, import_key, "Import");
+    livraisons = function.data_livraisons(livraisons, import_key, "Export");
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -127,7 +129,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Importation",
+          "Exportation",
           style: TextStyle(
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
               fontWeight: FontWeight.w500,
@@ -913,7 +915,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   ? Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "N° Lta",
+                                        "N° Bl",
                                         style: TextStyle(
                                           fontFamily: "Poppins",
                                           color: MyColors.light,
@@ -925,13 +927,13 @@ class _NewImportAerienState extends State<NewImportAerien> {
                               SizedBox(
                                 height: 60,
                                 child: TextField(
-                                  controller: Lta,
-                                  maxLength: 15,
+                                  controller: Bl,
+                                  maxLength: 14,
                                   onChanged: (value) =>
-                                      provider.change_lta(value),
+                                      provider.change_bl(value),
                                   decoration: InputDecoration(
-                                      suffixIcon: Lta.text.isNotEmpty &&
-                                              (lta.length < 3)
+                                      suffixIcon: Bl.text.isNotEmpty &&
+                                              (bl.length < 3)
                                           ? Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 15),
@@ -941,10 +943,10 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           : null,
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                        color: Lta.text.isEmpty
+                                        color: Bl.text.isEmpty
                                             ? function
                                                 .convertHexToColor("#79747E")
-                                            : (lta.length > 3)
+                                            : (bl.length > 3)
                                                 ? MyColors.secondary
                                                 : Colors.red,
                                       )),
@@ -954,7 +956,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           ? MyColors.filedDark
                                           : null,
                                       labelText:
-                                          user.dark_mode == 0 ? "N° Lta" : "",
+                                          user.dark_mode == 0 ? "N° Bl" : "",
                                       labelStyle: TextStyle(
                                           color: user.dark_mode == 1
                                               ? MyColors.light
@@ -967,9 +969,9 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           color: MyColors.black)),
                                 ),
                               ),
-                              Lta.text.isEmpty
+                              Bl.text.isEmpty
                                   ? Container()
-                                  : lta.length < 3
+                                  : bl.length < 3
                                       ? Padding(
                                           padding:
                                               const EdgeInsets.only(top: 3),
@@ -997,7 +999,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   ? Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "N° Marchandise",
+                                        "N° Conteneur",
                                         style: TextStyle(
                                           fontFamily: "Poppins",
                                           color: MyColors.light,
@@ -1009,14 +1011,13 @@ class _NewImportAerienState extends State<NewImportAerien> {
                               SizedBox(
                                 height: 60,
                                 child: TextField(
-                                  controller: NumeroMarchandise,
+                                  controller: Conteneur,
                                   maxLength: 15,
                                   onChanged: (value) =>
-                                      provider.change_numero_marchandise(value),
+                                      provider.change_conteneur(value),
                                   decoration: InputDecoration(
-                                      suffixIcon: NumeroMarchandise
-                                                  .text.isNotEmpty &&
-                                              (numero_marchandise.length < 3)
+                                      suffixIcon: Conteneur.text.isNotEmpty &&
+                                              (conteneur.length < 3)
                                           ? Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 15),
@@ -1026,10 +1027,10 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           : null,
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                        color: NumeroMarchandise.text.isEmpty
+                                        color: Conteneur.text.isEmpty
                                             ? function
                                                 .convertHexToColor("#79747E")
-                                            : (numero_marchandise.length > 3)
+                                            : (conteneur.length > 3)
                                                 ? MyColors.secondary
                                                 : Colors.red,
                                       )),
@@ -1039,7 +1040,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           ? MyColors.filedDark
                                           : null,
                                       labelText: user.dark_mode == 0
-                                          ? "N° Marchandise"
+                                          ? "N° Conteneur"
                                           : "",
                                       labelStyle: TextStyle(
                                           color: user.dark_mode == 1
@@ -1053,9 +1054,9 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                           color: MyColors.black)),
                                 ),
                               ),
-                              NumeroMarchandise.text.isEmpty
+                              Conteneur.text.isEmpty
                                   ? Container()
-                                  : numero_marchandise.length < 3
+                                  : conteneur.length < 3
                                       ? Padding(
                                           padding:
                                               const EdgeInsets.only(top: 3),
@@ -1337,9 +1338,9 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   padding: EdgeInsets.zero),
                               onPressed: () {
                                 if (chargement_effectues.isEmpty) {
-                                  NewTransp(context, import_key);
+                                  NewTranspExp(context, import_key);
                                 } else {
-                                  showTransp(context, import_key, "Import");
+                                  showTransp(context, import_key, "Export");
                                 }
                               },
                               child: chargement_effectues.isNotEmpty
@@ -1390,9 +1391,9 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   padding: EdgeInsets.zero),
                               onPressed: () {
                                 if (cargaisons.isEmpty) {
-                                  NewMarch(context, import_key);
+                                  NewMarchExp(context, import_key);
                                 } else {
-                                  showMarch(context, import_key, "Import");
+                                  showMarch(context, import_key, "Export");
                                 }
                               },
                               child: cargaisons.isNotEmpty
@@ -1443,9 +1444,9 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   padding: EdgeInsets.zero),
                               onPressed: () {
                                 if (livraisons.isEmpty) {
-                                  NewLiv(context, import_key);
+                                  NewLivExp(context, import_key);
                                 } else {
-                                  showLiv(context, import_key, "Import");
+                                  showLiv(context, import_key, "Export");
                                 }
                               },
                               child: livraisons.isNotEmpty
@@ -1499,10 +1500,10 @@ class _NewImportAerienState extends State<NewImportAerien> {
                             : () async {
                                 provider.change_affiche(true);
                                 String statut_code =
-                                    await service.addImportAerien(
+                                    await service.addExportMaritime(
                                         client_name,
-                                        lta,
-                                        numero_marchandise,
+                                        bl,
+                                        conteneur,
                                         client_telephone,
                                         pay_exp,
                                         ville_exp,
@@ -1545,8 +1546,8 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                                 secondaryAnimation) =>
                                             Align(
                                           alignment: Alignment.topLeft,
-                                          child: DetailImport(
-                                              import_id: api_provider.data_id),
+                                          child: DetailExport(
+                                              export_id: api_provider.data_id),
                                         ),
                                         transitionsBuilder: (context, animation,
                                             secondaryAnimation, child) {
@@ -1562,7 +1563,7 @@ class _NewImportAerienState extends State<NewImportAerien> {
                                   }
                                   showCustomSnackBar(
                                       context,
-                                      "L'importation a été enregistrée avec succès",
+                                      "L'exortation a été enregistrée avec succès",
                                       Colors.green);
                                 } else {
                                   showCustomSnackBar(

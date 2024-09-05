@@ -12,6 +12,7 @@ import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/in
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
+import 'package:bodah/wrappers/load.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,11 +79,7 @@ class _MesDocumentsState extends State<MesDocuments> {
         ],
       ),
       body: loading
-          ? Center(
-              child: CircularProgressIndicator(
-                color: MyColors.secondary,
-              ),
-            )
+          ? LoadingPage()
           : SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Container(
