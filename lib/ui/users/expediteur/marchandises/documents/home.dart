@@ -18,7 +18,16 @@ import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
+import '../../../../../modals/autre_docs.dart';
+import '../../../../../modals/avds.dart';
+import '../../../../../modals/bfus.dart';
+import '../../../../../modals/bl.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
+import '../../../../../modals/cartificat_origine.dart';
+import '../../../../../modals/certificat_phyto_sanitaire.dart';
+import '../../../../../modals/declaration.dart';
+import '../../../../../modals/fiche_technique.dart';
+import '../../../../../modals/lta.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
@@ -50,6 +59,15 @@ class _MesDocumentsState extends State<MesDocuments> {
     List<Tdos> tdos = api_provider.tdos;
     List<Vgms> vgms = api_provider.vgms;
     List<Recus> recus = api_provider.recus;
+    List<AutreDocs> autre_docs = api_provider.autre_docs;
+    List<Avd> avds = api_provider.avds;
+    List<Bl> bls = api_provider.bls;
+    List<Lta> ltas = api_provider.ltas;
+    List<Bfu> bfus = api_provider.bfus;
+    List<CO> cos = api_provider.cos;
+    List<CPS> cps = api_provider.cps;
+    List<Declaration> declarations = api_provider.declarations;
+    List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
     bool loading = api_provider.loading;
 
     return Scaffold(
@@ -172,12 +190,12 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     height: 15,
                                   ),
                                   Text(
-                                    "Bordereaux de livraisons",
+                                    "Bordereaux",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.secondary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -197,7 +215,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -270,7 +288,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.secondary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -290,7 +308,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -371,7 +389,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.primary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -391,7 +409,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -464,7 +482,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.primary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -484,7 +502,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -565,7 +583,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.secondary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -585,7 +603,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -658,7 +676,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.secondary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -678,7 +696,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -700,31 +718,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.49,
                           child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 500),
-                                  pageBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation) {
-                                    return MesRecus();
-                                  },
-                                  transitionsBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation,
-                                      Widget child) {
-                                    return SlideTransition(
-                                      position: Tween<Offset>(
-                                        begin: Offset(1.0, 0.0),
-                                        end: Offset.zero,
-                                      ).animate(animation),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
+                            onPressed: () {},
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -754,12 +748,12 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     height: 15,
                                   ),
                                   Text(
-                                    "Reçus",
+                                    "AVD",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.primary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -771,7 +765,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     alignment: Alignment.center,
                                     child: Text(
                                       function.formatAmount(
-                                              recus.length.toDouble()) +
+                                              avds.length.toDouble()) +
                                           " Reçus",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -779,7 +773,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(
@@ -852,7 +846,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: MyColors.primary,
-                                      fontSize: 13,
+                                      fontSize: 11,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -872,7 +866,592 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           color: MyColors.textColor,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/recu.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "BL",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              bls.length.toDouble()) +
+                                          " BL",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/fact.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "LTA",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              ltas.length.toDouble()) +
+                                          " LTA",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/recu.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "BFU",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              bfus.length.toDouble()) +
+                                          " BFU",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/fact.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "Déclarations",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              declarations.length.toDouble()) +
+                                          " Déclarations",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/recu.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "Fiche technique",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(fiche_techniques
+                                              .length
+                                              .toDouble()) +
+                                          " Fiche techniques",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/fact.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "CO",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 13,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              cos.length.toDouble()) +
+                                          " CO",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/recu.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "CPS",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              cps.length.toDouble()) +
+                                          " CPS",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.49,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(.70)),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          MyColors.textColor.withOpacity(.75),
+                                    ),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Image.asset(
+                                          "images/fact.png",
+                                          scale: 2.5,
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    "Autre documents",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: MyColors.secondary,
+                                      fontSize: 11,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      function.formatAmount(
+                                              autre_docs.length.toDouble()) +
+                                          " Autre documents",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
                                     ),
                                   ),
                                   SizedBox(

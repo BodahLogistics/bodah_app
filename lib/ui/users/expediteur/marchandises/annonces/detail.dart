@@ -15,7 +15,7 @@ import 'package:bodah/ui/users/expediteur/marchandises/annonces/marchandises/edi
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/add.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +34,7 @@ import '../../../../../providers/calculator/index.dart';
 import '../../../../auth/sign_in.dart';
 import '../expeditions/detail.dart';
 import 'list.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DetailAnnonce extends StatefulWidget {
   const DetailAnnonce({super.key, required this.id});
@@ -69,7 +70,7 @@ class _DetailAnnonceState extends State<DetailAnnonce> {
     List<AnnoncePhotos> photos = api_provider.photos;
     List<AnnoncePhotos> pictues =
         function.annonce_pictures(annonce, marchandises, photos);
-    final CarouselController _controller = CarouselController();
+    final CarouselSliderController _controller = CarouselSliderController();
     List<Expediteurs> expediteurs = api_provider.expediteurs;
     Expediteurs expediteur =
         function.expediteur(expediteurs, annonce.expediteur_id);

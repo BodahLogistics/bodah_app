@@ -110,7 +110,10 @@ class Marchandises {
       type_chargement_id: map['type_chargement_id'] != null
           ? map['type_chargement_id'] as int
           : null,
-      poids: map['poids'] as double,
+      poids: map['poids'] != null
+          ? double.tryParse(map['poids'].toString()) ??
+              0.0 // Convertir la chaîne en double
+          : 0.0, // Valeur par défaut si null
       destinataire_id:
           map['destinataire_id'] != null ? map['destinataire_id'] as int : null,
       nombre_camions: map['nombre_camions'] as int,
