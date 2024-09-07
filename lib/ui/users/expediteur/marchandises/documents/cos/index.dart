@@ -2,7 +2,6 @@
 
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/exports.dart';
-import 'package:bodah/modals/recus.dart';
 import 'package:bodah/ui/users/expediteur/export/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,8 @@ import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
 import '../../../../../../modals/cargaison.dart';
 import '../../../../../../modals/cargaison_client.dart';
+import '../../../../../../modals/cartificat_origine.dart';
 import '../../../../../../modals/chargement.dart';
-import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/import.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
@@ -26,16 +25,15 @@ import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
 import '../appeles/index.dart';
 
-class MesRecus extends StatelessWidget {
-  const MesRecus({super.key});
+class MesCos extends StatelessWidget {
+  const MesCos({super.key});
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
-    List<Recus> datas = api_provider.recus;
+    List<CO> datas = api_provider.cos;
     List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -59,7 +57,7 @@ class MesRecus extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Reçus et factures",
+          "Certificat d'origine (CO)",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -77,7 +75,7 @@ class MesRecus extends StatelessWidget {
       ),
       body: datas.isEmpty
           ? Center(
-              child: Text("Vous n'avez aucun reçu ou facture disponible",
+              child: Text("Vous n'avez aucun certificat d'origine disponible",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Poppins",
@@ -90,15 +88,15 @@ class MesRecus extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    Recus data = datas[index];
+                    CO data = datas[index];
 
-                    if (data.modele_type.contains("Expedition")) {
-                      Expeditions expedition =
-                          function.expedition(expeditions, data.modele_id);
+                    if (data.modele_type.contains("Annonce")) {
+                      Annonces annonce =
+                          function.annonce(annonces, data.modele_id);
 
-                      Marchandises marchandise =
-                          function.expedition_marchandise(
-                              expedition, marchandises, annonces);
+                      Marchandises marchandise = function
+                          .annonce_marchandises(marchandises, annonce.id)
+                          .first;
                       Localisations localisation =
                           function.marchandise_localisation(
                               localisations, marchandise.id);
@@ -122,7 +120,7 @@ class MesRecus extends StatelessWidget {
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
                                   return DetailAnnonce(
-                                    id: expedition.annonce_id,
+                                    id: data.modele_id,
                                   );
                                 },
                                 transitionsBuilder: (BuildContext context,

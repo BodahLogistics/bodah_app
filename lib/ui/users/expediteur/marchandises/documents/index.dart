@@ -15,9 +15,18 @@ import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/autre_dcos/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/avds/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/bfu/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/bls/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/cos/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/cps/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/declarations/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/fiches/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/lta/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/ordres/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
@@ -161,7 +170,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Bordereaux",
+                                  "Bordereau",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -174,21 +183,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            bordereaux.length.toDouble()) +
-                                        " bordereaux",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                bordereaux.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(bordereaux
+                                                  .length
+                                                  .toDouble()) +
+                                              " bordereau",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(bordereaux
+                                                  .length
+                                                  .toDouble()) +
+                                              " bordereaux",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -207,7 +234,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesOrdreTransport();
+                                  return MesOrdres();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -252,7 +279,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Ordres de transport",
+                                  "Ordre de transport",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -265,21 +292,37 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            ordres.length.toDouble()) +
-                                        " Ordres",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                ordres.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  ordres.length.toDouble()) +
+                                              " Ordre",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  ordres.length.toDouble()) +
+                                              " Ordres",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -351,7 +394,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Appélés",
+                                  "Appélé",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -364,21 +407,37 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            appeles.length.toDouble()) +
-                                        " Appélés",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                appeles.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  appeles.length.toDouble()) +
+                                              " Appélé",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  appeles.length.toDouble()) +
+                                              " Appélés",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -442,7 +501,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Interchanges",
+                                  "Interchange",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -455,21 +514,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            interchanges.length.toDouble()) +
-                                        " Interchanges",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                interchanges.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(interchanges
+                                                  .length
+                                                  .toDouble()) +
+                                              " Interchange",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(interchanges
+                                                  .length
+                                                  .toDouble()) +
+                                              " Interchanges",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -679,7 +756,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesAvds();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -726,7 +826,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   child: Text(
                                     function.formatAmount(
                                             avds.length.toDouble()) +
-                                        " Reçus",
+                                        " AVD",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -799,7 +899,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Factures",
+                                  "Reçu et facture",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -812,21 +912,37 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            recus.length.toDouble()) +
-                                        " Factures",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                recus.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  recus.length.toDouble()) +
+                                              " Reçu, facture",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(
+                                                  recus.length.toDouble()) +
+                                              " Reçus, factures",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -846,7 +962,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesBls();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -914,7 +1053,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesLtas();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -990,7 +1152,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesBfus();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1058,7 +1243,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesDeclarations();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1087,7 +1295,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Déclarations",
+                                  "Déclaration",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -1100,21 +1308,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            declarations.length.toDouble()) +
-                                        " Déclarations",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                declarations.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(declarations
+                                                  .length
+                                                  .toDouble()) +
+                                              " Déclaration",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(declarations
+                                                  .length
+                                                  .toDouble()) +
+                                              " Déclarations",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1134,7 +1360,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesFiches();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1176,22 +1425,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(fiche_techniques
-                                            .length
-                                            .toDouble()) +
-                                        " Fiche techniques",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                fiche_techniques.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(fiche_techniques
+                                                  .length
+                                                  .toDouble()) +
+                                              " Fiche technique",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(fiche_techniques
+                                                  .length
+                                                  .toDouble()) +
+                                              " Fiches techniques",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1203,7 +1469,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesCos();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1279,7 +1568,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesCps();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1347,7 +1659,30 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return MesAutreDocs();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -1376,7 +1711,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                   height: 15,
                                 ),
                                 Text(
-                                  "Autre documents",
+                                  "Autre document",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -1389,21 +1724,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            autre_docs.length.toDouble()) +
-                                        " Autre documents",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                autre_docs.length < 2
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(autre_docs
+                                                  .length
+                                                  .toDouble()) +
+                                              " Autre document",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          function.formatAmount(autre_docs
+                                                  .length
+                                                  .toDouble()) +
+                                              " Autres documents",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )

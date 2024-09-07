@@ -1,34 +1,33 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously, prefer_adjacent_string_concatenation
 
+import 'package:bodah/modals/annonces.dart';
+import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/vgms.dart';
+import 'package:bodah/ui/users/expediteur/export/details/index.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
-import '../../../../../../modals/annonces.dart';
+import '../../../../../../modals/cargaison.dart';
+import '../../../../../../modals/cargaison_client.dart';
+import '../../../../../../modals/chargement.dart';
 import '../../../../../../modals/expeditions.dart';
+import '../../../../../../modals/import.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/positions.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
+import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
+import '../appeles/index.dart';
 
-class MesVgms extends StatefulWidget {
+class MesVgms extends StatelessWidget {
   const MesVgms({super.key});
-
-  @override
-  State<MesVgms> createState() => _MesVgmsState();
-}
-
-class _MesVgmsState extends State<MesVgms> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitInterchanges();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +35,18 @@ class _MesVgmsState extends State<MesVgms> {
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
-    List<Vgms> vgms = api_provider.vgms;
-    bool loading = api_provider.loading;
+    List<Vgms> datas = api_provider.vgms;
+    List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
-    List<Annonces> annonces = api_provider.annonces;
+    List<Import> imports = api_provider.imports;
+    List<Exports> exports = api_provider.exports;
+    List<Cargaison> cargaison = api_provider.cargaisons;
+    List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
+    List<Chargement> chargements = api_provider.chargements;
+    List<Position> positions = api_provider.positions;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -55,7 +59,7 @@ class _MesVgmsState extends State<MesVgms> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "VGM",
+          "Masse Brute Vérifiée (VGM)",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -71,207 +75,759 @@ class _MesVgmsState extends State<MesVgms> {
               ))
         ],
       ),
-      body: loading
+      body: datas.isEmpty
           ? Center(
-              child: CircularProgressIndicator(
-                color: MyColors.secondary,
-              ),
-            )
-          : vgms.isEmpty
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: MyColors.secondary,
-                  ),
-                )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        Vgms vgm = vgms[index];
-                        Expeditions expedition =
-                            function.expedition(expeditions, vgm.modele_id);
-                        Marchandises marchandise =
-                            function.expedition_marchandise(
-                                expedition, marchandises, annonces);
-                        Localisations localisation =
-                            function.marchandise_localisation(
-                                localisations, marchandise.id);
-                        Pays pay_depart =
-                            function.pay(pays, localisation.pays_exp_id);
-                        Pays pay_dest =
-                            function.pay(pays, localisation.pays_liv_id);
-                        Villes ville_dep = function.ville(
-                            all_villes, localisation.city_exp_id);
-                        Villes ville_dest = function.ville(
-                            all_villes, localisation.city_liv_id);
+              child: Text("Vous n'avez aucun VGM disponible",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  )))
+          : SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    Vgms data = datas[index];
 
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                    if (data.modele_type.contains("Expedition")) {
+                      Expeditions expedition =
+                          function.expedition(expeditions, data.modele_id);
+
+                      Marchandises marchandise =
+                          function.expedition_marchandise(
+                              expedition, marchandises, annonces);
+                      Localisations localisation =
+                          function.marchandise_localisation(
+                              localisations, marchandise.id);
+                      Pays pay_depart =
+                          function.pay(pays, localisation.pays_exp_id);
+                      Pays pay_dest =
+                          function.pay(pays, localisation.pays_liv_id);
+                      Villes ville_dep =
+                          function.ville(all_villes, localisation.city_exp_id);
+                      Villes ville_dest =
+                          function.ville(all_villes, localisation.city_liv_id);
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 0),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return DetailAnnonce(
+                                    id: expedition.annonce_id,
+                                  );
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: user.dark_mode == 0
-                                    ? MyColors.textColor.withOpacity(.5)
-                                    : null,
+                                color: Colors.grey.withOpacity(.2),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                     color: user.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.textColor,
-                                    width: 1,
+                                    width: 0.1,
                                     style: BorderStyle.solid)),
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: ListTile(
-                                onTap: () {
-                                  /* Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration:
-                                          Duration(milliseconds: 500),
-                                      pageBuilder: (BuildContext context,
-                                          Animation<double> animation,
-                                          Animation<double>
-                                              secondaryAnimation) {
-                                        return DetailVgm(
-                                          id: vgm.id,
-                                        );
-                                      },
-                                      transitionsBuilder: (BuildContext context,
-                                          Animation<double> animation,
-                                          Animation<double> secondaryAnimation,
-                                          Widget child) {
-                                        return SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset.zero,
-                                          ).animate(animation),
-                                          child: child,
-                                        );
-                                      },
-                                    ),
-                                  );*/
-                                },
-                                leading: Icon(Icons.file_present,
-                                    size: 50,
-                                    color: user.dark_mode == 1
-                                        ? MyColors.secondary
-                                        : function.convertHexToColor(
-                                            function.couleurs[
-                                                function.randomInt(
-                                                    function.couleurs.length -
-                                                        1)],
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 5, top: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Nom/Référence : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          data.doc_id ?? data.reference,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Départ : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      pay_depart.id == 0
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                                fit: BoxFit.cover,
+                                                height: 15,
+                                                width: 20,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: MyColors.secondary,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(),
+                                              ),
+                                            ),
+                                      localisation.address_exp?.isEmpty ?? true
+                                          ? Expanded(
+                                              child: Text(
+                                                ville_dep.name +
+                                                    " , " +
+                                                    pay_depart.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                          : Expanded(
+                                              child: Text(
+                                                (localisation.address_exp ??
+                                                        "") +
+                                                    " , " +
+                                                    ville_dep.name +
+                                                    " , " +
+                                                    pay_depart.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Destination : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      pay_dest.id == 0
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                                fit: BoxFit.cover,
+                                                height: 15,
+                                                width: 20,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: MyColors.secondary,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(),
+                                              ),
+                                            ),
+                                      localisation.address_liv?.isEmpty ?? true
+                                          ? Expanded(
+                                              child: Text(
+                                                ville_dest.name +
+                                                    " , " +
+                                                    pay_dest.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                          : Expanded(
+                                              child: Text(
+                                                localisation.address_liv ??
+                                                    "" +
+                                                        " , " +
+                                                        ville_dest.name +
+                                                        " , " +
+                                                        pay_dest.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Date : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          function.date(
+                                              marchandise.date_chargement),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 5),
+                                    child: SizedBox(
+                                      height: 25,
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5))),
+                                          onPressed: () {
+                                            String url =
+                                                "https://test.bodah.bj/storage/" +
+                                                    data.path;
+                                            downloadDocument(context, url);
+                                          },
+                                          child: Text(
+                                            "Téléchargez",
+                                            style: TextStyle(
+                                                color: MyColors.light,
+                                                fontSize: 10,
+                                                fontFamily: "Poppins"),
                                           )),
-                                title: Text(
-                                  vgm.reference + " " + marchandise.nom,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: user.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
-                                ),
-                                trailing: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.more_vert,
-                                      color: user.dark_mode == 1
-                                          ? MyColors.light
-                                          : null,
-                                    )),
-                                subtitle: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "${pay_depart.name.toUpperCase()}, ${ville_dep.name}",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.black,
-                                                fontFamily: "Poppins",
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "- ${pay_dest.name.toUpperCase()}, ${ville_dest.name}",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                              fontFamily: "Poppins",
-                                            ),
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              function
-                                                  .date(expedition.date_depart),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.black,
-                                                fontFamily: "Poppins",
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "- " +
-                                                function.date(
-                                                    expedition.date_arrivee),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                              fontFamily: "Poppins",
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        );
-                      },
-                      itemCount: vgms.length,
-                    ),
-                  ),
+                        ),
+                      );
+                    } else {
+                      List<Cargaison> cargaisons = [];
+                      if (data.modele_type.contains("Import")) {
+                        Import import =
+                            function.import(imports, data.modele_id);
+                        cargaisons = function.data_cargaisons(
+                            cargaison, import.id, "Import");
+                      } else {
+                        Exports export =
+                            function.export(exports, data.modele_id);
+                        cargaisons = function.data_cargaisons(
+                            cargaison, export.id, "Export");
+                      }
+
+                      if (cargaisons.isEmpty) {
+                        cargaisons = [
+                          Cargaison(
+                              id: 0,
+                              reference: "",
+                              modele_type: "",
+                              modele_id: 0,
+                              nom: "",
+                              deleted: 0)
+                        ];
+                      }
+
+                      List<CargaisonClient> cargaison_clients =
+                          function.cargaison_cargaison_clients(
+                              cargaisons.first, cargaison_client);
+                      if (cargaison_clients.isEmpty) {
+                        cargaison_clients = [
+                          CargaisonClient(
+                              id: 0,
+                              client_id: 0,
+                              cargaison_id: 0,
+                              quantite: 0,
+                              deleted: 0)
+                        ];
+                      }
+                      Chargement chargement =
+                          function.cargaison_client_chargement(
+                              chargements, cargaison_clients.first);
+
+                      if (cargaison_clients.isEmpty) {
+                        cargaison_clients = [
+                          CargaisonClient(
+                              id: 0,
+                              client_id: 0,
+                              cargaison_id: 0,
+                              quantite: 0,
+                              deleted: 0)
+                        ];
+                      }
+
+                      Position position = function.cargaison_client_position(
+                          positions, cargaison_clients.first);
+
+                      Pays pay_depart = function.pay(pays, position.pay_dep_id);
+                      Pays pay_dest = function.pay(pays, position.pay_liv_id);
+                      Villes ville_dep =
+                          function.ville(all_villes, position.city_dep_id);
+                      Villes ville_dest =
+                          function.ville(all_villes, position.city_liv_id);
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 0),
+                        child: TextButton(
+                          onPressed: () {
+                            if (data.modele_type.contains("Import")) {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 500),
+                                  pageBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation) {
+                                    return DetailAnnonce(
+                                      id: data.modele_id,
+                                    );
+                                  },
+                                  transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
+                                        begin: Offset(1.0, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 500),
+                                  pageBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation) {
+                                    return DetailExport(
+                                      export_id: data.modele_id,
+                                    );
+                                  },
+                                  transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
+                                        begin: Offset(1.0, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(.2),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.textColor,
+                                    width: 0.1,
+                                    style: BorderStyle.solid)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 5, top: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Nom/Référence : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          data.doc_id ?? data.reference,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Départ : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      pay_depart.id == 0
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                                fit: BoxFit.cover,
+                                                height: 15,
+                                                width: 20,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: MyColors.secondary,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(),
+                                              ),
+                                            ),
+                                      position.address_dep?.isEmpty ?? true
+                                          ? Expanded(
+                                              child: Text(
+                                                ville_dep.name +
+                                                    " , " +
+                                                    pay_depart.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                          : Expanded(
+                                              child: Text(
+                                                (position.address_dep ?? "") +
+                                                    " , " +
+                                                    ville_dep.name +
+                                                    " , " +
+                                                    pay_depart.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Destination : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      pay_dest.id == 0
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                                fit: BoxFit.cover,
+                                                height: 15,
+                                                width: 20,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: MyColors.secondary,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(),
+                                              ),
+                                            ),
+                                      position.address_liv?.isEmpty ?? true
+                                          ? Expanded(
+                                              child: Text(
+                                                ville_dest.name +
+                                                    " , " +
+                                                    pay_dest.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            )
+                                          : Expanded(
+                                              child: Text(
+                                                position.address_liv ??
+                                                    "" +
+                                                        " , " +
+                                                        ville_dest.name +
+                                                        " , " +
+                                                        pay_dest.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Date : ",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.black,
+                                            fontFamily: "Poppins",
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          function.date(chargement.debut),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 5),
+                                    child: SizedBox(
+                                      height: 25,
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5))),
+                                          onPressed: () {
+                                            String url =
+                                                "https://test.bodah.bj/storage/" +
+                                                    data.path;
+                                            downloadDocument(context, url);
+                                          },
+                                          child: Text(
+                                            "Téléchargez",
+                                            style: TextStyle(
+                                                color: MyColors.light,
+                                                fontSize: 10,
+                                                fontFamily: "Poppins"),
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  itemCount: datas.length,
                 ),
+              ),
+            ),
     );
   }
 }

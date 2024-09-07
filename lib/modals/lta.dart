@@ -3,7 +3,7 @@ import 'dart:convert';
 
 class Lta {
   final int id;
-  final String path;
+  final String? path;
   final int modele_id;
   final String modele_type;
   final int deleted;
@@ -64,7 +64,7 @@ class Lta {
   factory Lta.fromMap(Map<String, dynamic> map) {
     return Lta(
       id: map['id'] as int,
-      path: map['path'] as String,
+      path: map['path'] != null ? map['path'] as String : null,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
       deleted: map['deleted'] as int,

@@ -538,6 +538,10 @@ class ApiProvider with ChangeNotifier {
     _bordereaux = response_bordereaux;
     final response_recues = await apiService.getRecus();
     _recus = response_recues;
+    final response_vgm = await apiService.getVgms();
+    _vgms = response_vgm;
+    final response_tdo = await apiService.getTdos();
+    _tdos = response_tdo;
     final response_apeles = await apiService.getApeles();
     _appeles = response_apeles;
     final response_interchange = await apiService.getInterchanges();

@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously, prefer_adjacent_string_concatenation
 
 import 'package:bodah/modals/annonces.dart';
-import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/modals/bon_commandes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
-import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
@@ -18,16 +17,15 @@ import '../../../drawer/index.dart';
 import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
 
-class MesBordereaux extends StatelessWidget {
-  const MesBordereaux({super.key});
+class MesOrdres extends StatelessWidget {
+  const MesOrdres({super.key});
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
-    List<BordereauLivraisons> datas = api_provider.bordereaux;
+    List<BonCommandes> datas = api_provider.ordres;
     List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -45,7 +43,7 @@ class MesBordereaux extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Bordereau de livraison",
+          "Ordre de transport",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
@@ -63,7 +61,7 @@ class MesBordereaux extends StatelessWidget {
       ),
       body: datas.isEmpty
           ? Center(
-              child: Text("Vous n'avez aucun bordereau de livraison disponible",
+              child: Text("Vous n'avez aucun ordre de transport disponible",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Poppins",
@@ -76,13 +74,14 @@ class MesBordereaux extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    BordereauLivraisons data = datas[index];
+                    BonCommandes data = datas[index];
 
-                    Expeditions expedition =
-                        function.expedition(expeditions, data.expedition_id);
+                    Annonces annonce =
+                        function.annonce(annonces, data.annonce_id);
 
-                    Marchandises marchandise = function.expedition_marchandise(
-                        expedition, marchandises, annonces);
+                    Marchandises marchandise = function
+                        .annonce_marchandises(marchandises, annonce.id)
+                        .first;
                     Localisations localisation =
                         function.marchandise_localisation(
                             localisations, marchandise.id);
@@ -106,7 +105,7 @@ class MesBordereaux extends StatelessWidget {
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
                                 return DetailAnnonce(
-                                  id: expedition.annonce_id,
+                                  id: data.annonce_id,
                                 );
                               },
                               transitionsBuilder: (BuildContext context,
@@ -160,7 +159,7 @@ class MesBordereaux extends StatelessWidget {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        data.numero_borderau,
+                                        data.numero_bon_commande,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(

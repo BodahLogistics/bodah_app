@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously, prefer_adjacent_string_concatenation
 
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/appeles.dart';
@@ -21,7 +21,6 @@ import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
 import '../../../../../../modals/positions.dart';
-import '../../../../../../modals/transport_mode.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../../../auth/sign_in.dart';
@@ -38,7 +37,7 @@ class MesApeles extends StatelessWidget {
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
     final user = api_provider.user;
-    List<Appeles> apeles = api_provider.appeles;
+    List<Appeles> datas = api_provider.appeles;
     List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -50,7 +49,6 @@ class MesApeles extends StatelessWidget {
     List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;
     List<Position> positions = api_provider.positions;
-    List<TransportMode> transport_modes = api_provider.transport_modes;
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -79,7 +77,7 @@ class MesApeles extends StatelessWidget {
               ))
         ],
       ),
-      body: apeles.isEmpty
+      body: datas.isEmpty
           ? Center(
               child: Text("Vous n'avez aucun appélé disponible",
                   textAlign: TextAlign.center,
@@ -94,11 +92,11 @@ class MesApeles extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    Appeles apele = apeles[index];
+                    Appeles data = datas[index];
 
-                    if (apele.modele_type.contains("Expedition")) {
+                    if (data.modele_type.contains("Expedition")) {
                       Expeditions expedition =
-                          function.expedition(expeditions, apele.modele_id);
+                          function.expedition(expeditions, data.modele_id);
 
                       Marchandises marchandise =
                           function.expedition_marchandise(
@@ -126,7 +124,7 @@ class MesApeles extends StatelessWidget {
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
                                   return DetailAnnonce(
-                                    id: apele.modele_id,
+                                    id: expedition.annonce_id,
                                   );
                                 },
                                 transitionsBuilder: (BuildContext context,
@@ -180,7 +178,7 @@ class MesApeles extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          apele.doc_id ?? apele.reference,
+                                          data.doc_id ?? data.reference,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -407,7 +405,7 @@ class MesApeles extends StatelessWidget {
                                           onPressed: () {
                                             String url =
                                                 "https://test.bodah.bj/storage/" +
-                                                    apele.path;
+                                                    data.path;
                                             downloadDocument(context, url);
                                           },
                                           child: Text(
@@ -427,14 +425,14 @@ class MesApeles extends StatelessWidget {
                       );
                     } else {
                       List<Cargaison> cargaisons = [];
-                      if (apele.modele_type.contains("Import")) {
+                      if (data.modele_type.contains("Import")) {
                         Import import =
-                            function.import(imports, apele.modele_id);
+                            function.import(imports, data.modele_id);
                         cargaisons = function.data_cargaisons(
                             cargaison, import.id, "Import");
                       } else {
                         Exports export =
-                            function.export(exports, apele.modele_id);
+                            function.export(exports, data.modele_id);
                         cargaisons = function.data_cargaisons(
                             cargaison, export.id, "Export");
                       }
@@ -493,7 +491,7 @@ class MesApeles extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 0),
                         child: TextButton(
                           onPressed: () {
-                            if (apele.modele_type.contains("Import")) {
+                            if (data.modele_type.contains("Import")) {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   transitionDuration:
@@ -502,7 +500,7 @@ class MesApeles extends StatelessWidget {
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
                                     return DetailAnnonce(
-                                      id: apele.modele_id,
+                                      id: data.modele_id,
                                     );
                                   },
                                   transitionsBuilder: (BuildContext context,
@@ -528,7 +526,7 @@ class MesApeles extends StatelessWidget {
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
                                     return DetailExport(
-                                      export_id: apele.modele_id,
+                                      export_id: data.modele_id,
                                     );
                                   },
                                   transitionsBuilder: (BuildContext context,
@@ -583,7 +581,7 @@ class MesApeles extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          apele.doc_id ?? apele.reference,
+                                          data.doc_id ?? data.reference,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -808,7 +806,7 @@ class MesApeles extends StatelessWidget {
                                           onPressed: () {
                                             String url =
                                                 "https://test.bodah.bj/storage/" +
-                                                    apele.path;
+                                                    data.path;
                                             downloadDocument(context, url);
                                           },
                                           child: Text(
@@ -828,7 +826,7 @@ class MesApeles extends StatelessWidget {
                       );
                     }
                   },
-                  itemCount: apeles.length,
+                  itemCount: datas.length,
                 ),
               ),
             ),
