@@ -10,6 +10,7 @@ import 'package:bodah/providers/calculator/index.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
 import 'package:bodah/providers/users/expediteur/import/aerien/add.dart';
+import 'package:bodah/providers/users/expediteur/import/home.dart';
 import 'package:bodah/providers/users/expediteur/import/liv/add.dart';
 import 'package:bodah/providers/users/expediteur/import/march/add.dart';
 import 'package:bodah/providers/users/expediteur/import/maritime/add.dart';
@@ -138,6 +139,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvAddLiv(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvHoImport(),
         ),
       ],
       child: MaterialApp(

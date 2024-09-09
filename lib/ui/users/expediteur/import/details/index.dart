@@ -1,5 +1,9 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, prefer_const_literals_to_create_immutables
 
+import 'package:bodah/providers/users/expediteur/import/home.dart';
+import 'package:bodah/ui/users/expediteur/import/details/liv/index.dart';
+import 'package:bodah/ui/users/expediteur/import/details/march/index.dart';
+import 'package:bodah/ui/users/expediteur/import/details/transp/index.dart';
 import 'package:bodah/ui/users/expediteur/import/list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +19,7 @@ import '../../../../../services/data_base_service.dart';
 import '../../../../auth/sign_in.dart';
 import '../../drawer/index.dart';
 import '../../marchandises/nav_bottom/index.dart';
+import '../route/add.dart';
 
 class DetailImport extends StatelessWidget {
   const DetailImport({super.key, required this.import_id});
@@ -24,6 +29,8 @@ class DetailImport extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
+    final provider = Provider.of<ProvHoImport>(context);
+    int current_index = provider.current_index;
     final user = api_provider.user;
     List<Import> imports = api_provider.imports;
     Import import = function.import(imports, import_id);
@@ -35,6 +42,13 @@ class DetailImport extends StatelessWidget {
         chargement_effectues, import_id, "Import");
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
     livraisons = function.data_livraisons(livraisons, import_id, "Import");
+
+    PageController pageController = PageController(initialPage: current_index);
+    final pages = [
+      ListCargaison(data_id: import.id, data_modele: "Import"),
+      ListTransporteur(data_id: import.id, data_modele: "Import"),
+      ListLivraisons(data_id: import.id, data_modele: "Import"),
+    ];
 
     return Scaffold(
       backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
@@ -110,44 +124,222 @@ class DetailImport extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 40, left: 15, right: 15, bottom: 80),
-              child: Column(
+              padding:
+                  const EdgeInsets.only(right: 7, left: 7, top: 20, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Référence de l'importation",
-                      style: TextStyle(
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: user.dark_mode == 1
-                              ? MyColors.light
-                              : MyColors.black),
+                  SizedBox(
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: current_index == 0 ? MyColors.secondary : null,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            provider.change_index(0);
+                          },
+                          child: Text(
+                            "Marchandise",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 9,
+                                color: current_index == 0
+                                    ? MyColors.light
+                                    : MyColors.secondary,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          )),
                     ),
                   ),
                   SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      import.reference,
-                      style: TextStyle(
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w300,
-                          color: user.dark_mode == 1
-                              ? MyColors.light
-                              : MyColors.black),
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: current_index == 1 ? MyColors.secondary : null,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            provider.change_index(1);
+                          },
+                          child: Text(
+                            "Transporteur",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 9,
+                                color: current_index == 1
+                                    ? MyColors.light
+                                    : MyColors.secondary,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          )),
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: current_index == 2 ? MyColors.secondary : null,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            provider.change_index(2);
+                          },
+                          child: Text(
+                            "Livraison",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 9,
+                                color: current_index == 2
+                                    ? MyColors.light
+                                    : MyColors.secondary,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          )),
+                    ),
                   ),
                 ],
               ),
-            )
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: PageView.builder(
+                itemCount: pages.length,
+                itemBuilder: (context, index) {
+                  return pages[current_index];
+                },
+                controller: pageController,
+                onPageChanged: (value) => provider.change_index(value),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 7, left: 7, bottom: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                              color: MyColors.secondary,
+                              width: 1,
+                              style: BorderStyle.solid)),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            NewTransp(context, import.id);
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyColors.secondary,
+                                ),
+                              ),
+                              Text(
+                                "Transporteur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 9,
+                                    color: MyColors.secondary,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                              color: MyColors.secondary,
+                              width: 1,
+                              style: BorderStyle.solid)),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            NewMarch(context, import.id);
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyColors.secondary,
+                                ),
+                              ),
+                              Text(
+                                "Marchandise",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 9,
+                                    color: MyColors.secondary,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                              color: MyColors.secondary,
+                              width: 1,
+                              style: BorderStyle.solid)),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            NewLiv(context, import.id);
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyColors.secondary,
+                                ),
+                              ),
+                              Text(
+                                "Livraison",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 9,
+                                    color: MyColors.secondary,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

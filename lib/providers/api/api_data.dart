@@ -272,6 +272,8 @@ class ApiProvider with ChangeNotifier {
     _positions = response_position;
     final response_chargement = await apiService.getChargements();
     _chargements = response_chargement;
+    final response_ville = await apiService.getAllVilles();
+    _villes = response_ville;
     _isLoading = false;
     notifyListeners();
   }

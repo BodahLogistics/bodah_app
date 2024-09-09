@@ -108,10 +108,6 @@ class MesImports extends StatelessWidget {
                     List<CargaisonClient> cargaison_clients =
                         function.cargaison_cargaison_clients(
                             cargaisons.first, cargaison_client);
-                    Chargement chargement =
-                        function.cargaison_client_chargement(
-                            chargements, cargaison_clients.first);
-
                     if (cargaison_clients.isEmpty) {
                       cargaison_clients = [
                         CargaisonClient(
@@ -122,6 +118,9 @@ class MesImports extends StatelessWidget {
                             deleted: 0)
                       ];
                     }
+                    Chargement chargement =
+                        function.cargaison_client_chargement(
+                            chargements, cargaison_clients.first);
 
                     Position position = function.cargaison_client_position(
                         positions, cargaison_clients.first);
