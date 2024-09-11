@@ -263,7 +263,7 @@ Future<dynamic> DeleteExport(BuildContext context, Exports export) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,

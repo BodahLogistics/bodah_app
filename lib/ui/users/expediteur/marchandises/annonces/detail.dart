@@ -1917,7 +1917,7 @@ Future<dynamic> DeleteAnnonce(BuildContext context, Annonces annonce) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -2045,7 +2045,7 @@ Future<dynamic> DeleteMarchandise(
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -2166,7 +2166,7 @@ Future<dynamic> ValidateOrdre(BuildContext context, BonCommandes ordre) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -2301,7 +2301,7 @@ Future<dynamic> DeleteOrdre(
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,

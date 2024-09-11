@@ -2545,6 +2545,7 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -2561,12 +2562,13 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -2620,7 +2622,7 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -2633,7 +2635,7 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -3402,6 +3404,7 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -3418,12 +3421,13 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -3477,7 +3481,7 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -3490,7 +3494,7 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -4060,6 +4064,7 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -4076,12 +4081,13 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -4133,7 +4139,7 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -4146,7 +4152,7 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),

@@ -572,6 +572,14 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitInterchanges() async {
+    _isLoading = true;
+    final response_interchange = await apiService.getInterchanges();
+    _interchanges = response_interchange;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitBordereaux() async {
     _isLoading = true;
     final response_all_villes = await apiService.getAllVilles();
@@ -594,38 +602,10 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> InitInterchanges() async {
-    _isLoading = true;
-    final response = await apiService.getInterchanges();
-    _interchanges = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
-    _isLoading = false;
-    notifyListeners();
-  }
-
   Future<void> InitAutreDocs() async {
     _isLoading = true;
     final response = await apiService.getAutreDocs();
     _autre_docs = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -634,16 +614,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getBls();
     _bls = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -652,16 +622,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getLtas();
     _ltas = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -670,16 +630,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getAvds();
     _avds = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -688,16 +638,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getBfus();
     _bfus = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -706,16 +646,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getDeclarations();
     _declarations = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -724,16 +654,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getFiches();
     _fiche_techniques = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -742,16 +662,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getCos();
     _cos = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -760,16 +670,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getCps();
     _cps = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -778,17 +678,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getTdos();
     _tdos = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -797,17 +686,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getVgms();
     _vgms = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -816,16 +694,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getRecus();
     _recus = response;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }
@@ -834,16 +702,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_apeles = await apiService.getApeles();
     _appeles = response_apeles;
-    final response_annonce = await apiService.getAnnonces();
-    _annonces = response_annonce;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
     _isLoading = false;
     notifyListeners();
   }

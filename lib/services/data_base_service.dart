@@ -749,11 +749,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportApele(String doc_id, File file, Import import) async {
+  Future<String> AddImportApele(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/apele/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/apele/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -763,8 +764,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -777,11 +784,11 @@ class DBServices {
   }
 
   Future<String> AddExportApele(
-      String doc_id, File file, Exports export) async {
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/apele/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/apele/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -791,8 +798,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -804,7 +817,8 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateApele(String doc_id, File file, Appeles apele) async {
+  Future<String> UpdateApele(
+      String doc_id, List<File> files, Appeles apele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -818,8 +832,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -876,11 +896,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportLta(String doc_id, File file, Import import) async {
+  Future<String> AddImportLta(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/lta/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/lta/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -890,8 +911,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -903,11 +930,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportLta(String doc_id, File file, Exports export) async {
+  Future<String> AddExportLta(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/lta/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/lta/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -917,8 +945,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -930,7 +964,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateLta(String doc_id, File file, Lta lta) async {
+  Future<String> UpdateLta(String doc_id, List<File> files, Lta lta) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -944,8 +978,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1002,11 +1042,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportBl(String doc_id, File file, Import import) async {
+  Future<String> AddImportBl(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/bl/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/bl/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1016,8 +1057,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1029,11 +1076,11 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportBl(String doc_id, File file, Exports export) async {
+  Future<String> AddExportBl(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
-      var url =
-          "${api_url}home/expediteur/export/document/bl/publish/${export.id}";
+      var url = "${api_url}home/expediteur/export/document/bl/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1043,8 +1090,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1056,7 +1109,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateBl(String doc_id, File file, Bl data) async {
+  Future<String> UpdateBl(String doc_id, List<File> files, Bl data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1070,8 +1123,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1128,11 +1187,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportTdo(String doc_id, File file, Import import) async {
+  Future<String> AddImportTdo(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/tdo/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/tdo/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1142,8 +1202,47 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
+      }
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportTdo(
+      String doc_id, List<File> files, int data_id) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/tdo/publish/$data_id";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1155,34 +1254,7 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportTdo(String doc_id, File file, Exports export) async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url =
-          "${api_url}home/expediteur/export/document/tdo/publish/${export.id}";
-      final uri = Uri.parse(url);
-      var request = http.MultipartRequest('POST', uri)
-        ..headers.addAll({
-          'API-KEY': api_key,
-          'AUTH-TOKEN': auth_token,
-          'Authorization': 'Bearer $token',
-        })
-        ..fields['doc_id'] = doc_id;
-
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
-      }
-
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      return response.statusCode.toString();
-    } catch (e) {
-      return "202"; // Code d'erreur personnalisé
-    }
-  }
-
-  Future<String> UpdateTdo(String doc_id, File file, Tdos data) async {
+  Future<String> UpdateTdo(String doc_id, List<File> files, Tdos data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1196,8 +1268,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1254,11 +1332,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportVgm(String doc_id, File file, Import import) async {
+  Future<String> AddImportVgm(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/vgm/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/vgm/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1268,8 +1347,47 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
+      }
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> AddExportVgm(
+      String doc_id, List<File> files, int data_id) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/expediteur/export/document/vgm/publish/$data_id";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['doc_id'] = doc_id;
+
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1281,34 +1399,7 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportVgm(String doc_id, File file, Exports export) async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url =
-          "${api_url}home/expediteur/export/document/vgm/publish/${export.id}";
-      final uri = Uri.parse(url);
-      var request = http.MultipartRequest('POST', uri)
-        ..headers.addAll({
-          'API-KEY': api_key,
-          'AUTH-TOKEN': auth_token,
-          'Authorization': 'Bearer $token',
-        })
-        ..fields['doc_id'] = doc_id;
-
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
-      }
-
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      return response.statusCode.toString();
-    } catch (e) {
-      return "202"; // Code d'erreur personnalisé
-    }
-  }
-
-  Future<String> UpdateVgm(String doc_id, File file, Vgms data) async {
+  Future<String> UpdateVgm(String doc_id, List<File> files, Vgms data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1322,10 +1413,15 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
-
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
@@ -1381,11 +1477,11 @@ class DBServices {
   }
 
   Future<String> AddImportInterchange(
-      String doc_id, File file, Import import) async {
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/interchange/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/interchange/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1395,8 +1491,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1409,11 +1511,11 @@ class DBServices {
   }
 
   Future<String> AddExportInterchange(
-      String doc_id, File file, Exports export) async {
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/interchange/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/interchange/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1423,8 +1525,14 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1437,7 +1545,7 @@ class DBServices {
   }
 
   Future<String> UpdateInterchange(
-      String doc_id, File file, Interchanges data) async {
+      String doc_id, List<File> files, Interchanges data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1451,10 +1559,15 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      // Vérifie si la liste de fichiers n'est pas vide
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
-
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
@@ -1509,11 +1622,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportRecu(String doc_id, File file, Import import) async {
+  Future<String> AddImportRecu(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/recu/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/recu/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1523,8 +1637,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1536,11 +1655,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportRecu(String doc_id, File file, Exports export) async {
+  Future<String> AddExportRecu(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/recu/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/recu/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1550,8 +1670,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1563,7 +1688,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateRecu(String doc_id, File file, Recus data) async {
+  Future<String> UpdateRecu(String doc_id, List<File> files, Recus data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1577,8 +1702,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1635,11 +1765,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportAvd(String doc_id, File file, Import import) async {
+  Future<String> AddImportAvd(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/avd/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/avd/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1649,8 +1780,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1662,11 +1798,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportAvd(String doc_id, File file, Exports export) async {
+  Future<String> AddExportAvd(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/avd/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/avd/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1676,8 +1813,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1689,7 +1831,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateAvd(String doc_id, File file, Avd data) async {
+  Future<String> UpdateAvd(String doc_id, List<File> files, Avd data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1703,8 +1845,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1761,11 +1908,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportBfu(String doc_id, File file, Import import) async {
+  Future<String> AddImportBfu(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/bfu/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/bfu/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1775,8 +1923,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1788,11 +1941,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportBfu(String doc_id, File file, Exports export) async {
+  Future<String> AddExportBfu(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/bfu/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/bfu/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1802,8 +1956,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1815,7 +1974,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateBfu(String doc_id, File file, Bfu data) async {
+  Future<String> UpdateBfu(String doc_id, List<File> files, Bfu data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1829,8 +1988,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1888,11 +2052,11 @@ class DBServices {
   }
 
   Future<String> AddImportDeclaration(
-      String doc_id, File file, Import import) async {
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/declaration/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/declaration/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1902,8 +2066,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1916,11 +2085,11 @@ class DBServices {
   }
 
   Future<String> AddExportDeclaration(
-      String doc_id, File file, Exports export) async {
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/declaration/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/declaration/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -1930,8 +2099,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -1944,7 +2118,7 @@ class DBServices {
   }
 
   Future<String> UpdateDeclaration(
-      String doc_id, File file, Declaration data) async {
+      String doc_id, List<File> files, Declaration data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1958,8 +2132,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2016,11 +2195,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportFiche(String doc_id, File file, Import import) async {
+  Future<String> AddImportFiche(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/fiche/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/fiche/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2030,8 +2210,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2044,11 +2229,11 @@ class DBServices {
   }
 
   Future<String> AddExportFiche(
-      String doc_id, File file, Exports export) async {
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/fiche/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/fiche/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2058,8 +2243,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2072,7 +2262,7 @@ class DBServices {
   }
 
   Future<String> UpdateFiche(
-      String doc_id, File file, FicheTechnique data) async {
+      String doc_id, List<File> files, FicheTechnique data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2086,8 +2276,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2144,11 +2339,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportCo(String doc_id, File file, Import import) async {
+  Future<String> AddImportCo(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/co/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/co/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2158,8 +2354,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2171,11 +2372,11 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportCo(String doc_id, File file, Exports export) async {
+  Future<String> AddExportCo(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
-      var url =
-          "${api_url}home/expediteur/export/document/co/publish/${export.id}";
+      var url = "${api_url}home/expediteur/export/document/co/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2185,8 +2386,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2198,7 +2404,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateCo(String doc_id, File file, CO data) async {
+  Future<String> UpdateCo(String doc_id, List<File> files, CO data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2212,8 +2418,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2270,11 +2481,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportCps(String doc_id, File file, Import import) async {
+  Future<String> AddImportCps(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/cps/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/cps/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2284,8 +2496,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2297,11 +2514,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportCps(String doc_id, File file, Exports export) async {
+  Future<String> AddExportCps(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/cps/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/cps/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2311,8 +2529,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2324,7 +2547,7 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateCps(String doc_id, File file, CPS data) async {
+  Future<String> UpdateCps(String doc_id, List<File> files, CPS data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2338,8 +2561,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2396,11 +2624,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportDoc(String doc_id, File file, Import import) async {
+  Future<String> AddImportDoc(
+      String doc_id, List<File> files, int data_id, String modele) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/import/document/doc/publish/${import.id}";
+          "${api_url}home/expediteur/${modele.toLowerCase()}/document/doc/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2410,8 +2639,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2423,11 +2657,12 @@ class DBServices {
     }
   }
 
-  Future<String> AddExportDoc(String doc_id, File file, Exports export) async {
+  Future<String> AddExportDoc(
+      String doc_id, List<File> files, int data_id) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
-          "${api_url}home/expediteur/export/document/doc/publish/${export.id}";
+          "${api_url}home/expediteur/export/document/doc/publish/$data_id";
       final uri = Uri.parse(url);
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({
@@ -2437,8 +2672,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();
@@ -2450,7 +2690,8 @@ class DBServices {
     }
   }
 
-  Future<String> UpdateDoc(String doc_id, File file, AutreDocs data) async {
+  Future<String> UpdateDoc(
+      String doc_id, List<File> files, AutreDocs data) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2464,8 +2705,13 @@ class DBServices {
         })
         ..fields['doc_id'] = doc_id;
 
-      if (file.existsSync()) {
-        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      if (files.isNotEmpty) {
+        // Ajoute uniquement le premier fichier de la liste
+        File firstFile = files.first;
+        if (firstFile.existsSync()) {
+          request.files
+              .add(await http.MultipartFile.fromPath('path', firstFile.path));
+        }
       }
 
       var streamedResponse = await request.send();

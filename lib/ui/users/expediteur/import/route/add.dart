@@ -2543,6 +2543,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -2559,12 +2560,13 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -2618,7 +2620,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -2631,7 +2633,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -3400,6 +3402,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -3416,12 +3419,13 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -3475,7 +3479,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -3488,7 +3492,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -4058,6 +4062,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -4074,12 +4079,13 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -4131,7 +4137,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -4144,7 +4150,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -4732,6 +4738,7 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -4748,12 +4755,13 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -4805,7 +4813,7 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -4818,7 +4826,7 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -5609,6 +5617,7 @@ Future<dynamic> UpdateMarch(
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -5625,12 +5634,13 @@ Future<dynamic> UpdateMarch(
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -5684,7 +5694,7 @@ Future<dynamic> UpdateMarch(
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -5697,7 +5707,7 @@ Future<dynamic> UpdateMarch(
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -6575,6 +6585,7 @@ Future<dynamic> UpdateTransp(
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -6591,12 +6602,13 @@ Future<dynamic> UpdateTransp(
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -6650,7 +6662,7 @@ Future<dynamic> UpdateTransp(
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -6663,7 +6675,7 @@ Future<dynamic> UpdateTransp(
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -7205,6 +7217,7 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -7220,12 +7233,13 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -7245,7 +7259,7 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
                     style: TextStyle(
                         color: MyColors.light,
                         fontFamily: "Poppins",
-                        fontSize: 10,
+                        fontSize: 8,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -7269,7 +7283,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
       List<Cargaison> cargaisons = api_provider.cargaisons;
       cargaisons = function.data_cargaisons(cargaisons, data_id, modele);
       List<Client> clients = api_provider.clients;
-      List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
+      List<CargaisonClient> cargaisons_clients = api_provider.cargaison_clients;
       List<Chargement> chargements = api_provider.chargements;
       List<Position> positions = api_provider.positions;
       List<Pays> pays = api_provider.pays;
@@ -7309,528 +7323,448 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
 
                       List<CargaisonClient> cargaison_clients =
                           function.cargaison_cargaison_clients(
-                              cargaison, cargaison_client);
+                              cargaison, cargaisons_clients);
+                      if (cargaison_clients.isEmpty) {
+                        cargaison_clients = [
+                          CargaisonClient(
+                              id: 0,
+                              client_id: 0,
+                              cargaison_id: 0,
+                              quantite: 0,
+                              deleted: 0)
+                        ];
+                      }
 
-                      return cargaison_clients.isEmpty
-                          ? Container()
-                          : SizedBox(
-                              height: 220,
-                              child: ListView.builder(
-                                itemCount: cargaison_clients.length,
-                                itemBuilder: (context, carIdex) {
-                                  CargaisonClient cargaison_client =
-                                      cargaison_clients[carIdex];
-                                  Chargement chargement =
-                                      function.cargaison_client_chargement(
-                                          chargements, cargaison_client);
-                                  Position position =
-                                      function.cargaison_client_position(
-                                          positions, cargaison_client);
-                                  Pays pay_depart =
-                                      function.pay(pays, position.pay_dep_id);
-                                  Pays pay_dest =
-                                      function.pay(pays, position.pay_liv_id);
-                                  Villes ville_dep = function.ville(
-                                      all_villes, position.city_dep_id);
-                                  Villes ville_dest = function.ville(
-                                      all_villes, position.city_liv_id);
-                                  Client client = function.client(
-                                      clients, cargaison_client.client_id);
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey.withOpacity(.2),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: user.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.textColor,
-                                              width: 0.1,
-                                              style: BorderStyle.solid)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            bottom: 5,
-                                            top: 5),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Nom : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    cargaison.nom,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Client : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    client.nom,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Contact : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    client.telephone,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Quantité : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    cargaison_client.quantite
-                                                        .toString(),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Départ : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                pay_depart.id == 0
-                                                    ? Container()
-                                                    : Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              "https://test.bodah.bj/countries/${pay_depart.flag}",
-                                                          fit: BoxFit.cover,
-                                                          height: 12,
-                                                          width: 17,
-                                                          progressIndicatorBuilder:
-                                                              (context, url,
-                                                                      downloadProgress) =>
-                                                                  CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress,
-                                                            color: MyColors
-                                                                .secondary,
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              Icon(
-                                                            Icons.error,
-                                                            color: Colors.red,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                Expanded(
-                                                  child: Text(
-                                                    ville_dep.name +
-                                                        " , " +
-                                                        pay_depart.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Destination : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 3,
-                                                ),
-                                                pay_dest.id == 0
-                                                    ? Container()
-                                                    : Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              "https://test.bodah.bj/countries/${pay_dest.flag}",
-                                                          fit: BoxFit.cover,
-                                                          height: 12,
-                                                          width: 17,
-                                                          progressIndicatorBuilder:
-                                                              (context, url,
-                                                                      downloadProgress) =>
-                                                                  CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress,
-                                                            color: MyColors
-                                                                .secondary,
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              Icon(
-                                                            Icons.error,
-                                                            color: Colors.red,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                Expanded(
-                                                  child: Text(
-                                                    ville_dest.name +
-                                                        " , " +
-                                                        pay_dest.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Chargement : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    function
-                                                        .date(chargement.debut),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Livraison : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    function
-                                                        .date(chargement.fin),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 9),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Actions : ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 10),
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                IconButton(
-                                                    style: TextButton.styleFrom(
-                                                        padding:
-                                                            EdgeInsets.zero),
-                                                    onPressed: () {
-                                                      provider
-                                                          .change_cargaison_client(
-                                                              client,
-                                                              cargaison_client,
-                                                              cargaison,
-                                                              pay_depart,
-                                                              pay_dest,
-                                                              ville_dep,
-                                                              ville_dest,
-                                                              chargement);
-                                                      UpdateMarch(dialocontext,
-                                                          cargaison_client);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.edit,
-                                                      size: 20,
-                                                      color: MyColors.primary,
-                                                    )),
-                                                IconButton(
-                                                    style: TextButton.styleFrom(
-                                                        padding:
-                                                            EdgeInsets.zero),
-                                                    onPressed: () {
-                                                      DeleteMarch(
-                                                          dialocontext,
-                                                          cargaison_client,
-                                                          cargaison);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.delete,
-                                                      size: 20,
-                                                      color: Colors.redAccent,
-                                                    )),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                      CargaisonClient cargaison_client =
+                          cargaison_clients.first;
+                      Chargement chargement =
+                          function.cargaison_client_chargement(
+                              chargements, cargaison_client);
+                      Position position = function.cargaison_client_position(
+                          positions, cargaison_client);
+                      Pays pay_depart = function.pay(pays, position.pay_dep_id);
+                      Pays pay_dest = function.pay(pays, position.pay_liv_id);
+                      Villes ville_dep =
+                          function.ville(all_villes, position.city_dep_id);
+                      Villes ville_dest =
+                          function.ville(all_villes, position.city_liv_id);
+                      Client client =
+                          function.client(clients, cargaison_client.client_id);
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(.2),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.textColor,
+                                  width: 0.1,
+                                  style: BorderStyle.solid)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 5, top: 5),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Nom : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        cargaison.nom,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                            );
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Client : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        client.nom,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Contact : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        client.telephone,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Quantité : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        cargaison_client.quantite.toString(),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Départ : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    pay_depart.id == 0
+                                        ? Container()
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                              fit: BoxFit.cover,
+                                              height: 12,
+                                              width: 17,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: MyColors.secondary,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                    Expanded(
+                                      child: Text(
+                                        ville_dep.name +
+                                            " , " +
+                                            pay_depart.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Destination : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    pay_dest.id == 0
+                                        ? Container()
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                              fit: BoxFit.cover,
+                                              height: 12,
+                                              width: 17,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: MyColors.secondary,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                    Expanded(
+                                      child: Text(
+                                        ville_dest.name + " , " + pay_dest.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Chargement : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        function.date(chargement.debut),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Livraison : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        function.date(chargement.fin),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: user.dark_mode == 1
+                                                ? MyColors.light
+                                                : MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontSize: 9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Actions : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontSize: 10),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    IconButton(
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero),
+                                        onPressed: () {
+                                          provider.change_cargaison_client(
+                                              client,
+                                              cargaison_client,
+                                              cargaison,
+                                              pay_depart,
+                                              pay_dest,
+                                              ville_dep,
+                                              ville_dest,
+                                              chargement);
+                                          UpdateMarch(
+                                              dialocontext, cargaison_client);
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 20,
+                                          color: MyColors.primary,
+                                        )),
+                                    IconButton(
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero),
+                                        onPressed: () {
+                                          DeleteMarch(dialocontext,
+                                              cargaison_client, cargaison);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                          color: Colors.redAccent,
+                                        )),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
                     },
                     itemCount: cargaisons.length),
               ),
@@ -7840,6 +7774,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -7855,12 +7790,13 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -7880,7 +7816,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
                     style: TextStyle(
                         color: MyColors.light,
                         fontFamily: "Poppins",
-                        fontSize: 10,
+                        fontSize: 8,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -8296,6 +8232,7 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -8311,12 +8248,13 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -8336,7 +8274,7 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
                     style: TextStyle(
                         color: MyColors.light,
                         fontFamily: "Poppins",
-                        fontSize: 10,
+                        fontSize: 8,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -8385,6 +8323,7 @@ Future<dynamic> DeleteTransp(BuildContext context,
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -8401,12 +8340,13 @@ Future<dynamic> DeleteTransp(BuildContext context,
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -8437,7 +8377,7 @@ Future<dynamic> DeleteTransp(BuildContext context,
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -8450,7 +8390,7 @@ Future<dynamic> DeleteTransp(BuildContext context,
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -8499,6 +8439,7 @@ Future<dynamic> DeleteMarch(BuildContext context,
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -8515,12 +8456,13 @@ Future<dynamic> DeleteMarch(BuildContext context,
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -8551,7 +8493,7 @@ Future<dynamic> DeleteMarch(BuildContext context,
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -8564,7 +8506,7 @@ Future<dynamic> DeleteMarch(BuildContext context,
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),
@@ -8615,6 +8557,7 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -8631,12 +8574,13 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -8671,7 +8615,7 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -8684,7 +8628,7 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),

@@ -9,6 +9,7 @@ import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
 import 'package:bodah/modals/chargement_effectues.dart';
 import 'package:bodah/modals/client.dart';
+import 'package:bodah/modals/declaration.dart';
 import 'package:bodah/modals/destinataires.dart';
 import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
@@ -1066,6 +1067,109 @@ class Functions {
           entrepriseable_type: "",
           entreprise_able_id: 0),
     );
+  }
+
+  List<Appeles> data_appeles(
+      List<Appeles> apeles, int data_id, String data_modele) {
+    return apeles
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Bl> data_bl(List<Bl> bls, int data_id, String data_modele) {
+    return bls
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Lta> data_lta(List<Lta> ltas, int data_id, String data_modele) {
+    return ltas
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Interchanges> data_interchanges(
+      List<Interchanges> interchanges, int data_id, String data_modele) {
+    return interchanges
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Tdos> data_tdos(List<Tdos> tdos, int data_id, String data_modele) {
+    return tdos
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Vgms> data_vgm(List<Vgms> vgms, int data_id, String data_modele) {
+    return vgms
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Recus> data_recus(List<Recus> recus, int data_id, String data_modele) {
+    return recus
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<AutreDocs> data_autre_docs(
+      List<AutreDocs> autre_docs, int data_id, String data_modele) {
+    return autre_docs
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Avd> data_avds(List<Avd> avds, int data_id, String data_modele) {
+    return avds
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Bfu> data_bfus(List<Bfu> bfus, int data_id, String data_modele) {
+    return bfus
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<CO> data_cos(List<CO> cos, int data_id, String data_modele) {
+    return cos
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<CPS> data_cps(List<CPS> cps, int data_id, String data_modele) {
+    return cps
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<FicheTechnique> data_fiches(
+      List<FicheTechnique> fiche_techniques, int data_id, String data_modele) {
+    return fiche_techniques
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Declaration> data_declarations(
+      List<Declaration> declarations, int data_id, String data_modele) {
+    return declarations
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
   }
 
   List<Marchandises> annonce_marchandises(

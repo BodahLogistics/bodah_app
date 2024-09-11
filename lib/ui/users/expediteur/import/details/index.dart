@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, prefer_const_literals_to_create_immutables
 
 import 'package:bodah/providers/users/expediteur/import/home.dart';
+import 'package:bodah/ui/users/expediteur/import/details/docs/index.dart';
 import 'package:bodah/ui/users/expediteur/import/details/liv/index.dart';
 import 'package:bodah/ui/users/expediteur/import/details/march/index.dart';
 import 'package:bodah/ui/users/expediteur/import/details/transp/index.dart';
@@ -48,6 +49,7 @@ class DetailImport extends StatelessWidget {
       ListCargaison(data_id: import.id, data_modele: "Import"),
       ListTransporteur(data_id: import.id, data_modele: "Import"),
       ListLivraisons(data_id: import.id, data_modele: "Import"),
+      ListDocuments(data_id: import.id, data_modele: "Import"),
     ];
 
     return Scaffold(
@@ -200,6 +202,32 @@ class DetailImport extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 9,
                                 color: current_index == 2
+                                    ? MyColors.light
+                                    : MyColors.secondary,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    width: 40,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: current_index == 3 ? MyColors.secondary : null,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: TextButton(
+                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                          onPressed: () {
+                            provider.change_index(3);
+                          },
+                          child: Text(
+                            "Docs",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 9,
+                                color: current_index == 3
                                     ? MyColors.light
                                     : MyColors.secondary,
                                 fontFamily: "Poppins",
@@ -382,6 +410,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
             children: [
               SizedBox(
                 width: 80,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -398,12 +427,13 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                           letterSpacing: 1),
                     )),
               ),
               SizedBox(
                 width: 100,
+                height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -455,7 +485,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                       ? Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: SizedBox(
-                            height: 30,
+                            height: 20,
                             width: 30,
                             child: CircularProgressIndicator(
                               color: MyColors.light,
@@ -468,7 +498,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold),
                         ),
                 ),

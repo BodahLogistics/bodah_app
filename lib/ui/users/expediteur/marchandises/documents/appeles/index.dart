@@ -883,6 +883,7 @@ void downloadDocument(BuildContext context, String url) {
               children: [
                 SizedBox(
                   width: 80,
+                  height: 30,
                   child: TextButton(
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -899,12 +900,13 @@ void downloadDocument(BuildContext context, String url) {
                             color: MyColors.light,
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.w500,
-                            fontSize: 10,
+                            fontSize: 8,
                             letterSpacing: 1),
                       )),
                 ),
                 SizedBox(
                   width: 100,
+                  height: 30,
                   child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -938,7 +940,7 @@ void downloadDocument(BuildContext context, String url) {
                         ? Padding(
                             padding: const EdgeInsets.only(right: 15),
                             child: SizedBox(
-                              height: 30,
+                              height: 20,
                               width: 30,
                               child: CircularProgressIndicator(
                                 color: MyColors.light,
@@ -951,7 +953,7 @@ void downloadDocument(BuildContext context, String url) {
                             style: TextStyle(
                                 color: MyColors.light,
                                 fontFamily: "Poppins",
-                                fontSize: 10,
+                                fontSize: 8,
                                 fontWeight: FontWeight.bold),
                           ),
                   ),
