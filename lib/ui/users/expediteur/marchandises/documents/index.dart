@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
-import '../../../../../functions/function.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
 import '../../../../../providers/api/api_data.dart';
 import 'bordereaux/index.dart';
@@ -57,7 +56,6 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
 
   @override
   Widget build(BuildContext context) {
-    final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     final user = api_provider.user;
     List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
@@ -163,34 +161,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/bord.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Bordereau",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                bordereaux.length < 2
+                                bordereaux.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(bordereaux
-                                                  .length
-                                                  .toDouble()) +
-                                              " bordereau",
+                                          "Aucun bordereau",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -200,22 +181,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(bordereaux
-                                                  .length
-                                                  .toDouble()) +
-                                              " bordereaux",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : bordereaux.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              bordereaux.length.toString() +
+                                                  " bordereau",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              bordereaux.length.toString() +
+                                                  " bordereaux",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -272,33 +266,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/ordre.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Ordre de transport",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                ordres.length < 2
+                                ordres.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(
-                                                  ordres.length.toDouble()) +
-                                              " Ordre",
+                                          "Aucun ordre de transport",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -308,21 +286,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(
-                                                  ordres.length.toDouble()) +
-                                              " Ordres",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : ordres.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              ordres.length.toString() +
+                                                  " ordre de transport",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              ordres.length.toString() +
+                                                  " ordres de transport",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -387,33 +379,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/appele.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Appélé",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.primary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                appeles.length < 2
+                                appeles.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(
-                                                  appeles.length.toDouble()) +
-                                              " Appélé",
+                                          "Aucun appélé",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -423,21 +399,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(
-                                                  appeles.length.toDouble()) +
-                                              " Appélés",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : appeles.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              appeles.length.toString() +
+                                                  " appélé",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              appeles.length.toString() +
+                                                  " appélés",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -494,34 +484,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/inter.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Interchange",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.primary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                interchanges.length < 2
+                                interchanges.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(interchanges
-                                                  .length
-                                                  .toDouble()) +
-                                              " Interchange",
+                                          "Aucune interchange",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -531,22 +504,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(interchanges
-                                                  .length
-                                                  .toDouble()) +
-                                              " Interchanges",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : interchanges.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              interchanges.length.toString() +
+                                                  " interchange",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              interchanges.length.toString() +
+                                                  " interchanges",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -611,41 +597,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/tdo.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "TDO",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            tdos.length.toDouble()) +
-                                        " TDO",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                tdos.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun TDO",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          tdos.length.toString() + " TDO",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -702,41 +686,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/vgm.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "VGM",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            vgms.length.toDouble()) +
-                                        " VGM",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                vgms.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun VGM",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          vgms.length.toString() + " VGM",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -801,41 +783,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/recu.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "AVD",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.primary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            avds.length.toDouble()) +
-                                        " AVD",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                avds.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucune AVD",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          avds.length.toString() + " AVD",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -892,33 +872,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/fact.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Reçu et facture",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.primary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                recus.length < 2
+                                recus.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(
-                                                  recus.length.toDouble()) +
-                                              " Reçu, facture",
+                                          "Aucun reçu, facture",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -928,21 +892,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(
-                                                  recus.length.toDouble()) +
-                                              " Reçus, factures",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : recus.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              recus.length.toString() +
+                                                  " reçu, facture",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              recus.length.toString() +
+                                                  " reçus, factures",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1007,41 +985,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/recu.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "BL",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            bls.length.toDouble()) +
-                                        " BL",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                bls.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun BL",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          bls.length.toString() + " BL",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1098,41 +1074,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/fact.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "LTA",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            ltas.length.toDouble()) +
-                                        " LTA",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                ltas.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucune LTA",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          ltas.length.toString() + " LTA",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1197,41 +1171,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/recu.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "BFU",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            bfus.length.toDouble()) +
-                                        " BFU",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                bfus.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun BFU",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          bfus.length.toString() + " BFU",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1288,34 +1260,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/fact.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Déclaration",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                declarations.length < 2
+                                declarations.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(declarations
-                                                  .length
-                                                  .toDouble()) +
-                                              " Déclaration",
+                                          "Aucune déclaration",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -1325,22 +1280,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(declarations
-                                                  .length
-                                                  .toDouble()) +
-                                              " Déclarations",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : declarations.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              declarations.length.toString() +
+                                                  " déclaration",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              declarations.length.toString() +
+                                                  " déclarations",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1405,34 +1373,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/recu.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Fiche technique",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                fiche_techniques.length < 2
+                                fiche_techniques.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(fiche_techniques
-                                                  .length
-                                                  .toDouble()) +
-                                              " Fiche technique",
+                                          "Aucune fiche technique",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -1442,22 +1393,37 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(fiche_techniques
-                                                  .length
-                                                  .toDouble()) +
-                                              " Fiches techniques",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : fiche_techniques.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              fiche_techniques.length
+                                                      .toString() +
+                                                  " fiche technique",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              fiche_techniques.length
+                                                      .toString() +
+                                                  " fiches techniques",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1514,41 +1480,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/fact.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "CO",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 13,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            cos.length.toDouble()) +
-                                        " CO",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                cos.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun CO",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          cos.length.toString() + " CO",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1613,41 +1577,39 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/recu.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "CPS",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    function.formatAmount(
-                                            cps.length.toDouble()) +
-                                        " CPS",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.textColor,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 11),
-                                  ),
-                                ),
+                                cps.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Aucun CPS",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: MyColors.textColor,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      )
+                                    : Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          cps.length.toString() + " CPS",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 11),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 15,
                                 )
@@ -1704,34 +1666,17 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         "images/fact.png",
                                         scale: 2.5,
                                         fit: BoxFit.cover,
-                                        height: 30,
+                                        height: 20,
                                       )),
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  "Autre document",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: MyColors.secondary,
-                                    fontSize: 11,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                autre_docs.length < 2
+                                autre_docs.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          function.formatAmount(autre_docs
-                                                  .length
-                                                  .toDouble()) +
-                                              " Autre document",
+                                          "Aucun autre document",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -1741,22 +1686,35 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          function.formatAmount(autre_docs
-                                                  .length
-                                                  .toDouble()) +
-                                              " Autres documents",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
+                                    : autre_docs.length < 2
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              autre_docs.length.toString() +
+                                                  " autre document",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              autre_docs.length.toString() +
+                                                  " autres documents",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11),
+                                            ),
+                                          ),
                                 SizedBox(
                                   height: 15,
                                 )

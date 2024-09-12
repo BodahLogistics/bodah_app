@@ -3,7 +3,6 @@
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/exports.dart';
-import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:bodah/ui/users/expediteur/export/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,7 +22,7 @@ import '../../../../../../modals/pays.dart';
 import '../../../../../../modals/positions.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
-import '../../../../../auth/sign_in.dart';
+import '../../../../../../providers/api/sdownload.dart';
 import '../../../drawer/index.dart';
 import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
@@ -840,11 +839,11 @@ void downloadDocument(BuildContext context, String url) {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogcontext) {
-        final provider = Provider.of<ProvDownloadDocument>(dialogcontext);
+        final provider = Provider.of<ProvDown>(dialogcontext);
         final api_provider = Provider.of<ApiProvider>(dialogcontext);
         final user = api_provider.user;
         bool affiche = provider.affiche;
-
+        double progress = provider.progress;
         final service = Provider.of<DBServices>(dialogcontext);
 
         return AlertDialog(
@@ -858,24 +857,8 @@ void downloadDocument(BuildContext context, String url) {
                 color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
                 fontWeight: FontWeight.bold),
           ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                affiche
-                    ? Center(
-                        child: SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(
-                            color: user.dark_mode == 1
-                                ? MyColors.light
-                                : MyColors.secondary,
-                          ),
-                        ),
-                      )
-                    : Container(),
-              ],
-            ),
+          content: LinearProgressIndicator(
+            value: progress,
           ),
           actions: [
             Row(
@@ -916,25 +899,9 @@ void downloadDocument(BuildContext context, String url) {
                     onPressed: affiche
                         ? null
                         : () async {
-                            api_provider.change_delete(true);
-                            String statut_code = await service.saveFile(url);
-
-                            if (statut_code == "203") {
-                              provider.change_affiche(false);
-                              showCustomSnackBar(
-                                  dialogcontext,
-                                  "Une erreur s'est produite",
-                                  Colors.redAccent);
-                            } else if (statut_code == "200") {
-                              provider.change_affiche(false);
-                              showCustomSnackBar(dialogcontext,
-                                  "Téléchargé avec succès", Colors.green);
-                              Navigator.of(dialogcontext).pop();
-                            } else {
-                              provider.change_affiche(false);
-                              showCustomSnackBar(
-                                  dialogcontext, statut_code, Colors.redAccent);
-                            }
+                            String savePath = await service.saveFile(url);
+                            provider.startDownload(url, savePath);
+                            await service.saveFile(url);
                           },
                     child: affiche
                         ? Padding(

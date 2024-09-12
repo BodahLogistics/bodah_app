@@ -3614,11 +3614,27 @@ class DBServices {
     }
   }
 
+  Future<String> getFilePath(String filePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String file_name = await fileName(filePath);
+    return '${directory.path}/$file_name'; // Nom du fichier téléchargé
+  }
+
   Future<void> saveFileLocally(String filename, List<int> bytes) async {
     Directory directory = await getApplicationDocumentsDirectory();
     String filePath = path.join(directory.path, filename);
     File file = File(filePath);
     await file.writeAsBytes(bytes);
+  }
+
+  Future<String> fileName(String fileUrl) async {
+    final originalFileName = path.basename(fileUrl);
+    final fileExtension = path.extension(originalFileName);
+    final now = DateTime.now();
+    final formattedDate = DateFormat('yyyyMMdd_HHmmss').format(now);
+    final newFileName = 'Bodah_document_$formattedDate$fileExtension';
+
+    return newFileName;
   }
 
   Future<String> saveFile(String fileUrl) async {

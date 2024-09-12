@@ -51,7 +51,7 @@ class _ListLivraisonsState extends State<ListLivraisons> {
 
     return loading
         ? Loading()
-        : cargaisons.isEmpty
+        : livraisons.isEmpty
             ? Center(
                 child: Text(
                 "Vous n'avez encore pas ajouté de livraisons",

@@ -116,12 +116,6 @@ class DetailImport extends StatelessWidget {
                         Icons.delete,
                         color: MyColors.light,
                       )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: MyColors.light,
-                      )),
                 ],
               ),
             ),
