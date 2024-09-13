@@ -6640,7 +6640,7 @@ Future<dynamic> NewImportOrdre(
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitOrdres();
+                                  await apiProvider.InitImportOrdre();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -6966,7 +6966,7 @@ Future<dynamic> DeleteImportOrdre(BuildContext context, OrdreTransport data) {
               fontSize: 16),
         ),
         content: Text(
-          "Voulez-vous vraiment supprimer le document" +
+          "Voulez-vous vraiment supprimer le document " +
               (data.nom ?? data.reference) +
               " ?",
           style: TextStyle(

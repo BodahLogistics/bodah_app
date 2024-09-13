@@ -16,7 +16,6 @@ import 'package:bodah/modals/ordre_transport.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/autre_dcos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/avds/index.dart';
@@ -28,7 +27,6 @@ import 'package:bodah/ui/users/expediteur/marchandises/documents/declarations/in
 import 'package:bodah/ui/users/expediteur/marchandises/documents/fiches/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/lta/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/ordre_import_export.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
@@ -40,6 +38,8 @@ import '../../../../../colors/color.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
 import '../../../../../providers/api/api_data.dart';
 import 'bordereaux/index.dart';
+import 'import_ordre/ordre_import_export.dart';
+import 'ordres/index.dart';
 
 class DashBoardDocExp extends StatefulWidget {
   const DashBoardDocExp({super.key});
@@ -1744,7 +1744,7 @@ Future<dynamic> ChooseOrdre(BuildContext context) {
           content: Container(
               constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height *
-                      0.6), // Limiter la hauteur du dialog
+                      0.2), // Limiter la hauteur du dialog
               child: Column(
                 children: [
                   TextButton(
@@ -1757,7 +1757,7 @@ Future<dynamic> ChooseOrdre(BuildContext context) {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return MesOrdreTransport();
+                            return MesOrdres();
                           },
                           transitionsBuilder: (BuildContext context,
                               Animation<double> animation,
@@ -1786,16 +1786,18 @@ Future<dynamic> ChooseOrdre(BuildContext context) {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Ordre de transport sécurisé de Bodah",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: "Poppins",
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12),
+                              Expanded(
+                                child: Text(
+                                  "Ordre sécurisé de Bodah",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
                               ),
                               Icon(
                                 Icons.lock_outline,
@@ -1847,16 +1849,18 @@ Future<dynamic> ChooseOrdre(BuildContext context) {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Ordres de transport d'import export",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: "Poppins",
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12),
+                              Expanded(
+                                child: Text(
+                                  "Ordre d'import & export",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
                               ),
                               Icon(
                                 Icons.flight,

@@ -50,7 +50,7 @@ class MesImportOrdres extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Odres d'import/export",
+          "Odres d'import & export",
           style: TextStyle(
               fontFamily: "Poppins",
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
