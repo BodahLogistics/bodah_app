@@ -3,24 +3,19 @@ import 'dart:convert';
 
 class Recus {
   final int id;
-  final String path;
+  final String? path;
   final String reference;
   final int modele_id;
   final String modele_type;
-  final int deleted;
   final String? doc_id;
-  final DateTime created_at;
-  final DateTime updated_at;
+
   Recus({
     required this.id,
     required this.path,
     required this.reference,
     required this.modele_id,
     required this.modele_type,
-    required this.deleted,
     this.doc_id,
-    required this.created_at,
-    required this.updated_at,
   });
 
   Recus copyWith({
@@ -29,10 +24,7 @@ class Recus {
     String? reference,
     int? modele_id,
     String? modele_type,
-    int? deleted,
     String? doc_id,
-    DateTime? created_at,
-    DateTime? updated_at,
   }) {
     return Recus(
       id: id ?? this.id,
@@ -40,10 +32,7 @@ class Recus {
       reference: reference ?? this.reference,
       modele_id: modele_id ?? this.modele_id,
       modele_type: modele_type ?? this.modele_type,
-      deleted: deleted ?? this.deleted,
       doc_id: doc_id ?? this.doc_id,
-      created_at: created_at ?? this.created_at,
-      updated_at: updated_at ?? this.updated_at,
     );
   }
 
@@ -54,24 +43,18 @@ class Recus {
       'reference': reference,
       'modele_id': modele_id,
       'modele_type': modele_type,
-      'deleted': deleted,
       'doc_id': doc_id,
-      'created_at': created_at.millisecondsSinceEpoch,
-      'updated_at': updated_at.millisecondsSinceEpoch,
     };
   }
 
   factory Recus.fromMap(Map<String, dynamic> map) {
     return Recus(
       id: map['id'] as int,
-      path: map['path'] as String,
+      path: map['path'] != null ? map['path'] as String : null,
       reference: map['reference'] as String,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
-      deleted: map['deleted'] as int,
       doc_id: map['doc_id'] != null ? map['doc_id'] as String : null,
-      created_at: DateTime.parse(map['created_at'] as String),
-      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 
@@ -82,7 +65,7 @@ class Recus {
 
   @override
   String toString() {
-    return 'Recus(id: $id, path: $path, reference: $reference, modele_id: $modele_id, modele_type: $modele_type, deleted: $deleted, doc_id: $doc_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'Recus(id: $id, path: $path, reference: $reference, modele_id: $modele_id, modele_type: $modele_type, doc_id: $doc_id)';
   }
 
   @override
@@ -94,10 +77,7 @@ class Recus {
         other.reference == reference &&
         other.modele_id == modele_id &&
         other.modele_type == modele_type &&
-        other.deleted == deleted &&
-        other.doc_id == doc_id &&
-        other.created_at == created_at &&
-        other.updated_at == updated_at;
+        other.doc_id == doc_id;
   }
 
   @override
@@ -107,9 +87,6 @@ class Recus {
         reference.hashCode ^
         modele_id.hashCode ^
         modele_type.hashCode ^
-        deleted.hashCode ^
-        doc_id.hashCode ^
-        created_at.hashCode ^
-        updated_at.hashCode;
+        doc_id.hashCode;
   }
 }

@@ -58,6 +58,8 @@ import '../../modals/fiche_technique.dart';
 import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
 import '../../modals/lta.dart';
+import '../../modals/ordre_transport.dart';
+import '../../modals/path.dart';
 import '../../modals/pays.dart';
 import '../../modals/positions.dart';
 import '../../modals/quartiers.dart';
@@ -400,6 +402,10 @@ class ApiProvider with ChangeNotifier {
   List<CO> get cos => _cos;
   List<CPS> _cps = [];
   List<CPS> get cps => _cps;
+  List<OrdreTransport> _import_ordres = [];
+  List<OrdreTransport> get import_ordres => _import_ordres;
+  List<Paths> _paths = [];
+  List<Paths> get paths => _paths;
 
   Future<void> InitData() async {
     _isLoading = true;
@@ -568,6 +574,10 @@ class ApiProvider with ChangeNotifier {
     _declarations = response_declaration;
     final response_fiche_technique = await apiService.getFiches();
     _fiche_techniques = response_fiche_technique;
+    final response_import_ordre = await apiService.getImportOrdre();
+    _import_ordres = response_import_ordre;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -576,6 +586,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_interchange = await apiService.getInterchanges();
     _interchanges = response_interchange;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -606,6 +618,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getAutreDocs();
     _autre_docs = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -614,6 +628,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getBls();
     _bls = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -622,6 +638,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getLtas();
     _ltas = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -630,6 +648,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getAvds();
     _avds = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -638,6 +658,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getBfus();
     _bfus = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -646,6 +668,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getDeclarations();
     _declarations = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -654,6 +678,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getFiches();
     _fiche_techniques = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -662,6 +688,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getCos();
     _cos = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -670,6 +698,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getCps();
     _cps = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -678,6 +708,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getTdos();
     _tdos = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -686,6 +718,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getVgms();
     _vgms = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -694,6 +728,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getRecus();
     _recus = response;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }
@@ -702,6 +738,18 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_apeles = await apiService.getApeles();
     _appeles = response_apeles;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitImportOrdre() async {
+    _isLoading = true;
+    final response_odre = await apiService.getImportOrdre();
+    _import_ordres = response_odre;
+    final response_paths = await apiService.getPaths();
+    _paths = response_paths;
     _isLoading = false;
     notifyListeners();
   }

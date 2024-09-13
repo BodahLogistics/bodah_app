@@ -6,21 +6,16 @@ class Bl {
   final String? path;
   final int modele_id;
   final String modele_type;
-  final int deleted;
   final String reference;
   final String? ref;
-  final DateTime created_at;
-  final DateTime updated_at;
+
   Bl({
     required this.id,
     required this.path,
     required this.modele_id,
     required this.modele_type,
-    required this.deleted,
     required this.reference,
     this.ref,
-    required this.created_at,
-    required this.updated_at,
   });
 
   Bl copyWith({
@@ -28,22 +23,16 @@ class Bl {
     String? path,
     int? modele_id,
     String? modele_type,
-    int? deleted,
     String? reference,
     String? ref,
-    DateTime? created_at,
-    DateTime? updated_at,
   }) {
     return Bl(
       id: id ?? this.id,
       path: path ?? this.path,
       modele_id: modele_id ?? this.modele_id,
       modele_type: modele_type ?? this.modele_type,
-      deleted: deleted ?? this.deleted,
       reference: reference ?? this.reference,
       ref: ref ?? this.ref,
-      created_at: created_at ?? this.created_at,
-      updated_at: updated_at ?? this.updated_at,
     );
   }
 
@@ -53,11 +42,8 @@ class Bl {
       'path': path,
       'modele_id': modele_id,
       'modele_type': modele_type,
-      'deleted': deleted,
       'reference': reference,
       'ref': ref,
-      'created_at': created_at.millisecondsSinceEpoch,
-      'updated_at': updated_at.millisecondsSinceEpoch,
     };
   }
 
@@ -67,11 +53,8 @@ class Bl {
       path: map['path'] != null ? map['path'] as String : null,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
-      deleted: map['deleted'] as int,
       reference: map['reference'] as String,
       ref: map['ref'] != null ? map['ref'] as String : null,
-      created_at: DateTime.parse(map['created_at'] as String),
-      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 
@@ -82,7 +65,7 @@ class Bl {
 
   @override
   String toString() {
-    return 'Bl(id: $id, path: $path, modele_id: $modele_id, modele_type: $modele_type, deleted: $deleted, reference: $reference, ref: $ref, created_at: $created_at, updated_at: $updated_at)';
+    return 'Bl(id: $id, path: $path, modele_id: $modele_id, modele_type: $modele_type, reference: $reference, ref: $ref)';
   }
 
   @override
@@ -93,11 +76,8 @@ class Bl {
         other.path == path &&
         other.modele_id == modele_id &&
         other.modele_type == modele_type &&
-        other.deleted == deleted &&
         other.reference == reference &&
-        other.ref == ref &&
-        other.created_at == created_at &&
-        other.updated_at == updated_at;
+        other.ref == ref;
   }
 
   @override
@@ -106,10 +86,7 @@ class Bl {
         path.hashCode ^
         modele_id.hashCode ^
         modele_type.hashCode ^
-        deleted.hashCode ^
         reference.hashCode ^
-        ref.hashCode ^
-        created_at.hashCode ^
-        updated_at.hashCode;
+        ref.hashCode;
   }
 }

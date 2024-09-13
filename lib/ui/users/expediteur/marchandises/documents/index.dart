@@ -12,9 +12,11 @@ import 'package:bodah/modals/declaration.dart';
 import 'package:bodah/modals/fiche_technique.dart';
 import 'package:bodah/modals/interchanges.dart';
 import 'package:bodah/modals/lta.dart';
+import 'package:bodah/modals/ordre_transport.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/autre_dcos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/avds/index.dart';
@@ -26,7 +28,7 @@ import 'package:bodah/ui/users/expediteur/marchandises/documents/declarations/in
 import 'package:bodah/ui/users/expediteur/marchandises/documents/fiches/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/lta/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/ordres/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/ordre_import_export.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
@@ -74,6 +76,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
     List<CPS> cps = api_provider.cps;
     List<Declaration> declarations = api_provider.declarations;
     List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
+    List<OrdreTransport> import_ordres = api_provider.import_ordres;
     bool loading = api_provider.loading;
 
     return loading
@@ -222,28 +225,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
                           onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesOrdres();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
+                            ChooseOrdre(context);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -272,7 +254,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                ordres.isEmpty
+                                ordres.isEmpty && import_ordres.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
@@ -286,11 +268,13 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : ordres.length < 2
+                                    : ordres.length + import_ordres.length < 2
                                         ? Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              ordres.length.toString() +
+                                              (ordres.length +
+                                                          import_ordres.length)
+                                                      .toString() +
                                                   " ordre de transport",
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -304,7 +288,9 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
                                         : Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              ordres.length.toString() +
+                                              (ordres.length +
+                                                          import_ordres.length)
+                                                      .toString() +
                                                   " ordres de transport",
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -1730,4 +1716,161 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
             ),
           );
   }
+}
+
+Future<dynamic> ChooseOrdre(BuildContext context) {
+  return showDialog(
+    barrierDismissible: true,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      return AlertDialog(
+          title: Container(
+            decoration: BoxDecoration(
+                color: MyColors.secondary,
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Ordre de transport",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: MyColors.light,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          content: Container(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height *
+                      0.6), // Limiter la hauteur du dialog
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(dialocontext).pop();
+
+                      Navigator.of(dialocontext).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return MesOrdreTransport();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(.4),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 7, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Ordre de transport sécurisé de Bodah",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
+                              ),
+                              Icon(
+                                Icons.lock_outline,
+                                size: 20,
+                                color: Colors.black.withOpacity(.5),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(dialocontext).pop();
+
+                      Navigator.of(dialocontext).push(
+                        PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return MesImportOrdres();
+                          },
+                          transitionsBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation,
+                              Widget child) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(.4),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 7, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Ordres de transport d'import export",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
+                              ),
+                              Icon(
+                                Icons.flight,
+                                size: 20,
+                                color: Colors.black.withOpacity(.5),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )));
+    },
+  );
 }

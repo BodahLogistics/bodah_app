@@ -21,6 +21,7 @@ import '../../../../../../modals/declaration.dart';
 import '../../../../../../modals/fiche_technique.dart';
 import '../../../../../../modals/interchanges.dart';
 import '../../../../../../modals/lta.dart';
+import '../../../../../../modals/ordre_transport.dart';
 import '../../../../../../modals/recus.dart';
 import '../../../../../../modals/tdos.dart';
 import '../../../../../../modals/users.dart';
@@ -86,6 +87,8 @@ class _ListDocumentsState extends State<ListDocuments> {
     List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
     fiche_techniques = function.data_fiches(
         fiche_techniques, widget.data_id, widget.data_modele);
+    List<OrdreTransport> ordres = api_provider.import_ordres;
+    ordres = function.data_ordres(ordres, widget.data_id, widget.data_modele);
 
     return loading
         ? Loading()
@@ -394,27 +397,61 @@ class _ListDocumentsState extends State<ListDocuments> {
                       width: MediaQuery.of(context).size.width * 0.23,
                       child: TextButton(
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {},
+                        onPressed: () {
+                          if (ordres.isNotEmpty) {
+                            showImportOrdre(
+                                context, widget.data_id, widget.data_modele);
+                          } else {
+                            NewImportOrdre(
+                                context, widget.data_id, widget.data_modele);
+                          }
+                        },
                         child: Row(
                           children: [
-                            Flexible(
-                              child: Text(
-                                "Ordre de transport",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
+                            ordres.length < 2
+                                ? Flexible(
+                                    child: Text(
+                                      "Ordre de transport",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 8,
+                                          color: ordres.isNotEmpty
+                                              ? Colors.green
+                                              : user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )
+                                : Flexible(
+                                    child: Text(
+                                      "Ordres de transport",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.green,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                            ordres.isEmpty
+                                ? Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                  )
+                                : Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size: 20,
                                     color: Colors.green,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 20,
-                              color: Colors.green,
-                            ),
+                                  ),
                           ],
                         ),
                       ),
@@ -1052,10 +1089,7 @@ Future<dynamic> showInterchanges(
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
-                                      "https://test.bodah.bj/storage/" +
-                                          interchange.path;
-                                  downloadDocument(context, url);
+                                  // downloadDocument(context, url);
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -1925,10 +1959,10 @@ Future<dynamic> showRecus(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /*  String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -2796,10 +2830,10 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -4539,10 +4573,10 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -5409,10 +5443,10 @@ Future<dynamic> showApeles(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -6160,6 +6194,879 @@ Future<dynamic> DeleteApele(BuildContext context, Appeles data) {
 }
 /* End Appélé */
 
+/* Ordre de transport */
+Future<dynamic> showImportOrdre(
+    BuildContext context, int dataId, String modele) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialogContext) {
+      final function = Provider.of<Functions>(dialogContext, listen: false);
+      final apiProvider = Provider.of<ApiProvider>(dialogContext);
+      List<OrdreTransport> datas = apiProvider.import_ordres;
+      datas = function.data_ordres(datas, dataId, modele);
+      double columnWidth = MediaQuery.of(context).size.width / 10;
+      Users user = apiProvider.user;
+      final provider = Provider.of<ProvAddDoc>(dialogContext);
+      return AlertDialog(
+        title: Text(
+          "Ordre de transport",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: datas.isEmpty
+            ? Center(
+                child: Text(
+                  "Vous n'avez aucun ordre de transport disponible",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "Poppins",
+                      color:
+                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ),
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columnSpacing: columnWidth * 0.9,
+                  dataRowHeight: 50,
+                  columns: <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        "Nom",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: user.dark_mode == 1
+                                ? MyColors.light
+                                : MyColors.black,
+                            fontFamily: "Poppins",
+                            fontSize: 10),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Padding(
+                        padding: const EdgeInsets.only(left: 50),
+                        child: Text(
+                          "Actions",
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: user.dark_mode == 1
+                                  ? MyColors.light
+                                  : MyColors.black,
+                              fontFamily: "Poppins",
+                              fontSize: 10),
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: datas.map((data) {
+                    return DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          SizedBox(
+                            child: Text(
+                              data.nom ?? data.reference,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: user.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                  fontFamily: "Poppins",
+                                  fontSize: 10),
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  provider.change_doc(data.nom ?? "");
+                                  UpdateImportOrdre(dialogContext, data);
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  color: MyColors.primary,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  DeleteImportOrdre(dialogContext, data);
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  /* String url =
+                                      "https://test.bodah.bj/storage/" +
+                                          data.path;
+                                  downloadDocument(context, url);*/
+                                },
+                                icon: Icon(
+                                  Icons.download,
+                                  size: 20,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.symmetric(horizontal: 7),
+                      backgroundColor: Colors.redAccent),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: Text(
+                    "Fermer",
+                    style: TextStyle(
+                        color: MyColors.light,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 8,
+                        letterSpacing: 1),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.symmetric(horizontal: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: () {
+                    NewImportOrdre(dialogContext, dataId, modele);
+                  },
+                  child: Text(
+                    "Ajouter",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: MyColors.light,
+                        fontFamily: "Poppins",
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> NewImportOrdre(
+    BuildContext context, int data_id, String modele) {
+  TextEditingController Name = TextEditingController();
+
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialogContext) {
+      final function = Provider.of<Functions>(dialogContext);
+      final apiProvider = Provider.of<ApiProvider>(dialogContext);
+      final provider = Provider.of<ProvAddDoc>(dialogContext);
+      final service = Provider.of<DBServices>(dialogContext);
+      Users user = apiProvider.user;
+      bool affiche = provider.affiche;
+      bool upload = provider.upload;
+      bool loading = provider.loading;
+      String nom = provider.nom;
+      List<File> files = provider.files_selected;
+
+      return AlertDialog(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        title: Text(
+          "Ordre de transport",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 16,
+              fontFamily: "Poppins",
+              color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
+              fontWeight: FontWeight.bold),
+        ),
+        content: SingleChildScrollView(
+          reverse: false,
+          physics: NeverScrollableScrollPhysics(),
+          child: ListBody(
+            children: [
+              user.dark_mode == 1
+                  ? Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Nom du document (Facultatif)",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              TextField(
+                controller: Name,
+                onChanged: (value) => provider.change_nom(value),
+                decoration: InputDecoration(
+                    suffixIcon: Name.text.isNotEmpty && (nom.length < 3)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Name.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (nom.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: "Nom (Faculatif)",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          files.isEmpty
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 60,
+                      height: 30,
+                      child: TextButton(
+                          style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)),
+                              padding: EdgeInsets.only(left: 7, right: 7),
+                              backgroundColor: Colors.redAccent),
+                          onPressed: () {
+                            provider.change_affiche(false);
+                            provider.reset();
+                            Navigator.of(dialogContext).pop();
+                          },
+                          child: Text(
+                            "Fermez",
+                            style: TextStyle(
+                                color: MyColors.light,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8,
+                                letterSpacing: 1),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 60,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.only(left: 7, right: 7),
+                            backgroundColor: MyColors.primary),
+                        onPressed: affiche
+                            ? null
+                            : () async {
+                                await provider
+                                    .takeImageWithCamera(dialogContext);
+                              },
+                        child: loading
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: MyColors.light,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                "Caméra",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MyColors.light,
+                                    fontFamily: "Poppins",
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 60,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.only(left: 7, right: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: affiche
+                            ? null
+                            : () async {
+                                await provider
+                                    .selectImagesFromGallery(dialogContext);
+                              },
+                        child: upload
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: MyColors.light,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                "Galérie",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MyColors.light,
+                                    fontFamily: "Poppins",
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 60,
+                      height: 30,
+                      child: TextButton(
+                          style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)),
+                              padding: EdgeInsets.only(left: 7, right: 7),
+                              backgroundColor: Colors.redAccent),
+                          onPressed: () {
+                            provider.change_affiche(false);
+                            provider.reset();
+                            Navigator.of(dialogContext).pop();
+                          },
+                          child: Text(
+                            "Fermez",
+                            style: TextStyle(
+                                color: MyColors.light,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8,
+                                letterSpacing: 1),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.only(left: 7, right: 7),
+                            backgroundColor: Colors.green),
+                        onPressed: affiche
+                            ? null
+                            : () async {
+                                provider.change_affiche(true);
+
+                                String statut_code =
+                                    await service.AddImportOrdre(
+                                        nom, files, data_id, modele);
+
+                                if (statut_code == "202") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      dialogContext,
+                                      "Une erreur est survenue",
+                                      Colors.redAccent);
+                                } else if (statut_code == "422") {
+                                  provider.change_affiche(false);
+                                  showCustomSnackBar(
+                                      dialogContext,
+                                      "Certains champs sont mal renseignés",
+                                      Colors.redAccent);
+                                } else if (statut_code == "200") {
+                                  await apiProvider.InitOrdres();
+                                  provider.reset();
+                                  showCustomSnackBar(
+                                      dialogContext,
+                                      "Le document a été ajouté avec succès",
+                                      Colors.green);
+                                  Navigator.of(dialogContext).pop();
+                                }
+                              },
+                        child: affiche
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: MyColors.light,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                "Ajoutez",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: MyColors.light,
+                                    fontFamily: "Poppins",
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> UpdateImportOrdre(BuildContext context, OrdreTransport data) {
+  TextEditingController Name = TextEditingController();
+
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialogContext) {
+      final function = Provider.of<Functions>(dialogContext);
+      final apiProvider = Provider.of<ApiProvider>(dialogContext);
+      final provider = Provider.of<ProvAddDoc>(dialogContext);
+      final service = Provider.of<DBServices>(dialogContext);
+      Users user = apiProvider.user;
+      bool affiche = provider.affiche;
+      String nom = provider.nom;
+      List<File> files = provider.files_selected;
+
+      if (Name.text.isEmpty && nom.isNotEmpty) {
+        Name.text = nom;
+      }
+
+      return AlertDialog(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        title: Text(
+          "Ordre de transport",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 16,
+              fontFamily: "Poppins",
+              color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
+              fontWeight: FontWeight.bold),
+        ),
+        content: SingleChildScrollView(
+          reverse: false,
+          physics: NeverScrollableScrollPhysics(),
+          child: ListBody(
+            children: [
+              user.dark_mode == 1
+                  ? Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Nom du document (Facultatif)",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: MyColors.light,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              TextField(
+                controller: Name,
+                onChanged: (value) => provider.change_nom(value),
+                decoration: InputDecoration(
+                    suffixIcon: Name.text.isNotEmpty && (nom.length < 3)
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(Icons.error, color: Colors.red),
+                          )
+                        : null,
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Name.text.isEmpty
+                          ? function.convertHexToColor("#79747E")
+                          : (nom.length > 3)
+                              ? MyColors.secondary
+                              : Colors.red,
+                    )),
+                    filled: user.dark_mode == 1 ? true : false,
+                    fillColor: user.dark_mode == 1 ? MyColors.filedDark : null,
+                    labelText: "Nom (Facultatif)",
+                    labelStyle: TextStyle(
+                        color: user.dark_mode == 1
+                            ? MyColors.light
+                            : MyColors.black,
+                        fontSize: 14,
+                        fontFamily: "Poppins"),
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        color: MyColors.black)),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          files.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          IconButton(
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7)),
+                                padding: EdgeInsets.only(left: 3, right: 3),
+                                backgroundColor: MyColors.primary),
+                            onPressed: affiche
+                                ? null
+                                : () async {
+                                    await provider
+                                        .takeImageWithCamera(dialogContext);
+                                  },
+                            icon: Icon(
+                              Icons.camera_alt,
+                              color: MyColors.light,
+                            ),
+                          ),
+                          Text(
+                            "Caméra",
+                            style: TextStyle(
+                                color: user.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8,
+                                letterSpacing: 1),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7)),
+                                padding: EdgeInsets.only(left: 3, right: 3),
+                                backgroundColor: MyColors.secondary),
+                            onPressed: affiche
+                                ? null
+                                : () async {
+                                    await provider
+                                        .selectImagesFromGallery(dialogContext);
+                                  },
+                            icon: Icon(
+                              Icons.photo_library,
+                              color: MyColors.light,
+                            ),
+                          ),
+                          Text(
+                            "Galérie",
+                            style: TextStyle(
+                                color: user.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8,
+                                letterSpacing: 1),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 60,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_affiche(false);
+                      provider.reset();
+                      Navigator.of(dialogContext).pop();
+                    },
+                    child: Text(
+                      "Fermez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: Colors.green),
+                  onPressed: affiche
+                      ? null
+                      : () async {
+                          provider.change_affiche(true);
+
+                          String statut_code =
+                              await service.UpdateImportOrdre(nom, files, data);
+
+                          if (statut_code == "404") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialogContext,
+                                "Impossible de mettre à jour le document",
+                                Colors.redAccent);
+                          } else if (statut_code == "202") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(dialogContext,
+                                "Une erreur est survenue", Colors.redAccent);
+                          } else if (statut_code == "422") {
+                            provider.change_affiche(false);
+                            showCustomSnackBar(
+                                dialogContext,
+                                "Certains champs sont mal renseignés",
+                                Colors.redAccent);
+                          } else if (statut_code == "200") {
+                            await apiProvider.InitImportOrdre();
+                            provider.reset();
+                            showCustomSnackBar(
+                                dialogContext,
+                                "Le document a été modifié avec succès",
+                                Colors.green);
+                            Navigator.of(dialogContext).pop();
+                          }
+                        },
+                  child: affiche
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 20,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Modifiez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> DeleteImportOrdre(BuildContext context, OrdreTransport data) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final provider = Provider.of<ApiProvider>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool delete = provider.delete;
+      return AlertDialog(
+        title: Text(
+          "Ordre de transport",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: Text(
+          "Voulez-vous vraiment supprimer le document" +
+              (data.nom ?? data.reference) +
+              " ?",
+          style: TextStyle(
+              color: function.convertHexToColor("#79747E"),
+              fontFamily: "Poppins",
+              fontSize: 12,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_delete(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          provider.change_delete(true);
+                          final String statut = await service.DeleteOrdre(data);
+                          if (statut == "404") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Impossible de supprimer le document",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "202") {
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur s'est produite", Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "200") {
+                            await provider.InitImportOrdre();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Le document a été supprimée avec succès",
+                                Colors.green);
+                            provider.change_delete(false);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: delete
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 20,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Supprimez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+/* End Ordre de transport */
+
 /* Tdo */
 Future<dynamic> showTdo(BuildContext context, int dataId, String modele) {
   return showDialog(
@@ -6280,10 +7187,10 @@ Future<dynamic> showTdo(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /*  String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -7150,10 +8057,10 @@ Future<dynamic> showVgm(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -8020,10 +8927,10 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -8892,10 +9799,10 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /*  String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -9770,10 +10677,10 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -10648,10 +11555,10 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  String url =
+                                  /* String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,

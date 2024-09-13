@@ -4,6 +4,7 @@ import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/lta.dart';
 import 'package:bodah/ui/users/expediteur/export/details/index.dart';
+import 'package:bodah/ui/users/expediteur/import/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -501,8 +502,8 @@ class MesLtas extends StatelessWidget {
                                   pageBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return DetailAnnonce(
-                                      id: data.modele_id,
+                                    return DetailImport(
+                                      import_id: data.modele_id,
                                     );
                                   },
                                   transitionsBuilder: (BuildContext context,

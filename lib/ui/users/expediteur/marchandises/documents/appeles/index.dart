@@ -5,6 +5,7 @@ import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/exports.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:bodah/ui/users/expediteur/export/details/index.dart';
+import 'package:bodah/ui/users/expediteur/import/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -402,10 +403,10 @@ class MesApeles extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           5))),
                                           onPressed: () {
-                                            String url =
+                                            /* String url =
                                                 "https://test.bodah.bj/storage/" +
                                                     data.path;
-                                            downloadDocument(context, url);
+                                            downloadDocument(context, url);*/
                                           },
                                           child: Text(
                                             "Téléchargez",
@@ -498,8 +499,8 @@ class MesApeles extends StatelessWidget {
                                   pageBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return DetailAnnonce(
-                                      id: data.modele_id,
+                                    return DetailImport(
+                                      import_id: data.modele_id,
                                     );
                                   },
                                   transitionsBuilder: (BuildContext context,
@@ -803,10 +804,10 @@ class MesApeles extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           5))),
                                           onPressed: () {
-                                            String url =
+                                            /* String url =
                                                 "https://test.bodah.bj/storage/" +
                                                     data.path;
-                                            downloadDocument(context, url);
+                                            downloadDocument(context, url);*/
                                           },
                                           child: Text(
                                             "Téléchargez",

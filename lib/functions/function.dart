@@ -50,6 +50,8 @@ import '../modals/import.dart';
 import '../modals/interchanges.dart';
 import '../modals/localisations.dart';
 import '../modals/marchandises.dart';
+import '../modals/ordre_transport.dart';
+import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/rules.dart';
 import '../modals/statuts.dart';
@@ -67,191 +69,10 @@ class Functions {
     return true;
   }
 
-  Appeles apele(List<Appeles> appeles, int id) {
-    return appeles.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Appeles(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
   double calculateHeight(
       int itemCount, int crossAxisCount, double aspectRatio) {
     final rows = (itemCount / crossAxisCount).ceil();
     return rows * (180 / aspectRatio); // Ajustez 200 selon la hauteur estimée
-  }
-
-  Interchanges interchange(List<Interchanges> interchanges, int id) {
-    return interchanges.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Interchanges(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Vgms vgm(List<Vgms> vgms, int id) {
-    return vgms.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Vgms(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Tdos tdo(List<Tdos> tdos, int id) {
-    return tdos.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Tdos(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Recus recu(List<Recus> recus, int id) {
-    return recus.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Recus(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  AutreDocs autre_doc(List<AutreDocs> autre_docs, int id) {
-    return autre_docs.firstWhere(
-      (data) => data.id == id,
-      orElse: () => AutreDocs(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Avd avd(List<Avd> avds, int id) {
-    return avds.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Avd(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Bfu bfu(List<Bfu> bfus, int id) {
-    return bfus.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Bfu(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  Bl bl(List<Bl> bls, int id) {
-    return bls.firstWhere(
-      (data) => data.id == id,
-      orElse: () => Bl(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  CO co(List<CO> cos, int id) {
-    return cos.firstWhere(
-      (data) => data.id == id,
-      orElse: () => CO(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  CPS cps(List<CPS> cps, int id) {
-    return cps.firstWhere(
-      (data) => data.id == id,
-      orElse: () => CPS(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
-  }
-
-  FicheTechnique fiche_technique(
-      List<FicheTechnique> fiche_techniques, int id) {
-    return fiche_techniques.firstWhere(
-      (data) => data.id == id,
-      orElse: () => FicheTechnique(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
-    );
   }
 
   Lta lta(List<Lta> ltas, int id) {
@@ -1101,6 +922,21 @@ class Functions {
 
   List<Tdos> data_tdos(List<Tdos> tdos, int data_id, String data_modele) {
     return tdos
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<OrdreTransport> data_ordres(
+      List<OrdreTransport> ordres, int data_id, String data_modele) {
+    return ordres
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  List<Paths> data_paths(List<Paths> paths, int data_id, String data_modele) {
+    return paths
         .where((data) =>
             data.modele_id == data_id && data.modele_type.contains(data_modele))
         .toList();

@@ -3,6 +3,7 @@
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/exports.dart';
 import 'package:bodah/ui/users/expediteur/export/details/index.dart';
+import 'package:bodah/ui/users/expediteur/import/details/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,6 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
 import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
-import '../appeles/index.dart';
 
 class MesCos extends StatelessWidget {
   const MesCos({super.key});
@@ -399,10 +399,10 @@ class MesCos extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           5))),
                                           onPressed: () {
-                                            String url =
+                                            /* String url =
                                                 "https://test.bodah.bj/storage/" +
                                                     data.path;
-                                            downloadDocument(context, url);
+                                            downloadDocument(context, url);*/
                                           },
                                           child: Text(
                                             "Téléchargez",
@@ -495,8 +495,8 @@ class MesCos extends StatelessWidget {
                                   pageBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return DetailAnnonce(
-                                      id: data.modele_id,
+                                    return DetailImport(
+                                      import_id: data.modele_id,
                                     );
                                   },
                                   transitionsBuilder: (BuildContext context,
@@ -800,10 +800,10 @@ class MesCos extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           5))),
                                           onPressed: () {
-                                            String url =
+                                            /* String url =
                                                 "https://test.bodah.bj/storage/" +
                                                     data.path;
-                                            downloadDocument(context, url);
+                                            downloadDocument(context, url);*/
                                           },
                                           child: Text(
                                             "Téléchargez",

@@ -7,6 +7,7 @@ import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
@@ -26,6 +27,7 @@ import '../../../../../modals/certificat_phyto_sanitaire.dart';
 import '../../../../../modals/declaration.dart';
 import '../../../../../modals/fiche_technique.dart';
 import '../../../../../modals/lta.dart';
+import '../../../../../modals/ordre_transport.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
@@ -39,7 +41,6 @@ import 'cps/index.dart';
 import 'declarations/index.dart';
 import 'fiches/index.dart';
 import 'lta/index.dart';
-import 'ordres/index.dart';
 
 class MesDocuments extends StatefulWidget {
   const MesDocuments({super.key});
@@ -75,6 +76,7 @@ class _MesDocumentsState extends State<MesDocuments> {
     List<CPS> cps = api_provider.cps;
     List<Declaration> declarations = api_provider.declarations;
     List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
+    List<OrdreTransport> import_ordres = api_provider.import_ordres;
     bool loading = api_provider.loading;
 
     return Scaffold(
@@ -252,29 +254,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                           width: MediaQuery.of(context).size.width * 0.49,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 500),
-                                  pageBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation) {
-                                    return MesOrdres();
-                                  },
-                                  transitionsBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation,
-                                      Widget child) {
-                                    return SlideTransition(
-                                      position: Tween<Offset>(
-                                        begin: Offset(1.0, 0.0),
-                                        end: Offset.zero,
-                                      ).animate(animation),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
+                              ChooseOrdre(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -304,7 +284,7 @@ class _MesDocumentsState extends State<MesDocuments> {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  ordres.isEmpty
+                                  ordres.isEmpty && import_ordres.isEmpty
                                       ? Container(
                                           alignment: Alignment.center,
                                           child: Text(
@@ -318,11 +298,14 @@ class _MesDocumentsState extends State<MesDocuments> {
                                                 fontSize: 11),
                                           ),
                                         )
-                                      : ordres.length < 2
+                                      : ordres.length + import_ordres.length < 2
                                           ? Container(
                                               alignment: Alignment.center,
                                               child: Text(
-                                                ordres.length.toString() +
+                                                (ordres.length +
+                                                            import_ordres
+                                                                .length)
+                                                        .toString() +
                                                     " ordre de transport",
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -336,7 +319,10 @@ class _MesDocumentsState extends State<MesDocuments> {
                                           : Container(
                                               alignment: Alignment.center,
                                               child: Text(
-                                                ordres.length.toString() +
+                                                (ordres.length +
+                                                            import_ordres
+                                                                .length)
+                                                        .toString() +
                                                     " ordres de transport",
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
