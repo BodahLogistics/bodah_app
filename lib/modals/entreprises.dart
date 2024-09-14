@@ -7,14 +7,14 @@ class Entreprises {
   final String? ifu;
   final String numero_entreprise;
   final String entrepriseable_type;
-  final int entreprise_able_id;
+  final int entrepriseable_id;
   Entreprises({
     required this.id,
     required this.name,
     this.ifu,
     required this.numero_entreprise,
     required this.entrepriseable_type,
-    required this.entreprise_able_id,
+    required this.entrepriseable_id,
   });
 
   Entreprises copyWith({
@@ -23,7 +23,7 @@ class Entreprises {
     String? ifu,
     String? numero_entreprise,
     String? entrepriseable_type,
-    int? entreprise_able_id,
+    int? entrepriseable_id,
   }) {
     return Entreprises(
       id: id ?? this.id,
@@ -31,7 +31,7 @@ class Entreprises {
       ifu: ifu ?? this.ifu,
       numero_entreprise: numero_entreprise ?? this.numero_entreprise,
       entrepriseable_type: entrepriseable_type ?? this.entrepriseable_type,
-      entreprise_able_id: entreprise_able_id ?? this.entreprise_able_id,
+      entrepriseable_id: entrepriseable_id ?? this.entrepriseable_id,
     );
   }
 
@@ -42,7 +42,7 @@ class Entreprises {
       'ifu': ifu,
       'numero_entreprise': numero_entreprise,
       'entrepriseable_type': entrepriseable_type,
-      'entreprise_able_id': entreprise_able_id,
+      'entrepriseable_id': entrepriseable_id,
     };
   }
 
@@ -53,7 +53,7 @@ class Entreprises {
       ifu: map['ifu'] != null ? map['ifu'] as String : null,
       numero_entreprise: map['numero_entreprise'] as String,
       entrepriseable_type: map['entrepriseable_type'] as String,
-      entreprise_able_id: map['entreprise_able_id'] as int,
+      entrepriseable_id: map['entrepriseable_id'] as int,
     );
   }
 
@@ -64,7 +64,7 @@ class Entreprises {
 
   @override
   String toString() {
-    return 'Entreprises(id: $id, name: $name, ifu: $ifu, numero_entreprise: $numero_entreprise, entrepriseable_type: $entrepriseable_type, entreprise_able_id: $entreprise_able_id)';
+    return 'Entreprises(id: $id, name: $name, ifu: $ifu, numero_entreprise: $numero_entreprise, entrepriseable_type: $entrepriseable_type, entrepriseable_id: $entrepriseable_id)';
   }
 
   @override
@@ -76,7 +76,7 @@ class Entreprises {
         other.ifu == ifu &&
         other.numero_entreprise == numero_entreprise &&
         other.entrepriseable_type == entrepriseable_type &&
-        other.entreprise_able_id == entreprise_able_id;
+        other.entrepriseable_id == entrepriseable_id;
   }
 
   @override
@@ -86,6 +86,6 @@ class Entreprises {
         ifu.hashCode ^
         numero_entreprise.hashCode ^
         entrepriseable_type.hashCode ^
-        entreprise_able_id.hashCode;
+        entrepriseable_id.hashCode;
   }
 }

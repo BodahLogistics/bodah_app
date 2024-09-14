@@ -1744,7 +1744,7 @@ Future<dynamic> ChooseOrdre(BuildContext context) {
           content: Container(
               constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height *
-                      0.2), // Limiter la hauteur du dialog
+                      0.15), // Limiter la hauteur du dialog
               child: Column(
                 children: [
                   TextButton(

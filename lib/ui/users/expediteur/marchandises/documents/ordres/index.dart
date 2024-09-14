@@ -2,6 +2,7 @@
 
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/bon_commandes.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/annonces/ordres/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,6 @@ import '../../../../../../modals/pays.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
-import '../../annonces/detail.dart';
 import '../../nav_bottom/index.dart';
 
 class MesOrdres extends StatelessWidget {
@@ -104,8 +104,8 @@ class MesOrdres extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return DetailAnnonce(
-                                  id: data.annonce_id,
+                                return DetailOrdre(
+                                  id: data.id,
                                 );
                               },
                               transitionsBuilder: (BuildContext context,

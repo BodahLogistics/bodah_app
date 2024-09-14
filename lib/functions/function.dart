@@ -133,7 +133,7 @@ class Functions {
       List<Charge> charges, Expeditions expedition) {
     return charges
         .where((data) =>
-            data.chargement_type == "App\Models\Expedition" &&
+            data.chargement_type.contains("Expedition") &&
             data.chargement_id == expedition.id)
         .toList();
   }
@@ -142,7 +142,7 @@ class Functions {
       List<Charge> charges, Marchandises marchandise) {
     return charges
         .where((data) =>
-            data.cargaison_type == "App\Models\Marchandise" &&
+            data.cargaison_type.contains("Marchandise") &&
             data.cargaison_id == marchandise.id)
         .toList();
   }
@@ -261,7 +261,17 @@ class Functions {
 
   Pieces conducteur_piece(List<Pieces> pieces, Conducteur conducteur) {
     return pieces.firstWhere(
-      (data) => data.modele_id == conducteur.id,
+      (data) =>
+          data.modele_id == conducteur.id &&
+          data.modele_type.contains("Conducteur"),
+      orElse: () => Pieces(id: 0, num_piece: "", modele_id: 0, modele_type: ""),
+    );
+  }
+
+  Pieces data_piece(List<Pieces> pieces, int data_id, String data_modele) {
+    return pieces.firstWhere(
+      (data) =>
+          data.modele_id == data_id && data.modele_type.contains(data_modele),
       orElse: () => Pieces(id: 0, num_piece: "", modele_id: 0, modele_type: ""),
     );
   }
@@ -270,6 +280,13 @@ class Functions {
       List<Camions> camions, ChargementEffectue chargement_effectue) {
     return camions.firstWhere(
       (data) => data.id == chargement_effectue.vehicule_id,
+      orElse: () => Camions(id: 0, num_immatriculation: "", modele_type: ""),
+    );
+  }
+
+  Camions camion(List<Camions> camions, int id) {
+    return camions.firstWhere(
+      (data) => data.id == id,
       orElse: () => Camions(id: 0, num_immatriculation: "", modele_type: ""),
     );
   }
@@ -819,14 +836,14 @@ class Functions {
       List<Entreprises> entreprises, int entite_facture_id) {
     return entreprises.firstWhere(
       (data) =>
-          data.entreprise_able_id == entite_facture_id &&
-          data.entrepriseable_type == "App\Models\EntiteFacture",
+          data.entrepriseable_id == entite_facture_id &&
+          data.entrepriseable_type.contains("EntiteFacture"),
       orElse: () => Entreprises(
           id: 0,
           name: "",
           numero_entreprise: "",
           entrepriseable_type: "",
-          entreprise_able_id: 0),
+          entrepriseable_id: 0),
     );
   }
 
@@ -834,14 +851,14 @@ class Functions {
       List<Entreprises> entreprises, int expediteur_id) {
     return entreprises.firstWhere(
       (data) =>
-          data.entreprise_able_id == expediteur_id &&
-          data.entrepriseable_type == "App\Models\Expediteur",
+          data.entrepriseable_id == expediteur_id &&
+          data.entrepriseable_type.contains("Expediteur"),
       orElse: () => Entreprises(
           id: 0,
           name: "",
           numero_entreprise: "",
           entrepriseable_type: "",
-          entreprise_able_id: 0),
+          entrepriseable_id: 0),
     );
   }
 
@@ -849,14 +866,14 @@ class Functions {
       List<Entreprises> entreprises, int transporteur_id) {
     return entreprises.firstWhere(
       (data) =>
-          data.entreprise_able_id == transporteur_id &&
-          data.entrepriseable_type == "App\Models\Transporteur",
+          data.entrepriseable_id == transporteur_id &&
+          data.entrepriseable_type.contains("Transporteur"),
       orElse: () => Entreprises(
           id: 0,
           name: "",
           numero_entreprise: "",
           entrepriseable_type: "",
-          entreprise_able_id: 0),
+          entrepriseable_id: 0),
     );
   }
 
@@ -864,14 +881,14 @@ class Functions {
       List<Entreprises> entreprises, int destinataire_id) {
     return entreprises.firstWhere(
       (data) =>
-          data.entreprise_able_id == destinataire_id &&
-          data.entrepriseable_type == "App\Models\Destinataire",
+          data.entrepriseable_id == destinataire_id &&
+          data.entrepriseable_type.contains("Destinataire"),
       orElse: () => Entreprises(
           id: 0,
           name: "",
           numero_entreprise: "",
           entrepriseable_type: "",
-          entreprise_able_id: 0),
+          entrepriseable_id: 0),
     );
   }
 
@@ -879,14 +896,14 @@ class Functions {
       List<Entreprises> entreprises, int donneur_id) {
     return entreprises.firstWhere(
       (data) =>
-          data.entreprise_able_id == donneur_id &&
-          data.entrepriseable_type == "App\Models\DonneurOrdre",
+          data.entrepriseable_id == donneur_id &&
+          data.entrepriseable_type.contains("DonneurOrdre"),
       orElse: () => Entreprises(
           id: 0,
           name: "",
           numero_entreprise: "",
           entrepriseable_type: "",
-          entreprise_able_id: 0),
+          entrepriseable_id: 0),
     );
   }
 
@@ -896,6 +913,69 @@ class Functions {
         .where((data) =>
             data.modele_id == data_id && data.modele_type.contains(data_modele))
         .toList();
+  }
+
+  List<Appeles> expedition_appeles(
+      List<Appeles> apeles, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return apeles
+        .where((data) =>
+            data.modele_type.contains('Expedition') &&
+            expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<Interchanges> expedition_interchanges(
+      List<Interchanges> interchanges, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return interchanges
+        .where((data) =>
+            data.modele_type.contains('Expedition') &&
+            expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<Vgms> expedition_vgm(List<Vgms> vgms, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return vgms
+        .where((data) =>
+            data.modele_type.contains('Expedition') &&
+            expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<Tdos> expedition_tdo(List<Tdos> tdos, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return tdos
+        .where((data) =>
+            data.modele_type.contains('Expedition') &&
+            expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<Recus> expedition_recus(
+      List<Recus> recus, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return recus
+        .where((data) =>
+            data.modele_type.contains('Expedition') &&
+            expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<Recus> annonce_recus(
+      Annonces annonce, List<Expeditions> expeditions, List<Recus> recus) {
+    List<Recus> mesRecus = [];
+    final list1 = data_recus(recus, annonce.id, "Annonce");
+    final list2 = expedition_recus(recus, expeditions);
+    mesRecus.addAll(list1);
+    mesRecus.addAll(list2);
+    return mesRecus;
   }
 
   List<Bl> data_bl(List<Bl> bls, int data_id, String data_modele) {
@@ -1028,6 +1108,14 @@ class Functions {
     } else {
       return datas;
     }
+  }
+
+  List<Marchandises> data_marchandises(
+      List<Marchandises> marchandises, int annonce_id) {
+    List<Marchandises> datas =
+        marchandises.where((data) => data.annonce_id == annonce_id).toList();
+
+    return datas;
   }
 
   Unites unite(List<Unites> unites, int id) {

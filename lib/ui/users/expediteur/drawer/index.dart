@@ -6,6 +6,7 @@ import 'package:bodah/ui/users/expediteur/export/list.dart';
 import 'package:bodah/ui/users/expediteur/import/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/list.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/documents/home.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/expeditions/index.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -226,6 +227,54 @@ class DrawerExpediteur extends StatelessWidget {
               style: TextStyle(
                   fontSize: 12,
                   color: current_index == 3
+                      ? Colors.white
+                      : user.dark_mode == 1
+                          ? MyColors.light
+                          : function.convertHexToColor("#222523"),
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              provider.change_index(11);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return MesExpeditions();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            leading: Icon(
+              Icons.check_circle_outline,
+              color: current_index == 11
+                  ? Colors.white
+                  : user.dark_mode == 1
+                      ? MyColors.light
+                      : null,
+            ),
+            tileColor: current_index == 11 ? MyColors.secondary : null,
+            title: Text(
+              "Mes expéditions",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: current_index == 11
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light

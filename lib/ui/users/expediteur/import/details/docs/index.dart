@@ -106,8 +106,8 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (interchanges.isNotEmpty) {
-                            showInterchanges(
-                                context, widget.data_id, widget.data_modele);
+                            showInterchanges(context, widget.data_id,
+                                widget.data_modele, interchanges);
                           } else {
                             NewInter(
                                 context, widget.data_id, widget.data_modele);
@@ -169,8 +169,8 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (recus.isNotEmpty) {
-                            showRecus(
-                                context, widget.data_id, widget.data_modele);
+                            showRecus(context, widget.data_id,
+                                widget.data_modele, recus);
                           } else {
                             NewRecu(
                                 context, widget.data_id, widget.data_modele);
@@ -351,8 +351,8 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (tdos.isNotEmpty) {
-                            showTdo(
-                                context, widget.data_id, widget.data_modele);
+                            showTdo(context, widget.data_id, widget.data_modele,
+                                tdos);
                           } else {
                             NewTdo(context, widget.data_id, widget.data_modele);
                           }
@@ -579,8 +579,8 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (vgms.isNotEmpty) {
-                            showVgm(
-                                context, widget.data_id, widget.data_modele);
+                            showVgm(context, widget.data_id, widget.data_modele,
+                                vgms);
                           } else {
                             NewVgm(context, widget.data_id, widget.data_modele);
                           }
@@ -792,8 +792,8 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (appeles.isNotEmpty) {
-                            showApeles(
-                                context, widget.data_id, widget.data_modele);
+                            showApeles(context, widget.data_id,
+                                widget.data_modele, appeles);
                           } else {
                             NewApele(
                                 context, widget.data_id, widget.data_modele);
@@ -969,16 +969,13 @@ class _ListDocumentsState extends State<ListDocuments> {
 }
 
 /*      Interchanges */
-Future<dynamic> showInterchanges(
-    BuildContext context, int dataId, String modele) {
+Future<dynamic> showInterchanges(BuildContext context, int dataId,
+    String modele, List<Interchanges> interchanges) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialogContext) {
-      final function = Provider.of<Functions>(dialogContext, listen: false);
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
-      List<Interchanges> interchanges = apiProvider.interchanges;
-      interchanges = function.data_interchanges(interchanges, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
       Users user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
@@ -1066,27 +1063,34 @@ Future<dynamic> showInterchanges(
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(interchange.doc_id ?? "");
-                                  UpdateInter(dialogContext, interchange);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteInter(dialogContext, interchange);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(
+                                            interchange.doc_id ?? "");
+                                        UpdateInter(dialogContext, interchange);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteInter(dialogContext, interchange);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   // downloadDocument(context, url);
@@ -1132,29 +1136,31 @@ Future<dynamic> showInterchanges(
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewInter(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewInter(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -1840,15 +1846,13 @@ Future<dynamic> DeleteInter(BuildContext context, Interchanges interchange) {
 /* End interchage*/
 
 /* Recus */
-Future<dynamic> showRecus(BuildContext context, int dataId, String modele) {
+Future<dynamic> showRecus(
+    BuildContext context, int dataId, String modele, List<Recus> datas) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialogContext) {
-      final function = Provider.of<Functions>(dialogContext, listen: false);
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
-      List<Recus> datas = apiProvider.recus;
-      datas = function.data_recus(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
       Users user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
@@ -1936,27 +1940,33 @@ Future<dynamic> showRecus(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateRecu(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteRecu(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateRecu(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteRecu(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /*  String url =
@@ -2005,29 +2015,31 @@ Future<dynamic> showRecus(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewRecu(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewRecu(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -2807,27 +2819,33 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateFiche(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteFiche(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateFiche(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteFiche(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -2876,29 +2894,31 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewFiche(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewFiche(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -3678,33 +3698,39 @@ Future<dynamic> showDecla(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateDecla(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteDecla(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateDecla(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteDecla(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  String url =
+                                  /*  String url =
                                       "https://test.bodah.bj/storage/" +
                                           data.path;
-                                  downloadDocument(context, url);
+                                  downloadDocument(context, url);*/
                                 },
                                 icon: Icon(
                                   Icons.download,
@@ -3747,29 +3773,31 @@ Future<dynamic> showDecla(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewDecla(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewDecla(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -4550,27 +4578,33 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateBfu(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteBfu(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateBfu(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteBfu(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -4619,29 +4653,31 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewBfu(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewBfu(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -5324,15 +5360,13 @@ Future<dynamic> DeleteBfu(BuildContext context, Bfu data) {
 /* End bfu */
 
 /*Appeles */
-Future<dynamic> showApeles(BuildContext context, int dataId, String modele) {
+Future<dynamic> showApeles(
+    BuildContext context, int dataId, String modele, List<Appeles> datas) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialogContext) {
-      final function = Provider.of<Functions>(dialogContext, listen: false);
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
-      List<Appeles> datas = apiProvider.appeles;
-      datas = function.data_appeles(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
       Users user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
@@ -5420,27 +5454,33 @@ Future<dynamic> showApeles(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateApele(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteApele(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateApele(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteApele(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -5489,29 +5529,31 @@ Future<dynamic> showApeles(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewApele(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewApele(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -6292,27 +6334,33 @@ Future<dynamic> showImportOrdre(
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.nom ?? "");
-                                  UpdateImportOrdre(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteImportOrdre(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.nom ?? "");
+                                        UpdateImportOrdre(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteImportOrdre(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -6361,29 +6409,31 @@ Future<dynamic> showImportOrdre(
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewImportOrdre(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewImportOrdre(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -7068,15 +7118,13 @@ Future<dynamic> DeleteImportOrdre(BuildContext context, OrdreTransport data) {
 /* End Ordre de transport */
 
 /* Tdo */
-Future<dynamic> showTdo(BuildContext context, int dataId, String modele) {
+Future<dynamic> showTdo(
+    BuildContext context, int dataId, String modele, List<Tdos> datas) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialogContext) {
-      final function = Provider.of<Functions>(dialogContext, listen: false);
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
-      List<Tdos> datas = apiProvider.tdos;
-      datas = function.data_tdos(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
       Users user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
@@ -7164,27 +7212,33 @@ Future<dynamic> showTdo(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateTdo(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteTdo(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateTdo(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteTdo(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /*  String url =
@@ -7233,29 +7287,31 @@ Future<dynamic> showTdo(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewTdo(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewTdo(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -7938,15 +7994,13 @@ Future<dynamic> DeleteTdo(BuildContext context, Tdos data) {
 /* End TDO */
 
 /* VGM */
-Future<dynamic> showVgm(BuildContext context, int dataId, String modele) {
+Future<dynamic> showVgm(
+    BuildContext context, int dataId, String modele, List<Vgms> datas) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialogContext) {
-      final function = Provider.of<Functions>(dialogContext, listen: false);
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
-      List<Vgms> datas = apiProvider.vgms;
-      datas = function.data_vgm(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
       Users user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
@@ -8034,27 +8088,33 @@ Future<dynamic> showVgm(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateVgm(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteVgm(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateVgm(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteVgm(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -8103,29 +8163,31 @@ Future<dynamic> showVgm(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewVgm(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewVgm(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -8904,27 +8966,33 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateAvd(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteAvd(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateAvd(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteAvd(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -8973,29 +9041,31 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewAvd(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewAvd(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -9776,27 +9846,33 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateCo(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteCo(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateCo(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteCo(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /*  String url =
@@ -9845,29 +9921,31 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewCo(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewCo(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -10654,27 +10732,33 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateCps(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteCps(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateCps(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteCps(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -10723,29 +10807,31 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewCps(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewCps(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -11532,27 +11618,33 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.doc_id ?? "");
-                                  UpdateDoc(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteDoc(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.doc_id ?? "");
+                                        UpdateDoc(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteDoc(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
                                   /* String url =
@@ -11601,29 +11693,31 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 100,
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      backgroundColor: MyColors.secondary),
-                  onPressed: () {
-                    NewDoc(dialogContext, dataId, modele);
-                  },
-                  child: Text(
-                    "Ajouter",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.light,
-                        fontFamily: "Poppins",
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              modele.contains("Annonce") || modele.contains("Expedition")
+                  ? Container()
+                  : SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
+                            padding: EdgeInsets.symmetric(horizontal: 7),
+                            backgroundColor: MyColors.secondary),
+                        onPressed: () {
+                          NewDoc(dialogContext, dataId, modele);
+                        },
+                        child: Text(
+                          "Ajouter",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ],
@@ -12410,27 +12504,33 @@ Future<dynamic> showBl(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.ref ?? "");
-                                  UpdateBl(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteBl(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.ref ?? "");
+                                        UpdateBl(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteBl(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               data.path != null
                                   ? IconButton(
                                       onPressed: () {
@@ -12481,31 +12581,33 @@ Future<dynamic> showBl(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              datas.isNotEmpty
+              modele.contains("Annonce") || modele.contains("Expedition")
                   ? Container()
-                  : SizedBox(
-                      width: 100,
-                      height: 30,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)),
-                            padding: EdgeInsets.symmetric(horizontal: 7),
-                            backgroundColor: MyColors.secondary),
-                        onPressed: () {
-                          NewBl(dialogContext, dataId, modele);
-                        },
-                        child: Text(
-                          "Ajouter",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyColors.light,
-                              fontFamily: "Poppins",
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold),
+                  : datas.isNotEmpty
+                      ? Container()
+                      : SizedBox(
+                          width: 100,
+                          height: 30,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7)),
+                                padding: EdgeInsets.symmetric(horizontal: 7),
+                                backgroundColor: MyColors.secondary),
+                            onPressed: () {
+                              NewBl(dialogContext, dataId, modele);
+                            },
+                            child: Text(
+                              "Ajouter",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: MyColors.light,
+                                  fontFamily: "Poppins",
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
             ],
           ),
         ],
@@ -13292,27 +13394,33 @@ Future<dynamic> showLta(BuildContext context, int dataId, String modele) {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  provider.change_doc(data.ref ?? "");
-                                  UpdateLta(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: MyColors.primary,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  DeleteLta(dialogContext, data);
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        provider.change_doc(data.ref ?? "");
+                                        UpdateLta(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: MyColors.primary,
+                                      ),
+                                    ),
+                              modele.contains("Annonce") ||
+                                      modele.contains("Expedition")
+                                  ? Container()
+                                  : IconButton(
+                                      onPressed: () {
+                                        DeleteLta(dialogContext, data);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
                               data.path != null
                                   ? IconButton(
                                       onPressed: () {
@@ -13363,31 +13471,33 @@ Future<dynamic> showLta(BuildContext context, int dataId, String modele) {
                   ),
                 ),
               ),
-              datas.isNotEmpty
+              modele.contains("Annonce") || modele.contains("Expedition")
                   ? Container()
-                  : SizedBox(
-                      width: 100,
-                      height: 30,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)),
-                            padding: EdgeInsets.symmetric(horizontal: 7),
-                            backgroundColor: MyColors.secondary),
-                        onPressed: () {
-                          NewLta(dialogContext, dataId, modele);
-                        },
-                        child: Text(
-                          "Ajouter",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyColors.light,
-                              fontFamily: "Poppins",
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold),
+                  : datas.isNotEmpty
+                      ? Container()
+                      : SizedBox(
+                          width: 100,
+                          height: 30,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7)),
+                                padding: EdgeInsets.symmetric(horizontal: 7),
+                                backgroundColor: MyColors.secondary),
+                            onPressed: () {
+                              NewLta(dialogContext, dataId, modele);
+                            },
+                            child: Text(
+                              "Ajouter",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: MyColors.light,
+                                  fontFamily: "Poppins",
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
             ],
           ),
         ],

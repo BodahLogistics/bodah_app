@@ -44,6 +44,7 @@ import '../modals/cartificat_origine.dart';
 import '../modals/certificat_phyto_sanitaire.dart';
 import '../modals/chargement.dart';
 import '../modals/chargement_effectues.dart';
+import '../modals/charges.dart';
 import '../modals/client.dart';
 import '../modals/communes.dart';
 import '../modals/conducteur.dart';
@@ -86,52 +87,68 @@ class DBServices {
   SecureStorage secure = SecureStorage();
 
   Future<List<dynamic>> user() async {
-    String? token = await secure.readSecureData('token');
+    try {
+      String? token = await secure.readSecureData('token');
 
-    if (token.isNotEmpty) {
-      var url = "${api_url}user";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
+      if (token.isNotEmpty) {
+        var url = "${api_url}user";
+        final uri = Uri.parse(url);
+        final response = await http.get(uri, headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token
+        });
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        if (data.containsKey('user') &&
-            data['user'] != null &&
-            data['user'] is Map<String, dynamic>) {
-          Users user = Users.fromMap(data['user'] as Map<String, dynamic>);
-          List<Rules> rules = [];
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          if (data.containsKey('user') &&
+              data['user'] != null &&
+              data['user'] is Map<String, dynamic>) {
+            Users user = Users.fromMap(data['user'] as Map<String, dynamic>);
+            List<Rules> rules = [];
 
-          if (data['roles'] is List) {
-            final roles = data['roles'] as List<dynamic>;
-            rules = roles
-                .map((role) => Rules.fromMap(role as Map<String, dynamic>))
-                .toList();
+            if (data['roles'] is List) {
+              final roles = data['roles'] as List<dynamic>;
+              rules = roles
+                  .map((role) => Rules.fromMap(role as Map<String, dynamic>))
+                  .toList();
+            } else {
+              final role = data['roles'] as Map<String, dynamic>;
+              rules = [Rules.fromMap(role)];
+            }
+
+            return [user, rules];
           } else {
-            final role = data['roles'] as Map<String, dynamic>;
-            rules = [Rules.fromMap(role)];
+            return [
+              Users(
+                dark_mode: 0,
+                id: 0,
+                name: "",
+                country_id: 0,
+                telephone: "",
+                deleted: 0,
+                is_verified: 0,
+                is_active: 0,
+              ),
+              <Rules>[]
+            ];
           }
-
-          return [user, rules];
-        } else {
-          return [
-            Users(
-              dark_mode: 0,
-              id: 0,
-              name: "",
-              country_id: 0,
-              telephone: "",
-              deleted: 0,
-              is_verified: 0,
-              is_active: 0,
-            ),
-            <Rules>[]
-          ];
         }
+
+        return [
+          Users(
+            dark_mode: 0,
+            id: 0,
+            name: "",
+            country_id: 0,
+            telephone: "",
+            deleted: 0,
+            is_verified: 0,
+            is_active: 0,
+          ),
+          <Rules>[]
+        ];
       }
 
       return [
@@ -147,21 +164,21 @@ class DBServices {
         ),
         <Rules>[]
       ];
+    } catch (error) {
+      return [
+        Users(
+          dark_mode: 0,
+          id: 0,
+          name: "",
+          country_id: 0,
+          telephone: "",
+          deleted: 0,
+          is_verified: 0,
+          is_active: 0,
+        ),
+        <Rules>[]
+      ];
     }
-
-    return [
-      Users(
-        dark_mode: 0,
-        id: 0,
-        name: "",
-        country_id: 0,
-        telephone: "",
-        deleted: 0,
-        is_verified: 0,
-        is_active: 0,
-      ),
-      <Rules>[]
-    ];
   }
 
   Future<List<Pays>> getPays() async {
@@ -620,7 +637,7 @@ class DBServices {
   Future<List<EntiteFactures>> getEntiteFactures() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonce/entite_factures";
+      var url = "${api_url}home/expediteur/annonce/entitefactures";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -643,7 +660,7 @@ class DBServices {
   Future<List<DonneurOrdres>> getDonneurOrdres() async {
     try {
       String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/expediteur/annonce/donneur_ordres";
+      var url = "${api_url}home/expediteur/annonce/donneurordres";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Authorization': 'Bearer $token',
@@ -2758,6 +2775,29 @@ class DBServices {
       }
     } catch (error) {
       return <Tarif>[];
+    }
+  }
+
+  Future<List<Charge>> getCharges() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/import/charges";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Charge.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
     }
   }
 

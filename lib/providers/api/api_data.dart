@@ -44,6 +44,7 @@ import '../../modals/bl.dart';
 import '../../modals/camions.dart';
 import '../../modals/cargaison.dart';
 import '../../modals/certificat_phyto_sanitaire.dart';
+import '../../modals/charges.dart';
 import '../../modals/client.dart';
 import '../../modals/coli_tarifs.dart';
 import '../../modals/declaration.dart';
@@ -407,6 +408,9 @@ class ApiProvider with ChangeNotifier {
   List<Paths> _paths = [];
   List<Paths> get paths => _paths;
 
+  List<Charge> _charges = [];
+  List<Charge> get charges => _charges;
+
   Future<void> InitData() async {
     _isLoading = true;
     final response_users = await apiService.getUsers();
@@ -494,16 +498,26 @@ class ApiProvider with ChangeNotifier {
     _expeditions = response_expedition;
     final response_marchandise = await apiService.getMarchandises();
     _marchandises = response_marchandise;
-    final response_photo = await apiService.getAnnoncePhotos();
-    _annonce_photos = response_photo;
     final response_tarification = await apiService.getTarifications();
     _tarifications = response_tarification;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
     final response_annonce = await apiService.getAnnonces();
     _annonces = response_annonce;
-    final response_destinataire = await apiService.getDestinataires();
-    _destinataires = response_destinataire;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitExpeditionForAnnonce() async {
+    _isLoading = true;
+    final response_charge = await apiService.getCharges();
+    _charges = response_charge;
+    final response_expedition = await apiService.getExpeditions();
+    _expeditions = response_expedition;
+    final response_tarif = await apiService.getTarifs();
+    _tarifs = response_tarif;
+    final response_piece = await apiService.getPieces();
+    _pieces = response_piece;
     final response_transporteur = await apiService.getTransporteurs();
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
@@ -514,18 +528,8 @@ class ApiProvider with ChangeNotifier {
 
   Future<void> InitForSomeAnnonce() async {
     _isLoading = true;
-    final response_all_villes = await apiService.getAllVilles();
-    _all_villes = response_all_villes;
-    final response_expedition = await apiService.getExpeditions();
-    _expeditions = response_expedition;
-    final response_marchandise = await apiService.getMarchandises();
-    _marchandises = response_marchandise;
     final response_photo = await apiService.getAnnoncePhotos();
     _annonce_photos = response_photo;
-    final response_tarification = await apiService.getTarifications();
-    _tarifications = response_tarification;
-    final response_localisation = await apiService.getLocalisations();
-    _localisations = response_localisation;
     final response_destinataire = await apiService.getDestinataires();
     _destinataires = response_destinataire;
     final response_entreprise = await apiService.getEntreprises();
@@ -534,8 +538,6 @@ class ApiProvider with ChangeNotifier {
     _expediteurs = response_expediteur;
     final response_users = await apiService.getUsers();
     _users = response_users;
-    final response_ordres = await apiService.getOrdres();
-    _ordres = response_ordres;
     _isLoading = false;
     notifyListeners();
   }

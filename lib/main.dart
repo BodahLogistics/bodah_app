@@ -38,6 +38,7 @@ import 'providers/users/expediteur/export/aerien/add.dart';
 import 'providers/users/expediteur/export/maritime/add.dart';
 import 'providers/users/expediteur/export/routes/add.dart';
 import 'providers/users/expediteur/import/routes/add.dart';
+import 'providers/users/expediteur/marchandises/annoces/details/home.dart';
 import 'providers/users/expediteur/marchandises/nav_bottom/index.dart';
 import 'services/data_base_service.dart';
 import 'services/secure_storage.dart';
@@ -154,6 +155,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvHoExport(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvHoAnn(),
         ),
       ],
       child: MaterialApp(
