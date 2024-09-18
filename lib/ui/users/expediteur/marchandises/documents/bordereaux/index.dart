@@ -12,6 +12,7 @@ import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/users.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
@@ -26,7 +27,7 @@ class MesBordereaux extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<BordereauLivraisons> datas = api_provider.bordereaux;
     List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
@@ -35,7 +36,7 @@ class MesBordereaux extends StatelessWidget {
     List<Villes> all_villes = api_provider.all_villes;
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

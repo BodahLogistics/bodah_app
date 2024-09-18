@@ -36,6 +36,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import 'bordereaux/index.dart';
 import 'import_ordre/ordre_import_export.dart';
@@ -59,7 +60,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
   @override
   Widget build(BuildContext context) {
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
     List<BonCommandes> ordres = api_provider.ordres;
     List<Appeles> appeles = api_provider.appeles;
@@ -84,7 +85,7 @@ class _DashBoardDocExpState extends State<DashBoardDocExp> {
         : SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Container(
-              color: user.dark_mode == 1
+              color: user!.dark_mode == 1
                   ? MyColors.secondDark
                   : MyColors.textColor.withOpacity(.4),
               child: Column(

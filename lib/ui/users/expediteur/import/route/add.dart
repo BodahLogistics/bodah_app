@@ -100,7 +100,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
 
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Pays> pays = api_provider.pays;
     List<Villes> villes_expedition = provider.villes_expeditions;
     List<Villes> villes_livraison = provider.villes_livraison;
@@ -121,7 +121,7 @@ class _NewImportRouteState extends State<NewImportRoute> {
     livraisons = function.data_livraisons(livraisons, import_key, "Import");
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(
@@ -1737,7 +1737,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (solde > 0) {
         Solde.text = solde.toStringAsFixed(0);
@@ -1763,7 +1763,7 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(
                     children: [
-                      user.dark_mode == 1
+                      user!.dark_mode == 1
                           ? Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -2677,7 +2677,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (DateDebut.text.isEmpty) {
         DateDebut.text = date_debut;
@@ -2696,7 +2696,7 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -3532,7 +3532,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
       Pays pay = provider.pay;
       List<Pays> pays = api_provider.pays;
       List<Villes> villes = provider.villes;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       return AlertDialog(
         title: Text(
@@ -3547,7 +3547,7 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -4191,7 +4191,7 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
       Pays pay = provider.pay;
       List<Pays> pays = api_provider.pays;
       List<Villes> villes = provider.villes;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (Adresse.text.isEmpty && adresse.isNotEmpty) {
         Adresse.text = adresse;
@@ -4226,7 +4226,7 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -4871,7 +4871,7 @@ Future<dynamic> UpdateMarch(
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (DateDebut.text.isEmpty && date_debut.isNotEmpty) {
         DateDebut.text = date_debut;
@@ -4911,7 +4911,7 @@ Future<dynamic> UpdateMarch(
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -5754,7 +5754,7 @@ Future<dynamic> UpdateTransp(
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (solde > 0) {
         Solde.text = solde.toStringAsFixed(0);
@@ -5805,7 +5805,7 @@ Future<dynamic> UpdateTransp(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(
                     children: [
-                      user.dark_mode == 1
+                      user!.dark_mode == 1
                           ? Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -6707,7 +6707,7 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
       List<Tarif> tarifs = api_provider.tarifs;
       List<Pays> pays = api_provider.pays;
       List<Villes> all_villes = api_provider.all_villes;
-      Users user = api_provider.user;
+      Users? user = api_provider.user;
 
       return AlertDialog(
         title: Text(
@@ -6726,7 +6726,7 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -6763,7 +6763,7 @@ Future<dynamic> showTransp(BuildContext context, int data_id, String modele) {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,
@@ -7288,7 +7288,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
       List<Position> positions = api_provider.positions;
       List<Pays> pays = api_provider.pays;
       List<Villes> all_villes = api_provider.all_villes;
-      Users user = api_provider.user;
+      Users? user = api_provider.user;
 
       return AlertDialog(
         title: Text(
@@ -7307,7 +7307,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -7357,7 +7357,7 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,
@@ -7843,7 +7843,7 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
       List<Client> clients = api_provider.clients;
       List<Pays> pays = api_provider.pays;
       List<Villes> all_villes = api_provider.all_villes;
-      Users user = api_provider.user;
+      Users? user = api_provider.user;
 
       return AlertDialog(
         title: Text(
@@ -7862,7 +7862,7 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -7889,7 +7889,7 @@ Future<dynamic> showLiv(BuildContext context, int data_id, String modele) {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,

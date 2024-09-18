@@ -37,7 +37,7 @@ class _WrappersState extends State<Wrappers> {
 
     final user = apiProvider.user;
 
-    if (user.id > 0) {
+    if (user != null) {
       List<Rules> rules = apiProvider.roles;
       bool is_expediteur = function.hasRole(rules, "Expéditeur");
 

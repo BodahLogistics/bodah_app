@@ -19,6 +19,7 @@ import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/expeditions.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../providers/api/api_data.dart';
+import '../../../../../modals/users.dart';
 import '../../../../auth/sign_in.dart';
 import '../expeditions/detail.dart';
 import 'list.dart';
@@ -32,7 +33,7 @@ class DetailAnnonce extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
     Annonces annonce = function.annonce(annonces, id);
     List<BonCommandes> ordres = api_provider.ordres;
@@ -53,7 +54,7 @@ class DetailAnnonce extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: DrawerExpediteur(),
       appBar: AppBar(
         backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,

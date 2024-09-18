@@ -48,7 +48,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    Users user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Expeditions> expeditions = api_provider.expeditions;
     expeditions = function.annonce_expeditions(expeditions, widget.annonce);
@@ -119,7 +119,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: interchanges.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -173,7 +173,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: recus.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -225,7 +225,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: ltas.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -265,7 +265,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: fiche_techniques.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -326,7 +326,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: tdos.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -413,7 +413,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: ordre.id > 0
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -424,7 +424,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -458,7 +458,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: bfus.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -498,7 +498,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: cos.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -559,7 +559,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: vgms.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -598,7 +598,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: bls.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -637,7 +637,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                     fontSize: 8,
                                     color: avds.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -677,7 +677,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: cps.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -739,7 +739,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: appeles.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -792,7 +792,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                           fontSize: 8,
                                           color: declarations.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -845,7 +845,7 @@ class _ListDocAnnonceState extends State<ListDocAnnonce> {
                                       fontSize: 8,
                                       color: ltas.isNotEmpty
                                           ? Colors.green
-                                          : user.dark_mode == 1
+                                          : user!.dark_mode == 1
                                               ? MyColors.light
                                               : MyColors.black,
                                       fontFamily: "Poppins",

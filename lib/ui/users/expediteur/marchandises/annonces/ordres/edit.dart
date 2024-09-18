@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
+import '../../../../../../modals/users.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../services/data_base_service.dart';
 import '../../../../../auth/sign_in.dart';
@@ -66,7 +67,7 @@ class _UpOrdreTransportState extends State<UpOrdreTransport> {
     bool affiche = provider.affiche;
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     int delai_chargement = provider.delai_chargement;
     double amende_delai_chargement = provider.amende_delai_chargement;
     double amende_dechargement = provider.amende_dechargement;
@@ -143,7 +144,7 @@ class _UpOrdreTransportState extends State<UpOrdreTransport> {
     }
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: DrawerExpediteur(),
       appBar: AppBar(
         backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,

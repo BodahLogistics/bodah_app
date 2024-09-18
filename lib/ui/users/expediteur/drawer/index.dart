@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
+import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
@@ -23,13 +24,13 @@ class DrawerExpediteur extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     final provider = Provider.of<ProvDrawExpediteur>(context);
     int current_index = provider.current_index;
     final service = Provider.of<DBServices>(context);
 
     return Drawer(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(45))),
       child: ListView(
@@ -572,7 +573,7 @@ void logOut(BuildContext context) {
         bool delete = apiProvider.delete;
 
         return AlertDialog(
-          backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+          backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
           title: Text(
             "Déconnexion",
             textAlign: TextAlign.center,

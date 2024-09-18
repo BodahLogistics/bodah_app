@@ -18,6 +18,7 @@ import '../../../../modals/cargaison.dart';
 import '../../../../modals/chargement.dart';
 import '../../../../modals/import.dart';
 import '../../../../modals/positions.dart';
+import '../../../../modals/users.dart';
 import '../drawer/index.dart';
 import '../marchandises/nav_bottom/index.dart';
 import 'route/add.dart';
@@ -29,7 +30,7 @@ class MesImports extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Import> imports = api_provider.imports;
     List<Cargaison> cargaison = api_provider.cargaisons;
     List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
@@ -47,7 +48,7 @@ class MesImports extends StatelessWidget {
         },
         child: Icon(Icons.add, color: MyColors.light),
       ),
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

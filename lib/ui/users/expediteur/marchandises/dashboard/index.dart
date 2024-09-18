@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../nav_bottom/index.dart';
 
@@ -22,7 +23,7 @@ class DashMarchExp extends StatelessWidget {
     int current_index = provider.current_index;
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
 
     PageController _pageController =
         PageController(viewportFraction: 0.25, initialPage: 0);
@@ -34,7 +35,7 @@ class DashMarchExp extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

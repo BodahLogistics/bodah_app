@@ -11,6 +11,7 @@ import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
 import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/users.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
@@ -36,7 +37,7 @@ class _MesOrdreTransportState extends State<MesOrdreTransport> {
     final api_provider = Provider.of<ApiProvider>(context);
     List<BonCommandes> ordres = api_provider.ordres;
     List<Annonces> annonces = api_provider.annonces;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -44,7 +45,7 @@ class _MesOrdreTransportState extends State<MesOrdreTransport> {
     List<Villes> all_villes = api_provider.all_villes;
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

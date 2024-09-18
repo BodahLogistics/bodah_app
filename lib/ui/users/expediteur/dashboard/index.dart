@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
+import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
 import '../drawer/index.dart';
 import '../marchandises/dashboard/index.dart';
@@ -19,11 +20,11 @@ class ExpediteurDashBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Villes> villes = api_provider.all_villes;
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: DrawerExpediteur(),
       appBar: AppBar(
         backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,

@@ -17,6 +17,7 @@ import '../../../../modals/localisations.dart';
 import '../../../../modals/marchandises.dart';
 import '../../../../modals/pays.dart';
 import '../../../../modals/unites.dart';
+import '../../../../modals/users.dart';
 import '../../../../modals/villes.dart';
 import '../../../../providers/api/api_data.dart';
 
@@ -27,7 +28,7 @@ class HomeMarchExp extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
     List<Expeditions> expeditions = api_provider.expeditions;
     List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
@@ -51,7 +52,7 @@ class HomeMarchExp extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: user.dark_mode == 1
+                      color: user!.dark_mode == 1
                           ? MyColors.textColor
                           : function
                               .convertHexToColor("#00000040")

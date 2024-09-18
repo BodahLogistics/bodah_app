@@ -46,7 +46,7 @@ class _ListMarchsState extends State<ListMarchs> {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     final provider = Provider.of<ProvAddMarchandise>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Users> users = api_provider.users;
     List<Tarifications> tarifications = api_provider.tarifications;
     List<Localisations> localisations = api_provider.localisations;
@@ -98,7 +98,7 @@ class _ListMarchsState extends State<ListMarchs> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -121,7 +121,7 @@ class _ListMarchsState extends State<ListMarchs> {
                                     },
                                     icon: Icon(
                                       Icons.arrow_left,
-                                      color: user.dark_mode == 1
+                                      color: user!.dark_mode == 1
                                           ? MyColors.light
                                           : MyColors.secondary,
                                       size: 40,
@@ -239,7 +239,7 @@ class _ListMarchsState extends State<ListMarchs> {
                                         fontFamily: "Poppins",
                                         fontWeight: FontWeight.bold,
                                         fontSize: 10,
-                                        color: user.dark_mode == 1
+                                        color: user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black),
                                   ),

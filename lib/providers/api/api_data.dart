@@ -138,17 +138,8 @@ class ApiProvider with ChangeNotifier {
   List<Users> _users = [];
   List<Users> get users => _users;
 
-  Users _user = Users(
-    dark_mode: 0,
-    id: 0,
-    name: "",
-    country_id: 0,
-    telephone: "",
-    deleted: 0,
-    is_verified: 0,
-    is_active: 0,
-  );
-  Users get user => _user;
+  Users? _user;
+  Users? get user => _user;
 
   String _token = "";
   String get token => _token;

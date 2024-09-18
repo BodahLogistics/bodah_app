@@ -15,6 +15,7 @@ import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/cargaison.dart';
 import '../../../../../modals/pays.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../providers/users/expediteur/import/liv/add.dart';
@@ -102,7 +103,7 @@ class _NewExportRouteState extends State<NewExportRoute> {
 
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Pays> pays = api_provider.pays;
     List<Villes> villes_expedition = provider.villes_expeditions;
     List<Villes> villes_livraison = provider.villes_livraison;
@@ -123,7 +124,7 @@ class _NewExportRouteState extends State<NewExportRoute> {
     livraisons = function.data_livraisons(livraisons, import_key, "Export");
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(
@@ -1739,7 +1740,7 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (solde > 0) {
         Solde.text = solde.toStringAsFixed(0);
@@ -1765,7 +1766,7 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(
                     children: [
-                      user.dark_mode == 1
+                      user!.dark_mode == 1
                           ? Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -2679,7 +2680,7 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
       List<Pays> pays = api_provider.pays;
       List<Villes> villes_expedition = provider.villes_expeditions;
       List<Villes> villes_livraison = provider.villes_livraison;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       if (DateDebut.text.isEmpty) {
         DateDebut.text = date_debut;
@@ -2698,7 +2699,7 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -3534,7 +3535,7 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
       Pays pay = provider.pay;
       List<Pays> pays = api_provider.pays;
       List<Villes> villes = provider.villes;
-      final user = api_provider.user;
+      Users? user = api_provider.user;
 
       return AlertDialog(
         title: Text(
@@ -3549,7 +3550,7 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
         content: SingleChildScrollView(
             child: ListBody(
           children: [
-            user.dark_mode == 1
+            user!.dark_mode == 1
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(

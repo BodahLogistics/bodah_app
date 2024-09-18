@@ -15,6 +15,7 @@ import '../../../../../modals/localisations.dart';
 import '../../../../../modals/marchandises.dart';
 import '../../../../../modals/pays.dart';
 import '../../../../../modals/unites.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../wrappers/load.dart';
@@ -39,7 +40,7 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
     List<AnnoncePhotos> annonce_photos = api_provider.photos;
     List<Marchandises> marchandises = api_provider.marchandises;
@@ -78,7 +79,7 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
         },
         child: Icon(Icons.add, color: MyColors.light),
       ),
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

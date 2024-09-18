@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../providers/calculator/index.dart';
 import '../../../../../services/data_base_service.dart';
@@ -80,7 +81,7 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
 
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = provider.loading;
     List<Pays> pays = api_provider.pays;
     List<Unites> unites = api_provider.unites;
@@ -105,7 +106,7 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
                       top: 5, right: 10, left: 15, bottom: 50),
                   child: Column(
                     children: [
-                      user.dark_mode == 1
+                      user!.dark_mode == 1
                           ? Container(
                               alignment: Alignment.centerLeft,
                               child: Text(

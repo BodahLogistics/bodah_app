@@ -12,6 +12,7 @@ import '../../../../../functions/function.dart';
 import '../../../../../modals/cargaison.dart';
 import '../../../../../modals/chargement_effectues.dart';
 import '../../../../../modals/livraison_cargaison.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../services/data_base_service.dart';
 import '../../../../auth/sign_in.dart';
@@ -32,7 +33,7 @@ class DetailExport extends StatelessWidget {
     final api_provider = Provider.of<ApiProvider>(context);
     final provider = Provider.of<ProvHoExport>(context);
     int current_index = provider.current_index;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Exports> exports = api_provider.exports;
     Exports export = function.export(exports, export_id);
     List<Cargaison> cargaisons = api_provider.cargaisons;
@@ -53,7 +54,7 @@ class DetailExport extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

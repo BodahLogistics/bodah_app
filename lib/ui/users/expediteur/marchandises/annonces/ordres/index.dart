@@ -36,7 +36,7 @@ class _MonOrdreTransportState extends State<MonOrdreTransport> {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     bool loading = api_provider.loading;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Users> users = api_provider.users;
     List<Annonces> annonces = api_provider.annonces;
     List<DonneurOrdres> donneur_ordres = api_provider.donneur_ordres;
@@ -67,7 +67,7 @@ class _MonOrdreTransportState extends State<MonOrdreTransport> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -98,7 +98,7 @@ class _MonOrdreTransportState extends State<MonOrdreTransport> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: user.dark_mode == 1
+                                      color: user!.dark_mode == 1
                                           ? MyColors.light
                                           : MyColors.black,
                                       fontFamily: "Poppins",

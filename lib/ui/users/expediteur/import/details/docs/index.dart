@@ -52,7 +52,7 @@ class _ListDocumentsState extends State<ListDocuments> {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
 
-    Users user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Appeles> appeles = api_provider.appeles;
     appeles =
@@ -126,7 +126,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: interchanges.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -150,7 +150,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -189,7 +189,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: recus.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -213,7 +213,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -250,7 +250,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: ltas.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -261,7 +261,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -300,7 +300,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: fiche_techniques.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -324,7 +324,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -369,7 +369,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: tdos.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -380,7 +380,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -419,7 +419,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: ordres.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -443,7 +443,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -480,7 +480,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: bfus.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -491,7 +491,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -528,7 +528,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: cos.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -552,7 +552,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -597,7 +597,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: vgms.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -608,7 +608,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -644,7 +644,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: bls.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -655,7 +655,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -692,7 +692,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                     fontSize: 8,
                                     color: avds.isNotEmpty
                                         ? Colors.green
-                                        : user.dark_mode == 1
+                                        : user!.dark_mode == 1
                                             ? MyColors.light
                                             : MyColors.black,
                                     fontFamily: "Poppins",
@@ -703,7 +703,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -741,7 +741,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: cps.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -765,7 +765,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -812,7 +812,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: appeles.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -836,7 +836,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -875,7 +875,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           fontSize: 8,
                                           color: declarations.isNotEmpty
                                               ? Colors.green
-                                              : user.dark_mode == 1
+                                              : user!.dark_mode == 1
                                                   ? MyColors.light
                                                   : MyColors.black,
                                           fontFamily: "Poppins",
@@ -899,7 +899,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                 ? Icon(
                                     Icons.add,
                                     size: 20,
-                                    color: user.dark_mode == 1
+                                    color: user!.dark_mode == 1
                                         ? MyColors.light
                                         : MyColors.black,
                                   )
@@ -937,7 +937,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                       fontSize: 8,
                                       color: ltas.isNotEmpty
                                           ? Colors.green
-                                          : user.dark_mode == 1
+                                          : user!.dark_mode == 1
                                               ? MyColors.light
                                               : MyColors.black,
                                       fontFamily: "Poppins",
@@ -948,7 +948,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                   ? Icon(
                                       Icons.add,
                                       size: 20,
-                                      color: user.dark_mode == 1
+                                      color: user!.dark_mode == 1
                                           ? MyColors.light
                                           : MyColors.black,
                                     )
@@ -977,7 +977,7 @@ Future<dynamic> showInterchanges(BuildContext context, int dataId,
     builder: (BuildContext dialogContext) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -997,7 +997,7 @@ Future<dynamic> showInterchanges(BuildContext context, int dataId,
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -1015,7 +1015,7 @@ Future<dynamic> showInterchanges(BuildContext context, int dataId,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -1180,7 +1180,7 @@ Future<dynamic> NewInter(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -1188,7 +1188,7 @@ Future<dynamic> NewInter(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvelle interchange",
           textAlign: TextAlign.center,
@@ -1466,7 +1466,7 @@ Future<dynamic> UpdateInter(BuildContext context, Interchanges interchange) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -1476,7 +1476,7 @@ Future<dynamic> UpdateInter(BuildContext context, Interchanges interchange) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Interchange",
           textAlign: TextAlign.center,
@@ -1854,7 +1854,7 @@ Future<dynamic> showRecus(
     builder: (BuildContext dialogContext) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -1874,7 +1874,7 @@ Future<dynamic> showRecus(
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -1892,7 +1892,7 @@ Future<dynamic> showRecus(
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -2059,7 +2059,7 @@ Future<dynamic> NewRecu(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -2067,7 +2067,7 @@ Future<dynamic> NewRecu(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvel reçu/facture",
           textAlign: TextAlign.center,
@@ -2345,7 +2345,7 @@ Future<dynamic> UpdateRecu(BuildContext context, Recus data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -2355,7 +2355,7 @@ Future<dynamic> UpdateRecu(BuildContext context, Recus data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Reçu/facture",
           textAlign: TextAlign.center,
@@ -2733,7 +2733,7 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
       List<FicheTechnique> datas = apiProvider.fiche_techniques;
       datas = function.data_fiches(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -2753,7 +2753,7 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -2771,7 +2771,7 @@ Future<dynamic> showFiches(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -2938,7 +2938,7 @@ Future<dynamic> NewFiche(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -2946,7 +2946,7 @@ Future<dynamic> NewFiche(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvelle fiche technique",
           textAlign: TextAlign.center,
@@ -3224,7 +3224,7 @@ Future<dynamic> UpdateFiche(BuildContext context, FicheTechnique data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -3234,7 +3234,7 @@ Future<dynamic> UpdateFiche(BuildContext context, FicheTechnique data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Fiche technique",
           textAlign: TextAlign.center,
@@ -3612,7 +3612,7 @@ Future<dynamic> showDecla(BuildContext context, int dataId, String modele) {
       List<Declaration> datas = apiProvider.declarations;
       datas = function.data_declarations(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -3632,7 +3632,7 @@ Future<dynamic> showDecla(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -3650,7 +3650,7 @@ Future<dynamic> showDecla(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -3817,7 +3817,7 @@ Future<dynamic> NewDecla(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -3825,7 +3825,7 @@ Future<dynamic> NewDecla(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvelle déclaration",
           textAlign: TextAlign.center,
@@ -4103,7 +4103,7 @@ Future<dynamic> UpdateDecla(BuildContext context, Declaration data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -4113,7 +4113,7 @@ Future<dynamic> UpdateDecla(BuildContext context, Declaration data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Déclaration",
           textAlign: TextAlign.center,
@@ -4492,7 +4492,7 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
       List<Bfu> datas = apiProvider.bfus;
       datas = function.data_bfus(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -4512,7 +4512,7 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -4530,7 +4530,7 @@ Future<dynamic> showBfu(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -4697,7 +4697,7 @@ Future<dynamic> NewBfu(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -4705,7 +4705,7 @@ Future<dynamic> NewBfu(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvel BFU",
           textAlign: TextAlign.center,
@@ -4982,7 +4982,7 @@ Future<dynamic> UpdateBfu(BuildContext context, Bfu data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -4992,7 +4992,7 @@ Future<dynamic> UpdateBfu(BuildContext context, Bfu data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "BFU",
           textAlign: TextAlign.center,
@@ -5368,7 +5368,7 @@ Future<dynamic> showApeles(
     builder: (BuildContext dialogContext) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -5388,7 +5388,7 @@ Future<dynamic> showApeles(
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -5406,7 +5406,7 @@ Future<dynamic> showApeles(
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -5573,7 +5573,7 @@ Future<dynamic> NewApele(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -5581,7 +5581,7 @@ Future<dynamic> NewApele(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouveau appélé",
           textAlign: TextAlign.center,
@@ -5859,7 +5859,7 @@ Future<dynamic> UpdateApele(BuildContext context, Appeles data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -5869,7 +5869,7 @@ Future<dynamic> UpdateApele(BuildContext context, Appeles data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Appélé",
           textAlign: TextAlign.center,
@@ -6248,7 +6248,7 @@ Future<dynamic> showImportOrdre(
       List<OrdreTransport> datas = apiProvider.import_ordres;
       datas = function.data_ordres(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -6268,7 +6268,7 @@ Future<dynamic> showImportOrdre(
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -6286,7 +6286,7 @@ Future<dynamic> showImportOrdre(
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -6454,7 +6454,7 @@ Future<dynamic> NewImportOrdre(
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -6462,7 +6462,7 @@ Future<dynamic> NewImportOrdre(
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Ordre de transport",
           textAlign: TextAlign.center,
@@ -6740,7 +6740,7 @@ Future<dynamic> UpdateImportOrdre(BuildContext context, OrdreTransport data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -6750,7 +6750,7 @@ Future<dynamic> UpdateImportOrdre(BuildContext context, OrdreTransport data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Ordre de transport",
           textAlign: TextAlign.center,
@@ -7126,7 +7126,7 @@ Future<dynamic> showTdo(
     builder: (BuildContext dialogContext) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -7146,7 +7146,7 @@ Future<dynamic> showTdo(
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -7164,7 +7164,7 @@ Future<dynamic> showTdo(
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -7331,7 +7331,7 @@ Future<dynamic> NewTdo(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -7339,7 +7339,7 @@ Future<dynamic> NewTdo(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouveau TDO",
           textAlign: TextAlign.center,
@@ -7616,7 +7616,7 @@ Future<dynamic> UpdateTdo(BuildContext context, Tdos data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -7626,7 +7626,7 @@ Future<dynamic> UpdateTdo(BuildContext context, Tdos data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "TDO",
           textAlign: TextAlign.center,
@@ -8002,7 +8002,7 @@ Future<dynamic> showVgm(
     builder: (BuildContext dialogContext) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -8022,7 +8022,7 @@ Future<dynamic> showVgm(
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -8040,7 +8040,7 @@ Future<dynamic> showVgm(
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -8207,7 +8207,7 @@ Future<dynamic> NewVgm(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -8215,7 +8215,7 @@ Future<dynamic> NewVgm(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouveau VGM",
           textAlign: TextAlign.center,
@@ -8492,7 +8492,7 @@ Future<dynamic> UpdateVgm(BuildContext context, Vgms data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -8502,7 +8502,7 @@ Future<dynamic> UpdateVgm(BuildContext context, Vgms data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "VGM",
           textAlign: TextAlign.center,
@@ -8880,7 +8880,7 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
       List<Avd> datas = apiProvider.avds;
       datas = function.data_avds(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -8900,7 +8900,7 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -8918,7 +8918,7 @@ Future<dynamic> showAvd(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -9085,7 +9085,7 @@ Future<dynamic> NewAvd(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -9093,7 +9093,7 @@ Future<dynamic> NewAvd(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Nouvelle AVD",
           textAlign: TextAlign.center,
@@ -9370,7 +9370,7 @@ Future<dynamic> UpdateAvd(BuildContext context, Avd data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -9380,7 +9380,7 @@ Future<dynamic> UpdateAvd(BuildContext context, Avd data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "AVD",
           textAlign: TextAlign.center,
@@ -9758,7 +9758,7 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
       List<CO> datas = apiProvider.cos;
       datas = function.data_cos(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -9780,7 +9780,7 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -9798,7 +9798,7 @@ Future<dynamic> showCo(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -9965,7 +9965,7 @@ Future<dynamic> NewCo(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -9973,7 +9973,7 @@ Future<dynamic> NewCo(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Certificat d'origine",
           maxLines: 1,
@@ -10252,7 +10252,7 @@ Future<dynamic> UpdateCo(BuildContext context, CO data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -10262,7 +10262,7 @@ Future<dynamic> UpdateCo(BuildContext context, CO data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Certificat d'origine",
           maxLines: 1,
@@ -10644,7 +10644,7 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
       List<CPS> datas = apiProvider.cps;
       datas = function.data_cps(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -10666,7 +10666,7 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -10684,7 +10684,7 @@ Future<dynamic> showCps(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -10851,7 +10851,7 @@ Future<dynamic> NewCps(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -10859,7 +10859,7 @@ Future<dynamic> NewCps(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Certificat phyto-sanitaire",
           maxLines: 1,
@@ -11138,7 +11138,7 @@ Future<dynamic> UpdateCps(BuildContext context, CPS data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -11148,7 +11148,7 @@ Future<dynamic> UpdateCps(BuildContext context, CPS data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Certificat phyto-sanitaire",
           maxLines: 1,
@@ -11530,7 +11530,7 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
       List<AutreDocs> datas = apiProvider.autre_docs;
       datas = function.data_autre_docs(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -11552,7 +11552,7 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -11570,7 +11570,7 @@ Future<dynamic> showAutreDoc(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -11737,7 +11737,7 @@ Future<dynamic> NewDoc(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -11745,7 +11745,7 @@ Future<dynamic> NewDoc(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Autre document",
           maxLines: 1,
@@ -12024,7 +12024,7 @@ Future<dynamic> UpdateDoc(BuildContext context, AutreDocs data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -12034,7 +12034,7 @@ Future<dynamic> UpdateDoc(BuildContext context, AutreDocs data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Autre document",
           maxLines: 1,
@@ -12416,7 +12416,7 @@ Future<dynamic> showBl(BuildContext context, int dataId, String modele) {
       List<Bl> datas = apiProvider.bls;
       datas = function.data_bl(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -12438,7 +12438,7 @@ Future<dynamic> showBl(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -12456,7 +12456,7 @@ Future<dynamic> showBl(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -12627,7 +12627,7 @@ Future<dynamic> NewBl(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -12635,7 +12635,7 @@ Future<dynamic> NewBl(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Bill of Loading",
           maxLines: 1,
@@ -12914,7 +12914,7 @@ Future<dynamic> UpdateBl(BuildContext context, Bl data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -12924,7 +12924,7 @@ Future<dynamic> UpdateBl(BuildContext context, Bl data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Bill of Loading",
           maxLines: 1,
@@ -13306,7 +13306,7 @@ Future<dynamic> showLta(BuildContext context, int dataId, String modele) {
       List<Lta> datas = apiProvider.ltas;
       datas = function.data_lta(datas, dataId, modele);
       double columnWidth = MediaQuery.of(context).size.width / 10;
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       return AlertDialog(
         title: Text(
@@ -13328,7 +13328,7 @@ Future<dynamic> showLta(BuildContext context, int dataId, String modele) {
                   style: TextStyle(
                       fontFamily: "Poppins",
                       color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
+                          user!.dark_mode == 1 ? MyColors.light : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
@@ -13346,7 +13346,7 @@ Future<dynamic> showLta(BuildContext context, int dataId, String modele) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: user.dark_mode == 1
+                            color: user!.dark_mode == 1
                                 ? MyColors.light
                                 : MyColors.black,
                             fontFamily: "Poppins",
@@ -13517,7 +13517,7 @@ Future<dynamic> NewLta(BuildContext context, int data_id, String modele) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       bool upload = provider.upload;
       bool loading = provider.loading;
@@ -13525,7 +13525,7 @@ Future<dynamic> NewLta(BuildContext context, int data_id, String modele) {
       List<File> files = provider.files_selected;
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Lterre de Transport Aérien",
           maxLines: 1,
@@ -13804,7 +13804,7 @@ Future<dynamic> UpdateLta(BuildContext context, Lta data) {
       final apiProvider = Provider.of<ApiProvider>(dialogContext);
       final provider = Provider.of<ProvAddDoc>(dialogContext);
       final service = Provider.of<DBServices>(dialogContext);
-      Users user = apiProvider.user;
+      Users? user = apiProvider.user;
       bool affiche = provider.affiche;
       String nom = provider.nom;
       List<File> files = provider.files_selected;
@@ -13814,7 +13814,7 @@ Future<dynamic> UpdateLta(BuildContext context, Lta data) {
       }
 
       return AlertDialog(
-        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
         title: Text(
           "Lettre de Transport Aérien",
           maxLines: 1,

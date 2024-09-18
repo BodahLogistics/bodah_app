@@ -14,6 +14,7 @@ import '../../../../../functions/function.dart';
 import '../../../../../modals/annonces.dart';
 import '../../../../../modals/expeditions.dart';
 import '../../../../../modals/pays.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
@@ -36,7 +37,7 @@ class _MesExpeditionsState extends State<MesExpeditions> {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Expeditions> expeditions = api_provider.expeditions;
     List<Marchandises> marchandises = api_provider.marchandises;
@@ -48,7 +49,7 @@ class _MesExpeditionsState extends State<MesExpeditions> {
     return loading
         ? LoadingPage()
         : Scaffold(
-            backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+            backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
             bottomNavigationBar: NavigBot(),
             drawer: DrawerExpediteur(),
             appBar: AppBar(

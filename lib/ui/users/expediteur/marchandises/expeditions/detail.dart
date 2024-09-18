@@ -39,7 +39,7 @@ class _DetailExpeditionState extends State<DetailExpedition> {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     List<Expeditions> expeditions = api_provider.expeditions;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
     List<Users> users = api_provider.users;
     Expeditions expedition = function.expedition(expeditions, widget.id);
@@ -77,7 +77,7 @@ class _DetailExpeditionState extends State<DetailExpedition> {
     return loading
         ? LoadingPage()
         : Scaffold(
-            backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+            backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
             drawer: DrawerExpediteur(),
             appBar: AppBar(
               backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,

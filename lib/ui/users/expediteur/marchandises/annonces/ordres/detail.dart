@@ -40,7 +40,7 @@ class _DetailOrdreState extends State<DetailOrdre> {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     bool loading = api_provider.loading;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Users> users = api_provider.users;
     List<Annonces> annonces = api_provider.annonces;
     List<DonneurOrdres> donneur_ordres = api_provider.donneur_ordres;
@@ -63,7 +63,7 @@ class _DetailOrdreState extends State<DetailOrdre> {
     marchandises = function.annonce_marchandises(marchandises, annonce.id);
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: DrawerExpediteur(),
       appBar: AppBar(
         backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,

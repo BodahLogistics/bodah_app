@@ -36,7 +36,7 @@ class _ListExpState extends State<ListExp> {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Users> users = api_provider.users;
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     List<Pieces> pieces = api_provider.pieces;
@@ -57,7 +57,7 @@ class _ListExpState extends State<ListExp> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -104,7 +104,7 @@ class _ListExpState extends State<ListExp> {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,

@@ -14,6 +14,7 @@ import '../../../../../functions/function.dart';
 import '../../../../../modals/annonces.dart';
 import '../../../../../modals/expeditions.dart';
 import '../../../../../modals/pays.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 
 class ListExpExp extends StatefulWidget {
@@ -34,7 +35,7 @@ class _ListExpExpState extends State<ListExpExp> {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Expeditions> expeditions = api_provider.expeditions;
     List<Marchandises> marchandises = api_provider.marchandises;
@@ -52,7 +53,7 @@ class _ListExpExpState extends State<ListExpExp> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -110,7 +111,7 @@ class _ListExpExpState extends State<ListExpExp> {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,

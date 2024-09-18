@@ -28,6 +28,7 @@ import '../../../../../modals/declaration.dart';
 import '../../../../../modals/fiche_technique.dart';
 import '../../../../../modals/lta.dart';
 import '../../../../../modals/ordre_transport.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
@@ -59,7 +60,7 @@ class _MesDocumentsState extends State<MesDocuments> {
   @override
   Widget build(BuildContext context) {
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
     List<BonCommandes> ordres = api_provider.ordres;
     List<Appeles> appeles = api_provider.appeles;
@@ -80,7 +81,7 @@ class _MesDocumentsState extends State<MesDocuments> {
     bool loading = api_provider.loading;
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

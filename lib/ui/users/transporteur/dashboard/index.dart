@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../functions/function.dart';
+import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
 
 class TransporteurDashboard extends StatelessWidget {
@@ -14,7 +16,7 @@ class TransporteurDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    final user = api_provider.user;
+    Users? user = api_provider.user;
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +49,7 @@ class TransporteurDashboard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Bienvenue " + user.name,
+                  "Bienvenue " + user!.name,
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: "Poppins",

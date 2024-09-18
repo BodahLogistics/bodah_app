@@ -15,6 +15,7 @@ import '../../../../../modals/cargaison.dart';
 import '../../../../../modals/chargement_effectues.dart';
 import '../../../../../modals/import.dart';
 import '../../../../../modals/livraison_cargaison.dart';
+import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../services/data_base_service.dart';
 import '../../../../auth/sign_in.dart';
@@ -32,7 +33,7 @@ class DetailImport extends StatelessWidget {
     final api_provider = Provider.of<ApiProvider>(context);
     final provider = Provider.of<ProvHoImport>(context);
     int current_index = provider.current_index;
-    final user = api_provider.user;
+    Users? user = api_provider.user;
     List<Import> imports = api_provider.imports;
     Import import = function.import(imports, import_id);
     List<Cargaison> cargaisons = api_provider.cargaisons;
@@ -53,7 +54,7 @@ class DetailImport extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       bottomNavigationBar: NavigBot(),
       drawer: DrawerExpediteur(),
       appBar: AppBar(

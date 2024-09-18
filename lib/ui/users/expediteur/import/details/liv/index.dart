@@ -45,7 +45,7 @@ class _ListLivraisonsState extends State<ListLivraisons> {
     List<Client> clients = api_provider.clients;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
-    Users user = api_provider.user;
+    Users? user = api_provider.user;
     bool loading = api_provider.loading;
     final provider = Provider.of<ProvAddLiv>(context);
 
@@ -58,7 +58,7 @@ class _ListLivraisonsState extends State<ListLivraisons> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ))
@@ -86,7 +86,7 @@ class _ListLivraisonsState extends State<ListLivraisons> {
                               color: Colors.grey.withOpacity(.2),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                  color: user.dark_mode == 1
+                                  color: user!.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,
