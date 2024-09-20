@@ -22,6 +22,11 @@ import 'package:bodah/providers/users/expediteur/marchandises/annoces/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/odres/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/prov_dash_march.dart';
+import 'package:bodah/providers/users/transporteur/chauffeurs/add.dart';
+import 'package:bodah/providers/users/transporteur/dashboard/prov_change.dart';
+import 'package:bodah/providers/users/transporteur/drawer/index.dart';
+import 'package:bodah/providers/users/transporteur/trajets/add.dart';
+import 'package:bodah/providers/users/transporteur/trajets/camions/add.dart';
 import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +163,21 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvHoAnn(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvDrawTransporteur(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvDashTransp(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddTrajet(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddCamion(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvAddChauffeur(),
         ),
       ],
       child: MaterialApp(

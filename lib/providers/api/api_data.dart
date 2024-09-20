@@ -1,7 +1,10 @@
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields, unnecessary_null_comparison
+
+import 'dart:convert';
 
 import 'package:bodah/modals/annonce_colis.dart';
 import 'package:bodah/modals/annonce_photos.dart';
+import 'package:bodah/modals/annonce_transporteurs.dart';
 import 'package:bodah/modals/appeles.dart';
 import 'package:bodah/modals/bon_commandes.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
@@ -15,17 +18,18 @@ import 'package:bodah/modals/envoi_colis.dart';
 import 'package:bodah/modals/expeditions.dart';
 import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/import.dart';
+import 'package:bodah/modals/letrre_voyage.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/location_colis.dart';
 import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/notifications.dart';
 import 'package:bodah/modals/pieces.dart';
+import 'package:bodah/modals/souscriptions.dart';
 import 'package:bodah/modals/statut_operations.dart';
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/tdos.dart';
-import 'package:bodah/modals/trajets.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/users.dart';
 import 'package:bodah/modals/villes.dart';
@@ -56,9 +60,11 @@ import '../../modals/entite_factures.dart';
 import '../../modals/entreprises.dart';
 import '../../modals/expediteurs.dart';
 import '../../modals/fiche_technique.dart';
+import '../../modals/info_localisation.dart';
 import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
 import '../../modals/lta.dart';
+import '../../modals/marchandise_transporteur.dart';
 import '../../modals/ordre_transport.dart';
 import '../../modals/path.dart';
 import '../../modals/pays.dart';
@@ -67,8 +73,10 @@ import '../../modals/quartiers.dart';
 import '../../modals/recepteurs.dart';
 import '../../modals/recus.dart';
 import '../../modals/rules.dart';
+import '../../modals/transport_liaison.dart';
 import '../../modals/transport_mode.dart';
 import '../../modals/transporteurs.dart';
+import '../../modals/type_camions.dart';
 import '../../modals/type_chargements.dart';
 import '../../modals/vgms.dart';
 import '../../services/secure_storage.dart';
@@ -117,8 +125,13 @@ class ApiProvider with ChangeNotifier {
   List<Recepteurs> get recepteurs => _recepteurs;
   List<StatutOperations> _statut_operations = [];
   List<StatutOperations> get statut_operations => _statut_operations;
-  List<Trajets> _trajets = [];
-  List<Trajets> get trajets => _trajets;
+  List<AnnonceTransporteurs> _trajets = [];
+  List<AnnonceTransporteurs> get trajets => _trajets;
+  List<MarchandiseTransporteur> _marchandise_transporteurs = [];
+  List<MarchandiseTransporteur> get marchandise_transporteurs =>
+      _marchandise_transporteurs;
+  List<InfoLocalisations> _info_localisations = [];
+  List<InfoLocalisations> get info_localisations => _info_localisations;
   List<Voitures> _voitures = [];
   List<Voitures> get voitures => _voitures;
   List<VoiturePhotos> _voiture_photos = [];
@@ -162,6 +175,8 @@ class ApiProvider with ChangeNotifier {
 
   List<TypeChargements> _type_chargements = [];
   List<TypeChargements> get type_chargements => _type_chargements;
+  List<TypeCamions> _type_camions = [];
+  List<TypeCamions> get type_camions => _type_camions;
   List<Recus> _recus = [];
   List<Recus> get recus => _recus;
   List<Interchanges> _interchanges = [];
@@ -219,6 +234,10 @@ class ApiProvider with ChangeNotifier {
   List<Cargaison> get cargaisons => _cargaisons;
   List<ChargementEffectue> _chargement_effectues = [];
   List<ChargementEffectue> get chargement_effectues => _chargement_effectues;
+  Rules? _rule;
+  Rules? get rule => _rule;
+  List<LetreVoitures> _contrats = [];
+  List<LetreVoitures> get contrats => _contrats;
 
   Future<void> InitImport() async {
     _isLoading = true;
@@ -376,6 +395,16 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setUser(Users? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  void setRule(Rules? rule) {
+    _rule = rule;
+    notifyListeners();
+  }
+
   List<AutreDocs> _autre_docs = [];
   List<AutreDocs> get autre_docs => _autre_docs;
   List<Avd> _avds = [];
@@ -402,32 +431,102 @@ class ApiProvider with ChangeNotifier {
   List<Charge> _charges = [];
   List<Charge> get charges => _charges;
 
+  List<Souscriptions> _souscriptions = [];
+  List<Souscriptions> get souscriptions => _souscriptions;
+
+  List<TransportLiaisons> _chauffeurs = [];
+  List<TransportLiaisons> get chauffeurs => _chauffeurs;
+
   Future<void> InitData() async {
     _isLoading = true;
+    try {
+      String? userJson = await secure.readSecureData('user');
+      String? ruleJson = await secure.readSecureData('rule');
+
+      if (userJson != null) {
+        Map<String, dynamic> userMap = jsonDecode(userJson);
+        Users user = Users.fromMap(userMap);
+        _user = user;
+        notifyListeners();
+      }
+
+      if (ruleJson != null) {
+        Map<String, dynamic> ruleMap = jsonDecode(ruleJson);
+        Rules rule = Rules.fromMap(ruleMap);
+        _rule = rule;
+        notifyListeners();
+      }
+
+      final response_users = await apiService.getUsers();
+      _users = response_users;
+      final response_pays = await apiService.getPays();
+      _pays = response_pays;
+
+      if (_user != null && _rule != null) {
+        if (_rule!.nom == "Expéditeur") {
+          final response_unites = await apiService.getUnites();
+          _unites = response_unites;
+          final response_devises = await apiService.getDevises();
+          _devises = response_devises;
+          final response_transport_mode = await apiService.getTransportMode();
+          _transport_modes = response_transport_mode;
+          await InitAnnonce();
+          await InitImport();
+        } else {
+          await InitTransporteurAnnonce();
+          final response_bordereaux =
+              await apiService.getTransporteurBordereaux();
+          _bordereaux = response_bordereaux;
+          final response_contrat = await apiService.getTransporteurContrat();
+          _contrats = response_contrat;
+          final response_trajet = await apiService.getTrajet();
+          _trajets = response_trajet;
+          final response_type_camions = await apiService.getTypeCamions();
+          _type_camions = response_type_camions;
+          final response_transporteur = await apiService.getTransporteur();
+          _transporteurs = response_transporteur;
+          final response_vehicule = await apiService.getTransporteurCamions();
+          _camions = response_vehicule;
+        }
+
+        final response_type_chargement = await apiService.getTypeChargements();
+        _type_chargements = response_type_chargement;
+        final response_unite = await apiService.getUnites();
+        _unites = response_unite;
+      } else {
+        final response_role = await apiService.getRules();
+        _rules = response_role;
+        final response_statuts = await apiService.getStatuts();
+        _statuts = response_statuts;
+      }
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> InitChauffeurs() async {
+    _isLoading = true;
+    final response_chauffeurs = await apiService.getChauffeurs();
+    _chauffeurs = response_chauffeurs;
+    final response_vehicule = await apiService.getTransporteurCamions();
+    _camions = response_vehicule;
     final response_users = await apiService.getUsers();
     _users = response_users;
+    final response_piece = await apiService.getTransporteurPieces();
+    _pieces = response_piece;
+    final response_transporteur = await apiService.getTransporteur();
+    _transporteurs = response_transporteur;
+    _isLoading = false;
+    notifyListeners();
+  }
 
-    final response = await apiService.user();
-    _user = response[0];
-    final response_pays = await apiService.getPays();
-    _pays = response_pays;
-    final response_role = await apiService.getRules();
-    _rules = response_role;
-    final response_statuts = await apiService.getStatuts();
-    _statuts = response_statuts;
-
-    _roles = response[1];
-    final response_unites = await apiService.getUnites();
-    _unites = response_unites;
-    final response_type_chargement = await apiService.getTypeChargements();
-    _type_chargements = response_type_chargement;
-    final response_devises = await apiService.getDevises();
-    _devises = response_devises;
-    final response_transport_mode = await apiService.getTransportMode();
-    _transport_modes = response_transport_mode;
-    await InitAnnonce();
-    await InitImport();
-
+  Future<void> InitCamions() async {
+    _isLoading = true;
+    final response_vehicule = await apiService.getTransporteurCamions();
+    _camions = response_vehicule;
     _isLoading = false;
     notifyListeners();
   }
@@ -436,7 +535,6 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response = await apiService.getImportRouteKey();
     _import_route_key = response;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -481,6 +579,51 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitSouscriptions() async {
+    _isLoading = true;
+    final response_souscription = await apiService.getSouscription();
+    _souscriptions = response_souscription;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTrajet() async {
+    _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_trajet = await apiService.getTrajet();
+    _trajets = response_trajet;
+    final response_marchandise = await apiService.getTrajetMarchandise();
+    _marchandise_transporteurs = response_marchandise;
+    final response_localisation = await apiService.getInfoLocalisations();
+    _info_localisations = response_localisation;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurAnnonce() async {
+    _isLoading = true;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_expedition = await apiService.getTransporteurExpditions();
+    _expeditions = response_expedition;
+    final response_marchandise =
+        await apiService.getAnnonceTransporteurMarchandises();
+    _marchandises = response_marchandise;
+    final response_photo = await apiService.getTransporteurAnnoncePhotos();
+    _annonce_photos = response_photo;
+    final response_tarification =
+        await apiService.getAnnonceTransporteurTarification();
+    _tarifications = response_tarification;
+    final response_localisation =
+        await apiService.getAnnonceTransporteurLocalisation();
+    _localisations = response_localisation;
+    final response_annonce = await apiService.getTransporteurAnnonces();
+    _annonces = response_annonce;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitExpedition() async {
     _isLoading = true;
     final response_all_villes = await apiService.getAllVilles();
@@ -499,6 +642,15 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitTransporteurExpedition() async {
+    _isLoading = true;
+    final response_expedition = await apiService.getTransporteurExpditions();
+    _expeditions = response_expedition;
+    await InitTransporteurAnnonce();
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitExpeditionForAnnonce() async {
     _isLoading = true;
     final response_charge = await apiService.getCharges();
@@ -512,6 +664,24 @@ class ApiProvider with ChangeNotifier {
     final response_transporteur = await apiService.getTransporteurs();
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
+    _camions = response_camions;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurExpeditionForAnnonce() async {
+    _isLoading = true;
+    final response_charge = await apiService.getTransporteurCharge();
+    _charges = response_charge;
+    final response_expedition = await apiService.getTransporteurExpditions();
+    _expeditions = response_expedition;
+    final response_tarif = await apiService.getTransporteurTarif();
+    _tarifs = response_tarif;
+    final response_piece = await apiService.getTransporteurPieces();
+    _pieces = response_piece;
+    final response_transporteur = await apiService.getTransporteur();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getTransporteurCamions();
     _camions = response_camions;
     _isLoading = false;
     notifyListeners();
@@ -575,11 +745,43 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitTransporteursDocuments() async {
+    _isLoading = true;
+    final response_bordereaux = await apiService.getTransporteurBordereaux();
+    _bordereaux = response_bordereaux;
+    final response_recues = await apiService.getTransporteurRecus();
+    _recus = response_recues;
+    final response_vgm = await apiService.getTransporteurVgm();
+    _vgms = response_vgm;
+    final response_tdo = await apiService.getTransporteurTdo();
+    _tdos = response_tdo;
+    final response_apeles = await apiService.getTransporteurApeles();
+    _appeles = response_apeles;
+    final response_interchange = await apiService.getTransporteurInterchange();
+    _interchanges = response_interchange;
+    final response_contrat = await apiService.getTransporteurContrat();
+    _contrats = response_contrat;
+    final response_paths = await apiService.getTransporteurPaths();
+    _paths = response_paths;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitInterchanges() async {
     _isLoading = true;
     final response_interchange = await apiService.getInterchanges();
     _interchanges = response_interchange;
     final response_paths = await apiService.getPaths();
+    _paths = response_paths;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurInterchanges() async {
+    _isLoading = true;
+    final response_interchange = await apiService.getTransporteurInterchange();
+    _interchanges = response_interchange;
+    final response_paths = await apiService.getTransporteurPaths();
     _paths = response_paths;
     _isLoading = false;
     notifyListeners();

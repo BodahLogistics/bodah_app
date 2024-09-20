@@ -15,6 +15,7 @@ import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
 import 'package:bodah/modals/exports.dart';
+import 'package:bodah/modals/info_localisation.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/pieces.dart';
@@ -30,6 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modals/annonce_transporteurs.dart';
 import '../modals/annonces.dart';
 import '../modals/appeles.dart';
 import '../modals/autre_docs.dart';
@@ -49,6 +51,7 @@ import '../modals/fiche_technique.dart';
 import '../modals/import.dart';
 import '../modals/interchanges.dart';
 import '../modals/localisations.dart';
+import '../modals/marchandise_transporteur.dart';
 import '../modals/marchandises.dart';
 import '../modals/ordre_transport.dart';
 import '../modals/path.dart';
@@ -61,6 +64,77 @@ import '../modals/users.dart';
 import '../modals/villes.dart';
 
 class Functions {
+  List<String> charges = [
+    "1-10 Tonnes",
+    "11-30 Tonnes",
+    "31-50 Tonnes",
+    "51-70 Tonnes",
+    "71-90 Tonnes",
+    "91-110 Tonnes",
+    "111-130 Tonnes",
+    "131-150 Tonnes",
+    "151-170 Tonnes",
+    "171-200 Tonnes"
+  ];
+
+  Transporteurs user_transporteur(
+      Users? user, List<Transporteurs> transporteurs) {
+    return transporteurs.firstWhere(
+      (data) => data.user_id == user!.id,
+      orElse: () =>
+          Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+    );
+  }
+
+  List<Camions> transporteur_camions(
+      List<Camions> camions, Transporteurs transporteur) {
+    return camions
+        .where((data) =>
+            data.modele_id == transporteur.id &&
+            data.modele_type.contains("Transporteur"))
+        .toList();
+  }
+
+  MarchandiseTransporteur trajet_marchandise(
+      List<MarchandiseTransporteur> marchandises, AnnonceTransporteurs trajet) {
+    return marchandises.firstWhere(
+      (data) => data.annonce_id == trajet.id,
+      orElse: () =>
+          MarchandiseTransporteur(id: 0, annonce_id: 0, nombre_tonnes: ""),
+    );
+  }
+
+  InfoLocalisations trajet_localisation(
+      List<InfoLocalisations> localisations, AnnonceTransporteurs trajet) {
+    return localisations.firstWhere(
+      (data) => data.annonce_id == trajet.id,
+      orElse: () => InfoLocalisations(
+          id: 0,
+          pays_dep_id: 0,
+          pays_dest_id: 0,
+          ville_dep_id: 0,
+          ville_dest_id: 0,
+          annonce_id: 0),
+    );
+  }
+
+  AnnonceTransporteurs trajet(List<AnnonceTransporteurs> trajets, int id) {
+    return trajets.firstWhere(
+      (data) => data.id == id,
+      orElse: () => AnnonceTransporteurs(
+          id: 0,
+          numero_annonce: "",
+          transporteur_id: 0,
+          type_chargement_id: 0,
+          vehicule_id: 0,
+          created_at: DateTime.now()),
+    );
+  }
+
+  bool is_pair(int index) {
+    return index % 2 == 0 ? true : false;
+  }
+
   bool cant_delete_annonce(List<Expeditions> expeditions, BonCommandes ordre) {
     if (expeditions.isNotEmpty || ordre.id > 0) {
       return false;

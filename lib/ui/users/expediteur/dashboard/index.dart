@@ -33,10 +33,10 @@ class ExpediteurDashBoard extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Accueil ${villes.length}",
+          "Accueil",
           style: TextStyle(
               color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontFamily: "Poppins",
               fontSize: 14),
         ),

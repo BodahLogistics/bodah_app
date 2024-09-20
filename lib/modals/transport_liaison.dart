@@ -3,16 +3,16 @@ import 'dart:convert';
 
 class TransportLiaisons {
   int id;
-  DateTime stop_date;
+  DateTime? stop_date;
   int proprietaire_id;
   int transporteur_id;
-  int duriing;
+  int during;
   TransportLiaisons({
     required this.id,
     required this.stop_date,
     required this.proprietaire_id,
     required this.transporteur_id,
-    required this.duriing,
+    required this.during,
   });
 
   TransportLiaisons copyWith({
@@ -20,34 +20,36 @@ class TransportLiaisons {
     DateTime? stop_date,
     int? proprietaire_id,
     int? transporteur_id,
-    int? duriing,
+    int? during,
   }) {
     return TransportLiaisons(
       id: id ?? this.id,
       stop_date: stop_date ?? this.stop_date,
       proprietaire_id: proprietaire_id ?? this.proprietaire_id,
       transporteur_id: transporteur_id ?? this.transporteur_id,
-      duriing: duriing ?? this.duriing,
+      during: during ?? this.during,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'stop_date': stop_date.millisecondsSinceEpoch,
+      'stop_date': stop_date?.millisecondsSinceEpoch,
       'proprietaire_id': proprietaire_id,
       'transporteur_id': transporteur_id,
-      'duriing': duriing,
+      'during': during,
     };
   }
 
   factory TransportLiaisons.fromMap(Map<String, dynamic> map) {
     return TransportLiaisons(
       id: map['id'] as int,
-      stop_date: DateTime.parse(map['stop_date'] as String),
+      stop_date: map['stop_date'] != null
+          ? DateTime.parse(map['stop_date'] as String)
+          : null,
       proprietaire_id: map['proprietaire_id'] as int,
       transporteur_id: map['transporteur_id'] as int,
-      duriing: map['duriing'] as int,
+      during: map['during'] as int,
     );
   }
 
@@ -58,7 +60,7 @@ class TransportLiaisons {
 
   @override
   String toString() {
-    return 'TransportLiaisons(id: $id, stop_date: $stop_date, proprietaire_id: $proprietaire_id, transporteur_id: $transporteur_id, duriing: $duriing)';
+    return 'TransportLiaisons(id: $id, stop_date: $stop_date, proprietaire_id: $proprietaire_id, transporteur_id: $transporteur_id, during: $during)';
   }
 
   @override
@@ -69,7 +71,7 @@ class TransportLiaisons {
         other.stop_date == stop_date &&
         other.proprietaire_id == proprietaire_id &&
         other.transporteur_id == transporteur_id &&
-        other.duriing == duriing;
+        other.during == during;
   }
 
   @override
@@ -78,6 +80,6 @@ class TransportLiaisons {
         stop_date.hashCode ^
         proprietaire_id.hashCode ^
         transporteur_id.hashCode ^
-        duriing.hashCode;
+        during.hashCode;
   }
 }

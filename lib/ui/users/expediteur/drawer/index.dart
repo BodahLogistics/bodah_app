@@ -566,8 +566,7 @@ void logOut(BuildContext context) {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogContext) {
-        final apiProvider =
-            Provider.of<ApiProvider>(dialogContext, listen: false);
+        final apiProvider = Provider.of<ApiProvider>(dialogContext);
         final user = apiProvider.user;
         final service = Provider.of<DBServices>(dialogContext);
         bool delete = apiProvider.delete;
@@ -597,6 +596,7 @@ void logOut(BuildContext context) {
               children: [
                 SizedBox(
                   width: 80,
+                  height: 30,
                   child: TextButton(
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -613,18 +613,19 @@ void logOut(BuildContext context) {
                             color: MyColors.light,
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.w500,
-                            fontSize: 10,
+                            fontSize: 8,
                             letterSpacing: 1),
                       )),
                 ),
                 SizedBox(
                   width: 100,
+                  height: 30,
                   child: TextButton(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7)),
                         padding: EdgeInsets.only(left: 7, right: 7),
-                        backgroundColor: MyColors.secondary),
+                        backgroundColor: Colors.green),
                     onPressed: delete
                         ? null
                         : () async {
@@ -689,7 +690,7 @@ void logOut(BuildContext context) {
                             style: TextStyle(
                                 color: MyColors.light,
                                 fontFamily: "Poppins",
-                                fontSize: 10,
+                                fontSize: 8,
                                 fontWeight: FontWeight.bold),
                           ),
                   ),

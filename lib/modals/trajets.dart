@@ -2,23 +2,23 @@
 import 'dart:convert';
 
 class Trajets {
-  final int id;
-  final String reference;
-  final int transporteur_id;
-  final int voiture_id;
-  final DateTime date_depart;
-  final int pay_dep_id;
-  final int pay_dest_id;
-  final int dep_depart_id;
-  final int dep_dest_id;
-  final int com_dep_id;
-  final int com_dest_id;
-  final int arrond_dep_id;
-  final int arrond_dest_id;
-  final int quart_dep_id;
-  final int quart_dest_id;
-  final DateTime created_at;
-  final DateTime updated_at;
+  int id;
+  String reference;
+  int transporteur_id;
+  int voiture_id;
+  DateTime date_depart;
+  int pay_dep_id;
+  int pay_dest_id;
+  int dep_depart_id;
+  int dep_dest_id;
+  int com_dep_id;
+  int com_dest_id;
+  int arrond_dep_id;
+  int arrond_dest_id;
+  int quart_dep_id;
+  int quart_dest_id;
+  DateTime created_at;
+  DateTime updated_at;
   Trajets({
     required this.id,
     required this.reference,

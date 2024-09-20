@@ -3,7 +3,6 @@
 import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/modals/statuts.dart';
-import 'package:bodah/modals/users.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/api/api_data.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
@@ -69,23 +68,8 @@ class _SignUpState extends State<SignUp> {
     final ville = provider.ville;
     final rule = provider.rule;
     final statut = provider.statut;
-    List<Users> users = api_provider.users;
-
-    bool existing_number = function.existing_phone_number(users, number);
 
     final service = Provider.of<DBServices>(context);
-
-    bool loading = api_provider.loading;
-
-    if (loading) {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            color: MyColors.secondary,
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -176,12 +160,6 @@ class _SignUpState extends State<SignUp> {
                     onChanged: (value) =>
                         provider.change_telephone(value.completeNumber),
                     decoration: InputDecoration(
-                        suffixIcon: Number.text.isNotEmpty && existing_number
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Icon(Icons.error, color: Colors.red),
-                              )
-                            : null,
                         border: OutlineInputBorder(borderSide: BorderSide()),
                         labelText: "Téléphone",
                         labelStyle: TextStyle(
@@ -193,23 +171,6 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              existing_number
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 3),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Numéro de téléphone déjà utilisé",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(),
               SizedBox(
                 height: 54,
                 child: DropdownSearch<String>(
@@ -545,90 +506,64 @@ class _SignUpState extends State<SignUp> {
                             } else {
                               provider.change_affiche(true);
 
-                              if (nom.length < 3 ||
-                                  number.length < 8 ||
-                                  pay.id < 1 ||
-                                  ville.id < 1 ||
-                                  rule.id < 1 ||
-                                  statut.id < 1 ||
-                                  password.length < 8 ||
-                                  confirm_password.length < 8) {
-                                provider.change_affiche(false);
-                                showCustomSnackBar(context, 'Données invalides',
-                                    Colors.redAccent);
-                              } else if (password != confirm_password) {
-                                provider.change_affiche(false);
-                                showCustomSnackBar(
-                                    context,
-                                    'Mot de passe mal confirmé',
-                                    Colors.redAccent);
-                              } else if (existing_number) {
-                                provider.change_affiche(false);
-                                showCustomSnackBar(
-                                    context,
-                                    'Numéro de téléphone déjà utilisé',
-                                    Colors.redAccent);
-                              } else {
-                                String statut_code = await service.register(
-                                    nom,
-                                    number,
-                                    statut,
-                                    rule,
-                                    password,
-                                    confirm_password,
-                                    ville,
-                                    pay,
-                                    prov_val_ac);
+                              String statut_code = await service.register(
+                                  nom,
+                                  number,
+                                  statut,
+                                  rule,
+                                  password,
+                                  confirm_password,
+                                  ville,
+                                  pay,
+                                  prov_val_ac,
+                                  api_provider);
 
-                                if (statut_code == "422") {
-                                  provider.change_affiche(false);
-                                  showCustomSnackBar(context,
-                                      "Erreur de validation", Colors.redAccent);
-                                } else if (statut_code == "500") {
-                                  provider.change_affiche(false);
-                                  showCustomSnackBar(
-                                      context,
-                                      "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
-                                      Colors.redAccent);
-                                } else if (statut_code == "502") {
-                                  provider.change_affiche(false);
-                                  showCustomSnackBar(
-                                      context,
-                                      "Une erreur s'est produite",
-                                      Colors.redAccent);
-                                } else if (statut_code == '200') {
-                                  provider.change_affiche(false);
-                                  provider.reset();
-                                  showCustomSnackBar(
-                                      context,
-                                      "Un code de validation vous a été envoyé. Procédez à l validation de votre compte",
-                                      Colors.green);
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration:
-                                          Duration(milliseconds: 500),
-                                      pageBuilder: (BuildContext context,
-                                          Animation<double> animation,
-                                          Animation<double>
-                                              secondaryAnimation) {
-                                        return ValidateAccount(
-                                            telephone: number);
-                                      },
-                                      transitionsBuilder: (BuildContext context,
-                                          Animation<double> animation,
-                                          Animation<double> secondaryAnimation,
-                                          Widget child) {
-                                        return SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset.zero,
-                                          ).animate(animation),
-                                          child: child,
-                                        );
-                                      },
-                                    ),
-                                  );
-                                }
+                              if (statut_code == "422") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context,
+                                    "Erreur de validation", Colors.redAccent);
+                              } else if (statut_code == "500") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
+                                    Colors.redAccent);
+                              } else if (statut_code == "502") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Une erreur s'est produite",
+                                    Colors.redAccent);
+                              } else if (statut_code == '200') {
+                                provider.change_affiche(false);
+                                provider.reset();
+                                showCustomSnackBar(
+                                    context,
+                                    "Un code de validation vous a été envoyé. Procédez à l validation de votre compte",
+                                    Colors.green);
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation) {
+                                      return ValidateAccount(telephone: number);
+                                    },
+                                    transitionsBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation,
+                                        Widget child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                               }
                             }
                           },

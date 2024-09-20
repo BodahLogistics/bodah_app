@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import '../../colors/color.dart';
 import '../../functions/function.dart';
-import '../../modals/users.dart';
 import '../../providers/api/api_data.dart';
 import '../../providers/auth/prov_sign_in.dart';
 import '../../services/data_base_service.dart';
@@ -45,9 +44,6 @@ class _SignInState extends State<SignIn> {
     String password = provider.password;
     bool affiche = provider.affiche;
     bool hide_password = provider.hide_password;
-    List<Users> users = api_provider.users;
-
-    bool existing_number = function.existing_phone_number(users, phone_number);
 
     final service = Provider.of<DBServices>(context);
 
@@ -90,13 +86,6 @@ class _SignInState extends State<SignIn> {
                             provider.change_phone_number(value.completeNumber),
                         decoration: InputDecoration(
                             labelText: "Téléphone",
-                            suffixIcon: Number.text.isNotEmpty &&
-                                    !existing_number
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Icon(Icons.error, color: Colors.red),
-                                  )
-                                : null,
                             border:
                                 OutlineInputBorder(borderSide: BorderSide()),
                             labelStyle: TextStyle(
@@ -108,23 +97,6 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  !existing_number && Number.text.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Aucun compte ne correspond à ce numéro",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins",
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: SizedBox(
@@ -205,8 +177,8 @@ class _SignInState extends State<SignIn> {
                             : () async {
                                 provider.change_affiche(true);
 
-                                String statut_code =
-                                    await service.login(phone_number, password);
+                                String statut_code = await service.login(
+                                    phone_number, password, api_provider);
 
                                 if (statut_code == "422") {
                                   provider.change_affiche(false);

@@ -3,21 +3,21 @@
 import 'dart:convert';
 
 class Marchandises {
-  final int id;
-  final String nom;
-  final String? description;
-  final String? autres_details;
-  final int annonce_id;
-  final String numero_marchandise;
-  final int deleted;
-  final int quantite;
-  final int unite_id;
-  final int? type_chargement_id;
-  final double poids;
-  final int? destinataire_id;
-  final int nombre_camions;
-  final DateTime? date_chargement;
-  final int? devise_id;
+  int id;
+  String nom;
+  String? description;
+  String? autres_details;
+  int annonce_id;
+  String numero_marchandise;
+  int deleted;
+  int quantite;
+  int unite_id;
+  int? type_chargement_id;
+  double poids;
+  int? destinataire_id;
+  int nombre_camions;
+  DateTime? date_chargement;
+  int? devise_id;
 
   Marchandises({
     required this.id,
