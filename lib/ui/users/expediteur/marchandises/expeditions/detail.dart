@@ -822,13 +822,14 @@ Widget buildAlertDialog({
                   ),
                   onPressed: onPressed,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Text(
                       message,
                       style: TextStyle(
                         fontFamily: "Poppins",
                         color: textColor,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),

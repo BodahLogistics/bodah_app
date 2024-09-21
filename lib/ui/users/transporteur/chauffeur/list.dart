@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
 
-import 'package:bodah/modals/annonce_transporteurs.dart';
 import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/transport_liaison.dart';
 import 'package:bodah/modals/transporteurs.dart';
-import 'package:bodah/modals/type_chargements.dart';
 import 'package:bodah/modals/villes.dart';
-import 'package:bodah/providers/users/transporteur/trajets/add.dart';
+import 'package:bodah/providers/users/transporteur/chauffeurs/add.dart';
 import 'package:bodah/ui/users/transporteur/chauffeur/add.dart';
-import 'package:bodah/ui/users/transporteur/trajets/edit.dart';
+import 'package:bodah/ui/users/transporteur/chauffeur/detail.dart';
+import 'package:bodah/ui/users/transporteur/chauffeur/edit.dart';
 import 'package:bodah/wrappers/load.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
+import '../../../../modals/pieces.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/marchandises/expeditions/detail.dart';
@@ -48,6 +48,7 @@ class _MesChauffeursState extends State<MesChauffeurs> {
     List<Users> users = api_provider.users;
     List<Pays> pays = api_provider.pays;
     List<Villes> villes = api_provider.all_villes;
+    List<Pieces> pieces = api_provider.pieces;
 
     return loading
         ? LoadingPage()
@@ -133,11 +134,38 @@ class _MesChauffeursState extends State<MesChauffeurs> {
                               function.pay(pays, chauffeur_user.country_id);
                           Villes ville = function.ville(
                               villes, chauffeur_user.city_id ?? 0);
+                          Pieces piece = function.data_piece(
+                              pieces, transporteur.id, "Transporteur");
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 0),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation) {
+                                      return DetailsChauffeur(
+                                          chauffeur: chauffeur);
+                                    },
+                                    transitionsBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation,
+                                        Widget child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: function.is_pair(index)
@@ -157,7 +185,7 @@ class _MesChauffeursState extends State<MesChauffeurs> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       transporteur.photo_url != null
                                           ? SizedBox(
@@ -180,9 +208,12 @@ class _MesChauffeursState extends State<MesChauffeurs> {
                                               width: 50,
                                             ),
                                       SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.60,
+                                                0.55,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -255,7 +286,22 @@ class _MesChauffeursState extends State<MesChauffeurs> {
                                             )
                                           ],
                                         ),
-                                      )
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            showAllFromChauffeur(
+                                                context,
+                                                chauffeur,
+                                                chauffeur_user,
+                                                transporteur,
+                                                piece,
+                                                pay,
+                                                ville);
+                                          },
+                                          icon: Icon(
+                                            Icons.more_vert,
+                                            color: Colors.green,
+                                          ))
                                     ],
                                   ),
                                 ),
@@ -269,88 +315,140 @@ class _MesChauffeursState extends State<MesChauffeurs> {
   }
 }
 
-void showAllFromTrajet(
+void showAllFromChauffeur(
     BuildContext context,
-    AnnonceTransporteurs trajet,
-    TypeChargements type_chargement,
-    Pays pays_dep,
-    Pays pays_dest,
-    Villes ville_dep,
-    Villes ville_dest,
-    String charge) {
-  showDialog(
-    context: context,
-    builder: (BuildContext dialogcontext) {
-      return buildAlertDialog(
-        context: dialogcontext,
-        bottom: MediaQuery.of(dialogcontext).size.height * 0.8,
-        message: "Supprimez le trajet",
-        backgroundColor: Colors.red,
-        textColor: MyColors.light,
-        onPressed: () {
-          Navigator.of(dialogcontext).pop();
-          DeleteTrajet(dialogcontext, trajet);
-        },
-      );
-    },
-  );
-
+    TransportLiaisons chauffeur,
+    Users user,
+    Transporteurs transporteur,
+    Pieces piece,
+    Pays pay,
+    Villes ville) {
+  // Premier dialogue
   Future.delayed(Duration(milliseconds: 500), () {
     showDialog(
       context: context,
       builder: (BuildContext dialogcontext) {
-        final provider = Provider.of<ProvAddTrajet>(dialogcontext);
         return buildAlertDialog(
           context: dialogcontext,
-          bottom: MediaQuery.of(dialogcontext).size.height * 0.7,
-          message: "Modifiez le trajet",
-          backgroundColor: MyColors.secondary,
+          bottom: MediaQuery.of(dialogcontext).size.height * 0.8,
+          message:
+              chauffeur.during == 1 ? "Chauffeur Actif" : "Chauffeur Non actif",
+          backgroundColor:
+              chauffeur.during == 1 ? Colors.green : Colors.redAccent,
           textColor: MyColors.light,
           onPressed: () {
             Navigator.of(dialogcontext).pop();
-            provider.change_trajet(charge, type_chargement, pays_dep, pays_dest,
-                ville_dep, ville_dest);
-            Navigator.of(dialogcontext).push(
-              PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 500),
-                pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) {
-                  return UpdateTrajet(
-                    trajet: trajet,
-                  );
-                },
-                transitionsBuilder: (BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child) {
-                  return ScaleTransition(
-                    scale:
-                        Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-                    child: child,
-                  );
-                },
-              ),
-            );
           },
         );
       },
     );
+  }).then((_) {
+    Future.delayed(Duration(milliseconds: 500), () {
+      // Deuxième dialogue
+
+      showDialog(
+        context: context,
+        builder: (BuildContext dialogcontext) {
+          return buildAlertDialog(
+            context: dialogcontext,
+            bottom: MediaQuery.of(dialogcontext).size.height * 0.74,
+            message: "Supprimez le chauffeur",
+            backgroundColor: Colors.red,
+            textColor: MyColors.light,
+            onPressed: () {
+              Navigator.of(dialogcontext).pop();
+              DeleteChauffeur(dialogcontext, chauffeur, user);
+            },
+          );
+        },
+      );
+    });
+  }).then((_) {
+    // Troisième dialogue
+    Future.delayed(Duration(milliseconds: 500), () {
+      showDialog(
+        context: context,
+        builder: (BuildContext dialogcontext) {
+          return buildAlertDialog(
+            context: dialogcontext,
+            bottom: MediaQuery.of(dialogcontext).size.height * 0.67,
+            message: chauffeur.during == 1
+                ? "Suspendre le chauffeur"
+                : "Remettre le chauffeur",
+            backgroundColor:
+                chauffeur.during == 1 ? Colors.redAccent : Colors.green,
+            textColor: MyColors.light,
+            onPressed: () {
+              Navigator.of(dialogcontext).pop();
+              if (chauffeur.during == 1) {
+                DisableChauffeur(dialogcontext, chauffeur, user);
+              } else {
+                ActiveChauffeur(dialogcontext, chauffeur, user);
+              }
+            },
+          );
+        },
+      );
+    });
+  }).then((_) {
+    // Quatrième dialogue
+    Future.delayed(Duration(milliseconds: 500), () {
+      showDialog(
+        context: context,
+        builder: (BuildContext dialogcontext) {
+          final provider = Provider.of<ProvAddChauffeur>(dialogcontext);
+          return buildAlertDialog(
+            context: dialogcontext,
+            bottom: MediaQuery.of(dialogcontext).size.height * 0.6,
+            message: "Modifiez les informations",
+            backgroundColor: MyColors.secondary,
+            textColor: MyColors.light,
+            onPressed: () {
+              Navigator.of(dialogcontext).pop();
+              provider.change_chauffeur(user, piece, pay, ville);
+              Navigator.of(dialogcontext).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return UpdateChauffeur(
+                      transporteur: transporteur,
+                    );
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return ScaleTransition(
+                      scale: Tween<double>(begin: 0.0, end: 1.0)
+                          .animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    });
   });
 }
 
-Future<dynamic> DeleteTrajet(
-    BuildContext context, AnnonceTransporteurs trajet) {
+// Fonction de suppression
+Future<dynamic> DeleteChauffeur(
+    BuildContext context, TransportLiaisons chauffeur, Users user) {
   return showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext dialocontext) {
-      final function = Provider.of<Functions>(dialocontext);
       final provider = Provider.of<ApiProvider>(dialocontext);
       final service = Provider.of<DBServices>(dialocontext);
       bool delete = provider.delete;
       return AlertDialog(
         title: Text(
-          "Trajet publié",
+          "Mon chauffeur",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontFamily: "Poppins",
@@ -359,11 +457,9 @@ Future<dynamic> DeleteTrajet(
               fontSize: 16),
         ),
         content: Text(
-          "Voulez-vous vraiment supprimer le trajet " +
-              trajet.numero_annonce +
-              " ?",
+          "Voulez-vous vraiment supprimer le chauffeur " + user.name + " ?",
           style: TextStyle(
-              color: function.convertHexToColor("#79747E"),
+              color: MyColors.textColor,
               fontFamily: "Poppins",
               fontSize: 12,
               fontWeight: FontWeight.w400),
@@ -379,7 +475,6 @@ Future<dynamic> DeleteTrajet(
                     style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7)),
-                        padding: EdgeInsets.only(left: 7, right: 7),
                         backgroundColor: Colors.redAccent),
                     onPressed: () {
                       provider.change_delete(false);
@@ -391,8 +486,7 @@ Future<dynamic> DeleteTrajet(
                           color: MyColors.light,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.w500,
-                          fontSize: 8,
-                          letterSpacing: 1),
+                          fontSize: 8),
                     )),
               ),
               SizedBox(
@@ -402,54 +496,282 @@ Future<dynamic> DeleteTrajet(
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7)),
-                      padding: EdgeInsets.only(left: 7, right: 7),
                       backgroundColor: MyColors.secondary),
                   onPressed: delete
                       ? null
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteTrajet(trajet);
-                          if (statut == "404") {
+                              await service.deleteChauffeur(chauffeur);
+
+                          if (statut == "500") {
                             showCustomSnackBar(
                                 dialocontext,
-                                "Vous ne pouvez pas supprimer cette annonce",
-                                Colors.redAccent);
-                            provider.change_delete(false);
-                          } else if (statut == "500") {
-                            showCustomSnackBar(
-                                dialocontext,
-                                "Une erreur s'est produite. Verifiez voytre connection internet et réssayer",
+                                "Une erreur inattendu s'est produite. Vérifiez vos données mobiles",
                                 Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "202") {
-                            showCustomSnackBar(dialocontext,
-                                "Une erreur s'est produite", Colors.redAccent);
-                            provider.change_delete(false);
-                          } else {
-                            await provider.InitTrajet();
                             showCustomSnackBar(
                                 dialocontext,
-                                "Le trajet a été supprimé avec succès",
+                                "Veuillez réessayer plus tardr",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "404") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Impossible de supprimer ce chauffeur",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else {
+                            await provider.InitChauffeurs();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Le chauffeur a été supprimé avec succès",
                                 Colors.green);
                             provider.change_delete(false);
                             Navigator.of(dialocontext).pop();
                           }
                         },
                   child: delete
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: SizedBox(
-                            height: 20,
-                            width: 30,
-                            child: CircularProgressIndicator(
-                              color: MyColors.light,
-                            ),
-                          ),
+                      ? CircularProgressIndicator(
+                          color: MyColors.light,
                         )
                       : Text(
                           "Supprimez",
-                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// Fonction de suppression
+Future<dynamic> ActiveChauffeur(
+    BuildContext context, TransportLiaisons chauffeur, Users user) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final provider = Provider.of<ApiProvider>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool delete = provider.delete;
+      return AlertDialog(
+        title: Text(
+          "Mon chauffeur",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: Text(
+          "Voulez-vous vraiment remettre le chauffeur " + user.name + " ?",
+          style: TextStyle(
+              color: MyColors.textColor,
+              fontFamily: "Poppins",
+              fontSize: 12,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_delete(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          provider.change_delete(true);
+                          final String statut =
+                              await service.activeChauffeur(chauffeur);
+                          if (statut == "500") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur inattendu s'est produite. Vérifiez vos données mobiles",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "202") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Veuillez réessayer plus tardr",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "404") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Ce chauffeur est déjà supprimé",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else {
+                            await provider.InitChauffeurs();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Le chauffeur a été remis avec succès",
+                                Colors.green);
+                            provider.change_delete(false);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: delete
+                      ? CircularProgressIndicator(
+                          color: MyColors.light,
+                        )
+                      : Text(
+                          "Remettez",
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// Fonction de suppression
+Future<dynamic> DisableChauffeur(
+    BuildContext context, TransportLiaisons chauffeur, Users user) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final provider = Provider.of<ApiProvider>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool delete = provider.delete;
+      return AlertDialog(
+        title: Text(
+          "Mon chauffeur",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: Text(
+          "Voulez-vous vraiment suspendre le chauffeur " + user.name + " ?",
+          style: TextStyle(
+              color: MyColors.textColor,
+              fontFamily: "Poppins",
+              fontSize: 12,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_delete(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          provider.change_delete(true);
+                          final String statut =
+                              await service.disableChauffeur(chauffeur);
+                          if (statut == "500") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur inattendu s'est produite. Vérifiez vos données mobiles",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "202") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Veuillez réessayer plus tardr",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "404") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Ce chauffeur est déjà supprimé",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else {
+                            await provider.InitChauffeurs();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Le chauffeur a été suspendu avec succès",
+                                Colors.green);
+                            provider.change_delete(false);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: delete
+                      ? CircularProgressIndicator(
+                          color: MyColors.light,
+                        )
+                      : Text(
+                          "Suspendez",
                           style: TextStyle(
                               color: MyColors.light,
                               fontFamily: "Poppins",

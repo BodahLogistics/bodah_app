@@ -4148,6 +4148,136 @@ class DBServices {
     }
   }
 
+  Future<String> UpdateChauffeur(
+      Transporteurs transporteur,
+      String name,
+      String telephone,
+      String permis,
+      Pays pay,
+      Villes city,
+      String email,
+      String adresse,
+      ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/transporteur/chauffeur/update/${transporteur.id}";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['email'] = email
+        ..fields['address'] = adresse
+        ..fields['name'] = name
+        ..fields['phone_number'] = telephone
+        ..fields['city'] = city.id.toString()
+        ..fields['country'] = pay.id.toString()
+        ..fields['number'] = permis;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> deleteChauffeur(TransportLiaisons chauffeur) async {
+    try {
+      var url = "${api_url}home/transporteur/chauffeur/delete/${chauffeur.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> activeChauffeur(TransportLiaisons chauffeur) async {
+    try {
+      var url = "${api_url}home/transporteur/chauffeur/active/${chauffeur.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> disableChauffeur(TransportLiaisons chauffeur) async {
+    try {
+      var url = "${api_url}home/transporteur/chauffeur/disable/${chauffeur.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> AddSouscription(Marchandises marchandise) async {
+    try {
+      var url =
+          "${api_url}home/transporteur/annonce/souscription/add/${marchandise.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> DeleteSouscription(Souscriptions souscription) async {
+    try {
+      var url =
+          "${api_url}home/transporteur/annonce/souscription/delete/${souscription.id}";
+      final uri = Uri.parse(url);
+      String? token = await secure.readSecureData('token');
+
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token,
+        'Authorization': 'Bearer $token',
+      });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> addTransp(
       String name,
       String permis,

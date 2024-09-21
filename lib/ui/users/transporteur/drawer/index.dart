@@ -2,6 +2,8 @@
 
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/providers/users/transporteur/drawer/index.dart';
+import 'package:bodah/ui/users/transporteur/dashboard/accueil.dart';
+import 'package:bodah/ui/users/transporteur/souscriptions/list.dart';
 import 'package:bodah/ui/users/transporteur/trajets/list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +69,19 @@ class DrawerTransporteur extends StatelessWidget {
             child: ListTile(
               onTap: () {
                 provider.change_index(0);
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        TransporteurDashboard(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
               leading: Icon(
                 Icons.dashboard,
@@ -216,6 +231,28 @@ class DrawerTransporteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(4);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return ListSouscription();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.subscriptions,

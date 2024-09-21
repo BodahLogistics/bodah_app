@@ -22,7 +22,9 @@ import '../../../../modals/camions.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/marchandises/expeditions/detail.dart';
+import '../dashboard/trajet.dart';
 import '../drawer/index.dart';
+import 'add.dart';
 
 class ListTrajets extends StatefulWidget {
   const ListTrajets({super.key});
@@ -60,6 +62,38 @@ class _ListTrajetsState extends State<ListTrajets> {
     return loading
         ? LoadingPage()
         : Scaffold(
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: loading ? MyColors.primary : MyColors.secondary,
+              onPressed: () {
+                if (camions.isNotEmpty) {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 500),
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return AddTrajet();
+                      },
+                      transitionsBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation,
+                          Widget child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  AddCamion(context);
+                }
+              },
+              child: Icon(Icons.add, color: MyColors.light),
+            ),
             backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
             drawer: DrawerTransporteur(),
             appBar: AppBar(

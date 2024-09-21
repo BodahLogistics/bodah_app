@@ -10,7 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
 import '../../../../../services/data_base_service.dart';
+import '../../../../modals/pieces.dart';
 import '../../../../modals/type_camions.dart';
+import '../../../../modals/users.dart';
 import '../../../../ui/auth/sign_in.dart';
 
 class ProvAddChauffeur with ChangeNotifier {
@@ -315,6 +317,17 @@ class ProvAddChauffeur with ChangeNotifier {
     _adresse = "";
     _email = "";
     _affiche = false;
+    notifyListeners();
+  }
+
+  void change_chauffeur(Users user, Pieces piece, Pays pay, Villes ville) {
+    _name = user.name;
+    _adresse = user.adresse ?? "";
+    _email = user.email ?? "";
+    _telepehone = user.telephone;
+    _permis = piece.num_piece;
+    _pay = pay;
+    _ville = ville;
     notifyListeners();
   }
 
