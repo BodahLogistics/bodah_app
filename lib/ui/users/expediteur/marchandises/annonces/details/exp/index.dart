@@ -3,6 +3,7 @@
 import 'package:bodah/modals/camions.dart';
 import 'package:bodah/modals/expeditions.dart';
 import 'package:bodah/modals/pieces.dart';
+import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/tarifs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,6 @@ import '../../../../../../../colors/color.dart';
 import '../../../../../../../functions/function.dart';
 import '../../../../../../../modals/annonces.dart';
 import '../../../../../../../modals/charges.dart';
-import '../../../../../../../modals/statuts.dart';
 import '../../../../../../../modals/transporteurs.dart';
 import '../../../../../../../modals/users.dart';
 import '../../../../../../../providers/api/api_data.dart';
@@ -41,7 +41,7 @@ class _ListExpState extends State<ListExp> {
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     List<Pieces> pieces = api_provider.pieces;
     List<Camions> camions = api_provider.camions;
-    List<Statuts> statuts = api_provider.statuts;
+    List<StatutExpeditions> statuts = api_provider.statut_expeditions;
     List<Charge> charges = api_provider.charges;
     List<Tarif> tarifs = api_provider.tarifs;
     List<Expeditions> expeditions = api_provider.expeditions;
@@ -68,7 +68,7 @@ class _ListExpState extends State<ListExp> {
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
                       Expeditions expedition = expeditions[index];
-                      Statuts statut = function.statut(
+                      StatutExpeditions statut = function.statut(
                           statuts, expedition.statu_expedition_id);
                       int quantite = 0;
                       double poids = 0;

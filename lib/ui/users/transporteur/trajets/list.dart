@@ -178,7 +178,7 @@ class _ListTrajetsState extends State<ListTrajets> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: function.is_pair(index)
+                                    color: index % 2 != 0
                                         ? Colors.grey.withOpacity(.2)
                                         : null,
                                     borderRadius: BorderRadius.circular(10),

@@ -57,7 +57,8 @@ import '../modals/ordre_transport.dart';
 import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/rules.dart';
-import '../modals/statuts.dart';
+import '../modals/souscriptions.dart';
+import '../modals/statut_expeditions.dart';
 import '../modals/transporteurs.dart';
 import '../modals/type_chargements.dart';
 import '../modals/users.dart';
@@ -196,10 +197,25 @@ class Functions {
     );
   }
 
-  Statuts statut(List<Statuts> statuts, int id) {
+  StatutExpeditions statut(List<StatutExpeditions> statuts, int id) {
     return statuts.firstWhere(
       (data) => data.id == id,
-      orElse: () => Statuts(id: 0, name: ""),
+      orElse: () => StatutExpeditions(id: 0, nom: ""),
+    );
+  }
+
+  Souscriptions marchandise_souscriptin(
+      List<Souscriptions> souscriptions, Marchandises marchandise) {
+    return souscriptions.firstWhere(
+      (data) => data.marchandise_id == marchandise.id,
+      orElse: () => Souscriptions(
+          id: 0,
+          numero_souscription: "",
+          transporteur_id: 0,
+          deleted: 0,
+          marchandise_id: 0,
+          created_at: DateTime.now(),
+          updated_at: DateTime.now()),
     );
   }
 
@@ -417,6 +433,14 @@ class Functions {
           modele_type: "",
           deleted: 0),
     );
+  }
+
+  List<Expeditions> mesTransports(
+      List<Transporteurs> transporteurs, List<Expeditions> expeditions) {
+    List<int> transporteurIds = transporteurs.map((t) => t.id).toList();
+    return expeditions.where((expedition) {
+      return transporteurIds.contains(expedition.transporteur_id);
+    }).toList();
   }
 
   Position chargement_effectue_position(

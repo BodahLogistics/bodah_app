@@ -75,6 +75,7 @@ import '../modals/positions.dart';
 import '../modals/quartiers.dart';
 import '../modals/recus.dart';
 import '../modals/souscriptions.dart';
+import '../modals/statut_expeditions.dart';
 import '../modals/statuts.dart';
 import '../modals/tarifications.dart';
 import '../modals/tarifs.dart';
@@ -400,7 +401,7 @@ class DBServices {
 
   Future<List<Statuts>> getStatuts() async {
     try {
-      var url = "${api_url}expeditions/statuts";
+      var url = "${api_url}statuts";
       final uri = Uri.parse(url);
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -416,6 +417,27 @@ class DBServices {
       }
     } catch (error) {
       return <Statuts>[];
+    }
+  }
+
+  Future<List<StatutExpeditions>> getStatutExpeditions() async {
+    try {
+      var url = "${api_url}status";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => StatutExpeditions.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
     }
   }
 

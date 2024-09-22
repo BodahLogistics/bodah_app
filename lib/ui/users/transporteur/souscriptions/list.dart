@@ -20,6 +20,7 @@ import '../../../../../providers/api/api_data.dart';
 import '../../../../modals/transporteurs.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
+import '../annonces/details/index.dart';
 import '../drawer/index.dart';
 
 class ListSouscription extends StatefulWidget {
@@ -128,7 +129,30 @@ class _ListSouscriptionState extends State<ListSouscription> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 0),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 500),
+                                  pageBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation) {
+                                    return DetailsMarchandises(
+                                        id: marchandise.annonce_id);
+                                  },
+                                  transitionsBuilder: (BuildContext context,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation,
+                                      Widget child) {
+                                    return ScaleTransition(
+                                      scale: Tween<double>(begin: 0.0, end: 1.0)
+                                          .animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                   color: index % 2 != 0
@@ -753,7 +777,7 @@ Future<dynamic> DeleteSouscription(
                           } else if (statut == "500") {
                             showCustomSnackBar(
                                 dialocontext,
-                                "Une erreur s'est produite. Verifiez voytre connection internet et réssayer",
+                                "Une erreur s'est produite. Verifiez votre connection internet et réssayer",
                                 Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "202") {
@@ -783,6 +807,132 @@ Future<dynamic> DeleteSouscription(
                         )
                       : Text(
                           "Supprimez",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.light,
+                              fontFamily: "Poppins",
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> AddSouscription(
+    BuildContext context, Marchandises marchandise) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext dialocontext) {
+      final function = Provider.of<Functions>(dialocontext);
+      final provider = Provider.of<ApiProvider>(dialocontext);
+      final service = Provider.of<DBServices>(dialocontext);
+      bool delete = provider.delete;
+      return AlertDialog(
+        title: Text(
+          "Souscription",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        content: Text(
+          "Voulez-vous vraiment souscrire pour le transport de marchandises de cette annonce ? ",
+          style: TextStyle(
+              color: function.convertHexToColor("#79747E"),
+              fontFamily: "Poppins",
+              fontSize: 12,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      provider.change_delete(false);
+                      Navigator.of(dialocontext).pop();
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: MyColors.secondary),
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          provider.change_delete(true);
+                          final String statut =
+                              await service.AddSouscription(marchandise);
+                          if (statut == "401") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Vous ne pouvez pas souscrire à cette annonce",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "500") {
+                            showCustomSnackBar(
+                                dialocontext,
+                                "Une erreur s'est produite. Verifiez votre connection internet et réssayer",
+                                Colors.redAccent);
+                            provider.change_delete(false);
+                          } else if (statut == "202") {
+                            showCustomSnackBar(dialocontext,
+                                "Une erreur s'est produite", Colors.redAccent);
+                            provider.change_delete(false);
+                          } else {
+                            await provider.InitSouscriptions();
+                            showCustomSnackBar(
+                                dialocontext,
+                                "La souscription a été enregistrée avec succès",
+                                Colors.green);
+                            provider.change_delete(false);
+                            Navigator.of(dialocontext).pop();
+                          }
+                        },
+                  child: delete
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: SizedBox(
+                            height: 20,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: MyColors.light,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Confirmez",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: MyColors.light,

@@ -118,7 +118,7 @@ class _MesTrajetsState extends State<MesTrajets> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                color: function.is_pair(index)
+                                color: index % 1 != 0
                                     ? Colors.grey.withOpacity(.2)
                                     : null,
                                 borderRadius: BorderRadius.circular(10),

@@ -22,6 +22,7 @@ import 'package:bodah/providers/users/expediteur/marchandises/annoces/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/odres/add.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/prov_dash_march.dart';
+import 'package:bodah/providers/users/transporteur/annonces/home.dart';
 import 'package:bodah/providers/users/transporteur/chauffeurs/add.dart';
 import 'package:bodah/providers/users/transporteur/dashboard/prov_change.dart';
 import 'package:bodah/providers/users/transporteur/drawer/index.dart';
@@ -178,6 +179,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvAddChauffeur(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvHoTransp(),
         ),
       ],
       child: MaterialApp(

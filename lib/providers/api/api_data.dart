@@ -25,6 +25,7 @@ import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/notifications.dart';
 import 'package:bodah/modals/pieces.dart';
 import 'package:bodah/modals/souscriptions.dart';
+import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/statut_operations.dart';
 import 'package:bodah/modals/statuts.dart';
 import 'package:bodah/modals/tarifications.dart';
@@ -125,6 +126,8 @@ class ApiProvider with ChangeNotifier {
   List<Recepteurs> get recepteurs => _recepteurs;
   List<StatutOperations> _statut_operations = [];
   List<StatutOperations> get statut_operations => _statut_operations;
+  List<StatutExpeditions> _statut_expeditions = [];
+  List<StatutExpeditions> get statut_expeditions => _statut_expeditions;
   List<AnnonceTransporteurs> _trajets = [];
   List<AnnonceTransporteurs> get trajets => _trajets;
   List<MarchandiseTransporteur> _marchandise_transporteurs = [];
@@ -493,6 +496,8 @@ class ApiProvider with ChangeNotifier {
         _type_chargements = response_type_chargement;
         final response_unite = await apiService.getUnites();
         _unites = response_unite;
+        final response_statuts = await apiService.getStatutExpeditions();
+        _statut_expeditions = response_statuts;
       } else {
         final response_role = await apiService.getRules();
         _rules = response_role;

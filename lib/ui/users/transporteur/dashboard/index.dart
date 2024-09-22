@@ -16,6 +16,7 @@ import '../../../../../functions/function.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../trajets/add.dart';
+import 'expedition.dart';
 
 class WelcomeTransporteur extends StatelessWidget {
   WelcomeTransporteur({super.key});
@@ -38,7 +39,7 @@ class WelcomeTransporteur extends StatelessWidget {
       HomeTransporteur(),
       MesTrajets(),
       MesSouscription(),
-      MesTrajets(),
+      MesTransport(),
       TranspDocument()
     ];
 

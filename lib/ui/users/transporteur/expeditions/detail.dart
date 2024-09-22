@@ -3,8 +3,8 @@
 import 'package:bodah/modals/camions.dart';
 import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/transporteurs.dart';
-import 'package:bodah/ui/users/expediteur/drawer/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
+import 'package:bodah/ui/users/transporteur/annonces/details/index.dart';
+import 'package:bodah/ui/users/transporteur/drawer/index.dart';
 import 'package:bodah/wrappers/load.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,19 +19,20 @@ import '../../../../../modals/charges.dart';
 import '../../../../../modals/pieces.dart';
 import '../../../../../modals/tarifs.dart';
 
-class DetailExpedition extends StatefulWidget {
-  const DetailExpedition({super.key, required this.id});
+class DetailChargement extends StatefulWidget {
+  const DetailChargement({super.key, required this.id});
   final int id;
 
   @override
-  State<DetailExpedition> createState() => _DetailExpeditionState();
+  State<DetailChargement> createState() => _DetailChargementState();
 }
 
-class _DetailExpeditionState extends State<DetailExpedition> {
+class _DetailChargementState extends State<DetailChargement> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitExpeditionForAnnonce();
+    Provider.of<ApiProvider>(context, listen: false)
+        .InitTransporteurExpeditionForAnnonce();
   }
 
   @override
@@ -79,7 +80,7 @@ class _DetailExpeditionState extends State<DetailExpedition> {
         ? LoadingPage()
         : Scaffold(
             backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
-            drawer: DrawerExpediteur(),
+            drawer: DrawerTransporteur(),
             appBar: AppBar(
               backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
               iconTheme: IconThemeData(
@@ -87,7 +88,7 @@ class _DetailExpeditionState extends State<DetailExpedition> {
               centerTitle: true,
               elevation: 0,
               title: Text(
-                "Expédition éffectuée",
+                "Chargement éffectué",
                 style: TextStyle(
                     color: user.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w300,
@@ -767,7 +768,7 @@ void showAnnonce(BuildContext context, Annonces annonce) {
                 transitionDuration: Duration(milliseconds: 500),
                 pageBuilder: (BuildContext context, Animation<double> animation,
                     Animation<double> secondaryAnimation) {
-                  return DetailAnnonce(id: annonce.id);
+                  return DetailsMarchandises(id: annonce.id);
                 },
                 transitionsBuilder: (BuildContext context,
                     Animation<double> animation,

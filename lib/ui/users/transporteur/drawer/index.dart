@@ -3,6 +3,8 @@
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/providers/users/transporteur/drawer/index.dart';
 import 'package:bodah/ui/users/transporteur/dashboard/accueil.dart';
+import 'package:bodah/ui/users/transporteur/documents/index.dart';
+import 'package:bodah/ui/users/transporteur/expeditions/list.dart';
 import 'package:bodah/ui/users/transporteur/souscriptions/list.dart';
 import 'package:bodah/ui/users/transporteur/trajets/list.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import '../../../../providers/api/api_data.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/drawer/index.dart';
+import '../annonces/list.dart';
 import '../chauffeur/list.dart';
 
 class DrawerTransporteur extends StatelessWidget {
@@ -205,6 +208,28 @@ class DrawerTransporteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(3);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return ListAnnonces();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.local_shipping,
@@ -279,6 +304,28 @@ class DrawerTransporteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(5);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return ListTransport();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.check_circle_outline,
@@ -305,6 +352,28 @@ class DrawerTransporteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(6);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return DocumentChargements();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.receipt,

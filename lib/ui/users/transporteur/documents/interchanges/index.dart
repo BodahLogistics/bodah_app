@@ -1,52 +1,41 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, use_build_context_synchronously, prefer_adjacent_string_concatenation
 
-import 'package:bodah/modals/localisations.dart';
-import 'package:bodah/modals/marchandises.dart';
-import 'package:bodah/modals/statut_expeditions.dart';
-import 'package:bodah/modals/villes.dart';
+import 'package:bodah/modals/annonces.dart';
+import 'package:bodah/modals/interchanges.dart';
+import 'package:bodah/ui/users/transporteur/drawer/index.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/detail.dart';
-import 'package:bodah/wrappers/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../colors/color.dart';
-import '../../../../../functions/function.dart';
-import '../../../../../modals/annonces.dart';
-import '../../../../../modals/expeditions.dart';
-import '../../../../../modals/pays.dart';
-import '../../../../../modals/users.dart';
-import '../../../../../providers/api/api_data.dart';
-import '../../../../modals/camions.dart';
-import '../../../../modals/transporteurs.dart';
+import '../../../../../../colors/color.dart';
+import '../../../../../../functions/function.dart';
+import '../../../../../../modals/expeditions.dart';
+import '../../../../../../modals/localisations.dart';
+import '../../../../../../modals/marchandises.dart';
+import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/users.dart';
+import '../../../../../../modals/villes.dart';
+import '../../../../../../providers/api/api_data.dart';
+import '../../../../../modals/camions.dart';
+import '../../../../../modals/statut_expeditions.dart';
+import '../../../../../modals/transporteurs.dart';
 
-class MesTransport extends StatefulWidget {
-  const MesTransport({super.key});
-
-  @override
-  State<MesTransport> createState() => _MesTransportState();
-}
-
-class _MesTransportState extends State<MesTransport> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteurExpedition();
-  }
+class ChargInterchanges extends StatelessWidget {
+  const ChargInterchanges({super.key});
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    Users? user = api_provider.user;
-    bool loading = api_provider.loading;
     List<Expeditions> expeditions = api_provider.expeditions;
+    Users? user = api_provider.user;
+    List<Interchanges> datas = api_provider.interchanges;
+    List<Annonces> annonces = api_provider.annonces;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
-    List<Annonces> annonces = api_provider.annonces;
     List<StatutExpeditions> statuts = api_provider.statut_expeditions;
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     Transporteurs user_transporteur =
@@ -54,27 +43,54 @@ class _MesTransportState extends State<MesTransport> {
     List<Camions> camions = api_provider.camions;
     List<Users> users = api_provider.users;
 
-    return loading
-        ? Loading()
-        : expeditions.isEmpty
-            ? Center(
-                child: Text(
-                "Auncune expédition disponible",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: "Poppins",
-                    color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14),
+    return Scaffold(
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
+      drawer: DrawerTransporteur(),
+      appBar: AppBar(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        iconTheme: IconThemeData(
+            color: user.dark_mode == 1 ? MyColors.light : Colors.black),
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Interchanges",
+          style: TextStyle(
+              fontFamily: "Poppins",
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 14),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
               ))
-            : SizedBox(
-                height: MediaQuery.of(context).size.height,
+        ],
+      ),
+      body: datas.isEmpty
+          ? Center(
+              child: Text("Vous n'avez aucune interchange disponible",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  )))
+          : SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: ListView.builder(
-                  itemCount: expeditions.length,
                   itemBuilder: (context, index) {
-                    Expeditions data = expeditions[index];
+                    Interchanges data = datas[index];
+
+                    Expeditions expedition =
+                        function.expedition(expeditions, data.modele_id);
+
                     Marchandises marchandise = function.expedition_marchandise(
-                        data, marchandises, annonces);
+                        expedition, marchandises, annonces);
                     Localisations localisation =
                         function.marchandise_localisation(
                             localisations, marchandise.id);
@@ -86,11 +102,12 @@ class _MesTransportState extends State<MesTransport> {
                         function.ville(all_villes, localisation.city_exp_id);
                     Villes ville_dest =
                         function.ville(all_villes, localisation.city_liv_id);
-                    StatutExpeditions statut =
-                        function.statut(statuts, data.statu_expedition_id);
-                    Camions camion = function.camion(camions, data.vehicule_id);
+                    StatutExpeditions statut = function.statut(
+                        statuts, expedition.statu_expedition_id);
+                    Camions camion =
+                        function.camion(camions, expedition.vehicule_id);
                     Transporteurs transporteur = function.transporteur(
-                        transporteurs, data.transporteur_id);
+                        transporteurs, expedition.transporteur_id);
                     Users chauffeur_user =
                         function.user(users, transporteur.user_id);
                     return Padding(
@@ -103,15 +120,19 @@ class _MesTransportState extends State<MesTransport> {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return DetailChargement(id: data.id);
+                                return DetailChargement(
+                                  id: expedition.id,
+                                );
                               },
                               transitionsBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation,
                                   Widget child) {
-                                return ScaleTransition(
-                                  scale: Tween<double>(begin: 0.0, end: 1.0)
-                                      .animate(animation),
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
                                   child: child,
                                 );
                               },
@@ -125,7 +146,7 @@ class _MesTransportState extends State<MesTransport> {
                                   : null,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: user!.dark_mode == 1
+                                  color: user.dark_mode == 1
                                       ? MyColors.light
                                       : MyColors.textColor,
                                   width: 0.1,
@@ -140,7 +161,7 @@ class _MesTransportState extends State<MesTransport> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Référence : ",
+                                      "Nom/Référence : ",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -156,7 +177,7 @@ class _MesTransportState extends State<MesTransport> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        data.numero_expedition,
+                                        data.doc_id ?? data.reference,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -333,6 +354,9 @@ class _MesTransportState extends State<MesTransport> {
                                 SizedBox(
                                   height: 5,
                                 ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -467,7 +491,7 @@ class _MesTransportState extends State<MesTransport> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        function.date(data.date_depart),
+                                        function.date(expedition.date_depart),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -503,7 +527,7 @@ class _MesTransportState extends State<MesTransport> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        function.date(data.date_arrivee),
+                                        function.date(expedition.date_arrivee),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -576,6 +600,35 @@ class _MesTransportState extends State<MesTransport> {
                                               ),
                                   ],
                                 ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 10, bottom: 5),
+                                  child: SizedBox(
+                                    height: 25,
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5))),
+                                        onPressed: () {
+                                          /* String url =
+                                                "https://test.bodah.bj/storage/" +
+                                                    data.path;
+                                            downloadDocument(context, url);*/
+                                        },
+                                        child: Text(
+                                          "Téléchargez",
+                                          style: TextStyle(
+                                              color: MyColors.light,
+                                              fontSize: 10,
+                                              fontFamily: "Poppins"),
+                                        )),
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -583,7 +636,10 @@ class _MesTransportState extends State<MesTransport> {
                       ),
                     );
                   },
+                  itemCount: datas.length,
                 ),
-              );
+              ),
+            ),
+    );
   }
 }

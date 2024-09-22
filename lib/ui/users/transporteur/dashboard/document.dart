@@ -1,35 +1,16 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/appeles.dart';
-import 'package:bodah/modals/autre_docs.dart';
-import 'package:bodah/modals/avds.dart';
-import 'package:bodah/modals/bfus.dart';
-import 'package:bodah/modals/bl.dart';
-import 'package:bodah/modals/bon_commandes.dart';
-import 'package:bodah/modals/cartificat_origine.dart';
-import 'package:bodah/modals/certificat_phyto_sanitaire.dart';
-import 'package:bodah/modals/declaration.dart';
-import 'package:bodah/modals/fiche_technique.dart';
 import 'package:bodah/modals/interchanges.dart';
-import 'package:bodah/modals/lta.dart';
-import 'package:bodah/modals/ordre_transport.dart';
+import 'package:bodah/modals/letrre_voyage.dart';
 import 'package:bodah/modals/recus.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/vgms.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/appeles/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/autre_dcos/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/avds/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/bfu/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/bls/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/cos/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/cps/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/declarations/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/fiches/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/interchanges/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/lta/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/recus_factures/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/tdos/index.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/documents/vgms/index.dart';
+import 'package:bodah/ui/users/transporteur/documents/appeles/index.dart';
+import 'package:bodah/ui/users/transporteur/documents/bordereaux/index.dart';
+import 'package:bodah/ui/users/transporteur/documents/interchanges/index.dart';
+import 'package:bodah/ui/users/transporteur/documents/recus/index.dart';
+import 'package:bodah/ui/users/transporteur/documents/tdo/index.dart';
 import 'package:bodah/wrappers/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,9 +19,8 @@ import '../../../../../colors/color.dart';
 import '../../../../../modals/bordereau_livraisons.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
-import '../../expediteur/marchandises/documents/bordereaux/index.dart';
-import '../../expediteur/marchandises/documents/import_ordre/ordre_import_export.dart';
-import '../../expediteur/marchandises/documents/ordres/index.dart';
+import '../documents/contrats/index.dart';
+import '../documents/vgm/index.dart';
 
 class TranspDocument extends StatefulWidget {
   const TranspDocument({super.key});
@@ -62,22 +42,12 @@ class _TranspDocumentState extends State<TranspDocument> {
     final api_provider = Provider.of<ApiProvider>(context);
     Users? user = api_provider.user;
     List<BordereauLivraisons> bordereaux = api_provider.bordereaux;
-    List<BonCommandes> ordres = api_provider.ordres;
+    List<LetreVoitures> contrats = api_provider.contrats;
     List<Appeles> appeles = api_provider.appeles;
     List<Interchanges> interchanges = api_provider.interchanges;
     List<Tdos> tdos = api_provider.tdos;
     List<Vgms> vgms = api_provider.vgms;
     List<Recus> recus = api_provider.recus;
-    List<AutreDocs> autre_docs = api_provider.autre_docs;
-    List<Avd> avds = api_provider.avds;
-    List<Bl> bls = api_provider.bls;
-    List<Lta> ltas = api_provider.ltas;
-    List<Bfu> bfus = api_provider.bfus;
-    List<CO> cos = api_provider.cos;
-    List<CPS> cps = api_provider.cps;
-    List<Declaration> declarations = api_provider.declarations;
-    List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
-    List<OrdreTransport> import_ordres = api_provider.import_ordres;
     bool loading = api_provider.loading;
 
     return loading
@@ -127,7 +97,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesBordereaux();
+                                  return ChargBordereaux();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -226,7 +196,28 @@ class _TranspDocumentState extends State<TranspDocument> {
                         width: MediaQuery.of(context).size.width * 0.49,
                         child: TextButton(
                           onPressed: () {
-                            ChooseOrdre(context);
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return ChargContrats();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -255,11 +246,11 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                ordres.isEmpty && import_ordres.isEmpty
+                                contrats.isEmpty
                                     ? Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          "Aucun ordre de transport",
+                                          "Aucune letre de voiture",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -269,14 +260,12 @@ class _TranspDocumentState extends State<TranspDocument> {
                                               fontSize: 11),
                                         ),
                                       )
-                                    : ordres.length + import_ordres.length < 2
+                                    : contrats.length < 2
                                         ? Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              (ordres.length +
-                                                          import_ordres.length)
-                                                      .toString() +
-                                                  " ordre de transport",
+                                              (contrats.length).toString() +
+                                                  " Letre de voiture",
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -289,10 +278,8 @@ class _TranspDocumentState extends State<TranspDocument> {
                                         : Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              (ordres.length +
-                                                          import_ordres.length)
-                                                      .toString() +
-                                                  " ordres de transport",
+                                              (contrats.length).toString() +
+                                                  " Letres de voiture",
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -328,7 +315,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesApeles();
+                                  return ChargAppeles();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -433,7 +420,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesInterchanges();
+                                  return ChargInterchanges();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -546,7 +533,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesTdos();
+                                  return ChargTdo();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -635,7 +622,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesVgms();
+                                  return ChargVgm();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -732,96 +719,7 @@ class _TranspDocumentState extends State<TranspDocument> {
                                 pageBuilder: (BuildContext context,
                                     Animation<double> animation,
                                     Animation<double> secondaryAnimation) {
-                                  return MesAvds();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/recu.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                avds.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucune AVD",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          avds.length.toString() + " AVD",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesRecus();
+                                  return ChargRecus();
                                 },
                                 transitionsBuilder: (BuildContext context,
                                     Animation<double> animation,
@@ -921,961 +819,9 @@ class _TranspDocumentState extends State<TranspDocument> {
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesBls();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/recu.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                bls.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucun BL",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          bls.length.toString() + " BL",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesLtas();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/fact.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                ltas.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucune LTA",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          ltas.length.toString() + " LTA",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesBfus();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/recu.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                bfus.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucun BFU",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          bfus.length.toString() + " BFU",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesDeclarations();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/fact.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                declarations.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucune déclaration",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : declarations.length < 2
-                                        ? Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              declarations.length.toString() +
-                                                  " déclaration",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          )
-                                        : Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              declarations.length.toString() +
-                                                  " déclarations",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesFiches();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/recu.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                fiche_techniques.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucune fiche technique",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : fiche_techniques.length < 2
-                                        ? Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              fiche_techniques.length
-                                                      .toString() +
-                                                  " fiche technique",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          )
-                                        : Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              fiche_techniques.length
-                                                      .toString() +
-                                                  " fiches techniques",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesCos();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/fact.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                cos.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucun CO",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          cos.length.toString() + " CO",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesCps();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/recu.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                cps.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucun CPS",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          cps.length.toString() + " CPS",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.49,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation) {
-                                  return MesAutreDocs();
-                                },
-                                transitionsBuilder: (BuildContext context,
-                                    Animation<double> animation,
-                                    Animation<double> secondaryAnimation,
-                                    Widget child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(.70)),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: MyColors.textColor.withOpacity(.75),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        "images/fact.png",
-                                        scale: 2.5,
-                                        fit: BoxFit.cover,
-                                        height: 20,
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                autre_docs.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Aucun autre document",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: MyColors.textColor,
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 11),
-                                        ),
-                                      )
-                                    : autre_docs.length < 2
-                                        ? Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              autre_docs.length.toString() +
-                                                  " autre document",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          )
-                                        : Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              autre_docs.length.toString() +
-                                                  " autres documents",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11),
-                                            ),
-                                          ),
-                                SizedBox(
-                                  height: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
           );
   }
-}
-
-Future<dynamic> ChooseOrdre(BuildContext context) {
-  return showDialog(
-    barrierDismissible: true,
-    context: context,
-    builder: (BuildContext dialocontext) {
-      return AlertDialog(
-          title: Container(
-            decoration: BoxDecoration(
-                color: MyColors.secondary,
-                borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Ordre de transport",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: "Poppins",
-                    color: MyColors.light,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16),
-              ),
-            ),
-          ),
-          content: Container(
-              constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height *
-                      0.15), // Limiter la hauteur du dialog
-              child: Column(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(dialocontext).pop();
-
-                      Navigator.of(dialocontext).push(
-                        PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 500),
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return MesOrdres();
-                          },
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset(1.0, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(.4),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10, bottom: 10, left: 7, right: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Ordre sécurisé de Bodah",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12),
-                                ),
-                              ),
-                              Icon(
-                                Icons.lock_outline,
-                                size: 20,
-                                color: Colors.black.withOpacity(.5),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(dialocontext).pop();
-
-                      Navigator.of(dialocontext).push(
-                        PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 500),
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return MesImportOrdres();
-                          },
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset(1.0, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(.4),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10, bottom: 10, left: 7, right: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Ordre d'import & export",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12),
-                                ),
-                              ),
-                              Icon(
-                                Icons.flight,
-                                size: 20,
-                                color: Colors.black.withOpacity(.5),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )));
-    },
-  );
 }

@@ -6,7 +6,6 @@ import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/expeditions.dart';
 import 'package:bodah/modals/letrre_voyage.dart';
 import 'package:bodah/modals/tarifications.dart';
-import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +20,7 @@ import '../../../../modals/unites.dart';
 import '../../../../modals/users.dart';
 import '../../../../modals/villes.dart';
 import '../../../../providers/api/api_data.dart';
+import '../annonces/details/index.dart';
 
 class HomeTransporteur extends StatelessWidget {
   const HomeTransporteur({super.key});
@@ -456,9 +456,8 @@ class HomeTransporteur extends StatelessWidget {
                                               Animation<double> animation,
                                               Animation<double>
                                                   secondaryAnimation) {
-                                            return DetailAnnonce(
-                                              id: annonce.id,
-                                            );
+                                            return DetailsMarchandises(
+                                                id: annonce.id);
                                           },
                                           transitionsBuilder:
                                               (BuildContext context,
@@ -466,11 +465,10 @@ class HomeTransporteur extends StatelessWidget {
                                                   Animation<double>
                                                       secondaryAnimation,
                                                   Widget child) {
-                                            return SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: Offset(1.0, 0.0),
-                                                end: Offset.zero,
-                                              ).animate(animation),
+                                            return ScaleTransition(
+                                              scale: Tween<double>(
+                                                      begin: 0.0, end: 1.0)
+                                                  .animate(animation),
                                               child: child,
                                             );
                                           },
@@ -511,8 +509,9 @@ class HomeTransporteur extends StatelessWidget {
                                                                       20.0),
                                                           child:
                                                               CachedNetworkImage(
-                                                            imageUrl:
-                                                                "https://test.bodah.bj/storage/${pictures.last.image_path}",
+                                                            imageUrl: pictures
+                                                                .last
+                                                                .image_path,
                                                             fit: BoxFit.cover,
                                                             height: 80,
                                                             progressIndicatorBuilder:
