@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'dart:async';
+
+import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../functions/function.dart';
-import '../../wrappers/wrapper.dart';
 
 class AccountCreated extends StatelessWidget {
   const AccountCreated({Key? key});

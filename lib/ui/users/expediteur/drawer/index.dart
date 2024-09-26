@@ -13,10 +13,12 @@ import 'package:provider/provider.dart';
 
 import '../../../../colors/color.dart';
 import '../../../../functions/function.dart';
+import '../../../../modals/rules.dart';
 import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
+import '../../settings/index.dart';
 import '../marchandises/dashboard/index.dart';
 
 class DrawerExpediteur extends StatelessWidget {
@@ -28,6 +30,7 @@ class DrawerExpediteur extends StatelessWidget {
     final provider = Provider.of<ProvDrawExpediteur>(context);
     int current_index = provider.current_index;
     final service = Provider.of<DBServices>(context);
+    Rules? rule = api_provider.rule;
 
     return Drawer(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
@@ -54,7 +57,7 @@ class DrawerExpediteur extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Bodah",
+                  rule!.nom,
                   style: TextStyle(
                     color: MyColors.secondary,
                     fontWeight: FontWeight.bold,
@@ -463,7 +466,7 @@ class DrawerExpediteur extends StatelessWidget {
             child: ListTile(
               trailing: IconButton(
                   onPressed: () async {
-                    String statut_code = await service.darkMode();
+                    String statut_code = await service.darkMode(api_provider);
                     if (statut_code == "202") {
                       showCustomSnackBar(context, "Une erreur s'est produite",
                           Colors.redAccent);
@@ -473,7 +476,6 @@ class DrawerExpediteur extends StatelessWidget {
                           "Vérifiez votre connection  internet",
                           Colors.redAccent);
                     } else {
-                      await api_provider.InitUser();
                       showCustomSnackBar(
                           context, "Effectué avec succès", Colors.green);
                     }
@@ -506,6 +508,28 @@ class DrawerExpediteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(8);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return MySettings();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.settings,

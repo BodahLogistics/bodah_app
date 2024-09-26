@@ -16,6 +16,22 @@ class ProvSignUp with ChangeNotifier {
     notifyListeners();
   }
 
+  void change_user_data(Users? user, Pays pay, Villes ville) {
+    _adresse = user!.adresse ?? "";
+    _nom = user.name;
+    _email = user.email ?? "";
+    _pay = pay;
+    _ville = ville;
+    notifyListeners();
+  }
+
+  String _last_password = "";
+  String get last_password => _last_password;
+  void change_last_password(String? value) {
+    _last_password = value!;
+    notifyListeners();
+  }
+
   Rules _rule = Rules(id: 0, nom: "");
   Statuts _statut = Statuts(id: 0, name: "");
 
@@ -48,6 +64,7 @@ class ProvSignUp with ChangeNotifier {
   }
 
   String _nom = "";
+  String _email = "";
   String _adresse = "";
   String _telephone = "";
   String _password = "";
@@ -62,6 +79,7 @@ class ProvSignUp with ChangeNotifier {
   }
 
   String get nom => _nom;
+  String get email => _email;
   String get adresse => _adresse;
   String get telephone => _telephone;
   String get password => _password;
@@ -71,6 +89,11 @@ class ProvSignUp with ChangeNotifier {
 
   void change_nom(String? value) {
     _nom = value!;
+    notifyListeners();
+  }
+
+  void change_email(String? value) {
+    _email = value!;
     notifyListeners();
   }
 

@@ -1,20 +1,40 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_interpolation_to_compose_strings, deprecated_member_use, use_build_context_synchronously
 
+import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../colors/color.dart';
 import '../../functions/function.dart';
 import '../../modals/users.dart';
+import '../../providers/api/api_data.dart';
+import '../../services/data_base_service.dart';
 
-class AccountNoRule extends StatelessWidget {
+class AccountNoRule extends StatefulWidget {
   const AccountNoRule({Key? key});
+
+  @override
+  State<AccountNoRule> createState() => _AccountNoRuleState();
+}
+
+class _AccountNoRuleState extends State<AccountNoRule> {
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ApiProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_delete(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
-    final user = Provider.of<Users>(context);
-
+    final apiProvider = Provider.of<ApiProvider>(context);
+    final service = Provider.of<DBServices>(context);
+    bool delete = apiProvider.delete;
+    Users? user = apiProvider.user;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
@@ -30,7 +50,7 @@ class AccountNoRule extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "Compte non-opérationnel",
+              "Compte non-opérationne l",
               style: TextStyle(
                 fontSize: 25,
                 color: function.convertHexToColor("#222523"),
@@ -42,7 +62,7 @@ class AccountNoRule extends StatelessWidget {
               padding: const EdgeInsets.only(top: 18),
               child: Text(
                 "Bonjour " +
-                    user.name +
+                    user!.name +
                     " !" +
                     "\n Votre compte chez Senna Finance a été créé avec suucès certes, mais vous n'avez pas les droits recquis pour utiliser cette application",
                 textAlign: TextAlign.center,
@@ -64,30 +84,29 @@ class AccountNoRule extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       backgroundColor: MyColors.secondary),
-                  onPressed: () async {
-                    String phoneNumber = "+22940349975";
-                    final url = 'https://wa.me/$phoneNumber';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      final snackBar = SnackBar(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.height * 0.8,
-                            left: MediaQuery.of(context).size.width * 0.5,
-                            right: 20),
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
-                          "Vous devez vous connecter à internet. Une erreur s'est produite",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Poppins"),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
+                  onPressed: delete
+                      ? null
+                      : () async {
+                          apiProvider.change_delete(true);
+                          String statut = await service.logout();
+                          if (statut == "202") {
+                            showCustomSnackBar(context,
+                                "Une erreur s'est produite", Colors.redAccent);
+                            apiProvider.change_delete(false);
+                          } else if (statut == "500") {
+                            showCustomSnackBar(
+                                context,
+                                "Vérifiez votre connection  internet",
+                                Colors.redAccent);
+                          } else {
+                            apiProvider.change_delete(false);
+                            String phoneNumber = "+22940349975";
+                            final url = 'https://wa.me/$phoneNumber';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            }
+                          }
+                        },
                   child: Text(
                     "Contactez l'administrateur",
                     textAlign: TextAlign.center,

@@ -2,22 +2,20 @@
 import 'dart:convert';
 
 class Users {
-  final int id;
-  final String name;
-  final String? prenom;
-  final String? email;
-  final String? adresse;
-  final int country_id;
-  final int? city_id;
-  final String telephone;
-  final int deleted;
-  final int is_verified;
-  final int is_active;
-  final int dark_mode;
+  int id;
+  String name;
+  String? email;
+  String? adresse;
+  int country_id;
+  int? city_id;
+  String telephone;
+  int deleted;
+  int is_verified;
+  int is_active;
+  int dark_mode;
   Users({
     required this.id,
     required this.name,
-    this.prenom,
     this.email,
     this.adresse,
     required this.country_id,
@@ -32,7 +30,6 @@ class Users {
   Users copyWith({
     int? id,
     String? name,
-    String? prenom,
     String? email,
     String? adresse,
     int? country_id,
@@ -46,7 +43,6 @@ class Users {
     return Users(
       id: id ?? this.id,
       name: name ?? this.name,
-      prenom: prenom ?? this.prenom,
       email: email ?? this.email,
       adresse: adresse ?? this.adresse,
       country_id: country_id ?? this.country_id,
@@ -63,7 +59,6 @@ class Users {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'prenom': prenom,
       'email': email,
       'adresse': adresse,
       'country_id': country_id,
@@ -80,11 +75,12 @@ class Users {
     return Users(
       id: map['id'] as int,
       name: map['name'] as String,
-      prenom: map['prenom'] != null ? map['prenom'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       adresse: map['adresse'] != null ? map['adresse'] as String : null,
-      country_id: map['country_id'] as int,
-      city_id: map['city_id'] != null ? map['city_id'] as int : null,
+      country_id: int.parse(map['country_id'].toString()), // Conversion en int
+      city_id: map['city_id'] != null
+          ? int.parse(map['city_id'].toString())
+          : null, // Conversion en int
       telephone: map['telephone'] as String,
       deleted: map['deleted'] as int,
       is_verified: map['is_verified'] as int,
@@ -100,7 +96,7 @@ class Users {
 
   @override
   String toString() {
-    return 'Users(id: $id, name: $name, prenom: $prenom, email: $email, adresse: $adresse, country_id: $country_id, city_id: $city_id, telephone: $telephone, deleted: $deleted, is_verified: $is_verified, is_active: $is_active, dark_mode: $dark_mode)';
+    return 'Users(id: $id, name: $name, email: $email, adresse: $adresse, country_id: $country_id, city_id: $city_id, telephone: $telephone, deleted: $deleted, is_verified: $is_verified, is_active: $is_active, dark_mode: $dark_mode)';
   }
 
   @override
@@ -109,7 +105,6 @@ class Users {
 
     return other.id == id &&
         other.name == name &&
-        other.prenom == prenom &&
         other.email == email &&
         other.adresse == adresse &&
         other.country_id == country_id &&
@@ -125,7 +120,6 @@ class Users {
   int get hashCode {
     return id.hashCode ^
         name.hashCode ^
-        prenom.hashCode ^
         email.hashCode ^
         adresse.hashCode ^
         country_id.hashCode ^

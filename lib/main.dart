@@ -28,6 +28,9 @@ import 'package:bodah/providers/users/transporteur/dashboard/prov_change.dart';
 import 'package:bodah/providers/users/transporteur/drawer/index.dart';
 import 'package:bodah/providers/users/transporteur/trajets/add.dart';
 import 'package:bodah/providers/users/transporteur/trajets/camions/add.dart';
+import 'package:bodah/ui/account/account_deleted.dart';
+import 'package:bodah/ui/account/account_disabled.dart';
+import 'package:bodah/ui/auth/sign_up.dart';
 import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -185,7 +188,12 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        routes: {"/login": (context) => SignIn()},
+        routes: {
+          "/login": (context) => SignIn(),
+          "/register": (context) => SignUp(),
+          "/disable": (context) => AccountDisabled(),
+          "/delete": (context) => AccountDeleted()
+        },
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

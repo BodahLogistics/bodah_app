@@ -3852,7 +3852,7 @@ class DBServices {
     }
   }
 
-  Future<String> darkMode() async {
+  Future<String> darkMode(ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}darkmode";
@@ -3862,6 +3862,21 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['data'];
+
+          Users user = Users.fromMap(userMap);
+
+          provider.setUser(user);
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('user', jsonEncode(userMap));
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4255,6 +4270,215 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> UpdateAccount(String name, Pays pay, Villes city, String email,
+      String adresse, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/update";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['email'] = email
+        ..fields['address'] = adresse
+        ..fields['name'] = name
+        ..fields['city'] = city.id.toString()
+        ..fields['country'] = pay.id.toString();
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['data'];
+
+          Users user = Users.fromMap(userMap);
+
+          provider.setUser(user);
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('user', jsonEncode(userMap));
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> ChangePhoneNumber(
+      String telephone, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/send/code/telephone";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['phone_number'] = telephone;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> ValidateChangePhoneNumber(
+      String telephone, String code, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/change/telephone";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['phone_number'] = telephone
+        ..fields['code'] = code;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['data'];
+
+          Users user = Users.fromMap(userMap);
+
+          provider.setUser(user);
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('user', jsonEncode(userMap));
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> ChangePassword(String last_password, String password,
+      String confirm_password, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/change/password";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['password'] = last_password
+        ..fields['new_password'] = password
+        ..fields['confirm_password'] = confirm_password;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> DisableAccount(String password, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/disable";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['password'] = password;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['data'];
+
+          Users user = Users.fromMap(userMap);
+
+          provider.setUser(user);
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('user', jsonEncode(userMap));
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> DeleteAccount(String password, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/account/delete";
+      final uri = Uri.parse(url);
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        })
+        ..fields['password'] = password;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['data'];
+
+          Users user = Users.fromMap(userMap);
+
+          provider.setUser(user);
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('user', jsonEncode(userMap));
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -5510,8 +5734,8 @@ class DBServices {
     }
   }
 
-  Future<String> validateAccount(String code, Users user) async {
-    var url = "${api_url}account/validate/" + user.id.toString();
+  Future<String> validateAccount(String code, ApiProvider provider) async {
+    var url = "${api_url}account/validate";
     final uri = Uri.parse(url);
     final response = await http.post(uri, headers: {
       'API-KEY': api_key,
@@ -5519,6 +5743,30 @@ class DBServices {
     }, body: {
       'code': code,
     });
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['data'] is Map<String, dynamic>) {
+        Map<String, dynamic> userMap = data['data'];
+
+        Users user = Users.fromMap(userMap);
+
+        provider.setUser(user);
+
+        // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+        await secure.writeSecureData('user', jsonEncode(userMap));
+      }
+    }
+
+    return response.statusCode.toString();
+  }
+
+  Future<String> ResendCodeForValidationAccount() async {
+    var url = "${api_url}account/resend/code";
+    final uri = Uri.parse(url);
+    final response = await http
+        .post(uri, headers: {'API-KEY': api_key, 'AUTH-TOKEN': auth_token});
 
     return response.statusCode.toString();
   }

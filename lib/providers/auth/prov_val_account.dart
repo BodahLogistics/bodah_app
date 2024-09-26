@@ -77,7 +77,15 @@ class ProvValiAccount with ChangeNotifier {
     _third = "";
     _fourth = "";
     _fifth = "";
+    _telephone = "";
     _sixth = "";
+    notifyListeners();
+  }
+
+  String _telephone = "";
+  String get telephone => _telephone;
+  void change_telephone(String? value) {
+    _telephone = value!;
     notifyListeners();
   }
 }

@@ -5,20 +5,34 @@ import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../colors/color.dart';
-import '../../functions/function.dart';
-import '../../providers/api/api_data.dart';
-import '../../providers/auth/prov_val_account.dart';
-import '../account/account_created.dart';
-import 'verification_opt.dart';
+import '../../../../colors/color.dart';
+import '../../../../functions/function.dart';
+import '../../../../modals/rules.dart';
+import '../../../../modals/users.dart';
+import '../../../../providers/api/api_data.dart';
+import '../../../../providers/auth/prov_val_account.dart';
+import '../../../auth/verification_opt.dart';
+import '../../expediteur/drawer/index.dart';
+import '../../transporteur/drawer/index.dart';
 
-class ValidateAccount extends StatelessWidget {
-  const ValidateAccount({
+class VValidatePhoneNumber extends StatefulWidget {
+  const VValidatePhoneNumber({
     super.key,
-    required this.telephone,
   });
 
-  final String telephone;
+  @override
+  State<VValidatePhoneNumber> createState() => _VValidatePhoneNumberState();
+}
+
+class _VValidatePhoneNumberState extends State<VValidatePhoneNumber> {
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProvValiAccount>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.change_affiche(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +46,40 @@ class ValidateAccount extends StatelessWidget {
     String sixth = provider.sixth;
     bool affiche = provider.affiche;
     final service = Provider.of<DBServices>(context);
-    final apiProvider = Provider.of<ApiProvider>(context);
+    String telephone = provider.telephone;
+
+    final api_provider = Provider.of<ApiProvider>(context);
+    Users? user = api_provider.user;
+    Rules? rule = api_provider.rule;
 
     return Scaffold(
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
+      drawer: rule!.nom == "Transporteur"
+          ? DrawerTransporteur()
+          : DrawerExpediteur(),
+      appBar: AppBar(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        iconTheme: IconThemeData(
+            color: user.dark_mode == 1 ? MyColors.light : Colors.black),
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Validation",
+          style: TextStyle(
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Poppins",
+              fontSize: 14),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              ))
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
@@ -60,10 +105,10 @@ class ValidateAccount extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Entrez le code de vérification envoyé par sms au numéro " +
-                      telephone.substring(0, 5) +
+                      user.telephone.substring(0, 5) +
                       "****" +
-                      telephone.substring(
-                          telephone.length - 4, telephone.length),
+                      user.telephone.substring(
+                          user.telephone.length - 4, telephone.length),
                   style: TextStyle(
                       color: function.convertHexToColor("#79747E"),
                       fontFamily: "Poppins",
@@ -115,20 +160,23 @@ class ValidateAccount extends StatelessWidget {
                                   "Validation du compte");
                             } else {
                               provider.change_affiche(true);
-                              String statut_code = await service
-                                  .validateAccount(code_taped, apiProvider);
+                              String statut_code =
+                                  await service.ValidateChangePhoneNumber(
+                                      telephone, code_taped, api_provider);
 
-                              if (statut_code == "404") {
+                              if (statut_code == "401") {
                                 provider.change_affiche(false);
-                                showCustomSnackBar(context,
-                                    "Compte non retrouvé", Colors.redAccent);
+                                showCustomSnackBar(
+                                    context,
+                                    "Nouveau numéro de téléphone déjà utilisé",
+                                    Colors.redAccent);
                               } else if (statut_code == "500") {
                                 provider.change_affiche(false);
                                 showCustomSnackBar(
                                     context,
                                     "Une erreur s'est produite. Vérifier votre connection internet et réessayer",
                                     Colors.redAccent);
-                              } else if (statut_code == "101") {
+                              } else if (statut_code == "01") {
                                 provider.change_affiche(false);
                                 showCustomSnackBar(
                                     context,
@@ -140,36 +188,19 @@ class ValidateAccount extends StatelessWidget {
                                     context,
                                     "Le code saisi est invalid",
                                     Colors.redAccent);
+                              } else if (statut_code == "422") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(context,
+                                    "Erreur de validation", Colors.redAccent);
                               } else {
                                 provider.change_affiche(false);
                                 provider.reset();
                                 showCustomSnackBar(
                                     context,
-                                    "Votre compte a été validé avec succès",
+                                    "Votre numéro de téléphone à été changé avec succès",
                                     Colors.green);
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    pageBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation) {
-                                      return AccountCreated();
-                                    },
-                                    transitionsBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation,
-                                        Widget child) {
-                                      return SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
+
+                                Navigator.of(context).pop();
                               }
                             }
                           },
@@ -257,78 +288,6 @@ Future<dynamic> DisplayFirst(BuildContext context, String element) {
           ),
         ),
       );
-    },
-  );
-}
-
-Future<dynamic> ShowErrorMessage(
-    BuildContext context, String message, String title) {
-  return showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext dialocontext) {
-      final function = Provider.of<Functions>(dialocontext);
-      return AlertDialog(
-        title: Text(
-          title,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(
-              color: function.convertHexToColor("#79747E"),
-              fontFamily: "Poppins",
-              fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          Container(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.secondary),
-                onPressed: () {
-                  Navigator.of(dialocontext).pop();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Fermez".toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Poppins",
-                    ),
-                  ),
-                )),
-          )
-        ],
-      );
-    },
-  );
-}
-
-Future<dynamic> ShowErrorCircular(BuildContext context, bool value) {
-  return showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext dialocontext) {
-      if (!value) {
-        Navigator.of(dialocontext).pop();
-      }
-      return AlertDialog(
-          title: Text(
-            "Traitement de l'opération",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          content: ListBody(
-            children: [
-              Container(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    color: MyColors.secondary,
-                  ))
-            ],
-          ));
     },
   );
 }

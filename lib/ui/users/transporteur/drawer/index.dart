@@ -17,6 +17,7 @@ import '../../../../providers/api/api_data.dart';
 import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/drawer/index.dart';
+import '../../settings/index.dart';
 import '../annonces/list.dart';
 import '../chauffeur/list.dart';
 
@@ -432,7 +433,7 @@ class DrawerTransporteur extends StatelessWidget {
             child: ListTile(
               trailing: IconButton(
                   onPressed: () async {
-                    String statut_code = await service.darkMode();
+                    String statut_code = await service.darkMode(api_provider);
                     if (statut_code == "202") {
                       showCustomSnackBar(context, "Une erreur s'est produite",
                           Colors.redAccent);
@@ -475,6 +476,28 @@ class DrawerTransporteur extends StatelessWidget {
           ListTile(
             onTap: () {
               provider.change_index(8);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return MySettings();
+                  },
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
             leading: Icon(
               Icons.settings,
