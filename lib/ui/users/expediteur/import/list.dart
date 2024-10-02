@@ -35,7 +35,7 @@ class MesImports extends StatelessWidget {
     List<Cargaison> cargaison = api_provider.cargaisons;
     List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;
-    List<Position> positions = api_provider.positions;
+    List<Positions> positions = api_provider.positions;
     List<TransportMode> transport_modes = api_provider.transport_modes;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
@@ -123,7 +123,7 @@ class MesImports extends StatelessWidget {
                         function.cargaison_client_chargement(
                             chargements, cargaison_clients.first);
 
-                    Position position = function.cargaison_client_position(
+                    Positions position = function.cargaison_client_position(
                         positions, cargaison_clients.first);
 
                     Pays pay_depart = function.pay(pays, position.pay_dep_id);

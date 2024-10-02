@@ -18,7 +18,6 @@ import '../../../../../../../modals/marchandises.dart';
 import '../../../../../../../modals/pays.dart';
 import '../../../../../../../modals/tarifications.dart';
 import '../../../../../../../modals/type_chargements.dart';
-import '../../../../../../../modals/unites.dart';
 import '../../../../../../../modals/users.dart';
 import '../../../../../../../modals/villes.dart';
 import '../../../../../../../providers/api/api_data.dart';
@@ -69,7 +68,7 @@ class _ListMarchsState extends State<ListMarchs> {
         function.expediteur_entreprise(entreprises, expediteur.id);
     Users expediteur_user = function.user(users, expediteur.user_id);
     List<TypeChargements> type_chargements = api_provider.type_chargements;
-    List<Unites> unites = api_provider.unites;
+
     final calculatrice = Provider.of<ProvCalculator>(context);
     TypeChargements type_cahrgement = function.type_chargement(
         type_chargements, marchandise.type_chargement_id);
@@ -86,7 +85,7 @@ class _ListMarchsState extends State<ListMarchs> {
     Entreprises destinataire_entreprise =
         function.destinataire_entreprise(entreprises, destinataire.id);
     Users destinataire_user = function.user(users, destinataire.user_id);
-    Unites unite = function.unite(unites, marchandise.unite_id);
+
     bool loading = api_provider.loading;
 
     return loading
@@ -765,9 +764,7 @@ class _ListMarchsState extends State<ListMarchs> {
                                                     fontSize: 10),
                                               ),
                                               Text(
-                                                marchandise.poids.toString() +
-                                                    " " +
-                                                    unite.name.toUpperCase(),
+                                                marchandise.poids,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
@@ -1261,7 +1258,6 @@ class _ListMarchsState extends State<ListMarchs> {
                                                           .toStringAsFixed(0));
                                                   provider.change_marchandise(
                                                       marchandise,
-                                                      unite,
                                                       tarification,
                                                       pay_depart,
                                                       pay_dest,

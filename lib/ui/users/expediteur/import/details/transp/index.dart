@@ -48,7 +48,7 @@ class _ListTransporteurState extends State<ListTransporteur> {
     List<Camions> camions = api_provider.camions;
     List<Pieces> pieces = api_provider.pieces;
     List<Conducteur> conducteurs = api_provider.conducteurs;
-    List<Position> positions = api_provider.positions;
+    List<Positions> positions = api_provider.positions;
     List<Tarif> tarifs = api_provider.tarifs;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
@@ -78,8 +78,9 @@ class _ListTransporteurState extends State<ListTransporteur> {
                     itemBuilder: (context, index) {
                       ChargementEffectue chargement_effectue =
                           chargement_effectues[index];
-                      Position position = function.chargement_effectue_position(
-                          positions, chargement_effectue);
+                      Positions position =
+                          function.chargement_effectue_position(
+                              positions, chargement_effectue);
                       Pays pay_depart = function.pay(pays, position.pay_dep_id);
                       Pays pay_dest = function.pay(pays, position.pay_liv_id);
                       Villes ville_dep =

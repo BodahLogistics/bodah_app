@@ -5,7 +5,6 @@ import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/souscriptions.dart';
 import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/type_chargements.dart';
-import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/wrappers/load.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -49,7 +48,6 @@ class _ListSouscriptionState extends State<ListSouscription> {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<TypeChargements> type_chargements = api_provider.type_chargements;
-    List<Unites> unites = api_provider.unites;
     List<Tarifications> tarifications = api_provider.tarifications;
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     List<Users> users = api_provider.users;
@@ -118,8 +116,7 @@ class _ListSouscriptionState extends State<ListSouscription> {
                         TypeChargements type_chargement =
                             function.type_chargement(type_chargements,
                                 marchandise.type_chargement_id);
-                        Unites unite =
-                            function.unite(unites, marchandise.unite_id);
+
                         Tarifications tarif = function.marchandise_tarification(
                             tarifications, marchandise.id);
                         Transporteurs transporteur = function.transporteur(
@@ -358,9 +355,7 @@ class _ListSouscriptionState extends State<ListSouscription> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            marchandise.poids.toString() +
-                                                " " +
-                                                unite.name,
+                                            marchandise.poids,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -397,9 +392,7 @@ class _ListSouscriptionState extends State<ListSouscription> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            function.formatAmount(
-                                                    tarif.prix_transport) +
-                                                " XOF",
+                                            tarif.prix_transport,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(

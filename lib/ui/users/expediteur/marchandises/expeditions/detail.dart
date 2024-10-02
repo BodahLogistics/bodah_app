@@ -57,16 +57,16 @@ class _DetailExpeditionState extends State<DetailExpedition> {
     Pieces piece = function.data_piece(pieces, transporteur.id, "Transporteur");
     StatutExpeditions statut =
         function.statut(statuts, expedition.statu_expedition_id);
-    int quantite = 0;
-    double poids = 0;
+    String quantite = "";
+    String poids = "";
     double montant = 0;
     double accompte = 0;
     List<Charge> data_charges =
         function.expedition_charges(charges, expedition);
     if (data_charges.isNotEmpty) {
       for (var i = 0; i < data_charges.length; i++) {
-        quantite += data_charges[i].quantite;
-        poids += data_charges[i].poids;
+        quantite = data_charges[i].quantite;
+        poids = data_charges[i].poids;
         Tarif tarif = function.charge_tarif(tarifs, data_charges[i]);
         montant += tarif.montant;
         accompte += tarif.accompte;

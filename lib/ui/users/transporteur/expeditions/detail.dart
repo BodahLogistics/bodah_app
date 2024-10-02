@@ -58,8 +58,8 @@ class _DetailChargementState extends State<DetailChargement> {
     Pieces piece = function.data_piece(pieces, transporteur.id, "Transporteur");
     StatutExpeditions statut =
         function.statut(statuts, expedition.statu_expedition_id);
-    int quantite = 0;
-    double poids = 0;
+    String quantite = "";
+    String poids = "";
     double montant = 0;
     double accompte = 0;
     List<Charge> data_charges =

@@ -46,7 +46,7 @@ class _ListCargaisonState extends State<ListCargaison> {
     List<Client> clients = api_provider.clients;
     List<CargaisonClient> cargaisons_clients = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;
-    List<Position> positions = api_provider.positions;
+    List<Positions> positions = api_provider.positions;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     Users? user = api_provider.user;
@@ -90,7 +90,7 @@ class _ListCargaisonState extends State<ListCargaison> {
                   CargaisonClient cargaison_client = cargaison_clients.first;
                   Chargement chargement = function.cargaison_client_chargement(
                       chargements, cargaison_client);
-                  Position position = function.cargaison_client_position(
+                  Positions position = function.cargaison_client_position(
                       positions, cargaison_client);
                   Pays pay_depart = function.pay(pays, position.pay_dep_id);
                   Pays pay_dest = function.pay(pays, position.pay_liv_id);

@@ -40,6 +40,7 @@ import 'package:bodah/providers/auth/prov_sign_up.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../modals/actualite.dart';
 import '../../modals/annonces.dart';
 import '../../modals/arrondissements.dart';
 import '../../modals/autre_docs.dart';
@@ -67,6 +68,7 @@ import '../../modals/localisations.dart';
 import '../../modals/lta.dart';
 import '../../modals/marchandise_transporteur.dart';
 import '../../modals/ordre_transport.dart';
+import '../../modals/paiement_solde.dart';
 import '../../modals/path.dart';
 import '../../modals/pays.dart';
 import '../../modals/positions.dart';
@@ -223,8 +225,11 @@ class ApiProvider with ChangeNotifier {
   List<CargaisonClient> get cargaison_clients => _cargaison_clients;
   List<Chargement> _chargements = [];
   List<Chargement> get chargements => _chargements;
-  List<Position> _positions = [];
-  List<Position> get positions => _positions;
+  List<PaiementSolde> _paiement_soldes = [];
+  List<PaiementSolde> get paiement_soldes => _paiement_soldes;
+
+  List<Positions> _positions = [];
+  List<Positions> get positions => _positions;
   List<Tarif> _tarifs = [];
   List<Tarif> get tarifs => _tarifs;
   List<Conducteur> _conducteurs = [];
@@ -434,6 +439,9 @@ class ApiProvider with ChangeNotifier {
   List<Charge> _charges = [];
   List<Charge> get charges => _charges;
 
+  List<Actualites> _actualites = [];
+  List<Actualites> get actualites => _actualites;
+
   List<Souscriptions> _souscriptions = [];
   List<Souscriptions> get souscriptions => _souscriptions;
 
@@ -466,38 +474,43 @@ class ApiProvider with ChangeNotifier {
       _pays = response_pays;
 
       if (_user != null && _rule != null) {
-        if (_rule!.nom == "Expéditeur") {
-          final response_unites = await apiService.getUnites();
-          _unites = response_unites;
-          final response_devises = await apiService.getDevises();
-          _devises = response_devises;
-          final response_transport_mode = await apiService.getTransportMode();
-          _transport_modes = response_transport_mode;
-          await InitAnnonce();
-          await InitImport();
-        } else {
-          await InitTransporteurAnnonce();
-          final response_bordereaux =
-              await apiService.getTransporteurBordereaux();
-          _bordereaux = response_bordereaux;
-          final response_contrat = await apiService.getTransporteurContrat();
-          _contrats = response_contrat;
-          final response_trajet = await apiService.getTrajet();
-          _trajets = response_trajet;
-          final response_type_camions = await apiService.getTypeCamions();
-          _type_camions = response_type_camions;
-          final response_transporteur = await apiService.getTransporteur();
-          _transporteurs = response_transporteur;
-          final response_vehicule = await apiService.getTransporteurCamions();
-          _camions = response_vehicule;
-        }
+        if (user!.is_active == 1 &&
+            user!.is_verified == 1 &&
+            user!.deleted == 0) {
+          if (_rule!.nom == "Expéditeur") {
+            final response_unites = await apiService.getUnites();
+            _unites = response_unites;
+            final response_devises = await apiService.getDevises();
+            _devises = response_devises;
+            final response_transport_mode = await apiService.getTransportMode();
+            _transport_modes = response_transport_mode;
+            await InitAnnonce();
+            await InitImport();
+          } else {
+            await InitTransporteurAnnonce();
+            final response_bordereaux =
+                await apiService.getTransporteurBordereaux();
+            _bordereaux = response_bordereaux;
+            final response_contrat = await apiService.getTransporteurContrat();
+            _contrats = response_contrat;
+            final response_trajet = await apiService.getTrajet();
+            _trajets = response_trajet;
+            final response_type_camions = await apiService.getTypeCamions();
+            _type_camions = response_type_camions;
+            final response_transporteur = await apiService.getTransporteur();
+            _transporteurs = response_transporteur;
+            final response_vehicule = await apiService.getTransporteurCamions();
+            _camions = response_vehicule;
+          }
 
-        final response_type_chargement = await apiService.getTypeChargements();
-        _type_chargements = response_type_chargement;
-        final response_unite = await apiService.getUnites();
-        _unites = response_unite;
-        final response_statuts = await apiService.getStatutExpeditions();
-        _statut_expeditions = response_statuts;
+          final response_type_chargement =
+              await apiService.getTypeChargements();
+          _type_chargements = response_type_chargement;
+          final response_unite = await apiService.getUnites();
+          _unites = response_unite;
+          final response_statuts = await apiService.getStatutExpeditions();
+          _statut_expeditions = response_statuts;
+        }
       } else {
         final response_role = await apiService.getRules();
         _rules = response_role;
@@ -524,6 +537,14 @@ class ApiProvider with ChangeNotifier {
     _pieces = response_piece;
     final response_transporteur = await apiService.getTransporteur();
     _transporteurs = response_transporteur;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitActualites() async {
+    _isLoading = true;
+    final response = await apiService.getActualites();
+    _actualites = response;
     _isLoading = false;
     notifyListeners();
   }
@@ -670,6 +691,8 @@ class ApiProvider with ChangeNotifier {
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
     _camions = response_camions;
+    final response_soldes = await apiService.getPaiementSoldes();
+    _paiement_soldes = response_soldes;
     _isLoading = false;
     notifyListeners();
   }
@@ -688,6 +711,8 @@ class ApiProvider with ChangeNotifier {
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getTransporteurCamions();
     _camions = response_camions;
+    final response_soldes = await apiService.getTransporteurPaiementSoldes();
+    _paiement_soldes = response_soldes;
     _isLoading = false;
     notifyListeners();
   }

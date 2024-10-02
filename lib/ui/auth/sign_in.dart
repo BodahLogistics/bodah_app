@@ -3,6 +3,7 @@
 import 'package:bodah/wrappers/wrapper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
@@ -176,9 +177,19 @@ class _SignInState extends State<SignIn> {
                             ? null
                             : () async {
                                 provider.change_affiche(true);
+                                String device = await function.getDeviceModel();
+                                Position? position =
+                                    await function.getLocation();
 
                                 String statut_code = await service.login(
-                                    phone_number, password, api_provider);
+                                    phone_number,
+                                    password,
+                                    api_provider,
+                                    device,
+                                    position?.longitude ?? 0.0,
+                                    position?.latitude ?? 0.0,
+                                    "",
+                                    "");
 
                                 if (statut_code == "422") {
                                   provider.change_affiche(false);

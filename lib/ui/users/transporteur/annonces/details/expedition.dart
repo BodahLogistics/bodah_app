@@ -74,8 +74,8 @@ class _MesChargementsState extends State<MesChargements> {
                         Expeditions expedition = expeditions[index];
                         StatutExpeditions statut = function.statut(
                             statuts, expedition.statu_expedition_id);
-                        int quantite = 0;
-                        double poids = 0;
+                        String quantite = '';
+                        String poids = "";
                         double montant = 0;
                         double accompte = 0;
                         Transporteurs transporteur = function.transporteur(

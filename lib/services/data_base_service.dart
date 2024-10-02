@@ -31,6 +31,7 @@ import 'package:path/path.dart' as path; //
 import 'package:path_provider/path_provider.dart';
 
 import '../apis/bodah/infos.dart';
+import '../modals/actualite.dart';
 import '../modals/annonce_colis.dart';
 import '../modals/annonce_transporteurs.dart';
 import '../modals/arrondissements.dart';
@@ -68,6 +69,7 @@ import '../modals/lta.dart';
 import '../modals/marchandise_transporteur.dart';
 import '../modals/marchandises.dart';
 import '../modals/ordre_transport.dart';
+import '../modals/paiement_solde.dart';
 import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/pieces.dart';
@@ -853,6 +855,29 @@ class DBServices {
     }
   }
 
+  Future<List<PaiementSolde>> getTransporteurPaiementSoldes() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/annonce/expedition/solde/pay";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => PaiementSolde.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<List<Annonces>> getTransporteurAnnonces() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -891,6 +916,29 @@ class DBServices {
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => AnnoncePhotos.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Actualites>> getActualites() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/actualites";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Actualites.fromMap(json)).toList();
       } else {
         return [];
       }
@@ -3294,7 +3342,7 @@ class DBServices {
     }
   }
 
-  Future<List<Position>> getPositions() async {
+  Future<List<Positions>> getPositions() async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/import/positions";
@@ -3308,12 +3356,12 @@ class DBServices {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Position.fromMap(json)).toList();
+        return jsonList.map((json) => Positions.fromMap(json)).toList();
       } else {
-        return <Position>[];
+        return [];
       }
     } catch (error) {
-      return <Position>[];
+      return [];
     }
   }
 
@@ -3737,6 +3785,29 @@ class DBServices {
     }
   }
 
+  Future<List<PaiementSolde>> getPaiementSoldes() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/solde/pay";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => PaiementSolde.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<List<Marchandises>> getMarchandises() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -3934,9 +4005,8 @@ class DBServices {
   Future<String> publishAnnonce(
       String date_chargement,
       String nom,
-      Unites unite,
-      double poids,
-      int quantite,
+      String poids,
+      String quantite,
       int tarif,
       Pays pay_exp,
       Pays pay_liv,
@@ -3945,7 +4015,8 @@ class DBServices {
       Villes ville_exp,
       Villes ville_liv,
       List<File> files,
-      ApiProvider provider) async {
+      ApiProvider provider,
+      String tarif_unitaire) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/publish";
@@ -3959,9 +4030,9 @@ class DBServices {
         })
         ..fields['date_chargement'] = date_chargement
         ..fields['nom'] = nom
-        ..fields['unite'] = unite.id.toString()
-        ..fields['poids'] = poids.toString()
-        ..fields['quantite'] = quantite.toString()
+        ..fields['tarif_unit'] = tarif_unitaire
+        ..fields['poids'] = poids
+        ..fields['quantite'] = quantite
         ..fields['tarif'] = tarif.toString()
         ..fields['city_exp'] = ville_exp.id.toString()
         ..fields['pays_exp'] = pay_exp.id.toString()
@@ -5349,9 +5420,8 @@ class DBServices {
   Future<String> UpdateMarchandise(
       String date_chargement,
       String nom,
-      Unites unite,
-      double poids,
-      int quantite,
+      String poids,
+      String quantite,
       int tarif,
       Pays pay_exp,
       Pays pay_liv,
@@ -5360,7 +5430,8 @@ class DBServices {
       Villes ville_exp,
       Villes ville_liv,
       List<File> files,
-      Marchandises marchandise) async {
+      Marchandises marchandise,
+      String tarif_unitaire) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/update/${marchandise.id}";
@@ -5373,9 +5444,9 @@ class DBServices {
         })
         ..fields['date_chargement'] = date_chargement
         ..fields['nom'] = nom
-        ..fields['unite'] = unite.id.toString()
-        ..fields['poids'] = poids.toString()
-        ..fields['quantite'] = quantite.toString()
+        ..fields['tarif_unit'] = tarif_unitaire
+        ..fields['poids'] = poids
+        ..fields['quantite'] = quantite
         ..fields['tarif'] = tarif.toString()
         ..fields['city_exp'] = ville_exp.id.toString()
         ..fields['pays_exp'] = pay_exp.id.toString()
@@ -5618,7 +5689,10 @@ class DBServices {
       Villes ville,
       Pays pay,
       ProvValiAccount provider,
-      ApiProvider api_provider) async {
+      ApiProvider api_provider,
+      double lat,
+      double long,
+      String device) async {
     try {
       var url = "${api_url}register";
       final uri = Uri.parse(url);
@@ -5626,6 +5700,9 @@ class DBServices {
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
       }, body: {
+        'device': device,
+        'lat': lat.toString(),
+        'long': long.toString(),
         'name': nom,
         'phone_number': number,
         'statut': statut.id.toString(), // Convertir en String
@@ -5680,7 +5757,14 @@ class DBServices {
   }
 
   Future<String> login(
-      String number, String password, ApiProvider provider) async {
+      String number,
+      String password,
+      ApiProvider provider,
+      String device,
+      double long,
+      double lat,
+      String city,
+      String country) async {
     try {
       var url = "${api_url}login";
       final uri = Uri.parse(url);
@@ -5688,6 +5772,11 @@ class DBServices {
         'API-KEY': api_key,
         'AUTH-TOKEN': auth_token
       }, body: {
+        'device': device,
+        'lat': lat.toString(),
+        'long': long.toString(),
+        'city': city,
+        'country': country,
         'phone_number': number,
         'password': password,
       });
@@ -5733,6 +5822,38 @@ class DBServices {
       return "204";
     }
   }
+
+
+  Future<String> createVisiteur(
+      
+      String device,
+      double long,
+      double lat,
+      String city,
+      String country) async {
+    try {
+      var url = "${api_url}create/visiteur";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'device': device,
+        'lat': lat.toString(),
+        'long': long.toString(),
+        'city': city,
+        'country': country,
+  
+      });
+
+    
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "204";
+    }
+  }
+
 
   Future<String> validateAccount(String code, ApiProvider provider) async {
     var url = "${api_url}account/validate";

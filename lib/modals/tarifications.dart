@@ -4,37 +4,33 @@
 import 'dart:convert';
 
 class Tarifications {
-  final int id;
-  final int marchandise_id;
-  final double prix_expedition;
-  final double prix_transport;
-  final double accompte;
-  final int? unite_tarif_id;
+  int id;
+  int marchandise_id;
+  double prix_expedition;
+  String prix_transport;
+  String tarif_unitaire;
 
   Tarifications({
     required this.id,
     required this.marchandise_id,
     required this.prix_expedition,
     required this.prix_transport,
-    required this.accompte,
-    this.unite_tarif_id,
+    required this.tarif_unitaire,
   });
 
   Tarifications copyWith({
     int? id,
     int? marchandise_id,
     double? prix_expedition,
-    double? prix_transport,
-    double? accompte,
-    int? unite_tarif_id,
+    String? prix_transport,
+    String? tarif_unitaire,
   }) {
     return Tarifications(
       id: id ?? this.id,
       marchandise_id: marchandise_id ?? this.marchandise_id,
       prix_expedition: prix_expedition ?? this.prix_expedition,
       prix_transport: prix_transport ?? this.prix_transport,
-      accompte: accompte ?? this.accompte,
-      unite_tarif_id: unite_tarif_id ?? this.unite_tarif_id,
+      tarif_unitaire: tarif_unitaire ?? this.tarif_unitaire,
     );
   }
 
@@ -44,8 +40,7 @@ class Tarifications {
       'marchandise_id': marchandise_id,
       'prix_expedition': prix_expedition,
       'prix_transport': prix_transport,
-      'accompte': accompte,
-      'unite_tarif_id': unite_tarif_id,
+      'tarif_unitaire': tarif_unitaire,
     };
   }
 
@@ -53,17 +48,9 @@ class Tarifications {
     return Tarifications(
       id: map['id'] as int,
       marchandise_id: map['marchandise_id'] as int,
-      prix_expedition: map['prix_expedition'] != null
-          ? double.tryParse(map['prix_expedition'].toString()) ?? 0.0
-          : 0.0, // Valeur par défaut si null
-      prix_transport: map['prix_transport'] != null
-          ? double.tryParse(map['prix_transport'].toString()) ?? 0.0
-          : 0.0, // Valeur par défaut si null
-      accompte: map['accompte'] != null
-          ? double.tryParse(map['accompte'].toString()) ?? 0.0
-          : 0.0, // Valeur par défaut si null
-      unite_tarif_id:
-          map['unite_tarif_id'] != null ? map['unite_tarif_id'] as int : null,
+      prix_expedition: map['prix_expedition'] as double,
+      prix_transport: map['prix_transport'] as String,
+      tarif_unitaire: map['tarif_unitaire'] as String,
     );
   }
 
@@ -74,7 +61,7 @@ class Tarifications {
 
   @override
   String toString() {
-    return 'Tarifications(id: $id, marchandise_id: $marchandise_id, prix_expedition: $prix_expedition, prix_transport: $prix_transport, accompte: $accompte, unite_tarif_id: $unite_tarif_id)';
+    return 'Tarifications(id: $id, marchandise_id: $marchandise_id, prix_expedition: $prix_expedition, prix_transport: $prix_transport, tarif_unitaire: $tarif_unitaire)';
   }
 
   @override
@@ -85,8 +72,7 @@ class Tarifications {
         other.marchandise_id == marchandise_id &&
         other.prix_expedition == prix_expedition &&
         other.prix_transport == prix_transport &&
-        other.accompte == accompte &&
-        other.unite_tarif_id == unite_tarif_id;
+        other.tarif_unitaire == tarif_unitaire;
   }
 
   @override
@@ -95,7 +81,6 @@ class Tarifications {
         marchandise_id.hashCode ^
         prix_expedition.hashCode ^
         prix_transport.hashCode ^
-        accompte.hashCode ^
-        unite_tarif_id.hashCode;
+        tarif_unitaire.hashCode;
   }
 }

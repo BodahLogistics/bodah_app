@@ -4,7 +4,6 @@ import 'package:bodah/modals/rules.dart';
 import 'package:bodah/ui/account/accoun_unvalidated.dart';
 import 'package:bodah/ui/account/account_deleted.dart';
 import 'package:bodah/ui/account/account_disabled.dart';
-import 'package:bodah/ui/auth/account_no_rule.dart';
 import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:bodah/ui/users/expediteur/dashboard/index.dart';
 import 'package:bodah/wrappers/load.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../modals/users.dart';
 import '../providers/api/api_data.dart';
+import '../ui/account/account_no_rule.dart';
 import '../ui/users/transporteur/dashboard/accueil.dart';
 
 class Wrappers extends StatefulWidget {

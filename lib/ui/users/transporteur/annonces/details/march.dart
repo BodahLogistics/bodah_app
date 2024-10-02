@@ -15,7 +15,6 @@ import '../../../../../../../modals/marchandises.dart';
 import '../../../../../../../modals/pays.dart';
 import '../../../../../../../modals/tarifications.dart';
 import '../../../../../../../modals/type_chargements.dart';
-import '../../../../../../../modals/unites.dart';
 import '../../../../../../../modals/users.dart';
 import '../../../../../../../modals/villes.dart';
 import '../../../../../../../providers/api/api_data.dart';
@@ -58,7 +57,7 @@ class _MarchTranspState extends State<MarchTransp> {
         function.annonce_pictures(widget.annonce, marchandises, photos);
     final CarouselSliderController controller = CarouselSliderController();
     List<TypeChargements> type_chargements = api_provider.type_chargements;
-    List<Unites> unites = api_provider.unites;
+
     TypeChargements type_cahrgement = function.type_chargement(
         type_chargements, marchandise.type_chargement_id);
     Localisations localisation =
@@ -69,7 +68,6 @@ class _MarchTranspState extends State<MarchTransp> {
     Villes ville_dest = function.ville(all_villes, localisation.city_liv_id);
     Tarifications tarification =
         function.marchandise_tarification(tarifications, marchandise.id);
-    Unites unite = function.unite(unites, marchandise.unite_id);
     bool loading = api_provider.loading;
 
     return loading
@@ -392,9 +390,7 @@ class _MarchTranspState extends State<MarchTransp> {
                                                     fontSize: 10),
                                               ),
                                               Text(
-                                                marchandise.poids.toString() +
-                                                    " " +
-                                                    unite.name.toUpperCase(),
+                                                marchandise.poids,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
@@ -546,10 +542,7 @@ class _MarchTranspState extends State<MarchTransp> {
                                                     fontSize: 10),
                                               ),
                                               Text(
-                                                function.formatAmount(
-                                                        tarification
-                                                            .prix_transport) +
-                                                    " XOF",
+                                                tarification.prix_transport,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(

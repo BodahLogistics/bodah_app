@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/pays.dart';
 import 'package:bodah/modals/tarifications.dart';
-import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
@@ -20,7 +19,6 @@ class ProvPublishAnnonce with ChangeNotifier {
   final apiService = DBServices();
   void change_marchandise(
       Marchandises marchandise,
-      Unites unite,
       Tarifications tarifications,
       Pays pay_expeditioon,
       Pays pay_livraison,
@@ -36,7 +34,7 @@ class ProvPublishAnnonce with ChangeNotifier {
     _pay_liv = pay_livraison;
     _nom = marchandise.nom;
     _quantite = marchandise.quantite;
-    _unite = unite;
+    _tarif_unitaire = tarifications.tarif_unitaire;
     _poids = marchandise.poids;
     _date_chargement =
         DateFormat("yyyy-MM-dd").format(marchandise.date_chargement!);
@@ -46,9 +44,9 @@ class ProvPublishAnnonce with ChangeNotifier {
   void reset() {
     _files_selected = [];
     _nom = "";
-    _unite = Unites(id: 0, name: "");
-    _poids = 0;
-    _quantite = 0;
+    _tarif_unitaire = "";
+    _poids = "";
+    _quantite = "";
     _date_chargement = DateFormat("yyyy-MM-dd").format(DateTime.now());
     _pay_exp = Pays(id: 0, name: "");
     _ville_exp = Villes(id: 0, name: "", country_id: 0);
@@ -283,19 +281,19 @@ class ProvPublishAnnonce with ChangeNotifier {
   }
 
   String _nom = "";
-  Unites _unite = Unites(id: 0, name: "");
 
-  Unites get unite => _unite;
+  String _tarif_unitaire = "";
+  String get tarif_unitaire => _tarif_unitaire;
 
-  void change_unite(Unites unite) {
-    _unite = unite;
+  void change_tarif_unitaire(String? value) {
+    _tarif_unitaire = value!;
     notifyListeners();
   }
 
-  int _quantite = 0;
-  int get quantite => _quantite;
+  String _quantite = "";
+  String get quantite => _quantite;
   void change_quantite(String? value) {
-    _quantite = value!.isEmpty ? 0 : int.parse(value);
+    _quantite = value!;
     notifyListeners();
   }
 
@@ -307,10 +305,10 @@ class ProvPublishAnnonce with ChangeNotifier {
     notifyListeners();
   }
 
-  double _poids = 0;
-  double get poids => _poids;
+  String _poids = "";
+  String get poids => _poids;
   void change_poids(String? value) {
-    _poids = value!.isEmpty ? 0 : double.parse(value);
+    _poids = value!;
     notifyListeners();
   }
 

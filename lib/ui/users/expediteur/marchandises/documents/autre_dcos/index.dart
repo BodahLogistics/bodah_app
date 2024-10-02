@@ -45,7 +45,7 @@ class MesAutreDocs extends StatelessWidget {
     List<Cargaison> cargaison = api_provider.cargaisons;
     List<CargaisonClient> cargaison_client = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;
-    List<Position> positions = api_provider.positions;
+    List<Positions> positions = api_provider.positions;
 
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
@@ -474,7 +474,7 @@ class MesAutreDocs extends StatelessWidget {
                         ];
                       }
 
-                      Position position = function.cargaison_client_position(
+                      Positions position = function.cargaison_client_position(
                           positions, cargaison_clients.first);
 
                       Pays pay_depart = function.pay(pays, position.pay_dep_id);

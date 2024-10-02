@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:bodah/modals/annonce_photos.dart';
@@ -27,7 +28,9 @@ import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/transport_mode.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +57,7 @@ import '../modals/localisations.dart';
 import '../modals/marchandise_transporteur.dart';
 import '../modals/marchandises.dart';
 import '../modals/ordre_transport.dart';
+import '../modals/paiement_solde.dart';
 import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/rules.dart';
@@ -417,13 +421,13 @@ class Functions {
     );
   }
 
-  Position cargaison_client_position(
-      List<Position> positions, CargaisonClient cargaison_client) {
+  Positions cargaison_client_position(
+      List<Positions> positions, CargaisonClient cargaison_client) {
     return positions.firstWhere(
       (data) =>
           data.modele_type.contains("CargaisonClient") &&
           data.modele_id == cargaison_client.id,
-      orElse: () => Position(
+      orElse: () => Positions(
           id: 0,
           pay_dep_id: 0,
           pay_liv_id: 0,
@@ -443,13 +447,13 @@ class Functions {
     }).toList();
   }
 
-  Position chargement_effectue_position(
-      List<Position> positions, ChargementEffectue chargement_effectue) {
+  Positions chargement_effectue_position(
+      List<Positions> positions, ChargementEffectue chargement_effectue) {
     return positions.firstWhere(
       (data) =>
           data.modele_type.contains("ChargementEffectue") &&
           data.modele_id == chargement_effectue.id,
-      orElse: () => Position(
+      orElse: () => Positions(
           id: 0,
           pay_dep_id: 0,
           pay_liv_id: 0,
@@ -753,9 +757,8 @@ class Functions {
           annonce_id: 0,
           numero_marchandise: "",
           deleted: 0,
-          quantite: 0,
-          unite_id: 0,
-          poids: 0,
+          quantite: "",
+          poids: "",
           nombre_camions: 0),
     );
   }
@@ -792,11 +795,11 @@ class Functions {
     return tarifications.firstWhere(
       (data) => data.id == id,
       orElse: () => Tarifications(
-        accompte: 0,
+        tarif_unitaire: "",
         id: 0,
         marchandise_id: 0,
         prix_expedition: 0,
-        prix_transport: 0,
+        prix_transport: "",
       ),
     );
   }
@@ -825,9 +828,8 @@ class Functions {
           annonce_id: 0,
           numero_marchandise: "",
           deleted: 0,
-          quantite: 0,
-          unite_id: 0,
-          poids: 0,
+          quantite: "",
+          poids: "",
           nombre_camions: 0),
     );
 
@@ -841,12 +843,22 @@ class Functions {
     return tarifications.firstWhere(
       (data) => data.marchandise_id == marchandise_id,
       orElse: () => Tarifications(
-        accompte: 0,
+        tarif_unitaire: "",
         id: 0,
         marchandise_id: 0,
         prix_expedition: 0,
-        prix_transport: 0,
+        prix_transport: "",
       ),
+    );
+  }
+
+  PaiementSolde paiement_solde(
+      List<PaiementSolde> paiements, String data_modele, int data_id) {
+    return paiements.firstWhere(
+      (data) =>
+          data.modele_type.contains(data_modele) && data.modele_id == data_id,
+      orElse: () =>
+          PaiementSolde(id: 0, montant: 0, modele_id: 0, modele_type: ""),
     );
   }
 
@@ -860,9 +872,8 @@ class Functions {
         annonce_id: 0,
         numero_marchandise: "",
         deleted: 0,
-        quantite: 0,
-        unite_id: 0,
-        poids: 0,
+        quantite: "",
+        poids: "",
         nombre_camions: 0);
   }
 
@@ -1198,9 +1209,8 @@ class Functions {
             annonce_id: annonce_id,
             numero_marchandise: "",
             deleted: 0,
-            quantite: 0,
-            unite_id: 0,
-            poids: 0,
+            quantite: "",
+            poids: "",
             nombre_camions: 0)
       ];
     } else {
@@ -1270,5 +1280,45 @@ class Functions {
   bool existing_phone_number(List<Users> users, String phone_number) {
     bool any = users.any((element) => element.telephone == phone_number);
     return any;
+  }
+
+  Future<LocationPermission> requestPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    return permission;
+  }
+
+  Future<Position?> getLocation() async {
+    LocationPermission permission = await requestPermission();
+    if (permission == LocationPermission.denied) {
+      return null;
+    }
+
+    try {
+      return await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<String> getDeviceModel() async {
+    try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.model;
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        return iosInfo.model;
+      } else {
+        return 'Unknown';
+      }
+    } catch (e) {
+      return 'Unknown';
+    }
   }
 }

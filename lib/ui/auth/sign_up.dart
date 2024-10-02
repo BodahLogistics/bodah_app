@@ -10,6 +10,7 @@ import 'package:bodah/services/data_base_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -506,6 +507,9 @@ class _SignUpState extends State<SignUp> {
                             } else {
                               provider.change_affiche(true);
 
+                              String device = await function.getDeviceModel();
+                              Position? position = await function.getLocation();
+
                               String statut_code = await service.register(
                                   nom,
                                   number,
@@ -516,9 +520,18 @@ class _SignUpState extends State<SignUp> {
                                   ville,
                                   pay,
                                   prov_val_ac,
-                                  api_provider);
+                                  api_provider,
+                                  position?.latitude ?? 0.0,
+                                  position?.longitude ?? 0.0,
+                                  device);
 
-                              if (statut_code == "422") {
+                              if (statut_code == "101") {
+                                provider.change_affiche(false);
+                                showCustomSnackBar(
+                                    context,
+                                    "Numéro de téléphone déjà utilisé",
+                                    Colors.redAccent);
+                              } else if (statut_code == "422") {
                                 provider.change_affiche(false);
                                 showCustomSnackBar(context,
                                     "Erreur de validation", Colors.redAccent);

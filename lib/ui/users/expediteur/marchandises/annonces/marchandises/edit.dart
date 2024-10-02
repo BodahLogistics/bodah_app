@@ -3,13 +3,11 @@
 import 'dart:io';
 
 import 'package:bodah/modals/pays.dart';
-import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/providers/users/expediteur/marchandises/annoces/marchandises/add.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +33,7 @@ class UpMarchandise extends StatefulWidget {
 
 class _UpMarchandiseState extends State<UpMarchandise> {
   TextEditingController Tarif = TextEditingController();
+  TextEditingController TarifUnitaire = TextEditingController();
 
   TextEditingController Quantite = TextEditingController();
 
@@ -68,8 +67,9 @@ class _UpMarchandiseState extends State<UpMarchandise> {
 
     String nom = provider.nom;
     int tarif = calculatrice.montant;
-    int quantite = provider.quantite;
-    double poids = provider.poids;
+    String quantite = provider.quantite;
+    String poids = provider.poids;
+    String tarif_unitaire = provider.tarif_unitaire;
     String adress_exp = provider.adress_exp;
     String adress_liv = provider.adress_liv;
     Villes ville_exp = provider.ville_exp;
@@ -88,12 +88,16 @@ class _UpMarchandiseState extends State<UpMarchandise> {
       Name.text = nom;
     }
 
-    if (Quantite.text.isEmpty && quantite > 0) {
-      Quantite.text = quantite.toString();
+    if (Quantite.text.isEmpty) {
+      Quantite.text = quantite;
     }
 
-    if (Poids.text.isEmpty && poids > 0) {
-      Poids.text = poids.toString();
+    if (TarifUnitaire.text.isEmpty) {
+      TarifUnitaire.text = tarif_unitaire;
+    }
+
+    if (Poids.text.isEmpty) {
+      Poids.text = poids;
     }
 
     if (AdresseExp.text.isEmpty) {
@@ -108,10 +112,10 @@ class _UpMarchandiseState extends State<UpMarchandise> {
     final api_provider = Provider.of<ApiProvider>(context);
     Users? user = api_provider.user;
     List<Pays> pays = api_provider.pays;
-    List<Unites> unites = api_provider.unites;
+
     List<Villes> villes_expedition = provider.villes_expeditions;
     List<Villes> villes_livraison = provider.villes_livraison;
-    Unites unite = provider.unite;
+
     final service = Provider.of<DBServices>(context);
     List<Marchandises> marchandises = api_provider.marchandises;
     Marchandises marchandise = function.marchandise(marchandises, widget.id);
@@ -222,56 +226,6 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                               ),
                             )
                           : Container(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  user.dark_mode == 1
-                      ? Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Tarif d'expédition (Facultatif)",
-                            style: TextStyle(
-                              fontFamily: "Poppins",
-                              color: MyColors.light,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  SizedBox(
-                    height: 40,
-                    child: TextField(
-                      controller: Tarif,
-                      onTap: () {
-                        Calculator(context);
-                      },
-                      onChanged: (value) {
-                        calculatrice.change_montant(value);
-                      },
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Tarif.text.isEmpty
-                                ? function.convertHexToColor("#79747E")
-                                : MyColors.secondary,
-                          )),
-                          labelText:
-                              user.dark_mode == 0 ? "Tarif d'expédition" : "",
-                          filled: user.dark_mode == 1 ? true : false,
-                          fillColor:
-                              user.dark_mode == 1 ? MyColors.filedDark : null,
-                          labelStyle: TextStyle(
-                              color: user.dark_mode == 1
-                                  ? MyColors.light
-                                  : MyColors.black,
-                              fontSize: 14,
-                              fontFamily: "Poppins"),
-                          hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontFamily: "Poppins",
-                              color: MyColors.black)),
-                    ),
-                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -740,7 +694,7 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                 ? Container(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Poids (Facultatif)",
+                                      "Poids",
                                       style: TextStyle(
                                         fontFamily: "Poppins",
                                         color: MyColors.light,
@@ -749,42 +703,41 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                     ),
                                   )
                                 : Container(),
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                onChanged: (value) {
-                                  provider.change_poids(value);
-                                },
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                controller: Poids,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: Poids.text.isEmpty
-                                          ? function
-                                              .convertHexToColor("#79747E")
-                                          : MyColors.secondary,
-                                    )),
-                                    filled: user.dark_mode == 1 ? true : false,
-                                    fillColor: user.dark_mode == 1
-                                        ? MyColors.filedDark
-                                        : null,
-                                    labelText: user.dark_mode == 0
-                                        ? "Poids (Facultatif)"
-                                        : "",
-                                    labelStyle: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontSize: 14,
-                                        fontFamily: "Poppins"),
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Poppins",
-                                        color: MyColors.black)),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: SizedBox(
+                                height: 40,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    provider.change_poids(value);
+                                  },
+                                  controller: Poids,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: Poids.text.isEmpty
+                                            ? function
+                                                .convertHexToColor("#79747E")
+                                            : MyColors.secondary,
+                                      )),
+                                      filled:
+                                          user.dark_mode == 1 ? true : false,
+                                      fillColor: user.dark_mode == 1
+                                          ? MyColors.filedDark
+                                          : null,
+                                      labelText:
+                                          user.dark_mode == 0 ? "Poids" : "",
+                                      labelStyle: TextStyle(
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontSize: 14,
+                                          fontFamily: "Poppins"),
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: "Poppins",
+                                          color: MyColors.black)),
+                                ),
                               ),
                             ),
                           ],
@@ -798,7 +751,7 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                 ? Container(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Unité",
+                                      "Quantité",
                                       style: TextStyle(
                                         fontFamily: "Poppins",
                                         color: MyColors.light,
@@ -807,78 +760,50 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                     ),
                                   )
                                 : Container(),
-                            Container(
-                              alignment: Alignment.centerLeft,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
                               child: SizedBox(
-                                height: 50,
-                                child: DropdownSearch<String>(
-                                  popupProps: PopupProps.dialog(
-                                    showSearchBox: true,
-                                    showSelectedItems: true,
-                                    disabledItemFn: (String s) =>
-                                        s.startsWith('I'),
-                                  ),
-
-                                  items:
-                                      unites.map((type) => type.name).toList(),
-                                  filterFn: (user, filter) => user
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()),
-
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                        labelText: user.dark_mode == 1
-                                            ? ""
-                                            : "Unité de chargement",
-                                        labelStyle: TextStyle(
-                                            color: user.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                            fontSize: 14,
-                                            fontFamily: "Poppins"),
-                                        hintStyle: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: "Poppins",
+                                height: 40,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    provider.change_quantite(value);
+                                  },
+                                  controller: Quantite,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: Quantite.text.isEmpty
+                                            ? function
+                                                .convertHexToColor("#79747E")
+                                            : MyColors.secondary,
+                                      )),
+                                      filled:
+                                          user.dark_mode == 1 ? true : false,
+                                      fillColor: user.dark_mode == 1
+                                          ? MyColors.filedDark
+                                          : null,
+                                      labelText:
+                                          user.dark_mode == 0 ? "Quantité" : "",
+                                      labelStyle: TextStyle(
                                           color: user.dark_mode == 1
                                               ? MyColors.light
                                               : MyColors.black,
-                                        )),
-                                  ),
-                                  dropdownBuilder: (context, selectedItem) {
-                                    return Text(
-                                      selectedItem ?? '',
-                                      style: TextStyle(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                        fontFamily: "Poppins",
-                                      ),
-                                    );
-                                  },
-
-                                  onChanged: (String? selectedType) {
-                                    if (selectedType != null) {
-                                      final unite_selected = unites.firstWhere(
-                                        (element) =>
-                                            element.name == selectedType,
-                                        orElse: () => Unites(id: 0, name: ""),
-                                      );
-                                      provider.change_unite(unite_selected);
-                                    }
-                                  },
-                                  selectedItem: unite
-                                      .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                                          fontSize: 14,
+                                          fontFamily: "Poppins"),
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: "Poppins",
+                                          color: MyColors.black)),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -891,9 +816,10 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                 ? Container(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Quantité (Facultatif)",
+                                      "Tarif unitaire",
                                       style: TextStyle(
                                         fontFamily: "Poppins",
+                                        fontSize: 13,
                                         color: MyColors.light,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -904,17 +830,13 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                               height: 40,
                               child: TextField(
                                 onChanged: (value) {
-                                  provider.change_quantite(value);
+                                  provider.change_tarif_unitaire(value);
                                 },
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                controller: Quantite,
-                                keyboardType: TextInputType.number,
+                                controller: TarifUnitaire,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                      color: Quantite.text.isEmpty
+                                      color: TarifUnitaire.text.isEmpty
                                           ? function
                                               .convertHexToColor("#79747E")
                                           : MyColors.secondary,
@@ -924,7 +846,7 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                         ? MyColors.filedDark
                                         : null,
                                     labelText: user.dark_mode == 0
-                                        ? "Quantité (Facultatif)"
+                                        ? "Tarif unitaire"
                                         : "",
                                     labelStyle: TextStyle(
                                         color: user.dark_mode == 1
@@ -941,6 +863,76 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: Column(
+                          children: [
+                            user.dark_mode == 1
+                                ? Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Tarif total",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 13,
+                                        color: MyColors.light,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                height: 40,
+                                child: TextField(
+                                  controller: Tarif,
+                                  onTap: () {
+                                    Calculator(context);
+                                  },
+                                  onChanged: (value) {
+                                    calculatrice.change_montant(value);
+                                  },
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: Tarif.text.isEmpty
+                                            ? function
+                                                .convertHexToColor("#79747E")
+                                            : MyColors.secondary,
+                                      )),
+                                      labelText: user.dark_mode == 0
+                                          ? "Tarif d'expédition"
+                                          : "",
+                                      filled:
+                                          user.dark_mode == 1 ? true : false,
+                                      fillColor: user.dark_mode == 1
+                                          ? MyColors.filedDark
+                                          : null,
+                                      labelStyle: TextStyle(
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontSize: 14,
+                                          fontFamily: "Poppins"),
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: "Poppins",
+                                          color: MyColors.black)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.45,
                         child: Column(
@@ -1108,7 +1100,6 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                     await service.UpdateMarchandise(
                                         date_chargement,
                                         nom,
-                                        unite,
                                         poids,
                                         quantite,
                                         tarif,
@@ -1119,7 +1110,8 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                         ville_exp,
                                         ville_liv,
                                         files,
-                                        marchandise);
+                                        marchandise,
+                                        tarif_unitaire);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);

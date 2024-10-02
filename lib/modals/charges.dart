@@ -2,14 +2,14 @@
 import 'dart:convert';
 
 class Charge {
-  final int id;
-  final int quantite;
-  final int poids;
-  final String cargaison_type;
-  final int cargaison_id;
-  final String chargement_type;
-  final int chargement_id;
-  final int deleted;
+  int id;
+  String quantite;
+  String poids;
+  String cargaison_type;
+  int cargaison_id;
+  String chargement_type;
+  int chargement_id;
+
   Charge({
     required this.id,
     required this.quantite,

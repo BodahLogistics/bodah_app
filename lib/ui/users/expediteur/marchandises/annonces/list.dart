@@ -14,7 +14,6 @@ import '../../../../../modals/annonce_photos.dart';
 import '../../../../../modals/localisations.dart';
 import '../../../../../modals/marchandises.dart';
 import '../../../../../modals/pays.dart';
-import '../../../../../modals/unites.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
@@ -45,7 +44,6 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
     List<AnnoncePhotos> annonce_photos = api_provider.photos;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
-    List<Unites> unites = api_provider.unites;
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Tarifications> tarifications = api_provider.tarifications;
@@ -136,8 +134,7 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
                         List<AnnoncePhotos> pictures =
                             function.annonce_pictures(
                                 annonce, marchandises, annonce_photos);
-                        Unites unite =
-                            function.unite(unites, marchandise.unite_id);
+
                         Pays pay_depart =
                             function.pay(pays, localisation.pays_exp_id);
                         Pays pay_dest =
@@ -257,7 +254,7 @@ class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
                                               ),
                                               SizedBox(height: 5),
                                               Text(
-                                                "${marchandise.poids} ${unite.name} / " +
+                                                "${marchandise.poids}  / " +
                                                     function.formatAmount(
                                                         tarification
                                                             .prix_expedition) +

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
@@ -5,15 +6,12 @@ import 'dart:convert';
 class Marchandises {
   int id;
   String nom;
-  String? description;
-  String? autres_details;
   int annonce_id;
   String numero_marchandise;
   int deleted;
-  int quantite;
-  int unite_id;
+  String quantite;
   int? type_chargement_id;
-  double poids;
+  String poids;
   int? destinataire_id;
   int nombre_camions;
   DateTime? date_chargement;
@@ -22,13 +20,10 @@ class Marchandises {
   Marchandises({
     required this.id,
     required this.nom,
-    this.description,
-    this.autres_details,
     required this.annonce_id,
     required this.numero_marchandise,
     required this.deleted,
     required this.quantite,
-    required this.unite_id,
     this.type_chargement_id,
     required this.poids,
     this.destinataire_id,
@@ -40,15 +35,12 @@ class Marchandises {
   Marchandises copyWith({
     int? id,
     String? nom,
-    String? description,
-    String? autres_details,
     int? annonce_id,
     String? numero_marchandise,
     int? deleted,
-    int? quantite,
-    int? unite_id,
+    String? quantite,
     int? type_chargement_id,
-    int? poids,
+    String? poids,
     int? destinataire_id,
     int? nombre_camions,
     DateTime? date_chargement,
@@ -57,15 +49,12 @@ class Marchandises {
     return Marchandises(
       id: id ?? this.id,
       nom: nom ?? this.nom,
-      description: description ?? this.description,
-      autres_details: autres_details ?? this.autres_details,
       annonce_id: annonce_id ?? this.annonce_id,
       numero_marchandise: numero_marchandise ?? this.numero_marchandise,
       deleted: deleted ?? this.deleted,
       quantite: quantite ?? this.quantite,
-      unite_id: unite_id ?? this.unite_id,
       type_chargement_id: type_chargement_id ?? this.type_chargement_id,
-      poids: this.poids,
+      poids: poids ?? this.poids,
       destinataire_id: destinataire_id ?? this.destinataire_id,
       nombre_camions: nombre_camions ?? this.nombre_camions,
       date_chargement: date_chargement ?? this.date_chargement,
@@ -77,13 +66,10 @@ class Marchandises {
     return <String, dynamic>{
       'id': id,
       'nom': nom,
-      'description': description,
-      'autres_details': autres_details,
       'annonce_id': annonce_id,
       'numero_marchandise': numero_marchandise,
       'deleted': deleted,
       'quantite': quantite,
-      'unite_id': unite_id,
       'type_chargement_id': type_chargement_id,
       'poids': poids,
       'destinataire_id': destinataire_id,
@@ -97,23 +83,14 @@ class Marchandises {
     return Marchandises(
       id: map['id'] as int,
       nom: map['nom'] as String,
-      description:
-          map['description'] != null ? map['description'] as String : null,
-      autres_details: map['autres_details'] != null
-          ? map['autres_details'] as String
-          : null,
       annonce_id: map['annonce_id'] as int,
       numero_marchandise: map['numero_marchandise'] as String,
       deleted: map['deleted'] as int,
-      quantite: map['quantite'] as int,
-      unite_id: map['unite_id'] as int,
+      quantite: map['quantite'] as String,
       type_chargement_id: map['type_chargement_id'] != null
           ? map['type_chargement_id'] as int
           : null,
-      poids: map['poids'] != null
-          ? double.tryParse(map['poids'].toString()) ??
-              0.0 // Convertir la chaîne en double
-          : 0.0, // Valeur par défaut si null
+      poids: map['poids'] as String,
       destinataire_id:
           map['destinataire_id'] != null ? map['destinataire_id'] as int : null,
       nombre_camions: map['nombre_camions'] as int,
@@ -131,7 +108,7 @@ class Marchandises {
 
   @override
   String toString() {
-    return 'Marchandises(id: $id, nom: $nom, description: $description, autres_details: $autres_details, annonce_id: $annonce_id, numero_marchandise: $numero_marchandise, deleted: $deleted, quantite: $quantite, unite_id: $unite_id, type_chargement_id: $type_chargement_id, poids: $poids, destinataire_id: $destinataire_id, nombre_camions: $nombre_camions, date_chargement: $date_chargement, devise_id: $devise_id)';
+    return 'Marchandises(id: $id, nom: $nom, annonce_id: $annonce_id, numero_marchandise: $numero_marchandise, deleted: $deleted, quantite: $quantite, type_chargement_id: $type_chargement_id, poids: $poids, destinataire_id: $destinataire_id, nombre_camions: $nombre_camions, date_chargement: $date_chargement, devise_id: $devise_id)';
   }
 
   @override
@@ -140,13 +117,10 @@ class Marchandises {
 
     return other.id == id &&
         other.nom == nom &&
-        other.description == description &&
-        other.autres_details == autres_details &&
         other.annonce_id == annonce_id &&
         other.numero_marchandise == numero_marchandise &&
         other.deleted == deleted &&
         other.quantite == quantite &&
-        other.unite_id == unite_id &&
         other.type_chargement_id == type_chargement_id &&
         other.poids == poids &&
         other.destinataire_id == destinataire_id &&
@@ -159,13 +133,10 @@ class Marchandises {
   int get hashCode {
     return id.hashCode ^
         nom.hashCode ^
-        description.hashCode ^
-        autres_details.hashCode ^
         annonce_id.hashCode ^
         numero_marchandise.hashCode ^
         deleted.hashCode ^
         quantite.hashCode ^
-        unite_id.hashCode ^
         type_chargement_id.hashCode ^
         poids.hashCode ^
         destinataire_id.hashCode ^

@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:bodah/providers/api/api_data.dart';
-import 'package:bodah/providers/api/sdownload.dart';
+import 'package:bodah/providers/api/download.dart';
 import 'package:bodah/providers/auth/prov_logout.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/providers/calculator/index.dart';

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
-class Position {
+class Positions {
   final int id;
   final int pay_dep_id;
   final int pay_liv_id;
@@ -12,7 +12,7 @@ class Position {
   final int modele_id;
   final String modele_type;
   final int deleted;
-  Position({
+  Positions({
     required this.id,
     required this.pay_dep_id,
     required this.pay_liv_id,
@@ -25,7 +25,7 @@ class Position {
     required this.deleted,
   });
 
-  Position copyWith({
+  Positions copyWith({
     int? id,
     int? pay_dep_id,
     int? pay_liv_id,
@@ -37,7 +37,7 @@ class Position {
     String? modele_type,
     int? deleted,
   }) {
-    return Position(
+    return Positions(
       id: id ?? this.id,
       pay_dep_id: pay_dep_id ?? this.pay_dep_id,
       pay_liv_id: pay_liv_id ?? this.pay_liv_id,
@@ -66,8 +66,8 @@ class Position {
     };
   }
 
-  factory Position.fromMap(Map<String, dynamic> map) {
-    return Position(
+  factory Positions.fromMap(Map<String, dynamic> map) {
+    return Positions(
       id: map['id'] as int,
       pay_dep_id: map['pay_dep_id'] as int,
       pay_liv_id: map['pay_liv_id'] as int,
@@ -85,8 +85,8 @@ class Position {
 
   String toJson() => json.encode(toMap());
 
-  factory Position.fromJson(String source) =>
-      Position.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Positions.fromJson(String source) =>
+      Positions.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -94,7 +94,7 @@ class Position {
   }
 
   @override
-  bool operator ==(covariant Position other) {
+  bool operator ==(covariant Positions other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&
