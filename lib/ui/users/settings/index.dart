@@ -8,7 +8,9 @@ import '../../../colors/color.dart';
 import '../../../modals/rules.dart';
 import '../../../modals/users.dart';
 import '../../../providers/api/api_data.dart';
+import '../../../providers/connection/index.dart';
 import '../../../services/data_base_service.dart';
+import '../../../wrappers/wrapper.dart';
 import '../../auth/sign_in.dart';
 import '../expediteur/drawer/index.dart';
 import '../transporteur/drawer/index.dart';
@@ -22,6 +24,16 @@ class MySettings extends StatelessWidget {
     final service = Provider.of<DBServices>(context);
     Users? user = api_provider.user;
     Rules? rule = api_provider.rule;
+    final connexionProvider = Provider.of<ProvConnexion>(context);
+    bool isConnected = connexionProvider.isConnected;
+
+    if (!isConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showNoConnectionState(
+            context, connexionProvider); // Affiche le popup si déconnecté
+      });
+    }
+
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: rule!.nom == "Transporteur"

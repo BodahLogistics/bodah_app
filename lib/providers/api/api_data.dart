@@ -39,7 +39,9 @@ import 'package:bodah/modals/voitures.dart';
 import 'package:bodah/providers/auth/prov_sign_up.dart';
 import 'package:bodah/services/data_base_service.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../../functions/function.dart';
 import '../../modals/actualite.dart';
 import '../../modals/annonces.dart';
 import '../../modals/arrondissements.dart';
@@ -86,6 +88,7 @@ import '../../services/secure_storage.dart';
 
 class ApiProvider with ChangeNotifier {
   final apiService = DBServices();
+  final function = Functions();
   SecureStorage secure = SecureStorage();
   final sign_uo_provider = ProvSignUp();
   bool _isLoading = false;
@@ -451,6 +454,11 @@ class ApiProvider with ChangeNotifier {
   Future<void> InitData() async {
     _isLoading = true;
     try {
+      String device = await function.getDeviceModel();
+      Position? position = await function.getLocation();
+      await apiService.createVisiteur(
+          device, position?.longitude ?? 0, position?.latitude ?? 0, "", "");
+
       String? userJson = await secure.readSecureData('user');
       String? ruleJson = await secure.readSecureData('rule');
 

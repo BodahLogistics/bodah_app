@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes, prefer_const_constructors
 
 import 'dart:io';
 import 'dart:math';
@@ -28,12 +28,14 @@ import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/transport_mode.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../colors/color.dart';
 import '../modals/annonce_transporteurs.dart';
 import '../modals/annonces.dart';
 import '../modals/appeles.dart';
@@ -1290,6 +1292,32 @@ class Functions {
     return permission;
   }
 
+  Future<bool> checkAndRequestLocationPermission(BuildContext context) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        _showPermissionDialog(context,
+            'Vous devez accepter la géolocalisation pour utiliser cette fonctionnalité.');
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      _showPermissionDialog(
+        context,
+        'La géolocalisation est désactivée de manière permanente. Veuillez activer la géolocalisation dans les paramètres de l\'application.',
+        openSettings: true,
+      );
+      return false;
+    }
+
+    // Si l'autorisation est accordée
+    return permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always;
+  }
+
   Future<Position?> getLocation() async {
     LocationPermission permission = await requestPermission();
     if (permission == LocationPermission.denied) {
@@ -1321,4 +1349,91 @@ class Functions {
       return 'Unknown';
     }
   }
+}
+
+void _showPermissionDialog(BuildContext context, String message,
+    {bool openSettings = false}) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext dialogcontext) {
+      return AlertDialog(
+        title: Text(
+          'Permission de géolocalisation requise',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: "Poppins",
+              fontSize: 15,
+              fontWeight: FontWeight.w500),
+        ),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: MyColors.textColor,
+              fontFamily: "Poppins",
+              fontSize: 13,
+              fontWeight: FontWeight.w400),
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      Navigator.of(dialogcontext)
+                          .pop(); // Ferme la boîte de dialogue
+                      SystemNavigator.pop(); // Ferme l'application
+                    },
+                    child: Text(
+                      "Annulez",
+                      style: TextStyle(
+                          color: MyColors.light,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8,
+                          letterSpacing: 1),
+                    )),
+              ),
+              SizedBox(
+                width: 100,
+                height: 30,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      backgroundColor: Colors.green),
+                  onPressed: () async {
+                    if (openSettings) {
+                      Geolocator.openAppSettings();
+                    }
+                    Navigator.of(dialogcontext).pop();
+                  },
+                  child: Text(
+                    "Acceptez",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: MyColors.light,
+                        fontFamily: "Poppins",
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
 }

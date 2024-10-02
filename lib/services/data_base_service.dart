@@ -4498,6 +4498,9 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      print(response.statusCode);
+      print(response.body);
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
@@ -5823,14 +5826,8 @@ class DBServices {
     }
   }
 
-
-  Future<String> createVisiteur(
-      
-      String device,
-      double long,
-      double lat,
-      String city,
-      String country) async {
+  Future<String> createVisiteur(String device, double long, double lat,
+      String city, String country) async {
     try {
       var url = "${api_url}create/visiteur";
       final uri = Uri.parse(url);
@@ -5843,17 +5840,13 @@ class DBServices {
         'long': long.toString(),
         'city': city,
         'country': country,
-  
       });
-
-    
 
       return response.statusCode.toString();
     } catch (e) {
       return "204";
     }
   }
-
 
   Future<String> validateAccount(String code, ApiProvider provider) async {
     var url = "${api_url}account/validate";

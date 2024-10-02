@@ -8,6 +8,7 @@ import 'package:bodah/providers/api/download.dart';
 import 'package:bodah/providers/auth/prov_logout.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
 import 'package:bodah/providers/calculator/index.dart';
+import 'package:bodah/providers/connection/index.dart';
 import 'package:bodah/providers/documents/appele.dart';
 import 'package:bodah/providers/users/expediteur/drawer/index.dart';
 import 'package:bodah/providers/users/expediteur/export/home.dart';
@@ -185,6 +186,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProvHoTransp(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProvConnexion(),
         ),
       ],
       child: MaterialApp(

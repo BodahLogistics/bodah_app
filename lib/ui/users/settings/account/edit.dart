@@ -12,7 +12,9 @@ import '../../../../colors/color.dart';
 import '../../../../modals/rules.dart';
 import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
+import '../../../../providers/connection/index.dart';
 import '../../../../services/data_base_service.dart';
+import '../../../../wrappers/wrapper.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/drawer/index.dart';
 import '../../transporteur/drawer/index.dart';
@@ -71,6 +73,16 @@ class _UpdateAccountState extends State<UpdateAccount> {
 
     if (Email.text.isEmpty && email.isNotEmpty) {
       Email.text = email;
+    }
+
+    final connexionProvider = Provider.of<ProvConnexion>(context);
+    bool isConnected = connexionProvider.isConnected;
+
+    if (!isConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showNoConnectionState(
+            context, connexionProvider); // Affiche le popup si déconnecté
+      });
     }
 
     return Scaffold(
@@ -228,7 +240,7 @@ class _UpdateAccountState extends State<UpdateAccount> {
                     )
                   : Container(),
               SizedBox(
-                height: 60,
+                height: 77,
                 child: TextField(
                   maxLength: 20,
                   controller: Adresse,

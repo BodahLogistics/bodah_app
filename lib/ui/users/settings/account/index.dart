@@ -14,7 +14,9 @@ import '../../../../colors/color.dart';
 import '../../../../modals/rules.dart';
 import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
+import '../../../../providers/connection/index.dart';
 import '../../../../services/data_base_service.dart';
+import '../../../../wrappers/wrapper.dart';
 import '../../../account/account_disabled.dart';
 import '../../../auth/sign_in.dart';
 import '../../expediteur/drawer/index.dart';
@@ -35,6 +37,16 @@ class MyAccount extends StatelessWidget {
     List<Villes> villes = api_provider.villes;
     Pays pay = function.pay(pays, user?.country_id ?? 24);
     Villes ville = function.ville(villes, user?.city_id ?? 0);
+    final connexionProvider = Provider.of<ProvConnexion>(context);
+    bool isConnected = connexionProvider.isConnected;
+
+    if (!isConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showNoConnectionState(
+            context, connexionProvider); // Affiche le popup si déconnecté
+      });
+    }
+
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
       drawer: rule!.nom == "Transporteur"
@@ -135,7 +147,7 @@ class MyAccount extends StatelessWidget {
               color: user.dark_mode == 1 ? MyColors.light : null,
             ),
             title: Text(
-              "Changez de numéro de téléphone",
+              "Changez de numéro",
               style: TextStyle(
                   fontSize: 14,
                   color: user.dark_mode == 1 ? MyColors.light : MyColors.black,
@@ -254,7 +266,6 @@ void DisableAccount(BuildContext context) {
         final api_provider = Provider.of<ApiProvider>(dialogcontext);
         Users? user = api_provider.user;
         String password = provider.password;
-        bool hide_password = provider.hide_password;
         bool affiche = provider.affiche;
         final service = Provider.of<DBServices>(dialogcontext);
         return AlertDialog(
@@ -274,7 +285,8 @@ void DisableAccount(BuildContext context) {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Votre mot de passe",
+                    "Saisissez votre mot de passe pour confirmer",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: user.dark_mode == 1
                           ? MyColors.light
@@ -283,16 +295,13 @@ void DisableAccount(BuildContext context) {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 7,
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SizedBox(
                     height: 40,
                     child: TextField(
                       controller: Password,
-                      obscureText: hide_password,
+                      obscureText: true,
                       onChanged: (value) => provider.change_password(value),
                       decoration: InputDecoration(
                           suffixIcon: Password.text.isNotEmpty &&
@@ -360,10 +369,8 @@ void DisableAccount(BuildContext context) {
                                 password, api_provider);
 
                             if (statut == "403") {
-                              showCustomSnackBar(
-                                  dialogcontext,
-                                  "Une erreur s'est produite",
-                                  Colors.redAccent);
+                              showCustomSnackBar(dialogcontext,
+                                  "Mot de passe incorrect", Colors.redAccent);
                               provider.change_affiche(false);
                             } else if (statut == "202") {
                               showCustomSnackBar(
@@ -451,7 +458,7 @@ void DeleteAccount(BuildContext context) {
         final api_provider = Provider.of<ApiProvider>(dialogcontext);
         Users? user = api_provider.user;
         String password = provider.password;
-        bool hide_password = provider.hide_password;
+
         bool affiche = provider.affiche;
         final service = Provider.of<DBServices>(dialogcontext);
         return AlertDialog(
@@ -471,7 +478,8 @@ void DeleteAccount(BuildContext context) {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Votre mot de passe",
+                    "Saisissez votre mot de passe pour confirmer",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: user.dark_mode == 1
                           ? MyColors.light
@@ -480,16 +488,13 @@ void DeleteAccount(BuildContext context) {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 7,
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SizedBox(
                     height: 40,
                     child: TextField(
                       controller: Password,
-                      obscureText: hide_password,
+                      obscureText: true,
                       onChanged: (value) => provider.change_password(value),
                       decoration: InputDecoration(
                           suffixIcon: Password.text.isNotEmpty &&
@@ -557,10 +562,8 @@ void DeleteAccount(BuildContext context) {
                                 password, api_provider);
 
                             if (statut == "403") {
-                              showCustomSnackBar(
-                                  dialogcontext,
-                                  "Une erreur s'est produite",
-                                  Colors.redAccent);
+                              showCustomSnackBar(dialogcontext,
+                                  "Mot de passe incoorect", Colors.redAccent);
                               provider.change_affiche(false);
                             } else if (statut == "202") {
                               showCustomSnackBar(

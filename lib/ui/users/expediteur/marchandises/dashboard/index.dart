@@ -13,6 +13,8 @@ import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
+import '../../../../../providers/connection/index.dart';
+import '../../../../../wrappers/wrapper.dart';
 import '../nav_bottom/index.dart';
 
 class DashMarchExp extends StatelessWidget {
@@ -33,6 +35,16 @@ class DashMarchExp extends StatelessWidget {
       ListExpExp(),
       DashBoardDocExp(),
     ];
+
+    final connexionProvider = Provider.of<ProvConnexion>(context);
+    bool isConnected = connexionProvider.isConnected;
+
+    if (!isConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showNoConnectionState(
+            context, connexionProvider); // Affiche le popup si déconnecté
+      });
+    }
 
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,

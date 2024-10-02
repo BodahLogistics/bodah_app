@@ -157,7 +157,7 @@ class DrawerExpediteur extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ExpediteurDashBoard(),
+                        ExpediteurDashboard(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       return FadeTransition(
@@ -608,6 +608,7 @@ void logOut(BuildContext context) {
           ),
           content: Text(
             "Voulez-vous vraiment vous déconnecter ?",
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
               color: user.dark_mode == 1 ? MyColors.light : MyColors.textColor,
