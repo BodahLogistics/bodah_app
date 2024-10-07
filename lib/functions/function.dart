@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes, prefer_const_constructors
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_string_escapes, prefer_const_constructors, deprecated_member_use
 
 import 'dart:io';
 import 'dart:math';
@@ -758,7 +758,6 @@ class Functions {
           nom: "",
           annonce_id: 0,
           numero_marchandise: "",
-          deleted: 0,
           quantite: "",
           poids: "",
           nombre_camions: 0),
@@ -829,7 +828,6 @@ class Functions {
           nom: "",
           annonce_id: 0,
           numero_marchandise: "",
-          deleted: 0,
           quantite: "",
           poids: "",
           nombre_camions: 0),
@@ -873,7 +871,6 @@ class Functions {
         nom: "",
         annonce_id: 0,
         numero_marchandise: "",
-        deleted: 0,
         quantite: "",
         poids: "",
         nombre_camions: 0);
@@ -1210,7 +1207,6 @@ class Functions {
             nom: "",
             annonce_id: annonce_id,
             numero_marchandise: "",
-            deleted: 0,
             quantite: "",
             poids: "",
             nombre_camions: 0)
@@ -1298,16 +1294,16 @@ class Functions {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        _showPermissionDialog(context,
-            'Vous devez accepter la géolocalisation pour utiliser cette fonctionnalité.');
+        showPermissionDialog(context,
+            "Cette application reccueille des données de localisation pour définir les emplacements des chauffeurs et leurs camions. Elle reccueille également les emplacements lorsque l'application est fermée et non utilisée pendant le charement pour des mésures de sécurité");
         return false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      _showPermissionDialog(
+      showPermissionDialog(
         context,
-        'La géolocalisation est désactivée de manière permanente. Veuillez activer la géolocalisation dans les paramètres de l\'application.',
+        "Cette application reccueille des données de localisation pour définir les emplacements des chauffeurs et leurs camions. Elle reccueille également les emplacements lorsque l'application est fermée et non utilisée pendant le charement pour des mésures de sécurité",
         openSettings: true,
       );
       return false;
@@ -1351,7 +1347,7 @@ class Functions {
   }
 }
 
-void _showPermissionDialog(BuildContext context, String message,
+void showPermissionDialog(BuildContext context, String message,
     {bool openSettings = false}) {
   showDialog(
     context: context,
@@ -1359,7 +1355,7 @@ void _showPermissionDialog(BuildContext context, String message,
     builder: (BuildContext dialogcontext) {
       return AlertDialog(
         title: Text(
-          'Permission de géolocalisation requise',
+          "Autorisation de localisation",
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.black,
@@ -1373,7 +1369,7 @@ void _showPermissionDialog(BuildContext context, String message,
           style: TextStyle(
               color: MyColors.textColor,
               fontFamily: "Poppins",
-              fontSize: 13,
+              fontSize: 11,
               fontWeight: FontWeight.w400),
         ),
         actions: <Widget>[

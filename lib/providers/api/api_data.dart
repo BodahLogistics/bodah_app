@@ -150,9 +150,6 @@ class ApiProvider with ChangeNotifier {
   List<Rules> _rules = [];
   List<Rules> get rules => _rules;
 
-  List<Rules> _roles = [];
-  List<Rules> get roles => _roles;
-
   List<Statuts> _statuts = [];
   List<Statuts> get statuts => _statuts;
 
@@ -476,8 +473,6 @@ class ApiProvider with ChangeNotifier {
         notifyListeners();
       }
 
-      final response_users = await apiService.getUsers();
-      _users = response_users;
       final response_pays = await apiService.getPays();
       _pays = response_pays;
 
@@ -519,13 +514,26 @@ class ApiProvider with ChangeNotifier {
           final response_statuts = await apiService.getStatutExpeditions();
           _statut_expeditions = response_statuts;
         }
-      } else {
-        final response_role = await apiService.getRules();
-        _rules = response_role;
-        final response_statuts = await apiService.getStatuts();
-        _statuts = response_statuts;
       }
 
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> Init() async {
+    _isLoading = true;
+    try {
+      final response_users = await apiService.getUsers();
+      _users = response_users;
+      final response_pays = await apiService.getPays();
+      _pays = response_pays;
+      final response_rule = await apiService.getRules();
+      _rules = response_rule;
+      final response_statuts = await apiService.getStatuts();
+      _statuts = response_statuts;
       _isLoading = false;
     } catch (e) {
       _isLoading = false;

@@ -40,15 +40,15 @@ class _WrappersState extends State<Wrappers> {
     final connexionProvider = Provider.of<ProvConnexion>(context);
     bool isConnected = connexionProvider.isConnected;
 
+    if (loading) {
+      return LoadingPage();
+    }
+
     if (!isConnected) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showNoConnectionState(
             context, connexionProvider); // Affiche le popup si déconnecté
       });
-    }
-
-    if (loading) {
-      return LoadingPage();
     }
 
     function.checkAndRequestLocationPermission(context);

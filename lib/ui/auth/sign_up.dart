@@ -46,6 +46,7 @@ class _SignUpState extends State<SignUp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.change_affiche(false);
     });
+    Provider.of<ApiProvider>(context, listen: false).Init();
   }
 
   @override
@@ -71,7 +72,6 @@ class _SignUpState extends State<SignUp> {
     final statut = provider.statut;
 
     final service = Provider.of<DBServices>(context);
-
     return Scaffold(
       body: SingleChildScrollView(
         reverse: false,

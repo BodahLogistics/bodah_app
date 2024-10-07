@@ -8,7 +8,6 @@ class Marchandises {
   String nom;
   int annonce_id;
   String numero_marchandise;
-  int deleted;
   String quantite;
   int? type_chargement_id;
   String poids;
@@ -22,7 +21,6 @@ class Marchandises {
     required this.nom,
     required this.annonce_id,
     required this.numero_marchandise,
-    required this.deleted,
     required this.quantite,
     this.type_chargement_id,
     required this.poids,
@@ -37,7 +35,6 @@ class Marchandises {
     String? nom,
     int? annonce_id,
     String? numero_marchandise,
-    int? deleted,
     String? quantite,
     int? type_chargement_id,
     String? poids,
@@ -51,7 +48,6 @@ class Marchandises {
       nom: nom ?? this.nom,
       annonce_id: annonce_id ?? this.annonce_id,
       numero_marchandise: numero_marchandise ?? this.numero_marchandise,
-      deleted: deleted ?? this.deleted,
       quantite: quantite ?? this.quantite,
       type_chargement_id: type_chargement_id ?? this.type_chargement_id,
       poids: poids ?? this.poids,
@@ -68,7 +64,6 @@ class Marchandises {
       'nom': nom,
       'annonce_id': annonce_id,
       'numero_marchandise': numero_marchandise,
-      'deleted': deleted,
       'quantite': quantite,
       'type_chargement_id': type_chargement_id,
       'poids': poids,
@@ -85,7 +80,6 @@ class Marchandises {
       nom: map['nom'] as String,
       annonce_id: map['annonce_id'] as int,
       numero_marchandise: map['numero_marchandise'] as String,
-      deleted: map['deleted'] as int,
       quantite: map['quantite'] as String,
       type_chargement_id: map['type_chargement_id'] != null
           ? map['type_chargement_id'] as int
@@ -108,7 +102,7 @@ class Marchandises {
 
   @override
   String toString() {
-    return 'Marchandises(id: $id, nom: $nom, annonce_id: $annonce_id, numero_marchandise: $numero_marchandise, deleted: $deleted, quantite: $quantite, type_chargement_id: $type_chargement_id, poids: $poids, destinataire_id: $destinataire_id, nombre_camions: $nombre_camions, date_chargement: $date_chargement, devise_id: $devise_id)';
+    return 'Marchandises(id: $id, nom: $nom, annonce_id: $annonce_id, numero_marchandise: $numero_marchandise, quantite: $quantite, type_chargement_id: $type_chargement_id, poids: $poids, destinataire_id: $destinataire_id, nombre_camions: $nombre_camions, date_chargement: $date_chargement, devise_id: $devise_id)';
   }
 
   @override
@@ -119,7 +113,6 @@ class Marchandises {
         other.nom == nom &&
         other.annonce_id == annonce_id &&
         other.numero_marchandise == numero_marchandise &&
-        other.deleted == deleted &&
         other.quantite == quantite &&
         other.type_chargement_id == type_chargement_id &&
         other.poids == poids &&
@@ -135,7 +128,6 @@ class Marchandises {
         nom.hashCode ^
         annonce_id.hashCode ^
         numero_marchandise.hashCode ^
-        deleted.hashCode ^
         quantite.hashCode ^
         type_chargement_id.hashCode ^
         poids.hashCode ^

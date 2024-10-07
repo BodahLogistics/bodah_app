@@ -135,17 +135,17 @@ class _TransporteurDashboardState extends State<TransporteurDashboard> {
                             ),
                           ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 35),
+                      padding: const EdgeInsets.only(top: 15, bottom: 20),
                       child: Text(
-                        "Trouvez des cargements en temps réel avec Bodah",
+                        "Planifiez paisiblement vos trajets et à l'avance avec Bodah",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: user.dark_mode == 1
                                 ? MyColors.light
-                                : Colors.black,
+                                : MyColors.black,
                             fontFamily: "Poppins",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                     Padding(
@@ -161,20 +161,6 @@ class _TransporteurDashboardState extends State<TransporteurDashboard> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 20),
-                      child: Text(
-                        "Planifiez paisiblement vos trajets et à l'avance avec Bodah",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: user.dark_mode == 1
-                                ? MyColors.light
-                                : MyColors.black,
-                            fontFamily: "Poppins",
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
                       ),
                     ),
                     ElevatedButton(

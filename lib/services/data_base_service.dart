@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors, empty_catches
 
 import 'dart:convert';
 import 'dart:io';
@@ -394,10 +394,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Rules.fromMap(json)).toList();
       } else {
-        return <Rules>[];
+        return [];
       }
     } catch (error) {
-      return <Rules>[];
+      return [];
     }
   }
 
@@ -4498,9 +4498,6 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print(response.statusCode);
-      print(response.body);
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
@@ -5842,10 +5839,41 @@ class DBServices {
         'country': country,
       });
 
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['visiteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> userMap = data['visiteur'];
+
+          // Stockage de l'utilisateur dans SecureStorage sous forme de chaîne JSON
+          await secure.writeSecureData('visiteur', jsonEncode(userMap));
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "204";
     }
+  }
+
+  Future createUserLocation(String device, double long, double lat, String city,
+      String country, int user_id) async {
+    try {
+      var url = "${api_url}create/user/location/$user_id";
+      final uri = Uri.parse(url);
+      final response = await http.post(uri, headers: {
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      }, body: {
+        'device': device,
+        'lat': lat.toString(),
+        'long': long.toString(),
+        'city': city,
+        'country': country,
+      });
+      print(response.statusCode);
+      print(response.body);
+    } catch (e) {}
   }
 
   Future<String> validateAccount(String code, ApiProvider provider) async {

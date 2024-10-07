@@ -220,8 +220,6 @@ class _SignInState extends State<SignIn> {
                                       "Une erreir s'est produite",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  provider.change_affiche(false);
-                                  provider.reset();
                                   Navigator.of(context).push(
                                     PageRouteBuilder(
                                       transitionDuration:
@@ -246,6 +244,9 @@ class _SignInState extends State<SignIn> {
                                       },
                                     ),
                                   );
+
+                                  provider.change_affiche(false);
+                                  provider.reset();
 
                                   showCustomSnackBar(
                                       context,
