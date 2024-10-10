@@ -133,8 +133,10 @@ class ApiProvider with ChangeNotifier {
   List<StatutOperations> get statut_operations => _statut_operations;
   List<StatutExpeditions> _statut_expeditions = [];
   List<StatutExpeditions> get statut_expeditions => _statut_expeditions;
+
   List<AnnonceTransporteurs> _trajets = [];
   List<AnnonceTransporteurs> get trajets => _trajets;
+
   List<MarchandiseTransporteur> _marchandise_transporteurs = [];
   List<MarchandiseTransporteur> get marchandise_transporteurs =>
       _marchandise_transporteurs;
@@ -246,6 +248,700 @@ class ApiProvider with ChangeNotifier {
   Rules? get rule => _rule;
   List<LetreVoitures> _contrats = [];
   List<LetreVoitures> get contrats => _contrats;
+
+  void setTrajet(AnnonceTransporteurs data) {
+    _trajets.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateTrajet(AnnonceTransporteurs data) {
+    int index = _trajets.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _trajets[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeTrajet(AnnonceTransporteurs data) {
+    _trajets.remove(data);
+    notifyListeners();
+  }
+
+  void setInfoLocalisation(InfoLocalisations data) {
+    _info_localisations.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateInfoLocalisation(InfoLocalisations data) {
+    int index =
+        _info_localisations.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _info_localisations[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setMarchandiseTransporteur(MarchandiseTransporteur data) {
+    _marchandise_transporteurs.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateMarchandiseTransporteur(MarchandiseTransporteur data) {
+    int index = _marchandise_transporteurs
+        .indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _marchandise_transporteurs[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setCamion(Camions data) {
+    _camions.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateCamion(Camions data) {
+    int index = _camions.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _camions[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setPiece(Pieces data) {
+    _pieces.insert(0, data);
+    notifyListeners();
+  }
+
+  void updatePieces(Pieces data) {
+    int index = _pieces.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _pieces[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setUtilisateur(Users data) {
+    _users.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateUser(Users data) {
+    int index = _users.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _users[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setTransporteur(Transporteurs data) {
+    _transporteurs.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateTransporteur(Transporteurs data) {
+    int index = _transporteurs.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _transporteurs[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setLiaison(TransportLiaisons data) {
+    _chauffeurs.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateLiaison(TransportLiaisons data) {
+    int index = _chauffeurs.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _chauffeurs[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeLiaison(TransportLiaisons data) {
+    _chauffeurs.remove(data);
+    notifyListeners();
+  }
+
+  void setAnnonce(Annonces data) {
+    _annonces.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateAnnonce(Annonces data) {
+    int index = _annonces.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _annonces[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeAnnonce(Annonces data) {
+    _annonces.remove(data);
+    notifyListeners();
+  }
+
+  void setMarchandise(Marchandises data) {
+    _marchandises.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateMarchandise(Marchandises data) {
+    int index = _marchandises.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _marchandises[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setLocalisation(Localisations data) {
+    _localisations.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateLocalisation(Localisations data) {
+    int index = _localisations.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _localisations[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setTarification(Tarifications data) {
+    _tarifications.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateTarification(Tarifications data) {
+    int index = _tarifications.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _tarifications[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setAnnoncePhotos(List<AnnoncePhotos> datas) {
+    _annonce_photos.addAll(datas);
+    notifyListeners();
+  }
+
+  void setNotification(Notifications data) {
+    _notifications.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateNotification(Notifications data) {
+    int index = _notifications.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _notifications[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeNotification(Notifications data) {
+    _notifications.remove(data);
+    notifyListeners();
+  }
+
+  void setBonCommande(BonCommandes data) {
+    _ordres.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateBonCommande(BonCommandes data) {
+    int index = _ordres.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _ordres[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeBonCommande(BonCommandes data) {
+    _ordres.remove(data);
+    notifyListeners();
+  }
+
+  void setEntite(EntiteFactures data) {
+    _entite_factures.insert(0, data);
+    notifyListeners();
+  }
+
+  void setDonneurOrdre(DonneurOrdres data) {
+    _donneur_ordres.insert(0, data);
+    notifyListeners();
+  }
+
+  void setExpediteur(Expediteurs data) {
+    _expediteurs.insert(0, data);
+    notifyListeners();
+  }
+
+  void setEntreprise(Entreprises data) {
+    _entreprises.insert(0, data);
+    notifyListeners();
+  }
+
+  void setConducteur(Conducteur data) {
+    _conducteurs.insert(0, data);
+    notifyListeners();
+  }
+
+  void setClient(Client data) {
+    _clients.insert(0, data);
+    notifyListeners();
+  }
+
+  void setChargementEffectue(ChargementEffectue data) {
+    _chargement_effectues.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateChargementEffectue(ChargementEffectue data) {
+    int index =
+        _chargement_effectues.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _chargement_effectues[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeChargementEffectue(ChargementEffectue data) {
+    _chargement_effectues.remove(data);
+    notifyListeners();
+  }
+
+  setChargementEffectues(List<ChargementEffectue> datas) {
+    _chargement_effectues.addAll(datas);
+    notifyListeners();
+  }
+
+  void setLivraison(LivraisonCargaison data) {
+    _livraisons.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateLivraison(LivraisonCargaison data) {
+    int index = _livraisons.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _livraisons[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeLivraison(LivraisonCargaison data) {
+    _livraisons.remove(data);
+    notifyListeners();
+  }
+
+  setLivraisons(List<LivraisonCargaison> datas) {
+    _livraisons.addAll(datas);
+    notifyListeners();
+  }
+
+  void setCargaison(Cargaison data) {
+    _cargaisons.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateCargaison(Cargaison data) {
+    int index = _cargaisons.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _cargaisons[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeCargaison(Cargaison data) {
+    _cargaisons.remove(data);
+    notifyListeners();
+  }
+
+  setCargaions(List<Cargaison> datas) {
+    _cargaisons.addAll(datas);
+    notifyListeners();
+  }
+
+  void setTarif(Tarif data) {
+    _tarifs.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateTarif(Tarif data) {
+    int index = _tarifs.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _tarifs[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setPosition(Positions data) {
+    _positions.insert(0, data);
+    notifyListeners();
+  }
+
+  void updatePosition(Positions data) {
+    int index = _positions.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _positions[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setChargements(Chargement data) {
+    _chargements.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateChargement(Chargement data) {
+    int index = _chargements.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _chargements[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void setCargaisonClient(CargaisonClient data) {
+    _cargaison_clients.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateCargaisonClient(CargaisonClient data) {
+    int index =
+        _cargaison_clients.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _cargaison_clients[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeCargaisonClient(CargaisonClient data) {
+    _cargaison_clients.remove(data);
+    notifyListeners();
+  }
+
+  setCargaisonClients(List<CargaisonClient> datas) {
+    _cargaison_clients.addAll(datas);
+    notifyListeners();
+  }
+
+  void setImport(Import data) {
+    _imports.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateImport(Import data) {
+    int index = _imports.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _imports[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeImport(Import data) {
+    _imports.remove(data);
+    notifyListeners();
+  }
+
+  void setExport(Exports data) {
+    _exports.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateExport(Exports data) {
+    int index = _exports.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _exports[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeExport(Exports data) {
+    _exports.remove(data);
+    notifyListeners();
+  }
+
+  void setSouscription(Souscriptions data) {
+    _souscriptions.insert(0, data);
+    notifyListeners();
+  }
+
+  void removeSouscription(Souscriptions data) {
+    _souscriptions.remove(data);
+    notifyListeners();
+  }
+
+  void setLta(Lta data) {
+    _ltas.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateLta(Lta data) {
+    int index = _ltas.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _ltas[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeLta(Lta data) {
+    _ltas.remove(data);
+    notifyListeners();
+  }
+
+  void setBl(Bl data) {
+    _bls.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateBl(Bl data) {
+    int index = _bls.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _bls[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeBl(Bl data) {
+    _bls.remove(data);
+    notifyListeners();
+  }
+
+  void setTdo(Tdos data) {
+    _tdos.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateTdo(Tdos data) {
+    int index = _tdos.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _tdos[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeTdo(Tdos data) {
+    _tdos.remove(data);
+    notifyListeners();
+  }
+
+  void setVgm(Vgms data) {
+    _vgms.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateVgm(Vgms data) {
+    int index = _vgms.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _vgms[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeVgm(Vgms data) {
+    _vgms.remove(data);
+    notifyListeners();
+  }
+
+  void setAppele(Appeles data) {
+    _appeles.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateAppele(Appeles data) {
+    int index = _appeles.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _appeles[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeAppele(Appeles data) {
+    _appeles.remove(data);
+    notifyListeners();
+  }
+
+  void setOrdre(OrdreTransport data) {
+    _import_ordres.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateOrdre(OrdreTransport data) {
+    int index = _import_ordres.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _import_ordres[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeOrdre(OrdreTransport data) {
+    _import_ordres.remove(data);
+    notifyListeners();
+  }
+
+  void setInterchange(Interchanges data) {
+    _interchanges.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateInterchange(Interchanges data) {
+    int index = _interchanges.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _interchanges[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeInterchange(Interchanges data) {
+    _interchanges.remove(data);
+    notifyListeners();
+  }
+
+  void setRecu(Recus data) {
+    _recus.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateRecu(Recus data) {
+    int index = _recus.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _recus[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeRecu(Recus data) {
+    _recus.remove(data);
+    notifyListeners();
+  }
+
+  void setAvd(Avd data) {
+    _avds.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateAvd(Avd data) {
+    int index = _avds.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _avds[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeAvd(Avd data) {
+    _avds.remove(data);
+    notifyListeners();
+  }
+
+  void setDeclaration(Declaration data) {
+    _declarations.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateDeclaration(Declaration data) {
+    int index = _declarations.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _declarations[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeDeclaration(Declaration data) {
+    _declarations.remove(data);
+    notifyListeners();
+  }
+
+  void setFiche(FicheTechnique data) {
+    _fiche_techniques.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateFiche(FicheTechnique data) {
+    int index =
+        _fiche_techniques.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _fiche_techniques[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeFicheTechnique(FicheTechnique data) {
+    _fiche_techniques.remove(data);
+    notifyListeners();
+  }
+
+  void setCo(CO data) {
+    _cos.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateCo(CO data) {
+    int index = _cos.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _cos[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeCo(CO data) {
+    _cos.remove(data);
+    notifyListeners();
+  }
+
+  void setCps(CPS data) {
+    _cps.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateCps(CPS data) {
+    int index = _cps.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _cps[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeCps(CPS data) {
+    _cps.remove(data);
+    notifyListeners();
+  }
+
+  void setBfu(Bfu data) {
+    _bfus.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateBfu(Bfu data) {
+    int index = _bfus.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _bfus[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeBfu(Bfu data) {
+    _bfus.remove(data);
+    notifyListeners();
+  }
+
+  void setAutreDoc(AutreDocs data) {
+    _autre_docs.insert(0, data);
+    notifyListeners();
+  }
+
+  void updateAutreDoc(AutreDocs data) {
+    int index = _autre_docs.indexWhere((account) => account.id == data.id);
+    if (index != -1) {
+      _autre_docs[index] = data;
+      notifyListeners();
+    }
+  }
+
+  void removeAutreDoc(AutreDocs data) {
+    _autre_docs.remove(data);
+    notifyListeners();
+  }
 
   Future<void> InitImport() async {
     _isLoading = true;

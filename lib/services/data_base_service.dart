@@ -1394,10 +1394,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1425,10 +1423,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1501,10 +1497,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1531,10 +1525,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1607,10 +1599,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1637,10 +1627,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1713,11 +1701,10 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
+
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
@@ -1742,10 +1729,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1818,10 +1803,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1848,10 +1831,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1924,10 +1905,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -1955,10 +1934,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2054,10 +2031,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2085,10 +2060,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2161,10 +2134,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2191,10 +2162,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2267,10 +2236,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2297,10 +2264,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2373,10 +2338,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2403,10 +2366,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2479,10 +2440,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2510,10 +2469,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2586,10 +2543,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2617,10 +2572,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2693,10 +2646,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2723,10 +2674,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2799,10 +2748,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2829,10 +2776,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2905,10 +2850,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
@@ -2936,10 +2879,8 @@ class DBServices {
         ..fields['doc_id'] = doc_id;
 
       if (files.isNotEmpty) {
-        for (var file in files) {
-          request.files
-              .add(await http.MultipartFile.fromPath('path[]', file.path));
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
       }
 
       var streamedResponse = await request.send();
