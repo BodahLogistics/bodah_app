@@ -64,7 +64,6 @@ class _NewExportMaritimeState extends State<NewExportMaritime> {
     final provider = Provider.of<ProvAddExportMaritime>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.change_affiche(false);
-      Provider.of<ApiProvider>(context, listen: false).InitImportData();
       Provider.of<ProvAddMarch>(context, listen: false).reset();
       Provider.of<ProvAddTransp>(context, listen: false).reset();
       Provider.of<ProvAddLiv>(context, listen: false).reset();
@@ -1537,7 +1536,6 @@ class _NewExportMaritimeState extends State<NewExportMaritime> {
                                       Colors.redAccent);
                                   provider.change_affiche(false);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitImportData();
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {

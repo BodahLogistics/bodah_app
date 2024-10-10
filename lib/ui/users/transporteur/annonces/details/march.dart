@@ -21,20 +21,9 @@ import '../../../../../../../providers/api/api_data.dart';
 import '../../../../../../../wrappers/loading.dart';
 import '../../souscriptions/list.dart';
 
-class MarchTransp extends StatefulWidget {
+class MarchTransp extends StatelessWidget {
   const MarchTransp({super.key, required this.annonce});
   final Annonces annonce;
-
-  @override
-  State<MarchTransp> createState() => _MarchTranspState();
-}
-
-class _MarchTranspState extends State<MarchTransp> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitSouscriptions();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +35,14 @@ class _MarchTranspState extends State<MarchTransp> {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Marchandises> marchandises = api_provider.marchandises;
-    marchandises =
-        function.annonce_marchandises(marchandises, widget.annonce.id);
+    marchandises = function.annonce_marchandises(marchandises, annonce.id);
     Marchandises marchandise = marchandises.first;
     List<Souscriptions> souscriptions = api_provider.souscriptions;
     Souscriptions souscription =
         function.marchandise_souscriptin(souscriptions, marchandise);
     List<AnnoncePhotos> photos = api_provider.photos;
     List<AnnoncePhotos> pictues =
-        function.annonce_pictures(widget.annonce, marchandises, photos);
+        function.annonce_pictures(annonce, marchandises, photos);
     final CarouselSliderController controller = CarouselSliderController();
     List<TypeChargements> type_chargements = api_provider.type_chargements;
 

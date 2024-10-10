@@ -23,19 +23,8 @@ import '../../../auth/sign_in.dart';
 import '../../expediteur/marchandises/expeditions/detail.dart';
 import '../drawer/index.dart';
 
-class MesChauffeurs extends StatefulWidget {
+class MesChauffeurs extends StatelessWidget {
   const MesChauffeurs({super.key});
-
-  @override
-  State<MesChauffeurs> createState() => _MesChauffeursState();
-}
-
-class _MesChauffeursState extends State<MesChauffeurs> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitChauffeurs();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -523,7 +512,6 @@ Future<dynamic> DeleteChauffeur(
                                 Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitChauffeurs();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le chauffeur a été supprimé avec succès",
@@ -640,7 +628,6 @@ Future<dynamic> ActiveChauffeur(
                                 Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitChauffeurs();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le chauffeur a été remis avec succès",
@@ -757,7 +744,6 @@ Future<dynamic> DisableChauffeur(
                                 Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitChauffeurs();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le chauffeur a été suspendu avec succès",

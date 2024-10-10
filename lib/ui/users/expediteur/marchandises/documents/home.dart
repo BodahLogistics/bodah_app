@@ -43,19 +43,8 @@ import 'declarations/index.dart';
 import 'fiches/index.dart';
 import 'lta/index.dart';
 
-class MesDocuments extends StatefulWidget {
+class MesDocuments extends StatelessWidget {
   const MesDocuments({super.key});
-
-  @override
-  State<MesDocuments> createState() => _MesDocumentsState();
-}
-
-class _MesDocumentsState extends State<MesDocuments> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitDocuments();
-  }
 
   @override
   Widget build(BuildContext context) {

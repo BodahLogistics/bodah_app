@@ -17,19 +17,8 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../drawer/index.dart';
 import '../../nav_bottom/index.dart';
 
-class MesOrdreTransport extends StatefulWidget {
+class MesOrdreTransport extends StatelessWidget {
   const MesOrdreTransport({super.key});
-
-  @override
-  State<MesOrdreTransport> createState() => _MesOrdreTransportState();
-}
-
-class _MesOrdreTransportState extends State<MesOrdreTransport> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitOrdres();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -20,22 +20,11 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../providers/users/expediteur/import/transp/add.dart';
 import '../../route/add.dart';
 
-class ListTransporteur extends StatefulWidget {
+class ListTransporteur extends StatelessWidget {
   const ListTransporteur(
       {super.key, required this.data_id, required this.data_modele});
   final int data_id;
   final String data_modele;
-
-  @override
-  State<ListTransporteur> createState() => _ListTransporteurState();
-}
-
-class _ListTransporteurState extends State<ListTransporteur> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitChargementEffectue();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +33,7 @@ class _ListTransporteurState extends State<ListTransporteur> {
     List<ChargementEffectue> chargement_effectues =
         api_provider.chargement_effectues;
     chargement_effectues = function.data_chargemnt_effectues(
-        chargement_effectues, widget.data_id, widget.data_modele);
+        chargement_effectues, data_id, data_modele);
     List<Camions> camions = api_provider.camions;
     List<Pieces> pieces = api_provider.pieces;
     List<Conducteur> conducteurs = api_provider.conducteurs;

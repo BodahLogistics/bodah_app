@@ -19,21 +19,9 @@ import '../../../../../modals/charges.dart';
 import '../../../../../modals/pieces.dart';
 import '../../../../../modals/tarifs.dart';
 
-class DetailChargement extends StatefulWidget {
+class DetailChargement extends StatelessWidget {
   const DetailChargement({super.key, required this.id});
   final int id;
-
-  @override
-  State<DetailChargement> createState() => _DetailChargementState();
-}
-
-class _DetailChargementState extends State<DetailChargement> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteurExpeditionForAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +31,7 @@ class _DetailChargementState extends State<DetailChargement> {
     Users? user = api_provider.user;
     List<Annonces> annonces = api_provider.annonces;
     List<Users> users = api_provider.users;
-    Expeditions expedition = function.expedition(expeditions, widget.id);
+    Expeditions expedition = function.expedition(expeditions, id);
     Annonces annonce = function.annonce(annonces, expedition.annonce_id);
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     Transporteurs transporteur =

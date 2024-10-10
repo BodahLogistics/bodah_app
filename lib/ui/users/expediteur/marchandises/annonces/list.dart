@@ -21,19 +21,8 @@ import '../../../../../wrappers/load.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
 
-class AnnonceMarchandises extends StatefulWidget {
+class AnnonceMarchandises extends StatelessWidget {
   const AnnonceMarchandises({super.key});
-
-  @override
-  State<AnnonceMarchandises> createState() => _AnnonceMarchandisesState();
-}
-
-class _AnnonceMarchandisesState extends State<AnnonceMarchandises> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {

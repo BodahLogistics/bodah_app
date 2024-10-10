@@ -23,20 +23,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../documents/contrats/index.dart';
 import '../documents/vgm/index.dart';
 
-class DocumentChargements extends StatefulWidget {
+class DocumentChargements extends StatelessWidget {
   const DocumentChargements({super.key});
-
-  @override
-  State<DocumentChargements> createState() => _DocumentChargementsState();
-}
-
-class _DocumentChargementsState extends State<DocumentChargements> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteursDocuments();
-  }
 
   @override
   Widget build(BuildContext context) {

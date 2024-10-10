@@ -22,19 +22,8 @@ import '../../../auth/sign_in.dart';
 import '../annonces/details/index.dart';
 import '../drawer/index.dart';
 
-class ListSouscription extends StatefulWidget {
+class ListSouscription extends StatelessWidget {
   const ListSouscription({super.key});
-
-  @override
-  State<ListSouscription> createState() => _ListSouscriptionState();
-}
-
-class _ListSouscriptionState extends State<ListSouscription> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitSouscriptions();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -778,7 +767,6 @@ Future<dynamic> DeleteSouscription(
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitSouscriptions();
                             showCustomSnackBar(
                                 dialocontext,
                                 "La souscription a été supprimée avec succès",
@@ -904,7 +892,6 @@ Future<dynamic> AddSouscription(
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitSouscriptions();
                             showCustomSnackBar(
                                 dialocontext,
                                 "La souscription a été enregistrée avec succès",

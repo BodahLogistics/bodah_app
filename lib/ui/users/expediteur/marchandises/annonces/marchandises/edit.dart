@@ -1137,7 +1137,6 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                       "Vous ne pouvez pas modifier la marchandise",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitForSomeAnnonce();
                                   provider.change_affiche(false);
                                   provider.reset();
                                   calculatrice.change_montant("");

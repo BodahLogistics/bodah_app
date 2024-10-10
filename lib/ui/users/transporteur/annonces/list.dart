@@ -19,19 +19,8 @@ import '../../../../../wrappers/load.dart';
 import '../drawer/index.dart';
 import 'details/index.dart';
 
-class ListAnnonces extends StatefulWidget {
+class ListAnnonces extends StatelessWidget {
   const ListAnnonces({super.key});
-
-  @override
-  State<ListAnnonces> createState() => _ListAnnoncesState();
-}
-
-class _ListAnnoncesState extends State<ListAnnonces> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitTransporteurAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {

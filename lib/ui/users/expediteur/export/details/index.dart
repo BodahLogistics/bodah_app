@@ -448,7 +448,6 @@ Future<dynamic> DeleteExport(BuildContext context, Exports export) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitImportData();
                             showCustomSnackBar(
                                 dialocontext,
                                 "L'exportation a été supprimée avec succès",

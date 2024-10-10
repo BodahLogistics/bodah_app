@@ -26,19 +26,8 @@ import '../dashboard/trajet.dart';
 import '../drawer/index.dart';
 import 'add.dart';
 
-class ListTrajets extends StatefulWidget {
+class ListTrajets extends StatelessWidget {
   const ListTrajets({super.key});
-
-  @override
-  State<ListTrajets> createState() => _ListTrajetsState();
-}
-
-class _ListTrajetsState extends State<ListTrajets> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitTrajet();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -775,7 +764,6 @@ Future<dynamic> DeleteTrajet(
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitTrajet();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le trajet a été supprimé avec succès",

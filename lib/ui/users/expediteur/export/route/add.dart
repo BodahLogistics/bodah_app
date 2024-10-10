@@ -66,7 +66,6 @@ class _NewExportRouteState extends State<NewExportRoute> {
     final provider = Provider.of<ProvAddExport>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.change_affiche(false);
-      Provider.of<ApiProvider>(context, listen: false).InitImportData();
       Provider.of<ProvAddMarch>(context, listen: false).reset();
       Provider.of<ProvAddTransp>(context, listen: false).reset();
       Provider.of<ProvAddLiv>(context, listen: false).reset();
@@ -1631,7 +1630,6 @@ class _NewExportRouteState extends State<NewExportRoute> {
                                       Colors.redAccent);
                                   provider.change_affiche(false);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitImportData();
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {

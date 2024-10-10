@@ -17,19 +17,8 @@ import '../../../../../modals/pays.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 
-class ListExpExp extends StatefulWidget {
+class ListExpExp extends StatelessWidget {
   const ListExpExp({super.key});
-
-  @override
-  State<ListExpExp> createState() => _ListExpExpState();
-}
-
-class _ListExpExpState extends State<ListExpExp> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {

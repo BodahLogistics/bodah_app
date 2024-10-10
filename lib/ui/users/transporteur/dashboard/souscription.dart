@@ -19,19 +19,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../../../../modals/transporteurs.dart';
 import '../souscriptions/list.dart';
 
-class MesSouscription extends StatefulWidget {
+class MesSouscription extends StatelessWidget {
   const MesSouscription({super.key});
-
-  @override
-  State<MesSouscription> createState() => _MesSouscriptionState();
-}
-
-class _MesSouscriptionState extends State<MesSouscription> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitSouscriptions();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1535,7 +1535,6 @@ class _NewImportMaritimeState extends State<NewImportMaritime> {
                                       Colors.redAccent);
                                   provider.change_affiche(false);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitImportData();
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {

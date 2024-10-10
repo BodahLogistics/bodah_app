@@ -1054,7 +1054,6 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
                                     "Une erreur s'est produite. Vérifiez votre connection internet et réessayer",
                                     Colors.redAccent);
                               } else if (statut_code == "200") {
-                                await api_provider.InitAnnonce();
                                 provider.change_affiche(false);
                                 provider.reset();
                                 calculatrice.change_montant("");

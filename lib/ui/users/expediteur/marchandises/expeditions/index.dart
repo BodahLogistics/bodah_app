@@ -19,19 +19,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
 
-class MesExpeditions extends StatefulWidget {
+class MesExpeditions extends StatelessWidget {
   const MesExpeditions({super.key});
-
-  @override
-  State<MesExpeditions> createState() => _MesExpeditionsState();
-}
-
-class _MesExpeditionsState extends State<MesExpeditions> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {

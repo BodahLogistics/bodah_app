@@ -450,7 +450,6 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitImportData();
                             showCustomSnackBar(
                                 dialocontext,
                                 "L'importation a été supprimée avec succès",

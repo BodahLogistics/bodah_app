@@ -15,21 +15,10 @@ import '../../../../providers/api/api_data.dart';
 import '../../../../providers/connection/index.dart';
 import '../../../../wrappers/wrapper.dart';
 
-class TransporteurDashboard extends StatefulWidget {
+class TransporteurDashboard extends StatelessWidget {
   const TransporteurDashboard({
     super.key,
   });
-
-  @override
-  State<TransporteurDashboard> createState() => _TransporteurDashboardState();
-}
-
-class _TransporteurDashboardState extends State<TransporteurDashboard> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitActualites();
-  }
 
   @override
   Widget build(BuildContext context) {

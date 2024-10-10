@@ -27,19 +27,8 @@ import '../../../../services/data_base_service.dart';
 import '../../../auth/sign_in.dart';
 import '../trajets/list.dart';
 
-class MesTrajets extends StatefulWidget {
+class MesTrajets extends StatelessWidget {
   const MesTrajets({super.key});
-
-  @override
-  State<MesTrajets> createState() => _MesTrajetsState();
-}
-
-class _MesTrajetsState extends State<MesTrajets> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitTrajet();
-  }
 
   @override
   Widget build(BuildContext context) {

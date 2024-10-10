@@ -1628,7 +1628,6 @@ class _NewImportRouteState extends State<NewImportRoute> {
                                       Colors.redAccent);
                                   provider.change_affiche(false);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitImportData();
                                   provider.reset();
                                   provider.change_affiche(false);
                                   if (api_provider.data_id > 0) {
@@ -2607,7 +2606,6 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitChargementEffectue();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -3466,7 +3464,6 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitCargaison();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -4124,7 +4121,6 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitLivraison();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -4800,7 +4796,6 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitLivraison();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -5681,7 +5676,6 @@ Future<dynamic> UpdateMarch(
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitCargaison();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -6649,7 +6643,6 @@ Future<dynamic> UpdateTransp(
                                 "Une erreur est survenue. Vérifie si tous les champs sont bien renseignés",
                                 Colors.redAccent);
                           } else {
-                            await api_provider.InitChargementEffectue();
                             provider.reset();
                             showCustomSnackBar(
                                 dialocontext,
@@ -8365,7 +8358,6 @@ Future<dynamic> DeleteTransp(BuildContext context,
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitChargementEffectue();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le transporteur a été supprimé avec succès",
@@ -8481,7 +8473,6 @@ Future<dynamic> DeleteMarch(BuildContext context,
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitCargaison();
                             showCustomSnackBar(
                                 dialocontext,
                                 "La marchandise a été supprimée avec succès",
@@ -8599,7 +8590,6 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitLivraison();
                             showCustomSnackBar(
                                 dialocontext,
                                 "La livraison a été supprimée avec succès",

@@ -1177,7 +1177,6 @@ class _UpOrdreTransportState extends State<UpOrdreTransport> {
                                       "Vous ne pouvez pas modifier l'ordrede transport",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitForSomeAnnonce();
                                   provider.change_affiche(false);
                                   provider.reset();
                                   Navigator.of(context).pop();

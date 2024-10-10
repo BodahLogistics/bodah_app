@@ -19,30 +19,18 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../providers/users/expediteur/import/march/add.dart';
 import '../../route/add.dart';
 
-class ListCargaison extends StatefulWidget {
+class ListCargaison extends StatelessWidget {
   const ListCargaison(
       {super.key, required this.data_id, required this.data_modele});
   final int data_id;
   final String data_modele;
 
   @override
-  State<ListCargaison> createState() => _ListCargaisonState();
-}
-
-class _ListCargaisonState extends State<ListCargaison> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitCargaison();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     List<Cargaison> cargaisons = api_provider.cargaisons;
-    cargaisons = function.data_cargaisons(
-        cargaisons, widget.data_id, widget.data_modele);
+    cargaisons = function.data_cargaisons(cargaisons, data_id, data_modele);
     List<Client> clients = api_provider.clients;
     List<CargaisonClient> cargaisons_clients = api_provider.cargaison_clients;
     List<Chargement> chargements = api_provider.chargements;

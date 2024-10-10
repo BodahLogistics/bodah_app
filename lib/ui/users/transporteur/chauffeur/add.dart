@@ -873,7 +873,6 @@ class _AddChauffeurState extends State<AddChauffeur> {
                                   "Une erreur s'est produite. Vérifiez votre connection internet et réessayer",
                                   Colors.redAccent);
                             } else if (statut_code == "200") {
-                              await api_provider.InitChauffeurs();
                               provider.change_affiche(false);
                               provider.reset();
                               Navigator.of(context).pop();

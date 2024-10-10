@@ -17,30 +17,18 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../../providers/users/expediteur/import/liv/add.dart';
 import '../../route/add.dart';
 
-class ListLivraisons extends StatefulWidget {
+class ListLivraisons extends StatelessWidget {
   const ListLivraisons(
       {super.key, required this.data_id, required this.data_modele});
   final int data_id;
   final String data_modele;
 
   @override
-  State<ListLivraisons> createState() => _ListLivraisonsState();
-}
-
-class _ListLivraisonsState extends State<ListLivraisons> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitLivraison();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     List<LivraisonCargaison> livraisons = api_provider.livraisons;
-    livraisons = function.data_livraisons(
-        livraisons, widget.data_id, widget.data_modele);
+    livraisons = function.data_livraisons(livraisons, data_id, data_modele);
     List<Cargaison> cargaisons = api_provider.cargaisons;
     List<Client> clients = api_provider.clients;
     List<Pays> pays = api_provider.pays;
@@ -424,11 +412,8 @@ class _ListLivraisonsState extends State<ListLivraisons> {
                                                   client,
                                                   pay,
                                                   ville);
-                                              UpdateLiv(
-                                                  context,
-                                                  livraison,
-                                                  widget.data_id,
-                                                  widget.data_modele);
+                                              UpdateLiv(context, livraison,
+                                                  data_id, data_modele);
                                             },
                                             icon: Icon(
                                               Icons.edit,

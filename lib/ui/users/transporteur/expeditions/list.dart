@@ -21,20 +21,8 @@ import '../../../../modals/camions.dart';
 import '../../../../modals/transporteurs.dart';
 import '../drawer/index.dart';
 
-class ListTransport extends StatefulWidget {
+class ListTransport extends StatelessWidget {
   const ListTransport({super.key});
-
-  @override
-  State<ListTransport> createState() => _ListTransportState();
-}
-
-class _ListTransportState extends State<ListTransport> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteurExpedition();
-  }
 
   @override
   Widget build(BuildContext context) {

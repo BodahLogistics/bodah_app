@@ -30,22 +30,11 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../auth/sign_in.dart';
 import '../../../marchandises/documents/appeles/index.dart';
 
-class ListDocuments extends StatefulWidget {
+class ListDocuments extends StatelessWidget {
   const ListDocuments(
       {super.key, required this.data_id, required this.data_modele});
   final int data_id;
   final String data_modele;
-
-  @override
-  State<ListDocuments> createState() => _ListDocumentsState();
-}
-
-class _ListDocumentsState extends State<ListDocuments> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitDocuments();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,40 +44,38 @@ class _ListDocumentsState extends State<ListDocuments> {
     Users? user = api_provider.user;
     bool loading = api_provider.loading;
     List<Appeles> appeles = api_provider.appeles;
-    appeles =
-        function.data_appeles(appeles, widget.data_id, widget.data_modele);
+    appeles = function.data_appeles(appeles, data_id, data_modele);
     List<Interchanges> interchanges = api_provider.interchanges;
-    interchanges = function.data_interchanges(
-        interchanges, widget.data_id, widget.data_modele);
+    interchanges =
+        function.data_interchanges(interchanges, data_id, data_modele);
     List<Tdos> tdos = api_provider.tdos;
-    tdos = function.data_tdos(tdos, widget.data_id, widget.data_modele);
+    tdos = function.data_tdos(tdos, data_id, data_modele);
     List<Vgms> vgms = api_provider.vgms;
-    vgms = function.data_vgm(vgms, widget.data_id, widget.data_modele);
+    vgms = function.data_vgm(vgms, data_id, data_modele);
     List<Recus> recus = api_provider.recus;
-    recus = function.data_recus(recus, widget.data_id, widget.data_modele);
+    recus = function.data_recus(recus, data_id, data_modele);
     List<AutreDocs> autre_docs = api_provider.autre_docs;
-    autre_docs = function.data_autre_docs(
-        autre_docs, widget.data_id, widget.data_modele);
+    autre_docs = function.data_autre_docs(autre_docs, data_id, data_modele);
     List<Avd> avds = api_provider.avds;
-    avds = function.data_avds(avds, widget.data_id, widget.data_modele);
+    avds = function.data_avds(avds, data_id, data_modele);
     List<Bl> bls = api_provider.bls;
-    bls = function.data_bl(bls, widget.data_id, widget.data_modele);
+    bls = function.data_bl(bls, data_id, data_modele);
     List<Lta> ltas = api_provider.ltas;
-    ltas = function.data_lta(ltas, widget.data_id, widget.data_modele);
+    ltas = function.data_lta(ltas, data_id, data_modele);
     List<Bfu> bfus = api_provider.bfus;
-    bfus = function.data_bfus(bfus, widget.data_id, widget.data_modele);
+    bfus = function.data_bfus(bfus, data_id, data_modele);
     List<CO> cos = api_provider.cos;
-    cos = function.data_cos(cos, widget.data_id, widget.data_modele);
+    cos = function.data_cos(cos, data_id, data_modele);
     List<CPS> cps = api_provider.cps;
-    cps = function.data_cps(cps, widget.data_id, widget.data_modele);
+    cps = function.data_cps(cps, data_id, data_modele);
     List<Declaration> declarations = api_provider.declarations;
-    declarations = function.data_declarations(
-        declarations, widget.data_id, widget.data_modele);
+    declarations =
+        function.data_declarations(declarations, data_id, data_modele);
     List<FicheTechnique> fiche_techniques = api_provider.fiche_techniques;
-    fiche_techniques = function.data_fiches(
-        fiche_techniques, widget.data_id, widget.data_modele);
+    fiche_techniques =
+        function.data_fiches(fiche_techniques, data_id, data_modele);
     List<OrdreTransport> ordres = api_provider.import_ordres;
-    ordres = function.data_ordres(ordres, widget.data_id, widget.data_modele);
+    ordres = function.data_ordres(ordres, data_id, data_modele);
 
     return loading
         ? Loading()
@@ -106,11 +93,10 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (interchanges.isNotEmpty) {
-                            showInterchanges(context, widget.data_id,
-                                widget.data_modele, interchanges);
+                            showInterchanges(
+                                context, data_id, data_modele, interchanges);
                           } else {
-                            NewInter(
-                                context, widget.data_id, widget.data_modele);
+                            NewInter(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -169,11 +155,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (recus.isNotEmpty) {
-                            showRecus(context, widget.data_id,
-                                widget.data_modele, recus);
+                            showRecus(context, data_id, data_modele, recus);
                           } else {
-                            NewRecu(
-                                context, widget.data_id, widget.data_modele);
+                            NewRecu(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -232,10 +216,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (ltas.isNotEmpty) {
-                            showLta(
-                                context, widget.data_id, widget.data_modele);
+                            showLta(context, data_id, data_modele);
                           } else {
-                            NewLta(context, widget.data_id, widget.data_modele);
+                            NewLta(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -280,11 +263,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (fiche_techniques.isNotEmpty) {
-                            showFiches(
-                                context, widget.data_id, widget.data_modele);
+                            showFiches(context, data_id, data_modele);
                           } else {
-                            NewFiche(
-                                context, widget.data_id, widget.data_modele);
+                            NewFiche(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -351,10 +332,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (tdos.isNotEmpty) {
-                            showTdo(context, widget.data_id, widget.data_modele,
-                                tdos);
+                            showTdo(context, data_id, data_modele, tdos);
                           } else {
-                            NewTdo(context, widget.data_id, widget.data_modele);
+                            NewTdo(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -399,11 +379,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (ordres.isNotEmpty) {
-                            showImportOrdre(
-                                context, widget.data_id, widget.data_modele);
+                            showImportOrdre(context, data_id, data_modele);
                           } else {
-                            NewImportOrdre(
-                                context, widget.data_id, widget.data_modele);
+                            NewImportOrdre(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -462,10 +440,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (bfus.isNotEmpty) {
-                            showBfu(
-                                context, widget.data_id, widget.data_modele);
+                            showBfu(context, data_id, data_modele);
                           } else {
-                            NewBfu(context, widget.data_id, widget.data_modele);
+                            NewBfu(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -510,9 +487,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (cos.isNotEmpty) {
-                            showCo(context, widget.data_id, widget.data_modele);
+                            showCo(context, data_id, data_modele);
                           } else {
-                            NewCo(context, widget.data_id, widget.data_modele);
+                            NewCo(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -579,10 +556,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (vgms.isNotEmpty) {
-                            showVgm(context, widget.data_id, widget.data_modele,
-                                vgms);
+                            showVgm(context, data_id, data_modele, vgms);
                           } else {
-                            NewVgm(context, widget.data_id, widget.data_modele);
+                            NewVgm(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -627,9 +603,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (bls.isNotEmpty) {
-                            showBl(context, widget.data_id, widget.data_modele);
+                            showBl(context, data_id, data_modele);
                           } else {
-                            NewBl(context, widget.data_id, widget.data_modele);
+                            NewBl(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -674,10 +650,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (avds.isNotEmpty) {
-                            showAvd(
-                                context, widget.data_id, widget.data_modele);
+                            showAvd(context, data_id, data_modele);
                           } else {
-                            NewAvd(context, widget.data_id, widget.data_modele);
+                            NewAvd(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -722,10 +697,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (cps.isNotEmpty) {
-                            showCps(
-                                context, widget.data_id, widget.data_modele);
+                            showCps(context, data_id, data_modele);
                           } else {
-                            NewCps(context, widget.data_id, widget.data_modele);
+                            NewCps(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -792,11 +766,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (appeles.isNotEmpty) {
-                            showApeles(context, widget.data_id,
-                                widget.data_modele, appeles);
+                            showApeles(context, data_id, data_modele, appeles);
                           } else {
-                            NewApele(
-                                context, widget.data_id, widget.data_modele);
+                            NewApele(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -855,11 +827,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (declarations.isNotEmpty) {
-                            showDecla(
-                                context, widget.data_id, widget.data_modele);
+                            showDecla(context, data_id, data_modele);
                           } else {
-                            NewDecla(
-                                context, widget.data_id, widget.data_modele);
+                            NewDecla(context, data_id, data_modele);
                           }
                         },
                         child: Row(
@@ -918,11 +888,9 @@ class _ListDocumentsState extends State<ListDocuments> {
                           style: TextButton.styleFrom(padding: EdgeInsets.zero),
                           onPressed: () {
                             if (autre_docs.isNotEmpty) {
-                              showAutreDoc(
-                                  context, widget.data_id, widget.data_modele);
+                              showAutreDoc(context, data_id, data_modele);
                             } else {
-                              NewDoc(
-                                  context, widget.data_id, widget.data_modele);
+                              NewDoc(context, data_id, data_modele);
                             }
                           },
                           child: Row(

@@ -18,21 +18,9 @@ import '../../../../../../../modals/vgms.dart';
 import '../../../../../../../providers/api/api_data.dart';
 import '../../../../expediteur/import/details/docs/index.dart';
 
-class DocsChargement extends StatefulWidget {
+class DocsChargement extends StatelessWidget {
   const DocsChargement({super.key, required this.annonce});
   final Annonces annonce;
-
-  @override
-  State<DocsChargement> createState() => _DocsChargementState();
-}
-
-class _DocsChargementState extends State<DocsChargement> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteursDocuments();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +30,7 @@ class _DocsChargementState extends State<DocsChargement> {
     bool loading = api_provider.loading;
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     List<Expeditions> expeditions = api_provider.expeditions;
-    expeditions = function.annonce_expeditions(expeditions, widget.annonce);
+    expeditions = function.annonce_expeditions(expeditions, annonce);
     expeditions = function.mesTransports(transporteurs, expeditions);
     List<Appeles> appeles = api_provider.appeles;
     appeles = function.expedition_appeles(appeles, expeditions);
@@ -71,8 +59,8 @@ class _DocsChargementState extends State<DocsChargement> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (interchanges.isNotEmpty) {
-                            showInterchanges(context, widget.annonce.id,
-                                "Expedition", interchanges);
+                            showInterchanges(context, annonce.id, "Expedition",
+                                interchanges);
                           }
                         },
                         child: Row(
@@ -125,8 +113,7 @@ class _DocsChargementState extends State<DocsChargement> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (recus.isNotEmpty) {
-                            showRecus(
-                                context, widget.annonce.id, "Annonce", recus);
+                            showRecus(context, annonce.id, "Annonce", recus);
                           }
                         },
                         child: Row(
@@ -179,8 +166,7 @@ class _DocsChargementState extends State<DocsChargement> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (tdos.isNotEmpty) {
-                            showTdo(
-                                context, widget.annonce.id, "Annonce", tdos);
+                            showTdo(context, annonce.id, "Annonce", tdos);
                           }
                         },
                         child: Row(
@@ -227,8 +213,7 @@ class _DocsChargementState extends State<DocsChargement> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (vgms.isNotEmpty) {
-                            showVgm(
-                                context, widget.annonce.id, "Annonce", vgms);
+                            showVgm(context, annonce.id, "Annonce", vgms);
                           }
                         },
                         child: Row(
@@ -267,8 +252,7 @@ class _DocsChargementState extends State<DocsChargement> {
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
                           if (appeles.isNotEmpty) {
-                            showApeles(
-                                context, widget.annonce.id, "Annonce", appeles);
+                            showApeles(context, annonce.id, "Annonce", appeles);
                           }
                         },
                         child: Row(

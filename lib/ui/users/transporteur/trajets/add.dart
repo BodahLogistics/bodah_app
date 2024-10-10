@@ -666,7 +666,6 @@ class _AddTrajetState extends State<AddTrajet> {
                                       "Une erreur s'est produite. Vérifiez votre connection internet et réessayer",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await api_provider.InitTrajet();
                                   provider.change_affiche(false);
                                   provider.reset();
                                   Navigator.of(context).pop();

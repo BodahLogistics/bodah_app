@@ -22,20 +22,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../documents/contrats/index.dart';
 import '../documents/vgm/index.dart';
 
-class TranspDocument extends StatefulWidget {
+class TranspDocument extends StatelessWidget {
   const TranspDocument({super.key});
-
-  @override
-  State<TranspDocument> createState() => _TranspDocumentState();
-}
-
-class _TranspDocumentState extends State<TranspDocument> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteursDocuments();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -42,20 +42,8 @@ import 'bordereaux/index.dart';
 import 'import_ordre/ordre_import_export.dart';
 import 'ordres/index.dart';
 
-class DashBoardDocExp extends StatefulWidget {
+class DashBoardDocExp extends StatelessWidget {
   const DashBoardDocExp({super.key});
-
-  @override
-  State<DashBoardDocExp> createState() => _DashBoardDocExpState();
-}
-
-class _DashBoardDocExpState extends State<DashBoardDocExp> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitDocuments();
-    Provider.of<ApiProvider>(context, listen: false).InitImportData();
-  }
 
   @override
   Widget build(BuildContext context) {

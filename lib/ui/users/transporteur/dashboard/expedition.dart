@@ -20,20 +20,8 @@ import '../../../../../providers/api/api_data.dart';
 import '../../../../modals/camions.dart';
 import '../../../../modals/transporteurs.dart';
 
-class MesTransport extends StatefulWidget {
+class MesTransport extends StatelessWidget {
   const MesTransport({super.key});
-
-  @override
-  State<MesTransport> createState() => _MesTransportState();
-}
-
-class _MesTransportState extends State<MesTransport> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false)
-        .InitTransporteurExpedition();
-  }
 
   @override
   Widget build(BuildContext context) {
