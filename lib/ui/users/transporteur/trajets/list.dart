@@ -746,7 +746,7 @@ Future<dynamic> DeleteTrajet(
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteTrajet(trajet);
+                              await service.deleteTrajet(trajet, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,

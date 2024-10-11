@@ -2587,7 +2587,8 @@ Future<dynamic> NewTransp(BuildContext context, int import_id) {
                               ville_liv,
                               tarif,
                               accompte,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -3445,7 +3446,8 @@ Future<dynamic> NewMarch(BuildContext context, int import_id) {
                               pay_liv,
                               ville_liv,
                               quantite,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -4102,7 +4104,8 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                               adresse,
                               quantite,
                               sup,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -4777,7 +4780,8 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                               adresse,
                               quantite,
                               sup,
-                              livraison);
+                              livraison,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -5657,7 +5661,8 @@ Future<dynamic> UpdateMarch(
                               pay_liv,
                               ville_liv,
                               quantite,
-                              cargaison_client);
+                              cargaison_client,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -6624,7 +6629,8 @@ Future<dynamic> UpdateTransp(
                               ville_liv,
                               tarif,
                               accompte,
-                              chargement_effectue);
+                              chargement_effectue,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -8351,8 +8357,9 @@ Future<dynamic> DeleteTransp(BuildContext context,
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service
-                              .deleteChargementEffectue(chargement_effectue);
+                          final String statut =
+                              await service.deleteChargementEffectue(
+                                  chargement_effectue, provider);
                           if (statut == "202") {
                             showCustomSnackBar(dialocontext,
                                 "Une erreur s'est produite", Colors.redAccent);
@@ -8466,8 +8473,9 @@ Future<dynamic> DeleteMarch(BuildContext context,
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service
-                              .deleteCargaisonClient(cargaison_client);
+                          final String statut =
+                              await service.deleteCargaisonClient(
+                                  cargaison_client, provider);
                           if (statut == "202") {
                             showCustomSnackBar(dialocontext,
                                 "Une erreur s'est produite", Colors.redAccent);
@@ -8584,7 +8592,7 @@ Future<dynamic> DeleteLiv(BuildContext context, LivraisonCargaison livraison,
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteLiv(livraison);
+                              await service.deleteLiv(livraison, provider);
                           if (statut == "202") {
                             showCustomSnackBar(dialocontext,
                                 "Une erreur s'est produite", Colors.redAccent);

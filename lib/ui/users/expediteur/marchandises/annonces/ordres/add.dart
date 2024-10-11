@@ -1104,7 +1104,8 @@ class _AddOrdreTransportState extends State<AddOrdreTransport> {
                                     entite_entreprise,
                                     ifu,
                                     entite_ifu,
-                                    widget.annonce);
+                                    widget.annonce,
+                                    api_provider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);

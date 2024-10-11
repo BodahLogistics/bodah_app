@@ -452,7 +452,7 @@ Future<dynamic> DeleteAnnonce(BuildContext context, Annonces annonce) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteAnnonce(annonce);
+                              await service.deleteAnnonce(annonce, provider);
                           if (statut == "404" || statut == "403") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -470,7 +470,6 @@ Future<dynamic> DeleteAnnonce(BuildContext context, Annonces annonce) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitAnnonce();
                             showCustomSnackBar(
                                 dialocontext,
                                 "L'annonce a été supprimée avec succès",
@@ -596,7 +595,7 @@ Future<dynamic> ValidateOrdre(BuildContext context, BonCommandes ordre) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.validateOrdre(ordre);
+                              await service.validateOrdre(ordre, provider);
                           if (statut == "404" ||
                               statut == "401" ||
                               statut == "403") {
@@ -610,7 +609,6 @@ Future<dynamic> ValidateOrdre(BuildContext context, BonCommandes ordre) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else {
-                            await provider.InitForSomeOrdre();
                             showCustomSnackBar(
                                 dialocontext,
                                 "L'ordre de transport a été validé avec succès",
@@ -718,7 +716,7 @@ Future<dynamic> DeleteOrdre(
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteOrdre(ordre);
+                              await service.deleteOrdre(ordre, provider);
                           if (statut == "404" ||
                               statut == "401" ||
                               statut == "403") {

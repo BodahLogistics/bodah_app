@@ -490,8 +490,8 @@ Future<dynamic> DeleteChauffeur(
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut =
-                              await service.deleteChauffeur(chauffeur);
+                          final String statut = await service.deleteChauffeur(
+                              chauffeur, provider);
 
                           if (statut == "500") {
                             showCustomSnackBar(
@@ -607,8 +607,8 @@ Future<dynamic> ActiveChauffeur(
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut =
-                              await service.activeChauffeur(chauffeur);
+                          final String statut = await service.activeChauffeur(
+                              chauffeur, provider);
                           if (statut == "500") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -723,8 +723,8 @@ Future<dynamic> DisableChauffeur(
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut =
-                              await service.disableChauffeur(chauffeur);
+                          final String statut = await service.disableChauffeur(
+                              chauffeur, provider);
                           if (statut == "500") {
                             showCustomSnackBar(
                                 dialocontext,

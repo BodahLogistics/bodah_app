@@ -2589,7 +2589,8 @@ Future<dynamic> NewTranspExp(BuildContext context, int import_id) {
                               ville_liv,
                               tarif,
                               accompte,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -3448,7 +3449,8 @@ Future<dynamic> NewMarchExp(BuildContext context, int import_id) {
                               pay_liv,
                               ville_liv,
                               quantite,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);
@@ -4106,7 +4108,8 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
                               adresse,
                               quantite,
                               sup,
-                              import_id);
+                              import_id,
+                              api_provider);
 
                           if (statut_code == "202") {
                             provider.change_affiche(false);

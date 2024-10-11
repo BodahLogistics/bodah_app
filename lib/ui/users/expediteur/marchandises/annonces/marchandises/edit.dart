@@ -1111,7 +1111,8 @@ class _UpMarchandiseState extends State<UpMarchandise> {
                                         ville_liv,
                                         files,
                                         marchandise,
-                                        tarif_unitaire);
+                                        tarif_unitaire,
+                                        api_provider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);

@@ -438,7 +438,7 @@ Future<dynamic> DeleteExport(BuildContext context, Exports export) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteExport(export);
+                              await service.deleteExport(export, provider);
                           if (statut == "500") {
                             showCustomSnackBar(dialocontext,
                                 "Echec de suppression", Colors.redAccent);

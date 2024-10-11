@@ -749,7 +749,8 @@ Future<dynamic> DeleteSouscription(
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.DeleteSouscription(souscription);
+                              await service.DeleteSouscription(
+                                  souscription, provider);
                           if (statut == "401") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -873,8 +874,8 @@ Future<dynamic> AddSouscription(
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut =
-                              await service.AddSouscription(marchandise);
+                          final String statut = await service.AddSouscription(
+                              marchandise, provider);
                           if (statut == "401") {
                             showCustomSnackBar(
                                 dialocontext,

@@ -440,7 +440,7 @@ Future<dynamic> DeleteImport(BuildContext context, Import import) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.deleteImport(import);
+                              await service.deleteImport(import, provider);
                           if (statut == "500") {
                             showCustomSnackBar(dialocontext,
                                 "Echec de suppression", Colors.redAccent);

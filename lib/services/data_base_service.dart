@@ -1378,8 +1378,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportApele(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportApele(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1401,14 +1401,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          Appeles data = Appeles.fromMap(dataMap);
+          provider.setAppele(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateApele(
-      String doc_id, List<File> files, Appeles apele) async {
+  Future<String> UpdateApele(String doc_id, List<File> files, Appeles apele,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1429,6 +1441,17 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          Appeles data = Appeles.fromMap(dataMap);
+          provider.updateAppele(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1436,7 +1459,7 @@ class DBServices {
     }
   }
 
-  Future<String> DeleteApele(Appeles apele) async {
+  Future<String> DeleteApele(Appeles apele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1447,6 +1470,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeAppele(apele);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1481,8 +1508,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportLta(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportLta(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1504,13 +1531,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Lta.fromMap(dataMap);
+          provider.setLta(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateLta(String doc_id, List<File> files, Lta lta) async {
+  Future<String> UpdateLta(
+      String doc_id, List<File> files, Lta lta, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1532,13 +1572,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Lta.fromMap(dataMap);
+          provider.updateLta(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteLta(Lta lta) async {
+  Future<String> DeleteLta(Lta lta, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1549,6 +1601,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeLta(lta);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1583,8 +1639,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportBl(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportBl(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1606,13 +1662,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Bl.fromMap(dataMap);
+          provider.setBl(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateBl(String doc_id, List<File> files, Bl data) async {
+  Future<String> UpdateBl(
+      String doc_id, List<File> files, Bl data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1634,13 +1703,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Bl.fromMap(dataMap);
+          provider.updateBl(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteBl(Bl data) async {
+  Future<String> DeleteBl(Bl data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1651,6 +1732,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeBl(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1685,8 +1770,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportTdo(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportTdo(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1708,13 +1793,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Tdos.fromMap(dataMap);
+          provider.setTdo(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateTdo(String doc_id, List<File> files, Tdos data) async {
+  Future<String> UpdateTdo(
+      String doc_id, List<File> files, Tdos data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1736,13 +1834,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Tdos.fromMap(dataMap);
+          provider.updateTdo(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteTdo(Tdos data) async {
+  Future<String> DeleteTdo(Tdos data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1753,6 +1863,9 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+      if (response.statusCode == 200) {
+        provider.removeTdo(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1787,8 +1900,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportVgm(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportVgm(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1810,13 +1923,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Vgms.fromMap(dataMap);
+          provider.setVgm(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateVgm(String doc_id, List<File> files, Vgms data) async {
+  Future<String> UpdateVgm(
+      String doc_id, List<File> files, Vgms data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1838,13 +1964,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Vgms.fromMap(dataMap);
+          provider.updateVgm(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteVgm(Vgms data) async {
+  Future<String> DeleteVgm(Vgms data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1855,6 +1993,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeVgm(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -1889,8 +2031,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportInterchange(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportInterchange(String doc_id, List<File> files,
+      int data_id, String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1912,14 +2054,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Interchanges.fromMap(dataMap);
+          provider.setInterchange(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateInterchange(
-      String doc_id, List<File> files, Interchanges data) async {
+  Future<String> UpdateInterchange(String doc_id, List<File> files,
+      Interchanges data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1941,13 +2095,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Interchanges.fromMap(dataMap);
+          provider.updateInterchange(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteInterchange(Interchanges data) async {
+  Future<String> DeleteInterchange(
+      Interchanges data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -1959,6 +2126,10 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeInterchange(data);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
@@ -1967,6 +2138,7 @@ class DBServices {
 
   /*  End Interchanges */
 
+/*
   Future<List<Paths>> getPaths() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -1988,7 +2160,7 @@ class DBServices {
     } catch (error) {
       return [];
     }
-  }
+  }*/
 
   /*  Odre import export */
 
@@ -2015,8 +2187,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportOrdre(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportOrdre(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2038,14 +2210,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = OrdreTransport.fromMap(dataMap);
+          provider.setOrdre(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateImportOrdre(
-      String doc_id, List<File> files, OrdreTransport data) async {
+  Future<String> UpdateImportOrdre(String doc_id, List<File> files,
+      OrdreTransport data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2067,13 +2251,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = OrdreTransport.fromMap(dataMap);
+          provider.updateOrdre(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteOrdre(OrdreTransport data) async {
+  Future<String> DeleteOrdre(OrdreTransport data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2084,6 +2280,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeOrdre(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2118,8 +2318,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportRecu(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportRecu(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2141,13 +2341,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Recus.fromMap(dataMap);
+          provider.setRecu(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateRecu(String doc_id, List<File> files, Recus data) async {
+  Future<String> UpdateRecu(
+      String doc_id, List<File> files, Recus data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2169,13 +2382,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Recus.fromMap(dataMap);
+          provider.updateRecu(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteRecu(Recus data) async {
+  Future<String> DeleteRecu(Recus data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2186,6 +2411,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeRecu(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2220,8 +2449,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportAvd(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportAvd(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2243,13 +2472,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Avd.fromMap(dataMap);
+          provider.setAvd(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateAvd(String doc_id, List<File> files, Avd data) async {
+  Future<String> UpdateAvd(
+      String doc_id, List<File> files, Avd data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2271,13 +2513,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Avd.fromMap(dataMap);
+          provider.updateAvd(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteAvd(Avd data) async {
+  Future<String> DeleteAvd(Avd data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2288,6 +2542,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeAvd(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2322,8 +2580,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportBfu(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportBfu(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2345,13 +2603,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Bfu.fromMap(dataMap);
+          provider.setBfu(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateBfu(String doc_id, List<File> files, Bfu data) async {
+  Future<String> UpdateBfu(
+      String doc_id, List<File> files, Bfu data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2373,13 +2644,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Bfu.fromMap(dataMap);
+          provider.updateBfu(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteBfu(Bfu data) async {
+  Future<String> DeleteBfu(Bfu data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2390,6 +2673,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeBfu(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2424,8 +2711,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportDeclaration(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportDeclaration(String doc_id, List<File> files,
+      int data_id, String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2447,14 +2734,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Declaration.fromMap(dataMap);
+          provider.setDeclaration(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateDeclaration(
-      String doc_id, List<File> files, Declaration data) async {
+  Future<String> UpdateDeclaration(String doc_id, List<File> files,
+      Declaration data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2476,13 +2775,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Declaration.fromMap(dataMap);
+          provider.updateDeclaration(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteDeclaration(Declaration data) async {
+  Future<String> DeleteDeclaration(
+      Declaration data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2493,6 +2805,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeDeclaration(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2527,8 +2843,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportFiche(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportFiche(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2550,14 +2866,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = FicheTechnique.fromMap(dataMap);
+          provider.setFiche(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateFiche(
-      String doc_id, List<File> files, FicheTechnique data) async {
+  Future<String> UpdateFiche(String doc_id, List<File> files,
+      FicheTechnique data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2579,13 +2907,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = FicheTechnique.fromMap(dataMap);
+          provider.updateFiche(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteFiche(FicheTechnique data) async {
+  Future<String> DeleteFiche(FicheTechnique data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2596,6 +2936,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeFicheTechnique(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2630,8 +2974,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportCo(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportCo(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2653,13 +2997,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = CO.fromMap(dataMap);
+          provider.setCo(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateCo(String doc_id, List<File> files, CO data) async {
+  Future<String> UpdateCo(
+      String doc_id, List<File> files, CO data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2681,13 +3038,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = CO.fromMap(dataMap);
+          provider.updateCo(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteCo(CO data) async {
+  Future<String> DeleteCo(CO data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2698,6 +3067,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeCo(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2732,8 +3105,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportCps(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportCps(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2755,13 +3128,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = CPS.fromMap(dataMap);
+          provider.setCps(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateCps(String doc_id, List<File> files, CPS data) async {
+  Future<String> UpdateCps(
+      String doc_id, List<File> files, CPS data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2783,13 +3169,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = CPS.fromMap(dataMap);
+          provider.updateCps(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteCps(CPS data) async {
+  Future<String> DeleteCps(CPS data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2800,6 +3198,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeCps(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -2834,8 +3236,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddImportDoc(
-      String doc_id, List<File> files, int data_id, String modele) async {
+  Future<String> AddImportDoc(String doc_id, List<File> files, int data_id,
+      String modele, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2857,14 +3259,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = AutreDocs.fromMap(dataMap);
+          provider.setAutreDoc(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> UpdateDoc(
-      String doc_id, List<File> files, AutreDocs data) async {
+  Future<String> UpdateDoc(String doc_id, List<File> files, AutreDocs data,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2886,13 +3300,25 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = AutreDocs.fromMap(dataMap);
+          provider.updateAutreDoc(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202"; // Code d'erreur personnalisé
     }
   }
 
-  Future<String> DeleteDoc(AutreDocs data) async {
+  Future<String> DeleteDoc(AutreDocs data, ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -2903,6 +3329,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeAutreDoc(data);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -3992,6 +4422,51 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('annonce') &&
+            responseData['annonce'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['annonce'];
+
+          final data = Annonces.fromMap(dataMap);
+          provider.setAnnonce(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Marchandises.fromMap(dataMap);
+          provider.setMarchandise(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarifications.fromMap(dataMap);
+          provider.setTarification(data);
+        }
+
+        if (responseData.containsKey('localisation') &&
+            responseData['localisation'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['localisation'];
+
+          final data = Localisations.fromMap(dataMap);
+          provider.setLocalisation(data);
+        }
+
+        if (responseData.containsKey('photos') &&
+            responseData['photos'] is List) {
+          List<dynamic> datasList = responseData['photos'];
+          List<AnnoncePhotos> datas = datasList.map((pathData) {
+            return AnnoncePhotos.fromMap(pathData);
+          }).toList();
+          provider.setAnnoncePhotos(datas);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -4026,6 +4501,34 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('annonce') &&
+            responseData['annonce'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['annonce'];
+
+          final data = AnnonceTransporteurs.fromMap(dataMap);
+          provider.setTrajet(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = MarchandiseTransporteur.fromMap(dataMap);
+          provider.setMarchandiseTransporteur(data);
+        }
+
+        if (responseData.containsKey('localisation') &&
+            responseData['localisation'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['localisation'];
+
+          final data = InfoLocalisations.fromMap(dataMap);
+          provider.setInfoLocalisation(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4063,13 +4566,42 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('annonce') &&
+            responseData['annonce'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['annonce'];
+
+          final data = AnnonceTransporteurs.fromMap(dataMap);
+          provider.updateTrajet(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = MarchandiseTransporteur.fromMap(dataMap);
+          provider.updateMarchandiseTransporteur(data);
+        }
+
+        if (responseData.containsKey('localisation') &&
+            responseData['localisation'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['localisation'];
+
+          final data = InfoLocalisations.fromMap(dataMap);
+          provider.updateInfoLocalisation(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteTrajet(AnnonceTransporteurs trajet) async {
+  Future<String> deleteTrajet(
+      AnnonceTransporteurs trajet, ApiProvider provider) async {
     try {
       var url = "${api_url}home/transporteur/trajet/delete/${trajet.id}";
       final uri = Uri.parse(url);
@@ -4080,6 +4612,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeTrajet(trajet);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4125,6 +4661,18 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          provider.setCamion(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4191,6 +4739,50 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('user') &&
+            responseData['user'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user'];
+
+          final data = Users.fromMap(dataMap);
+          provider.setUtilisateur(data);
+        }
+
+        if (responseData.containsKey('transporteur') &&
+            responseData['transporteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['transporteur'];
+
+          final data = Transporteurs.fromMap(dataMap);
+          provider.setTransporteur(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('liaison') &&
+            responseData['liaison'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['liaison'];
+
+          final data = TransportLiaisons.fromMap(dataMap);
+          provider.setLiaison(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -4229,13 +4821,43 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('user') &&
+            responseData['user'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user'];
+
+          final data = Users.fromMap(dataMap);
+          provider.updateUser(data);
+        }
+
+        if (responseData.containsKey('transporteur') &&
+            responseData['transporteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['transporteur'];
+
+          final data = Transporteurs.fromMap(dataMap);
+          provider.updateTransporteur(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          provider.setPiece(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteChauffeur(TransportLiaisons chauffeur) async {
+  Future<String> deleteChauffeur(
+      TransportLiaisons chauffeur, ApiProvider provider) async {
     try {
       var url = "${api_url}home/transporteur/chauffeur/delete/${chauffeur.id}";
       final uri = Uri.parse(url);
@@ -4247,13 +4869,18 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeLiaison(chauffeur);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> activeChauffeur(TransportLiaisons chauffeur) async {
+  Future<String> activeChauffeur(
+      TransportLiaisons chauffeur, ApiProvider provider) async {
     try {
       var url = "${api_url}home/transporteur/chauffeur/active/${chauffeur.id}";
       final uri = Uri.parse(url);
@@ -4265,13 +4892,26 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = TransportLiaisons.fromMap(dataMap);
+          provider.updateLiaison(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> disableChauffeur(TransportLiaisons chauffeur) async {
+  Future<String> disableChauffeur(
+      TransportLiaisons chauffeur, ApiProvider provider) async {
     try {
       var url = "${api_url}home/transporteur/chauffeur/disable/${chauffeur.id}";
       final uri = Uri.parse(url);
@@ -4282,6 +4922,18 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('liaison') &&
+            responseData['liaison'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['liaison'];
+
+          final data = TransportLiaisons.fromMap(dataMap);
+          provider.updateLiaison(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4498,7 +5150,8 @@ class DBServices {
     }
   }
 
-  Future<String> AddSouscription(Marchandises marchandise) async {
+  Future<String> AddSouscription(
+      Marchandises marchandise, ApiProvider provider) async {
     try {
       var url =
           "${api_url}home/transporteur/annonce/souscription/add/${marchandise.id}";
@@ -4511,13 +5164,26 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('data') &&
+            responseData['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['data'];
+
+          final data = Souscriptions.fromMap(dataMap);
+          provider.setSouscription(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> DeleteSouscription(Souscriptions souscription) async {
+  Future<String> DeleteSouscription(
+      Souscriptions souscription, ApiProvider provider) async {
     try {
       var url =
           "${api_url}home/transporteur/annonce/souscription/delete/${souscription.id}";
@@ -4529,6 +5195,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeSouscription(souscription);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4547,7 +5217,8 @@ class DBServices {
       Villes city_liv,
       double tarif,
       double accompte,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -4574,6 +5245,58 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('conducteur') &&
+            responseData['conducteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['conducteur'];
+
+          final data = Conducteur.fromMap(dataMap);
+          provider.setConducteur(data);
+        }
+
+        if (responseData.containsKey('chargement_effectue') &&
+            responseData['chargement_effectue'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement_effectue'];
+
+          final data = ChargementEffectue.fromMap(dataMap);
+          provider.setChargementEffectue(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.setPosition(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -4591,7 +5314,8 @@ class DBServices {
       Villes city_liv,
       double tarif,
       double accompte,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -4617,6 +5341,58 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('conducteur') &&
+            responseData['conducteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['conducteur'];
+
+          final data = Conducteur.fromMap(dataMap);
+          provider.setConducteur(data);
+        }
+
+        if (responseData.containsKey('chargement_effectue') &&
+            responseData['chargement_effectue'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement_effectue'];
+
+          final data = ChargementEffectue.fromMap(dataMap);
+          provider.setChargementEffectue(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.setPosition(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -4674,17 +5450,130 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('import') &&
+            responseData['import'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['import'];
+
+          final data = Import.fromMap(dataMap);
+          api_provider.setImport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('conducteur') &&
+            responseData['conducteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['conducteur'];
+
+          final data = Conducteur.fromMap(dataMap);
+          api_provider.setConducteur(data);
+        }
+
+        if (responseData.containsKey('chargement_effectue') &&
+            responseData['chargement_effectue'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement_effectue'];
+
+          final data = ChargementEffectue.fromMap(dataMap);
+          api_provider.setChargementEffectue(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          api_provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          api_provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
 
@@ -4744,17 +5633,130 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('export') &&
+            responseData['export'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = Exports.fromMap(dataMap);
+          api_provider.setExport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('conducteur') &&
+            responseData['conducteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['conducteur'];
+
+          final data = Conducteur.fromMap(dataMap);
+          api_provider.setConducteur(data);
+        }
+
+        if (responseData.containsKey('chargement_effectue') &&
+            responseData['chargement_effectue'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement_effectue'];
+
+          final data = ChargementEffectue.fromMap(dataMap);
+          api_provider.setChargementEffectue(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          api_provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          api_provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
 
@@ -4810,20 +5812,108 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('import') &&
+            responseData['import'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['import'];
+
+          final data = Import.fromMap(dataMap);
+          api_provider.setImport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('bl') &&
+            responseData['bl'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['bl'];
+
+          final data = Bl.fromMap(dataMap);
+          api_provider.setBl(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
-
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -4876,17 +5966,106 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('export') &&
+            responseData['export'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = Exports.fromMap(dataMap);
+          api_provider.setExport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('bl') &&
+            responseData['bl'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['bl'];
+
+          final data = Bl.fromMap(dataMap);
+          api_provider.setBl(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
 
@@ -4942,17 +6121,106 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('import') &&
+            responseData['import'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['import'];
+
+          final data = Import.fromMap(dataMap);
+          api_provider.setImport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('lta') &&
+            responseData['lta'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['lta'];
+
+          final data = Lta.fromMap(dataMap);
+          api_provider.setLta(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
 
@@ -5008,17 +6276,106 @@ class DBServices {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
 
-        if (data is int) {
-          api_provider.change_data_id(data);
-        } else if (data is String && int.tryParse(data) != null) {
-          api_provider.change_data_id(int.parse(data));
-        } else if (data is Map && data['key'] != null) {
-          data['key'] is int
-              ? api_provider.change_data_id(data['key'])
-              : api_provider
-                  .change_data_id(int.tryParse(data['key'].toString()) ?? 0);
+        if (responseData.containsKey('export') &&
+            responseData['export'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = Exports.fromMap(dataMap);
+          api_provider.setExport(data);
+        }
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          api_provider.setClient(data);
+        }
+
+        if (responseData.containsKey('lta') &&
+            responseData['lta'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['lta'];
+
+          final data = Lta.fromMap(dataMap);
+          api_provider.setLta(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          api_provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          api_provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          api_provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('chargement_effectues') &&
+            responseData['chargement_effectues'] is List) {
+          List<dynamic> datasList = responseData['chargement_effectues'];
+          List<ChargementEffectue> datas = datasList.map((pathData) {
+            return ChargementEffectue.fromMap(pathData);
+          }).toList();
+          api_provider.setChargementEffectues(datas);
+        }
+
+        if (responseData.containsKey('livraisons') &&
+            responseData['livraisons'] is List) {
+          List<dynamic> datasList = responseData['livraisons'];
+          List<LivraisonCargaison> datas = datasList.map((pathData) {
+            return LivraisonCargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setLivraisons(datas);
+        }
+
+        if (responseData.containsKey('cargaisons') &&
+            responseData['cargaisons'] is List) {
+          List<dynamic> datasList = responseData['cargaisons'];
+          List<Cargaison> datas = datasList.map((pathData) {
+            return Cargaison.fromMap(pathData);
+          }).toList();
+          api_provider.setCargaisons(datas);
+        }
+
+        if (responseData.containsKey('id')) {
+          if (responseData['id'] is int) {
+            api_provider.change_data_id(responseData['id']);
+          } else if (responseData['id'] is String &&
+              int.tryParse(responseData['id']) != null) {
+            api_provider.change_data_id(int.parse(responseData['id']));
+          }
         }
       }
 
@@ -5028,7 +6385,7 @@ class DBServices {
     }
   }
 
-  Future<String> deleteImport(Import import) async {
+  Future<String> deleteImport(Import import, ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/import/delete/${import.id}";
       final uri = Uri.parse(url);
@@ -5040,13 +6397,17 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeImport(import);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteExport(Exports export) async {
+  Future<String> deleteExport(Exports export, ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/export/delete/${export.id}";
       final uri = Uri.parse(url);
@@ -5057,6 +6418,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeExport(export);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -5075,7 +6440,8 @@ class DBServices {
       Pays pay_liv,
       Villes city_liv,
       int quantite,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -5102,6 +6468,50 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.setPosition(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5119,7 +6529,8 @@ class DBServices {
       Pays pay_liv,
       Villes city_liv,
       int quantite,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -5146,6 +6557,50 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          provider.setCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          provider.setCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          provider.setChargements(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.setPosition(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5161,7 +6616,8 @@ class DBServices {
       String adresse,
       int quantite,
       String superviseur,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/import/livraison/publish/$import_id";
@@ -5185,6 +6641,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('livraison') &&
+            responseData['livraison'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['livraison'];
+
+          final data = LivraisonCargaison.fromMap(dataMap);
+          provider.setLivraison(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5200,7 +6676,8 @@ class DBServices {
       String adresse,
       int quantite,
       String superviseur,
-      int import_id) async {
+      int import_id,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/export/livraison/publish/$import_id";
@@ -5224,6 +6701,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('livraison') &&
+            responseData['livraison'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['livraison'];
+
+          final data = LivraisonCargaison.fromMap(dataMap);
+          provider.setLivraison(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5239,7 +6736,8 @@ class DBServices {
       String adresse,
       int quantite,
       String superviseur,
-      LivraisonCargaison livraison) async {
+      LivraisonCargaison livraison,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -5264,6 +6762,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('livraison') &&
+            responseData['livraison'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['livraison'];
+
+          final data = LivraisonCargaison.fromMap(dataMap);
+          provider.updateLivraison(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5281,7 +6799,8 @@ class DBServices {
       Pays pay_liv,
       Villes city_liv,
       int quantite,
-      CargaisonClient cargaison_client) async {
+      CargaisonClient cargaison_client,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -5308,6 +6827,50 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('client') &&
+            responseData['client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['client'];
+
+          final data = Client.fromMap(dataMap);
+          provider.setClient(data);
+        }
+
+        if (responseData.containsKey('cargaison_client') &&
+            responseData['cargaison_client'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['cargaison_client'];
+
+          final data = CargaisonClient.fromMap(dataMap);
+          provider.updateCargaisonClient(data);
+        }
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Cargaison.fromMap(dataMap);
+          provider.updateCargaison(data);
+        }
+
+        if (responseData.containsKey('chargement') &&
+            responseData['chargement'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement'];
+
+          final data = Chargement.fromMap(dataMap);
+          provider.updateChargement(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.updatePosition(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5325,7 +6888,8 @@ class DBServices {
       Villes city_liv,
       double tarif,
       double accompte,
-      ChargementEffectue chargement_effectue) async {
+      ChargementEffectue chargement_effectue,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url =
@@ -5352,6 +6916,58 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('conducteur') &&
+            responseData['conducteur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['conducteur'];
+
+          final data = Conducteur.fromMap(dataMap);
+          provider.setConducteur(data);
+        }
+
+        if (responseData.containsKey('piece') &&
+            responseData['piece'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['piece'];
+
+          final data = Pieces.fromMap(dataMap);
+          provider.setPiece(data);
+        }
+
+        if (responseData.containsKey('vehicule') &&
+            responseData['vehicule'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['vehicule'];
+
+          final data = Camions.fromMap(dataMap);
+          provider.setCamion(data);
+        }
+
+        if (responseData.containsKey('chargement_effectue') &&
+            responseData['chargement_effectue'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['chargement_effectue'];
+
+          final data = ChargementEffectue.fromMap(dataMap);
+          provider.updateChargementEffectue(data);
+        }
+
+        if (responseData.containsKey('tarif') &&
+            responseData['tarif'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif'];
+
+          final data = Tarif.fromMap(dataMap);
+          provider.updateTarif(data);
+        }
+
+        if (responseData.containsKey('position') &&
+            responseData['position'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          provider.updatePosition(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5372,7 +6988,8 @@ class DBServices {
       Villes ville_liv,
       List<File> files,
       Marchandises marchandise,
-      String tarif_unitaire) async {
+      String tarif_unitaire,
+      ApiProvider provider) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/update/${marchandise.id}";
@@ -5406,13 +7023,50 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('marchandise') &&
+            responseData['marchandise'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['marchandise'];
+
+          final data = Marchandises.fromMap(dataMap);
+          provider.updateMarchandise(data);
+        }
+
+        if (responseData.containsKey('tarification') &&
+            responseData['tarification'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarification'];
+
+          final data = Tarifications.fromMap(dataMap);
+          provider.setTarification(data);
+        }
+
+        if (responseData.containsKey('localisation') &&
+            responseData['localisation'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['localisation'];
+
+          final data = Localisations.fromMap(dataMap);
+          provider.updateLocalisation(data);
+        }
+
+        if (responseData.containsKey('photos') &&
+            responseData['photos'] is List) {
+          List<dynamic> datasList = responseData['photos'];
+          List<AnnoncePhotos> datas = datasList.map((pathData) {
+            return AnnoncePhotos.fromMap(pathData);
+          }).toList();
+          provider.setAnnoncePhotos(datas);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteAnnonce(Annonces annonce) async {
+  Future<String> deleteAnnonce(Annonces annonce, ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/annonce/delete/${annonce.id}";
       final uri = Uri.parse(url);
@@ -5424,6 +7078,10 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeAnnonce(annonce);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5431,7 +7089,7 @@ class DBServices {
   }
 
   Future<String> deleteChargementEffectue(
-      ChargementEffectue chargement_effectue) async {
+      ChargementEffectue chargement_effectue, ApiProvider provider) async {
     try {
       var url =
           "${api_url}home/expediteur/import/transporteur/delete/${chargement_effectue.id}";
@@ -5444,13 +7102,18 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeChargementEffectue(chargement_effectue);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteLiv(LivraisonCargaison livraison) async {
+  Future<String> deleteLiv(
+      LivraisonCargaison livraison, ApiProvider provider) async {
     try {
       var url =
           "${api_url}home/expediteur/import/livraison/delete/${livraison.id}";
@@ -5463,13 +7126,18 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeLivraison(livraison);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteCargaisonClient(CargaisonClient cargaison_client) async {
+  Future<String> deleteCargaisonClient(
+      CargaisonClient cargaison_client, ApiProvider provider) async {
     try {
       var url =
           "${api_url}home/expediteur/import/marchandise/delete/${cargaison_client.id}";
@@ -5481,6 +7149,10 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        provider.removeCargaisonClient(cargaison_client);
+      }
 
       return response.statusCode.toString();
     } catch (e) {
@@ -5503,7 +7175,8 @@ class DBServices {
       String entite_entreprise,
       String ifu,
       String entite_ifu,
-      Annonces annonce) async {
+      Annonces annonce,
+      ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/annonce/ordre/publish/${annonce.id}";
       final uri = Uri.parse(url);
@@ -5530,6 +7203,82 @@ class DBServices {
         'ifu': ifu
       });
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('ordre') &&
+            responseData['ordre'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = BonCommandes.fromMap(dataMap);
+          provider.setBonCommande(data);
+        }
+
+        if (responseData.containsKey('entite') &&
+            responseData['entite'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entite'];
+
+          final data = EntiteFactures.fromMap(dataMap);
+          provider.setEntite(data);
+        }
+
+        if (responseData.containsKey('donneur') &&
+            responseData['donneur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['donneur'];
+
+          final data = DonneurOrdres.fromMap(dataMap);
+          provider.setDonneurOrdre(data);
+        }
+
+        if (responseData.containsKey('user1') &&
+            responseData['user1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user1'];
+
+          final data = Users.fromMap(dataMap);
+          provider.setUtilisateur(data);
+        }
+
+        if (responseData.containsKey('user2') &&
+            responseData['user2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user2'];
+
+          final data = Users.fromMap(dataMap);
+          provider.setUtilisateur(data);
+        }
+
+        if (responseData.containsKey('entreprise1') &&
+            responseData['entreprise1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entreprise1'];
+
+          final data = Entreprises.fromMap(dataMap);
+          provider.setEntreprise(data);
+        }
+
+        if (responseData.containsKey('entreprise2') &&
+            responseData['entreprise2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entreprise2'];
+
+          final data = Entreprises.fromMap(dataMap);
+          provider.setEntreprise(data);
+        }
+
+        if (responseData.containsKey('expediteur1') &&
+            responseData['expediteur1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expediteur1'];
+
+          final data = Expediteurs.fromMap(dataMap);
+          provider.setExpediteur(data);
+        }
+
+        if (responseData.containsKey('expediteur2') &&
+            responseData['expediteur2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expediteur2'];
+
+          final data = Expediteurs.fromMap(dataMap);
+          provider.setExpediteur(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
@@ -5551,7 +7300,8 @@ class DBServices {
       String entite_entreprise,
       String ifu,
       String entite_ifu,
-      BonCommandes ordre) async {
+      BonCommandes ordre,
+      ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/annonce/ordre/update/${ordre.id}";
       final uri = Uri.parse(url);
@@ -5578,13 +7328,89 @@ class DBServices {
         'ifu': ifu
       });
 
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('ordre') &&
+            responseData['ordre'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = BonCommandes.fromMap(dataMap);
+          provider.updateBonCommande(data);
+        }
+
+        if (responseData.containsKey('entite') &&
+            responseData['entite'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entite'];
+
+          final data = EntiteFactures.fromMap(dataMap);
+          provider.setEntite(data);
+        }
+
+        if (responseData.containsKey('donneur') &&
+            responseData['donneur'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['donneur'];
+
+          final data = DonneurOrdres.fromMap(dataMap);
+          provider.setDonneurOrdre(data);
+        }
+
+        if (responseData.containsKey('user1') &&
+            responseData['user1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user1'];
+
+          final data = Users.fromMap(dataMap);
+          provider.setUtilisateur(data);
+        }
+
+        if (responseData.containsKey('user2') &&
+            responseData['user2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['user2'];
+
+          final data = Users.fromMap(dataMap);
+          provider.setUtilisateur(data);
+        }
+
+        if (responseData.containsKey('entreprise1') &&
+            responseData['entreprise1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entreprise1'];
+
+          final data = Entreprises.fromMap(dataMap);
+          provider.setEntreprise(data);
+        }
+
+        if (responseData.containsKey('entreprise2') &&
+            responseData['entreprise2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['entreprise2'];
+
+          final data = Entreprises.fromMap(dataMap);
+          provider.setEntreprise(data);
+        }
+
+        if (responseData.containsKey('expediteur1') &&
+            responseData['expediteur1'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expediteur1'];
+
+          final data = Expediteurs.fromMap(dataMap);
+          provider.setExpediteur(data);
+        }
+
+        if (responseData.containsKey('expediteur2') &&
+            responseData['expediteur2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expediteur2'];
+
+          final data = Expediteurs.fromMap(dataMap);
+          provider.setExpediteur(data);
+        }
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> deleteOrdre(BonCommandes ordre) async {
+  Future<String> deleteOrdre(BonCommandes ordre, ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/annonce/ordre/delete/${ordre.id}";
       final uri = Uri.parse(url);
@@ -5596,13 +7422,17 @@ class DBServices {
         'Authorization': 'Bearer $token',
       });
 
+      if (response.statusCode == 200) {
+        provider.removeBonCommande(ordre);
+      }
+
       return response.statusCode.toString();
     } catch (e) {
       return "202";
     }
   }
 
-  Future<String> validateOrdre(BonCommandes ordre) async {
+  Future<String> validateOrdre(BonCommandes ordre, ApiProvider provider) async {
     try {
       var url = "${api_url}home/expediteur/annonce/ordre/validate/${ordre.id}";
       final uri = Uri.parse(url);
@@ -5613,6 +7443,18 @@ class DBServices {
         'AUTH-TOKEN': auth_token,
         'Authorization': 'Bearer $token',
       });
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('ordre') &&
+            responseData['ordre'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['export'];
+
+          final data = BonCommandes.fromMap(dataMap);
+          provider.updateBonCommande(data);
+        }
+      }
 
       return response.statusCode.toString();
     } catch (e) {

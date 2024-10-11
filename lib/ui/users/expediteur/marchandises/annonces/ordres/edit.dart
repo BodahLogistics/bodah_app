@@ -1151,7 +1151,8 @@ class _UpOrdreTransportState extends State<UpOrdreTransport> {
                                     entite_entreprise,
                                     ifu,
                                     entite_ifu,
-                                    ordre);
+                                    ordre,
+                                    api_provider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);

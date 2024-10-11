@@ -1368,8 +1368,8 @@ Future<dynamic> NewInter(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportInterchange(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportInterchange(nom,
+                                        files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -1384,7 +1384,6 @@ Future<dynamic> NewInter(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitInterchanges();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -1632,7 +1631,7 @@ Future<dynamic> UpdateInter(BuildContext context, Interchanges interchange) {
                           provider.change_affiche(true);
 
                           String statut_code = await service.UpdateInterchange(
-                              nom, files, interchange);
+                              nom, files, interchange, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -1651,7 +1650,6 @@ Future<dynamic> UpdateInter(BuildContext context, Interchanges interchange) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitInterchanges();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -1759,8 +1757,8 @@ Future<dynamic> DeleteInter(BuildContext context, Interchanges interchange) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut =
-                              await service.DeleteInterchange(interchange);
+                          final String statut = await service.DeleteInterchange(
+                              interchange, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -2247,8 +2245,8 @@ Future<dynamic> NewRecu(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportRecu(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportRecu(nom, files,
+                                        data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -2263,7 +2261,6 @@ Future<dynamic> NewRecu(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitRecus();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -2510,8 +2507,8 @@ Future<dynamic> UpdateRecu(BuildContext context, Recus data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateRecu(nom, files, data);
+                          String statut_code = await service.UpdateRecu(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -2530,7 +2527,6 @@ Future<dynamic> UpdateRecu(BuildContext context, Recus data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitRecus();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -2638,7 +2634,8 @@ Future<dynamic> DeleteRecu(BuildContext context, Recus data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteRecu(data);
+                          final String statut =
+                              await service.DeleteRecu(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -3126,8 +3123,8 @@ Future<dynamic> NewFiche(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportFiche(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportFiche(nom, files,
+                                        data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -3142,7 +3139,6 @@ Future<dynamic> NewFiche(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitFicheTechnique();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -3389,8 +3385,8 @@ Future<dynamic> UpdateFiche(BuildContext context, FicheTechnique data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateFiche(nom, files, data);
+                          String statut_code = await service.UpdateFiche(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -3409,7 +3405,6 @@ Future<dynamic> UpdateFiche(BuildContext context, FicheTechnique data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitFicheTechnique();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -3517,7 +3512,8 @@ Future<dynamic> DeleteFiche(BuildContext context, FicheTechnique data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteFiche(data);
+                          final String statut =
+                              await service.DeleteFiche(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -4005,8 +4001,8 @@ Future<dynamic> NewDecla(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportDeclaration(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportDeclaration(nom,
+                                        files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -4021,7 +4017,6 @@ Future<dynamic> NewDecla(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitDeclaration();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -4268,8 +4263,8 @@ Future<dynamic> UpdateDecla(BuildContext context, Declaration data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateDeclaration(nom, files, data);
+                          String statut_code = await service.UpdateDeclaration(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -4288,7 +4283,6 @@ Future<dynamic> UpdateDecla(BuildContext context, Declaration data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitDeclaration();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -4397,7 +4391,7 @@ Future<dynamic> DeleteDecla(BuildContext context, Declaration data) {
                       : () async {
                           provider.change_delete(true);
                           final String statut =
-                              await service.DeleteDeclaration(data);
+                              await service.DeleteDeclaration(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -4885,7 +4879,7 @@ Future<dynamic> NewBfu(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportBfu(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -4900,7 +4894,6 @@ Future<dynamic> NewBfu(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitBfu();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -5147,8 +5140,8 @@ Future<dynamic> UpdateBfu(BuildContext context, Bfu data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateBfu(nom, files, data);
+                          String statut_code = await service.UpdateBfu(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -5167,7 +5160,6 @@ Future<dynamic> UpdateBfu(BuildContext context, Bfu data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitBfu();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -5275,7 +5267,8 @@ Future<dynamic> DeleteBfu(BuildContext context, Bfu data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteBfu(data);
+                          final String statut =
+                              await service.DeleteBfu(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -5761,8 +5754,8 @@ Future<dynamic> NewApele(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportApele(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportApele(nom, files,
+                                        data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -5777,7 +5770,6 @@ Future<dynamic> NewApele(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitApeles();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -6024,8 +6016,8 @@ Future<dynamic> UpdateApele(BuildContext context, Appeles data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateApele(nom, files, data);
+                          String statut_code = await service.UpdateApele(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -6044,7 +6036,6 @@ Future<dynamic> UpdateApele(BuildContext context, Appeles data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitApeles();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -6152,7 +6143,8 @@ Future<dynamic> DeleteApele(BuildContext context, Appeles data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteApele(data);
+                          final String statut =
+                              await service.DeleteApele(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -6642,8 +6634,8 @@ Future<dynamic> NewImportOrdre(
                                 provider.change_affiche(true);
 
                                 String statut_code =
-                                    await service.AddImportOrdre(
-                                        nom, files, data_id, modele);
+                                    await service.AddImportOrdre(nom, files,
+                                        data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -6658,7 +6650,6 @@ Future<dynamic> NewImportOrdre(
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitImportOrdre();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -6905,8 +6896,8 @@ Future<dynamic> UpdateImportOrdre(BuildContext context, OrdreTransport data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateImportOrdre(nom, files, data);
+                          String statut_code = await service.UpdateImportOrdre(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -6925,7 +6916,6 @@ Future<dynamic> UpdateImportOrdre(BuildContext context, OrdreTransport data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitImportOrdre();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -7033,7 +7023,8 @@ Future<dynamic> DeleteImportOrdre(BuildContext context, OrdreTransport data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteOrdre(data);
+                          final String statut =
+                              await service.DeleteOrdre(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -7519,7 +7510,7 @@ Future<dynamic> NewTdo(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportTdo(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -7534,7 +7525,6 @@ Future<dynamic> NewTdo(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitTdos();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -7781,8 +7771,8 @@ Future<dynamic> UpdateTdo(BuildContext context, Tdos data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateTdo(nom, files, data);
+                          String statut_code = await service.UpdateTdo(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -7801,7 +7791,6 @@ Future<dynamic> UpdateTdo(BuildContext context, Tdos data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitTdos();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -7909,7 +7898,8 @@ Future<dynamic> DeleteTdo(BuildContext context, Tdos data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteTdo(data);
+                          final String statut =
+                              await service.DeleteTdo(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -8395,7 +8385,7 @@ Future<dynamic> NewVgm(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportVgm(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -8410,7 +8400,6 @@ Future<dynamic> NewVgm(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitVgms();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -8657,8 +8646,8 @@ Future<dynamic> UpdateVgm(BuildContext context, Vgms data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateVgm(nom, files, data);
+                          String statut_code = await service.UpdateVgm(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -8677,7 +8666,6 @@ Future<dynamic> UpdateVgm(BuildContext context, Vgms data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitVgms();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -8785,7 +8773,8 @@ Future<dynamic> DeleteVgm(BuildContext context, Vgms data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteVgm(data);
+                          final String statut =
+                              await service.DeleteVgm(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -8797,7 +8786,6 @@ Future<dynamic> DeleteVgm(BuildContext context, Vgms data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitVgms();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -9273,7 +9261,7 @@ Future<dynamic> NewAvd(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportAvd(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -9288,7 +9276,6 @@ Future<dynamic> NewAvd(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitAvd();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -9535,8 +9522,8 @@ Future<dynamic> UpdateAvd(BuildContext context, Avd data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateAvd(nom, files, data);
+                          String statut_code = await service.UpdateAvd(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -9555,7 +9542,6 @@ Future<dynamic> UpdateAvd(BuildContext context, Avd data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitAvd();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -9663,7 +9649,8 @@ Future<dynamic> DeleteAvd(BuildContext context, Avd data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteAvd(data);
+                          final String statut =
+                              await service.DeleteAvd(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -9675,7 +9662,6 @@ Future<dynamic> DeleteAvd(BuildContext context, Avd data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitAvd();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -10155,7 +10141,7 @@ Future<dynamic> NewCo(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportCo(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -10170,7 +10156,6 @@ Future<dynamic> NewCo(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitCo();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -10419,8 +10404,8 @@ Future<dynamic> UpdateCo(BuildContext context, CO data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateCo(nom, files, data);
+                          String statut_code = await service.UpdateCo(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -10439,7 +10424,6 @@ Future<dynamic> UpdateCo(BuildContext context, CO data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitCo();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -10549,7 +10533,8 @@ Future<dynamic> DeleteCo(BuildContext context, CO data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteCo(data);
+                          final String statut =
+                              await service.DeleteCo(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -10561,7 +10546,6 @@ Future<dynamic> DeleteCo(BuildContext context, CO data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitCo();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -11041,7 +11025,7 @@ Future<dynamic> NewCps(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportCps(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -11056,7 +11040,6 @@ Future<dynamic> NewCps(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitCps();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -11305,8 +11288,8 @@ Future<dynamic> UpdateCps(BuildContext context, CPS data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateCps(nom, files, data);
+                          String statut_code = await service.UpdateCps(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -11325,7 +11308,6 @@ Future<dynamic> UpdateCps(BuildContext context, CPS data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitCps();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -11435,7 +11417,8 @@ Future<dynamic> DeleteCps(BuildContext context, CPS data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteCps(data);
+                          final String statut =
+                              await service.DeleteCps(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -11447,7 +11430,6 @@ Future<dynamic> DeleteCps(BuildContext context, CPS data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitCps();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -11927,7 +11909,7 @@ Future<dynamic> NewDoc(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportDoc(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -11942,7 +11924,6 @@ Future<dynamic> NewDoc(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitAutreDocs();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -12191,8 +12172,8 @@ Future<dynamic> UpdateDoc(BuildContext context, AutreDocs data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateDoc(nom, files, data);
+                          String statut_code = await service.UpdateDoc(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -12211,7 +12192,6 @@ Future<dynamic> UpdateDoc(BuildContext context, AutreDocs data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitAutreDocs();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -12321,7 +12301,8 @@ Future<dynamic> DeleteDoc(BuildContext context, AutreDocs data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteDoc(data);
+                          final String statut =
+                              await service.DeleteDoc(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -12333,7 +12314,6 @@ Future<dynamic> DeleteDoc(BuildContext context, AutreDocs data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitAutreDocs();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -12817,7 +12797,7 @@ Future<dynamic> NewBl(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportBl(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -12832,7 +12812,6 @@ Future<dynamic> NewBl(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitBL();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -13081,8 +13060,8 @@ Future<dynamic> UpdateBl(BuildContext context, Bl data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateBl(nom, files, data);
+                          String statut_code = await service.UpdateBl(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -13101,7 +13080,6 @@ Future<dynamic> UpdateBl(BuildContext context, Bl data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitBL();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -13211,7 +13189,8 @@ Future<dynamic> DeleteBl(BuildContext context, Bl data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteBl(data);
+                          final String statut =
+                              await service.DeleteBl(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -13223,7 +13202,6 @@ Future<dynamic> DeleteBl(BuildContext context, Bl data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitBL();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
@@ -13707,7 +13685,7 @@ Future<dynamic> NewLta(BuildContext context, int data_id, String modele) {
                                 provider.change_affiche(true);
 
                                 String statut_code = await service.AddImportLta(
-                                    nom, files, data_id, modele);
+                                    nom, files, data_id, modele, apiProvider);
 
                                 if (statut_code == "202") {
                                   provider.change_affiche(false);
@@ -13722,7 +13700,6 @@ Future<dynamic> NewLta(BuildContext context, int data_id, String modele) {
                                       "Certains champs sont mal renseignés",
                                       Colors.redAccent);
                                 } else if (statut_code == "200") {
-                                  await apiProvider.InitLta();
                                   provider.reset();
                                   showCustomSnackBar(
                                       dialogContext,
@@ -13971,8 +13948,8 @@ Future<dynamic> UpdateLta(BuildContext context, Lta data) {
                       : () async {
                           provider.change_affiche(true);
 
-                          String statut_code =
-                              await service.UpdateLta(nom, files, data);
+                          String statut_code = await service.UpdateLta(
+                              nom, files, data, apiProvider);
 
                           if (statut_code == "404") {
                             provider.change_affiche(false);
@@ -13991,7 +13968,6 @@ Future<dynamic> UpdateLta(BuildContext context, Lta data) {
                                 "Certains champs sont mal renseignés",
                                 Colors.redAccent);
                           } else if (statut_code == "200") {
-                            await apiProvider.InitLta();
                             provider.reset();
                             showCustomSnackBar(
                                 dialogContext,
@@ -14101,7 +14077,8 @@ Future<dynamic> DeleteLta(BuildContext context, Lta data) {
                       ? null
                       : () async {
                           provider.change_delete(true);
-                          final String statut = await service.DeleteLta(data);
+                          final String statut =
+                              await service.DeleteLta(data, provider);
                           if (statut == "404") {
                             showCustomSnackBar(
                                 dialocontext,
@@ -14113,7 +14090,6 @@ Future<dynamic> DeleteLta(BuildContext context, Lta data) {
                                 "Une erreur s'est produite", Colors.redAccent);
                             provider.change_delete(false);
                           } else if (statut == "200") {
-                            await provider.InitLta();
                             showCustomSnackBar(
                                 dialocontext,
                                 "Le document a été supprimée avec succès",
