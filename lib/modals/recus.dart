@@ -2,12 +2,12 @@
 import 'dart:convert';
 
 class Recus {
-  final int id;
-  final String? path;
-  final String reference;
-  final int modele_id;
-  final String modele_type;
-  final String? doc_id;
+  int id;
+  String? path;
+  String reference;
+  int modele_id;
+  String modele_type;
+  String? doc_id;
 
   Recus({
     required this.id,

@@ -2,15 +2,15 @@
 import 'dart:convert';
 
 class Lta {
-  final int id;
-  final String? path;
-  final int modele_id;
-  final String modele_type;
-  final int deleted;
-  final String reference;
-  final String? ref;
-  final DateTime created_at;
-  final DateTime updated_at;
+  int id;
+  String? path;
+  int modele_id;
+  String modele_type;
+  int deleted;
+  String reference;
+  String? ref;
+  DateTime created_at;
+  DateTime updated_at;
   Lta({
     required this.id,
     required this.path,

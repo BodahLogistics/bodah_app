@@ -20,6 +20,12 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
+        <!-- Clé API pour Google Maps Android -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCZU6HLGiSzKFRTfsZrhuYBDjgyrBUJYMQ" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

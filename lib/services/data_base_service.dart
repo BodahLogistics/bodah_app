@@ -25,8 +25,10 @@ import 'package:bodah/modals/voitures.dart';
 import 'package:bodah/providers/api/api_data.dart';
 import 'package:bodah/providers/auth/prov_reset_password.dart';
 import 'package:bodah/providers/auth/prov_val_account.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as path; //
 import 'package:path_provider/path_provider.dart';
 
@@ -70,7 +72,6 @@ import '../modals/marchandise_transporteur.dart';
 import '../modals/marchandises.dart';
 import '../modals/ordre_transport.dart';
 import '../modals/paiement_solde.dart';
-import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/pieces.dart';
 import '../modals/positions.dart';
@@ -335,6 +336,188 @@ class DBServices {
       }
     } catch (error) {
       return <Arrondissements>[];
+    }
+  }
+
+  Future<String> sinatureContrat(
+      Expeditions data, List<File> files, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/transporteur/annonce/expedition/contrat/signer/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        });
+
+      if (files.isNotEmpty) {
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('expedition') &&
+            responseData['expedition'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expedition'];
+
+          Expeditions data = Expeditions.fromMap(dataMap);
+          provider.updateExpedition(data);
+        }
+
+        if (responseData.containsKey('contrat') &&
+            responseData['contrat'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['contrat'];
+
+          LetreVoitures data = LetreVoitures.fromMap(dataMap);
+          provider.updateContrat(data);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> generateContrat(Expeditions data) async {
+    try {
+      String? token = await secure.readSecureData('token');
+
+      var url =
+          "${api_url}home/transporteur/annonce/expedition/contrat/download/${data.id}";
+
+      String currentDate = DateTime.now().toString().split(' ')[0];
+      String currentTime =
+          DateTime.now().toString().split(' ')[1].split('.')[0];
+      String fileName =
+          "lettre_voiture_sécurisée_${currentDate}_$currentTime.pdf";
+
+      Directory tempDir = await getTemporaryDirectory();
+      String filePath = '${tempDir.path}/$fileName';
+
+      Dio dio = Dio();
+      var response = await dio.download(
+        url,
+        filePath,
+        options: Options(
+          headers: {
+            'API-KEY': api_key,
+            'AUTH-TOKEN': auth_token,
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        OpenFilex.open(filePath);
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> sinatureTransporteur(
+      Expeditions data, List<File> files, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url =
+          "${api_url}home/transporteur/annonce/expedition/bordereau/signer/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        });
+
+      if (files.isNotEmpty) {
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('expedition') &&
+            responseData['expedition'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expedition'];
+
+          Expeditions data = Expeditions.fromMap(dataMap);
+          provider.updateExpedition(data);
+        }
+
+        if (responseData.containsKey('bordereau') &&
+            responseData['bordereau'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['bordereau'];
+
+          BordereauLivraisons data = BordereauLivraisons.fromMap(dataMap);
+          provider.updateBordereau(data);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> sinatureDestinataire(
+      Expeditions data, List<File> files, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/bordereau/signer/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        });
+
+      if (files.isNotEmpty) {
+        request.files
+            .add(await http.MultipartFile.fromPath('path', files.first.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('expedition') &&
+            responseData['expedition'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['expedition'];
+
+          Expeditions data = Expeditions.fromMap(dataMap);
+          provider.updateExpedition(data);
+        }
+
+        if (responseData.containsKey('bordereau') &&
+            responseData['bordereau'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['bordereau'];
+
+          BordereauLivraisons data = BordereauLivraisons.fromMap(dataMap);
+          provider.updateBordereau(data);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
     }
   }
 
@@ -1274,29 +1457,6 @@ class DBServices {
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Recus.fromMap(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return [];
-    }
-  }
-
-  Future<List<Paths>> getTransporteurPaths() async {
-    try {
-      String? token = await secure.readSecureData('token');
-      var url = "${api_url}home/transporteur/annonce/document/path";
-      final uri = Uri.parse(url);
-      final response = await http.get(uri, headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-        'API-KEY': api_key,
-        'AUTH-TOKEN': auth_token
-      });
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Paths.fromMap(json)).toList();
       } else {
         return [];
       }

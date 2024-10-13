@@ -2,17 +2,20 @@
 import 'dart:convert';
 
 class OrdreTransport {
-  final int id;
-  final int modele_id;
-  final String modele_type;
-  final String reference;
-  final String? nom;
+  int id;
+  int modele_id;
+  String modele_type;
+  String reference;
+  String? nom;
+  String path;
+
   OrdreTransport({
     required this.id,
     required this.modele_id,
     required this.modele_type,
     required this.reference,
     this.nom,
+    required this.path,
   });
 
   OrdreTransport copyWith({
@@ -21,6 +24,7 @@ class OrdreTransport {
     String? modele_type,
     String? reference,
     String? nom,
+    String? path,
   }) {
     return OrdreTransport(
       id: id ?? this.id,
@@ -28,6 +32,7 @@ class OrdreTransport {
       modele_type: modele_type ?? this.modele_type,
       reference: reference ?? this.reference,
       nom: nom ?? this.nom,
+      path: path ?? this.path,
     );
   }
 
@@ -38,6 +43,7 @@ class OrdreTransport {
       'modele_type': modele_type,
       'reference': reference,
       'nom': nom,
+      'path': path,
     };
   }
 
@@ -48,6 +54,7 @@ class OrdreTransport {
       modele_type: map['modele_type'] as String,
       reference: map['reference'] as String,
       nom: map['nom'] != null ? map['nom'] as String : null,
+      path: map['path'] as String,
     );
   }
 
@@ -58,26 +65,29 @@ class OrdreTransport {
 
   @override
   String toString() {
-    return 'OrdreTransport(id: $id, modele_id: $modele_id, modele_type: $modele_type, reference: $reference, nom: $nom)';
+    return 'OrdreTransport(id: $id, modele_id: $modele_id, modele_type: $modele_type, reference: $reference, nom: $nom, path: $path)';
   }
 
   @override
   bool operator ==(covariant OrdreTransport other) {
     if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.modele_id == modele_id &&
-        other.modele_type == modele_type &&
-        other.reference == reference &&
-        other.nom == nom;
+  
+    return 
+      other.id == id &&
+      other.modele_id == modele_id &&
+      other.modele_type == modele_type &&
+      other.reference == reference &&
+      other.nom == nom &&
+      other.path == path;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        modele_id.hashCode ^
-        modele_type.hashCode ^
-        reference.hashCode ^
-        nom.hashCode;
+      modele_id.hashCode ^
+      modele_type.hashCode ^
+      reference.hashCode ^
+      nom.hashCode ^
+      path.hashCode;
   }
 }
