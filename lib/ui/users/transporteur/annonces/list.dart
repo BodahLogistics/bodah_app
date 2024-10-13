@@ -15,7 +15,6 @@ import '../../../../../modals/pays.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../modals/villes.dart';
 import '../../../../../providers/api/api_data.dart';
-import '../../../../../wrappers/load.dart';
 import '../drawer/index.dart';
 import 'details/index.dart';
 
@@ -34,7 +33,9 @@ class ListAnnonces extends StatelessWidget {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Tarifications> tarifications = api_provider.tarifications;
-    bool loading = api_provider.loading;
+    Future<void> refresh() async {
+      await api_provider.InitTransporteurAnnonce();
+    }
 
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
@@ -62,10 +63,11 @@ class ListAnnonces extends StatelessWidget {
               ))
         ],
       ),
-      body: loading
-          ? LoadingPage()
-          : annonces.isEmpty
-              ? Center(
+      body: annonces.isEmpty
+          ? RefreshIndicator(
+              color: MyColors.secondary,
+              onRefresh: refresh,
+              child: Center(
                   child: Text("Aucune annonce disponible",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -73,244 +75,201 @@ class ListAnnonces extends StatelessWidget {
                         color:
                             user.dark_mode == 1 ? MyColors.light : Colors.black,
                         fontWeight: FontWeight.w500,
-                      )))
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: ListView.builder(
-                      physics: ScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        Annonces annonce = annonces[index];
-                        Marchandises marchandise = function
-                            .annonce_marchandises(marchandises, annonce.id)
-                            .first;
-                        Tarifications tarification =
-                            function.marchandise_tarification(
-                                tarifications, marchandise.id);
-                        Localisations localisation =
-                            function.marchandise_localisation(
-                                localisations, marchandise.id);
-                        List<AnnoncePhotos> pictures =
-                            function.annonce_pictures(
-                                annonce, marchandises, annonce_photos);
-                        Pays pay_depart =
-                            function.pay(pays, localisation.pays_exp_id);
-                        Pays pay_dest =
-                            function.pay(pays, localisation.pays_liv_id);
-                        Villes ville_dep = function.ville(
-                            all_villes, localisation.city_exp_id);
-                        Villes ville_dest = function.ville(
-                            all_villes, localisation.city_liv_id);
+                      ))),
+            )
+          : RefreshIndicator(
+              color: MyColors.secondary,
+              onRefresh: refresh,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      Annonces annonce = annonces[index];
+                      Marchandises marchandise = function
+                          .annonce_marchandises(marchandises, annonce.id)
+                          .first;
+                      Tarifications tarification =
+                          function.marchandise_tarification(
+                              tarifications, marchandise.id);
+                      Localisations localisation =
+                          function.marchandise_localisation(
+                              localisations, marchandise.id);
+                      List<AnnoncePhotos> pictures = function.annonce_pictures(
+                          annonce, marchandises, annonce_photos);
+                      Pays pay_depart =
+                          function.pay(pays, localisation.pays_exp_id);
+                      Pays pay_dest =
+                          function.pay(pays, localisation.pays_liv_id);
+                      Villes ville_dep =
+                          function.ville(all_villes, localisation.city_exp_id);
+                      Villes ville_dest =
+                          function.ville(all_villes, localisation.city_liv_id);
 
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 500),
-                                  pageBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation) {
-                                    return DetailsMarchandises(id: annonce.id);
-                                  },
-                                  transitionsBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation,
-                                      Widget child) {
-                                    return ScaleTransition(
-                                      scale: Tween<double>(begin: 0.0, end: 1.0)
-                                          .animate(animation),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                      color: user.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.textColor,
-                                      width: 1,
-                                      style: BorderStyle.solid)),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, bottom: 5, top: 5),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.35,
-                                          child: pictures.isEmpty
-                                              ? Container()
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: pictures
-                                                        .last.image_path,
-                                                    fit: BoxFit.cover,
-                                                    height: 80,
-                                                    progressIndicatorBuilder: (context,
-                                                            url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                      value: downloadProgress
-                                                          .progress,
-                                                      color: MyColors.secondary,
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Container(),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return DetailsMarchandises(id: annonce.id);
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return ScaleTransition(
+                                    scale: Tween<double>(begin: 0.0, end: 1.0)
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.textColor,
+                                    width: 1,
+                                    style: BorderStyle.solid)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 5, top: 5),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.35,
+                                        child: pictures.isEmpty
+                                            ? Container()
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      pictures.last.image_path,
+                                                  fit: BoxFit.cover,
+                                                  height: 80,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: MyColors.secondary,
                                                   ),
-                                                ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8),
-                                                child: Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    marchandise.nom,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: user.dark_mode == 1
-                                                          ? MyColors.light
-                                                          : MyColors.black,
-                                                      fontFamily: "Poppins",
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(),
                                                 ),
                                               ),
-                                              SizedBox(height: 5),
-                                              Text(
-                                                "${marchandise.poids} / " +
-                                                    tarification.prix_transport,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8),
+                                              child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  marchandise.nom,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
                                                     color: user.dark_mode == 1
                                                         ? MyColors.light
-                                                        : MyColors.textColor,
+                                                        : MyColors.black,
                                                     fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                              SizedBox(height: 5),
-                                              Text(
-                                                function.date(marchandise
-                                                    .date_chargement),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
                                                     fontWeight: FontWeight.w500,
-                                                    color: user.dark_mode == 1
-                                                        ? MyColors.light
-                                                        : MyColors.textColor,
-                                                    fontFamily: "Poppins",
-                                                    fontSize: 11),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, bottom: 5),
-                                      child: Row(
-                                        children: [
-                                          pay_depart.id == 0
-                                              ? Container()
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        "https://test.bodah.bj/countries/${pay_depart.flag}",
-                                                    fit: BoxFit.cover,
-                                                    height: 15,
-                                                    width: 20,
-                                                    progressIndicatorBuilder: (context,
-                                                            url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                      value: downloadProgress
-                                                          .progress,
-                                                      color: MyColors.secondary,
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Container(),
                                                   ),
-                                                ),
-                                          Expanded(
-                                            child: Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                "${ville_dep.name}, ${pay_depart.name.toUpperCase()} ->",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: user.dark_mode == 1
-                                                      ? MyColors.light
-                                                      : MyColors.black,
-                                                  fontFamily: "Poppins",
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          pay_dest.id == 0
-                                              ? Container()
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        "https://test.bodah.bj/countries/${pay_dest.flag}",
-                                                    fit: BoxFit.cover,
-                                                    height: 15,
-                                                    width: 20,
-                                                    progressIndicatorBuilder: (context,
-                                                            url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                      value: downloadProgress
-                                                          .progress,
-                                                      color: MyColors.secondary,
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Container(),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              "${marchandise.poids} / " +
+                                                  tarification.prix_transport,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 11),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              function.date(
+                                                  marchandise.date_chargement),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: user.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.textColor,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 11),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 5),
+                                    child: Row(
+                                      children: [
+                                        pay_depart.id == 0
+                                            ? Container()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://test.bodah.bj/countries/${pay_depart.flag}",
+                                                  fit: BoxFit.cover,
+                                                  height: 15,
+                                                  width: 20,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: MyColors.secondary,
                                                   ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(),
                                                 ),
-                                          Expanded(
+                                              ),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
                                             child: Text(
-                                              "${ville_dest.name}, ${pay_dest.name.toUpperCase()}",
+                                              "${ville_dep.name}, ${pay_depart.name.toUpperCase()} ->",
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -322,18 +281,58 @@ class ListAnnonces extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                        ),
+                                        pay_dest.id == 0
+                                            ? Container()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://test.bodah.bj/countries/${pay_dest.flag}",
+                                                  fit: BoxFit.cover,
+                                                  height: 15,
+                                                  width: 20,
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: MyColors.secondary,
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(),
+                                                ),
+                                              ),
+                                        Expanded(
+                                          child: Text(
+                                            "${ville_dest.name}, ${pay_dest.name.toUpperCase()}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        );
-                      },
-                      itemCount: annonces.length),
-                ),
+                        ),
+                      );
+                    },
+                    itemCount: annonces.length),
+              ),
+            ),
     );
   }
 }

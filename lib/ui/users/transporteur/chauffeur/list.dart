@@ -8,7 +8,6 @@ import 'package:bodah/providers/users/transporteur/chauffeurs/add.dart';
 import 'package:bodah/ui/users/transporteur/chauffeur/add.dart';
 import 'package:bodah/ui/users/transporteur/chauffeur/detail.dart';
 import 'package:bodah/ui/users/transporteur/chauffeur/edit.dart';
-import 'package:bodah/wrappers/load.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,268 +38,262 @@ class MesChauffeurs extends StatelessWidget {
     List<Villes> villes = api_provider.all_villes;
     List<Pieces> pieces = api_provider.pieces;
 
-    return loading
-        ? LoadingPage()
-        : Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: loading ? MyColors.primary : MyColors.secondary,
-              onPressed: () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500),
-                    pageBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation) {
-                      return AddChauffeur();
-                    },
-                    transitionsBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation,
-                        Widget child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                  ),
+    Future<void> refresh() async {
+      await api_provider.InitChauffeurs();
+    }
+
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: loading ? MyColors.primary : MyColors.secondary,
+        onPressed: () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 500),
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return AddChauffeur();
+              },
+              transitionsBuilder: (BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
                 );
               },
-              child: Icon(Icons.add, color: MyColors.light),
             ),
-            backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
-            drawer: DrawerTransporteur(),
-            appBar: AppBar(
-              backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
-              iconTheme: IconThemeData(
-                  color: user.dark_mode == 1 ? MyColors.light : Colors.black),
-              centerTitle: true,
-              elevation: 0,
-              title: Text(
-                "Mes chauffeurs",
+          );
+        },
+        child: Icon(Icons.add, color: MyColors.light),
+      ),
+      backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
+      drawer: DrawerTransporteur(),
+      appBar: AppBar(
+        backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+        iconTheme: IconThemeData(
+            color: user.dark_mode == 1 ? MyColors.light : Colors.black),
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Mes chauffeurs",
+          style: TextStyle(
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Poppins",
+              fontSize: 14),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+              ))
+        ],
+      ),
+      body: chauffeurs.isEmpty
+          ? RefreshIndicator(
+              color: MyColors.secondary,
+              onRefresh: refresh,
+              child: Center(
+                  child: Text(
+                "Auncun chauffeur n'est ajouté",
+                textAlign: TextAlign.center,
                 style: TextStyle(
+                    fontFamily: "Poppins",
                     color: user.dark_mode == 1 ? MyColors.light : Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
                     fontSize: 14),
-              ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.notifications,
-                      color:
-                          user.dark_mode == 1 ? MyColors.light : Colors.black,
-                    ))
-              ],
-            ),
-            body: chauffeurs.isEmpty
-                ? Center(
-                    child: Text(
-                    "Auncun chauffeur n'est ajouté",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: "Poppins",
-                        color:
-                            user.dark_mode == 1 ? MyColors.light : Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14),
-                  ))
-                : SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: ListView.builder(
-                        physics: ScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          TransportLiaisons chauffeur = chauffeurs[index];
-                          Transporteurs transporteur = function.transporteur(
-                              transporteurs, chauffeur.transporteur_id);
-                          Users chauffeur_user =
-                              function.user(users, transporteur.user_id);
-                          Pays pay =
-                              function.pay(pays, chauffeur_user.country_id);
-                          Villes ville = function.ville(
-                              villes, chauffeur_user.city_id ?? 0);
-                          Pieces piece = function.data_piece(
-                              pieces, transporteur.id, "Transporteur");
+              )),
+            )
+          : RefreshIndicator(
+              color: MyColors.secondary,
+              onRefresh: refresh,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      TransportLiaisons chauffeur = chauffeurs[index];
+                      Transporteurs transporteur = function.transporteur(
+                          transporteurs, chauffeur.transporteur_id);
+                      Users chauffeur_user =
+                          function.user(users, transporteur.user_id);
+                      Pays pay = function.pay(pays, chauffeur_user.country_id);
+                      Villes ville =
+                          function.ville(villes, chauffeur_user.city_id ?? 0);
+                      Pieces piece = function.data_piece(
+                          pieces, transporteur.id, "Transporteur");
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 0),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    pageBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation) {
-                                      return DetailsChauffeur(
-                                          chauffeur: chauffeur);
-                                    },
-                                    transitionsBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation,
-                                        Widget child) {
-                                      return SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: function.is_pair(index)
-                                        ? Colors.grey.withOpacity(.2)
-                                        : null,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: user.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.textColor,
-                                        width: 0.1,
-                                        style: BorderStyle.solid)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 5, top: 5),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      transporteur.photo_url != null
-                                          ? SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child: CircleAvatar(
-                                                radius:
-                                                    40, // Ajuster la taille du cercle
-                                                backgroundImage:
-                                                    CachedNetworkImageProvider(
-                                                  "https://test.bodah.bj/storage/${transporteur.photo_url}",
-                                                ),
-                                                backgroundColor: Colors.grey[
-                                                    200], // Optionnel, couleur de fond si l'image n'est pas encore chargée
-                                              ),
-                                            )
-                                          : Image.asset(
-                                              "images/avatar.png",
-                                              height: 50,
-                                              width: 50,
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 0),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return DetailsChauffeur(chauffeur: chauffeur);
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: function.is_pair(index)
+                                    ? Colors.grey.withOpacity(.2)
+                                    : null,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: user.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.textColor,
+                                    width: 0.1,
+                                    style: BorderStyle.solid)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 5, top: 5),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  transporteur.photo_url != null
+                                      ? SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircleAvatar(
+                                            radius:
+                                                40, // Ajuster la taille du cercle
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                              "https://test.bodah.bj/storage/${transporteur.photo_url}",
                                             ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.55,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              chauffeur_user.name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: user.dark_mode == 1
-                                                      ? MyColors.light
-                                                      : MyColors.black,
-                                                  fontFamily: "Poppins",
-                                                  fontSize: 10),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                pay.id == 0
-                                                    ? Container()
-                                                    : Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              "https://test.bodah.bj/countries/${pay.flag}",
-                                                          fit: BoxFit.cover,
-                                                          height: 13,
-                                                          width: 20,
-                                                          progressIndicatorBuilder:
-                                                              (context, url,
-                                                                      downloadProgress) =>
-                                                                  CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress,
-                                                            color: MyColors
-                                                                .secondary,
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              Container(),
-                                                        ),
-                                                      ),
-                                                Expanded(
-                                                  child: Text(
-                                                    ville.name +
-                                                        " , " +
-                                                        pay.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            user.dark_mode == 1
-                                                                ? MyColors.light
-                                                                : MyColors
-                                                                    .textColor,
-                                                        fontFamily: "Poppins",
-                                                        fontSize: 10),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
+                                            backgroundColor: Colors.grey[
+                                                200], // Optionnel, couleur de fond si l'image n'est pas encore chargée
+                                          ),
+                                        )
+                                      : Image.asset(
+                                          "images/avatar.png",
+                                          height: 50,
+                                          width: 50,
                                         ),
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            showAllFromChauffeur(
-                                                context,
-                                                chauffeur,
-                                                chauffeur_user,
-                                                transporteur,
-                                                piece,
-                                                pay,
-                                                ville);
-                                          },
-                                          icon: Icon(
-                                            Icons.more_vert,
-                                            color: Colors.green,
-                                          ))
-                                    ],
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.55,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          chauffeur_user.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: user.dark_mode == 1
+                                                  ? MyColors.light
+                                                  : MyColors.black,
+                                              fontFamily: "Poppins",
+                                              fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            pay.id == 0
+                                                ? Container()
+                                                : Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          "https://test.bodah.bj/countries/${pay.flag}",
+                                                      fit: BoxFit.cover,
+                                                      height: 13,
+                                                      width: 20,
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  downloadProgress) =>
+                                                              CircularProgressIndicator(
+                                                        value: downloadProgress
+                                                            .progress,
+                                                        color:
+                                                            MyColors.secondary,
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Container(),
+                                                    ),
+                                                  ),
+                                            Expanded(
+                                              child: Text(
+                                                ville.name + " , " + pay.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: user.dark_mode == 1
+                                                        ? MyColors.light
+                                                        : MyColors.textColor,
+                                                    fontFamily: "Poppins",
+                                                    fontSize: 10),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        showAllFromChauffeur(
+                                            context,
+                                            chauffeur,
+                                            chauffeur_user,
+                                            transporteur,
+                                            piece,
+                                            pay,
+                                            ville);
+                                      },
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                        color: Colors.green,
+                                      ))
+                                ],
                               ),
                             ),
-                          );
-                        },
-                        itemCount: chauffeurs.length),
-                  ),
-          );
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: chauffeurs.length),
+              ),
+            ),
+    );
   }
 }
 

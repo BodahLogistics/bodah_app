@@ -122,7 +122,7 @@ class WelcomeTransporteur extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 65,
+                  height: 62,
                   child: ListView.builder(
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,

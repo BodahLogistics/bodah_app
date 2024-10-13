@@ -1,49 +1,37 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_local_variable, prefer_adjacent_string_concatenation, unnecessary_null_comparison
-
-import 'package:bodah/colors/color.dart';
-import 'package:bodah/modals/actualite.dart';
-import 'package:bodah/ui/users/transporteur/dashboard/index.dart';
-import 'package:bodah/wrappers/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../functions/function.dart';
+import '../../../../colors/color.dart';
+import '../../../../modals/actualite.dart';
 import '../../../../modals/users.dart';
 import '../../../../providers/api/api_data.dart';
-import '../../../../providers/connection/index.dart';
-import '../../../../wrappers/wrapper.dart';
+import 'index.dart';
 
 class TransporteurDashboard extends StatelessWidget {
-  const TransporteurDashboard({
-    super.key,
-  });
+  const TransporteurDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     Users? user = api_provider.user;
     List<Actualites> actualites = api_provider.actualites;
-    bool loading = api_provider.loading;
-    final CarouselSliderController controller = CarouselSliderController();
 
-    final connexionProvider = Provider.of<ProvConnexion>(context);
-    bool isConnected = connexionProvider.isConnected;
-
-    if (!isConnected) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showNoConnectionState(
-            context, connexionProvider); // Affiche le popup si déconnecté
-      });
+    Future<void> refreshActualites() async {
+      await api_provider.InitActualites();
     }
 
     return Scaffold(
       backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
-      body: loading
-          ? Loading()
-          : SingleChildScrollView(
+      body: Stack(
+        children: [
+          RefreshIndicator(
+            color: MyColors.secondary,
+            onRefresh: refreshActualites,
+            child: SingleChildScrollView(
+              physics:
+                  AlwaysScrollableScrollPhysics(), // Assure le défilement même si le contenu est petit
               scrollDirection: Axis.vertical,
               child: Padding(
                 padding: EdgeInsets.only(left: 10, right: 10, top: 60),
@@ -52,7 +40,7 @@ class TransporteurDashboard extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Bienvenue " + user.name,
+                        "Bienvenue ${user.name}",
                         style: TextStyle(
                             color: user.dark_mode == 1
                                 ? MyColors.light
@@ -80,7 +68,6 @@ class TransporteurDashboard extends StatelessWidget {
                                         builder: (context) {
                                           return Stack(
                                             children: [
-                                              // Image en arrière-plan
                                               ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(20.0),
@@ -105,9 +92,7 @@ class TransporteurDashboard extends StatelessWidget {
                                         },
                                       );
                                     }).toList(),
-                                    carouselController: controller,
                                     options: CarouselOptions(
-                                      pauseAutoPlayOnManualNavigate: false,
                                       height: 200,
                                       aspectRatio: 16 / 9,
                                       autoPlay: true,
@@ -115,7 +100,6 @@ class TransporteurDashboard extends StatelessWidget {
                                       autoPlayAnimationDuration:
                                           Duration(milliseconds: 800),
                                       autoPlayCurve: Curves.fastOutSlowIn,
-                                      pauseAutoPlayOnTouch: false,
                                       viewportFraction: 1,
                                     ),
                                   ),
@@ -124,7 +108,7 @@ class TransporteurDashboard extends StatelessWidget {
                             ),
                           ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 20),
+                      padding: const EdgeInsets.only(top: 25, bottom: 20),
                       child: Text(
                         "Planifiez paisiblement vos trajets et à l'avance avec Bodah",
                         textAlign: TextAlign.center,
@@ -152,46 +136,53 @@ class TransporteurDashboard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: MyColors.secondary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return WelcomeTransporteur();
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Commencez",
-                          style: TextStyle(
-                              color: MyColors.light,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w500),
-                        ))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 35),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.secondary,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4))),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation) {
+                                  return WelcomeTransporteur();
+                                },
+                                transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Commencez",
+                            style: TextStyle(
+                                color: MyColors.light,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          )),
+                    )
                   ],
                 ),
               ),
             ),
+          ),
+          // CircularProgressIndicator centré pendant le chargement
+        ],
+      ),
     );
   }
 }

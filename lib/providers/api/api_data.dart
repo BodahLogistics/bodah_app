@@ -1602,6 +1602,62 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> InitTransporteurContrat() async {
+    _isLoading = true;
+    final response_contrat = await apiService.getTransporteurContrat();
+    _contrats = response_contrat;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurInterchange() async {
+    _isLoading = true;
+    final response_interchange = await apiService.getTransporteurInterchange();
+    _interchanges = response_interchange;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurAppele() async {
+    _isLoading = true;
+    final response_apeles = await apiService.getTransporteurApeles();
+    _appeles = response_apeles;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurTdo() async {
+    _isLoading = true;
+    final response_tdo = await apiService.getTransporteurTdo();
+    _tdos = response_tdo;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurVgms() async {
+    _isLoading = true;
+    final response_vgm = await apiService.getTransporteurVgm();
+    _vgms = response_vgm;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurRecus() async {
+    _isLoading = true;
+    final response_recues = await apiService.getTransporteurRecus();
+    _recus = response_recues;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurBordereau() async {
+    _isLoading = true;
+    final response_bordereaux = await apiService.getTransporteurBordereaux();
+    _bordereaux = response_bordereaux;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> InitInterchanges() async {
     _isLoading = true;
     final response_interchange = await apiService.getInterchanges();

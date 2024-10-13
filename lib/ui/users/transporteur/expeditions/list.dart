@@ -5,7 +5,6 @@ import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/detail.dart';
-import 'package:bodah/wrappers/load.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,6 @@ class ListTransport extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     Users? user = api_provider.user;
-    bool loading = api_provider.loading;
     List<Expeditions> expeditions = api_provider.expeditions;
     List<Marchandises> marchandises = api_provider.marchandises;
     List<Localisations> localisations = api_provider.localisations;
@@ -43,48 +41,55 @@ class ListTransport extends StatelessWidget {
     List<Camions> camions = api_provider.camions;
     List<Users> users = api_provider.users;
 
-    return loading
-        ? LoadingPage()
-        : Scaffold(
-            backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
-            drawer: DrawerTransporteur(),
-            appBar: AppBar(
-              backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
-              iconTheme: IconThemeData(
-                  color: user.dark_mode == 1 ? MyColors.light : Colors.black),
-              centerTitle: true,
-              elevation: 0,
-              title: Text(
-                "Mes transports",
-                style: TextStyle(
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                    fontSize: 14),
-              ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.notifications,
+    Future<void> refresh() async {
+      await api_provider.InitTransporteurExpedition();
+    }
+
+    return Scaffold(
+        backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
+        drawer: DrawerTransporteur(),
+        appBar: AppBar(
+          backgroundColor: user.dark_mode == 1 ? MyColors.secondDark : null,
+          iconTheme: IconThemeData(
+              color: user.dark_mode == 1 ? MyColors.light : Colors.black),
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            "Mes transports",
+            style: TextStyle(
+                color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Poppins",
+                fontSize: 14),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.notifications,
+                  color: user.dark_mode == 1 ? MyColors.light : Colors.black,
+                ))
+          ],
+        ),
+        body: RefreshIndicator(
+          color: MyColors.secondary,
+          onRefresh: refresh,
+          child: expeditions.isEmpty
+              ? Center(
+                  child: Text(
+                  "Auncune expédition disponible",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "Poppins",
                       color:
                           user.dark_mode == 1 ? MyColors.light : Colors.black,
-                    ))
-              ],
-            ),
-            body: expeditions.isEmpty
-                ? Center(
-                    child: Text(
-                    "Auncune expédition disponible",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: "Poppins",
-                        color:
-                            user.dark_mode == 1 ? MyColors.light : Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14),
-                  ))
-                : SizedBox(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ))
+              : RefreshIndicator(
+                  color: MyColors.secondary,
+                  onRefresh: refresh,
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
                       itemCount: expeditions.length,
@@ -636,6 +641,8 @@ class ListTransport extends StatelessWidget {
                         );
                       },
                     ),
-                  ));
+                  ),
+                ),
+        ));
   }
 }

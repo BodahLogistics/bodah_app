@@ -2,7 +2,6 @@
 
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/transporteurs.dart';
-import 'package:bodah/wrappers/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,6 @@ class DocsChargement extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
     Users? user = api_provider.user;
-    bool loading = api_provider.loading;
     List<Transporteurs> transporteurs = api_provider.transporteurs;
     List<Expeditions> expeditions = api_provider.expeditions;
     expeditions = function.annonce_expeditions(expeditions, annonce);
@@ -43,269 +41,275 @@ class DocsChargement extends StatelessWidget {
     List<Recus> recus = api_provider.recus;
     recus = function.expedition_recus(recus, expeditions);
 
-    return loading
-        ? Loading()
-        : Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    Future<void> refresh() async {
+      await api_provider.InitTransporteursDocuments();
+    }
+
+    return RefreshIndicator(
+      color: MyColors.secondary,
+      onRefresh: refresh,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (interchanges.isNotEmpty) {
-                            showInterchanges(context, annonce.id, "Expedition",
-                                interchanges);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            interchanges.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Interchange",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: interchanges.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Interchanges",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            interchanges.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (recus.isNotEmpty) {
-                            showRecus(context, annonce.id, "Annonce", recus);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            recus.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Reçu et facture",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: recus.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Reçu et factures",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            recus.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (tdos.isNotEmpty) {
-                            showTdo(context, annonce.id, "Annonce", tdos);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "TDO",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: tdos.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (interchanges.isNotEmpty) {
+                        showInterchanges(
+                            context, annonce.id, "Expedition", interchanges);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        interchanges.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Interchange",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: interchanges.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Interchanges",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            ),
-                            tdos.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
+                        interchanges.isEmpty
+                            ? Container()
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (vgms.isNotEmpty) {
-                            showVgm(context, annonce.id, "Annonce", vgms);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "VGM",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: vgms.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (recus.isNotEmpty) {
+                        showRecus(context, annonce.id, "Annonce", recus);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        recus.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Reçu et facture",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: recus.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Reçu et factures",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            ),
-                            vgms.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
+                        recus.isEmpty
+                            ? Container()
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (appeles.isNotEmpty) {
-                            showApeles(context, annonce.id, "Annonce", appeles);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            appeles.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Appélé",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: appeles.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Appélés",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            appeles.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (tdos.isNotEmpty) {
+                        showTdo(context, annonce.id, "Annonce", tdos);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "TDO",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: tdos.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        tdos.isEmpty
+                            ? Container()
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
+            SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (vgms.isNotEmpty) {
+                        showVgm(context, annonce.id, "Annonce", vgms);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "VGM",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: vgms.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        vgms.isEmpty
+                            ? Container()
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (appeles.isNotEmpty) {
+                        showApeles(context, annonce.id, "Annonce", appeles);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        appeles.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Appélé",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: appeles.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Appélés",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        appeles.isEmpty
+                            ? Container()
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

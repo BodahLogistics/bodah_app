@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bodah/providers/users/expediteur/import/docs/add.dart';
 import 'package:bodah/services/data_base_service.dart';
-import 'package:bodah/wrappers/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +41,6 @@ class ListDocuments extends StatelessWidget {
     final api_provider = Provider.of<ApiProvider>(context);
 
     Users? user = api_provider.user;
-    bool loading = api_provider.loading;
     List<Appeles> appeles = api_provider.appeles;
     appeles = function.data_appeles(appeles, data_id, data_modele);
     List<Interchanges> interchanges = api_provider.interchanges;
@@ -77,833 +75,45 @@ class ListDocuments extends StatelessWidget {
     List<OrdreTransport> ordres = api_provider.import_ordres;
     ordres = function.data_ordres(ordres, data_id, data_modele);
 
-    return loading
-        ? Loading()
-        : Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    Future<void> refresh() async {
+      await api_provider.InitDocuments();
+    }
+
+    return RefreshIndicator(
+      color: MyColors.secondary,
+      onRefresh: refresh,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (interchanges.isNotEmpty) {
-                            showInterchanges(
-                                context, data_id, data_modele, interchanges);
-                          } else {
-                            NewInter(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            interchanges.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Interchange",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: interchanges.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Interchanges",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            interchanges.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (recus.isNotEmpty) {
-                            showRecus(context, data_id, data_modele, recus);
-                          } else {
-                            NewRecu(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            recus.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Reçu et facture",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: recus.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Reçu et factures",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            recus.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (ltas.isNotEmpty) {
-                            showLta(context, data_id, data_modele);
-                          } else {
-                            NewLta(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "LTA",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: ltas.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            ltas.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (fiche_techniques.isNotEmpty) {
-                            showFiches(context, data_id, data_modele);
-                          } else {
-                            NewFiche(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            fiche_techniques.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Fiche technique",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: fiche_techniques.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Fiche techniques",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            fiche_techniques.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (tdos.isNotEmpty) {
-                            showTdo(context, data_id, data_modele, tdos);
-                          } else {
-                            NewTdo(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "TDO",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: tdos.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            tdos.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (ordres.isNotEmpty) {
-                            showImportOrdre(context, data_id, data_modele);
-                          } else {
-                            NewImportOrdre(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            ordres.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Ordre de transport",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: ordres.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Ordres de transport",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            ordres.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (bfus.isNotEmpty) {
-                            showBfu(context, data_id, data_modele);
-                          } else {
-                            NewBfu(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "BFU",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: bfus.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            bfus.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (cos.isNotEmpty) {
-                            showCo(context, data_id, data_modele);
-                          } else {
-                            NewCo(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            cos.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Certificat d'origine",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: cos.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Certificat d'origines",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            cos.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (vgms.isNotEmpty) {
-                            showVgm(context, data_id, data_modele, vgms);
-                          } else {
-                            NewVgm(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "VGM",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: vgms.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            vgms.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (bls.isNotEmpty) {
-                            showBl(context, data_id, data_modele);
-                          } else {
-                            NewBl(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "BL",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: bls.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            bls.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (avds.isNotEmpty) {
-                            showAvd(context, data_id, data_modele);
-                          } else {
-                            NewAvd(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "AVD",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: avds.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            avds.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (cps.isNotEmpty) {
-                            showCps(context, data_id, data_modele);
-                          } else {
-                            NewCps(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            cps.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Certificat Phyto-sanitaire",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: cps.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Certificat phyto-sanitaires",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            cps.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (appeles.isNotEmpty) {
-                            showApeles(context, data_id, data_modele, appeles);
-                          } else {
-                            NewApele(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            appeles.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Appélé",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: appeles.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Appélés",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            appeles.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (declarations.isNotEmpty) {
-                            showDecla(context, data_id, data_modele);
-                          } else {
-                            NewDecla(context, data_id, data_modele);
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            declarations.length < 2
-                                ? Flexible(
-                                    child: Text(
-                                      "Déclaration",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: declarations.isNotEmpty
-                                              ? Colors.green
-                                              : user!.dark_mode == 1
-                                                  ? MyColors.light
-                                                  : MyColors.black,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                : Flexible(
-                                    child: Text(
-                                      "Déclarations",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.green,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                            declarations.isEmpty
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                  )
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextButton(
-                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                          onPressed: () {
-                            if (autre_docs.isNotEmpty) {
-                              showAutreDoc(context, data_id, data_modele);
-                            } else {
-                              NewDoc(context, data_id, data_modele);
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Flexible(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (interchanges.isNotEmpty) {
+                        showInterchanges(
+                            context, data_id, data_modele, interchanges);
+                      } else {
+                        NewInter(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        interchanges.length < 2
+                            ? Flexible(
                                 child: Text(
-                                  "Autre document",
+                                  "Interchange",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 8,
-                                      color: ltas.isNotEmpty
+                                      color: interchanges.isNotEmpty
                                           ? Colors.green
                                           : user!.dark_mode == 1
                                               ? MyColors.light
@@ -911,28 +121,822 @@ class ListDocuments extends StatelessWidget {
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w500),
                                 ),
-                              ),
-                              autre_docs.isEmpty
-                                  ? Icon(
-                                      Icons.add,
-                                      size: 20,
-                                      color: user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                    )
-                                  : Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 20,
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Interchanges",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
                                       color: Colors.green,
-                                    ),
-                            ],
-                          )),
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        interchanges.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
                     ),
-                  ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (recus.isNotEmpty) {
+                        showRecus(context, data_id, data_modele, recus);
+                      } else {
+                        NewRecu(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        recus.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Reçu et facture",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: recus.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Reçu et factures",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        recus.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (ltas.isNotEmpty) {
+                        showLta(context, data_id, data_modele);
+                      } else {
+                        NewLta(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "LTA",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: ltas.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        ltas.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (fiche_techniques.isNotEmpty) {
+                        showFiches(context, data_id, data_modele);
+                      } else {
+                        NewFiche(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        fiche_techniques.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Fiche technique",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: fiche_techniques.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Fiche techniques",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        fiche_techniques.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
+            SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (tdos.isNotEmpty) {
+                        showTdo(context, data_id, data_modele, tdos);
+                      } else {
+                        NewTdo(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "TDO",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: tdos.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        tdos.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (ordres.isNotEmpty) {
+                        showImportOrdre(context, data_id, data_modele);
+                      } else {
+                        NewImportOrdre(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        ordres.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Ordre de transport",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: ordres.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Ordres de transport",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        ordres.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (bfus.isNotEmpty) {
+                        showBfu(context, data_id, data_modele);
+                      } else {
+                        NewBfu(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "BFU",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: bfus.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        bfus.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (cos.isNotEmpty) {
+                        showCo(context, data_id, data_modele);
+                      } else {
+                        NewCo(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        cos.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Certificat d'origine",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: cos.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Certificat d'origines",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        cos.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (vgms.isNotEmpty) {
+                        showVgm(context, data_id, data_modele, vgms);
+                      } else {
+                        NewVgm(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "VGM",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: vgms.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        vgms.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (bls.isNotEmpty) {
+                        showBl(context, data_id, data_modele);
+                      } else {
+                        NewBl(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "BL",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: bls.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        bls.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (avds.isNotEmpty) {
+                        showAvd(context, data_id, data_modele);
+                      } else {
+                        NewAvd(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "AVD",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 8,
+                                color: avds.isNotEmpty
+                                    ? Colors.green
+                                    : user!.dark_mode == 1
+                                        ? MyColors.light
+                                        : MyColors.black,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        avds.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (cps.isNotEmpty) {
+                        showCps(context, data_id, data_modele);
+                      } else {
+                        NewCps(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        cps.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Certificat Phyto-sanitaire",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: cps.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Certificat phyto-sanitaires",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        cps.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (appeles.isNotEmpty) {
+                        showApeles(context, data_id, data_modele, appeles);
+                      } else {
+                        NewApele(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        appeles.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Appélé",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: appeles.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Appélés",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        appeles.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      if (declarations.isNotEmpty) {
+                        showDecla(context, data_id, data_modele);
+                      } else {
+                        NewDecla(context, data_id, data_modele);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        declarations.length < 2
+                            ? Flexible(
+                                child: Text(
+                                  "Déclaration",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 8,
+                                      color: declarations.isNotEmpty
+                                          ? Colors.green
+                                          : user!.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            : Flexible(
+                                child: Text(
+                                  "Déclarations",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.green,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                        declarations.isEmpty
+                            ? Icon(
+                                Icons.add,
+                                size: 20,
+                                color: user!.dark_mode == 1
+                                    ? MyColors.light
+                                    : MyColors.black,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Colors.green,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextButton(
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      onPressed: () {
+                        if (autre_docs.isNotEmpty) {
+                          showAutreDoc(context, data_id, data_modele);
+                        } else {
+                          NewDoc(context, data_id, data_modele);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "Autre document",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 8,
+                                  color: ltas.isNotEmpty
+                                      ? Colors.green
+                                      : user!.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          autre_docs.isEmpty
+                              ? Icon(
+                                  Icons.add,
+                                  size: 20,
+                                  color: user!.dark_mode == 1
+                                      ? MyColors.light
+                                      : MyColors.black,
+                                )
+                              : Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 20,
+                                  color: Colors.green,
+                                ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
