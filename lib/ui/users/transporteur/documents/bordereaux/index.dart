@@ -2,6 +2,7 @@
 
 import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
+import 'package:bodah/ui/users/transporteur/documents/contrats/index.dart';
 import 'package:bodah/ui/users/transporteur/drawer/index.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -44,6 +45,7 @@ class ChargBordereaux extends StatelessWidget {
     List<Users> users = api_provider.users;
     Future<void> refresh() async {
       await api_provider.InitTransporteurBordereau();
+      await api_provider.InitTransporteurExpeditionForAnnonce();
     }
 
     return Scaffold(
@@ -628,33 +630,68 @@ class ChargBordereaux extends StatelessWidget {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 5),
-                                    child: SizedBox(
-                                      height: 25,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.green,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
-                                          onPressed: () {
-                                            /* String url =
+                                  data.dest_sign_id != null &&
+                                          data.transp_sign_id != null
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 5),
+                                          child: SizedBox(
+                                            height: 25,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5))),
+                                                onPressed: () {
+                                                  /* String url =
                                                   "https://test.bodah.bj/storage/" +
                                                       data.path;
                                               downloadDocument(context, url);*/
-                                          },
-                                          child: Text(
-                                            "Téléchargez",
-                                            style: TextStyle(
-                                                color: MyColors.light,
-                                                fontSize: 10,
-                                                fontFamily: "Poppins"),
-                                          )),
-                                    ),
-                                  )
+                                                },
+                                                child: Text(
+                                                  "Téléchargez",
+                                                  style: TextStyle(
+                                                      color: MyColors.light,
+                                                      fontSize: 10,
+                                                      fontFamily: "Poppins"),
+                                                )),
+                                          ),
+                                        )
+                                      : data.transp_sign_id == null
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10, bottom: 5),
+                                              child: SizedBox(
+                                                height: 25,
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5))),
+                                                    onPressed: () {
+                                                      signerTransporteur(
+                                                          context, expedition);
+                                                    },
+                                                    child: Text(
+                                                      "Signez",
+                                                      style: TextStyle(
+                                                          color: MyColors.light,
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                              "Poppins"),
+                                                    )),
+                                              ),
+                                            )
+                                          : Container()
                                 ],
                               ),
                             ),

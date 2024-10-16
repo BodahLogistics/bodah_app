@@ -71,7 +71,6 @@ class DocumentChargements extends StatelessWidget {
         color: MyColors.secondary,
         onRefresh: refresh,
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
           child: Container(
             color: user.dark_mode == 1
                 ? MyColors.secondDark

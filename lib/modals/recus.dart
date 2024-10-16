@@ -3,7 +3,7 @@ import 'dart:convert';
 
 class Recus {
   int id;
-  String? path;
+  String path;
   String reference;
   int modele_id;
   String modele_type;
@@ -50,7 +50,7 @@ class Recus {
   factory Recus.fromMap(Map<String, dynamic> map) {
     return Recus(
       id: map['id'] as int,
-      path: map['path'] != null ? map['path'] as String : null,
+      path: map['path'] as String,
       reference: map['reference'] as String,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,

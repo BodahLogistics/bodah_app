@@ -3,7 +3,7 @@ import 'dart:convert';
 
 class Vgms {
   final int id;
-  final String? path;
+  final String path;
   final int modele_id;
   final String modele_type;
   final String reference;
@@ -50,7 +50,7 @@ class Vgms {
   factory Vgms.fromMap(Map<String, dynamic> map) {
     return Vgms(
       id: map['id'] as int,
-      path: map['path'] != null ? map['path'] as String : null,
+      path: map['path'] as String,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
       reference: map['reference'] as String,

@@ -125,6 +125,14 @@ class Functions {
     );
   }
 
+  List<PaiementSolde> data_paiement(
+      List<PaiementSolde> datas, String data_modele, int data_id) {
+    return datas
+        .where((data) =>
+            data.modele_type.contains(data_modele) && data.modele_id == data_id)
+        .toList();
+  }
+
   AnnonceTransporteurs trajet(List<AnnonceTransporteurs> trajets, int id) {
     return trajets.firstWhere(
       (data) => data.id == id,

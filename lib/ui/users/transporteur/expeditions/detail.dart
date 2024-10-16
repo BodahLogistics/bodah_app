@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously, prefer_interpolation_to_compose_strings
 
 import 'package:bodah/modals/camions.dart';
+import 'package:bodah/modals/paiement_solde.dart';
 import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/transporteurs.dart';
 import 'package:bodah/ui/users/transporteur/annonces/details/index.dart';
@@ -45,10 +46,13 @@ class DetailChargement extends StatelessWidget {
     Pieces piece = function.data_piece(pieces, transporteur.id, "Transporteur");
     StatutExpeditions statut =
         function.statut(statuts, expedition.statu_expedition_id);
+    List<PaiementSolde> paiements = api_provider.paiement_soldes;
+    paiements = function.data_paiement(paiements, "Expedition", expedition.id);
     String quantite = "";
     String poids = "";
     double montant = 0;
     double accompte = 0;
+    double solde = 0;
     List<Charge> data_charges =
         function.expedition_charges(charges, expedition);
     if (data_charges.isNotEmpty) {
@@ -60,6 +64,11 @@ class DetailChargement extends StatelessWidget {
         accompte += tarif.accompte;
       }
     }
+
+    solde = montant -
+        accompte -
+        paiements.fold(
+            0, (previousValue, data) => previousValue + data.montant);
 
     Future<void> refresh() async {
       await api_provider.InitTransporteurExpeditionForAnnonce();

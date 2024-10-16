@@ -116,7 +116,6 @@ class MesChauffeurs extends StatelessWidget {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: ListView.builder(
-                    physics: ScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
                       TransportLiaisons chauffeur = chauffeurs[index];

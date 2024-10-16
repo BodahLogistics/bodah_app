@@ -20,6 +20,7 @@ import '../../../../../../providers/api/api_data.dart';
 import '../../../../../modals/camions.dart';
 import '../../../../../modals/statut_expeditions.dart';
 import '../../../../../modals/transporteurs.dart';
+import '../../../expediteur/marchandises/documents/appeles/index.dart';
 
 class ChargAppeles extends StatelessWidget {
   const ChargAppeles({super.key});
@@ -641,10 +642,10 @@ class ChargAppeles extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           5))),
                                           onPressed: () {
-                                            /* String url =
-                                                  "https://test.bodah.bj/storage/" +
-                                                      data.path;
-                                              downloadDocument(context, url);*/
+                                            String url =
+                                                "https://test.bodah.bj/storage/" +
+                                                    data.path;
+                                            downloadDocument(context, url);
                                           },
                                           child: Text(
                                             "Téléchargez",

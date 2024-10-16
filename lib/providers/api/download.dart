@@ -11,6 +11,11 @@ class ProvDown extends ChangeNotifier {
   double get progress => _progress;
   bool get affiche => _affiche;
 
+  void change_affiche(bool value) {
+    _affiche = value;
+    notifyListeners();
+  }
+
   Future<void> startDownload(String fileUrl, String savePath) async {
     _affiche = true;
     _progress = 0.0;
