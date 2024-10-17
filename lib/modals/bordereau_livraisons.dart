@@ -2,18 +2,18 @@
 import 'dart:convert';
 
 class BordereauLivraisons {
-  final int id;
-  final String numero_borderau;
-  final int expedition_id;
-  final int? observation_id;
-  final int? transp_sign_id;
-  final int? dest_sign_id;
+  int id;
+  String numero_borderau;
+  int expedition_id;
+  int? transp_sign_id;
+  String? representant;
+  int? dest_sign_id;
   BordereauLivraisons({
     required this.id,
     required this.numero_borderau,
     required this.expedition_id,
-    required this.observation_id,
     this.transp_sign_id,
+    this.representant,
     this.dest_sign_id,
   });
 
@@ -21,16 +21,16 @@ class BordereauLivraisons {
     int? id,
     String? numero_borderau,
     int? expedition_id,
-    int? observation_id,
     int? transp_sign_id,
+    String? representant,
     int? dest_sign_id,
   }) {
     return BordereauLivraisons(
       id: id ?? this.id,
       numero_borderau: numero_borderau ?? this.numero_borderau,
       expedition_id: expedition_id ?? this.expedition_id,
-      observation_id: observation_id ?? this.observation_id,
       transp_sign_id: transp_sign_id ?? this.transp_sign_id,
+      representant: representant ?? this.representant,
       dest_sign_id: dest_sign_id ?? this.dest_sign_id,
     );
   }
@@ -40,8 +40,8 @@ class BordereauLivraisons {
       'id': id,
       'numero_borderau': numero_borderau,
       'expedition_id': expedition_id,
-      'observation_id': observation_id,
       'transp_sign_id': transp_sign_id,
+      'representant': representant,
       'dest_sign_id': dest_sign_id,
     };
   }
@@ -51,10 +51,10 @@ class BordereauLivraisons {
       id: map['id'] as int,
       numero_borderau: map['numero_borderau'] as String,
       expedition_id: map['expedition_id'] as int,
-      observation_id:
-          map['observation_id'] != null ? map['observation_id'] as int : null,
       transp_sign_id:
           map['transp_sign_id'] != null ? map['transp_sign_id'] as int : null,
+      representant:
+          map['representant'] != null ? map['representant'] as String : null,
       dest_sign_id:
           map['dest_sign_id'] != null ? map['dest_sign_id'] as int : null,
     );
@@ -67,7 +67,7 @@ class BordereauLivraisons {
 
   @override
   String toString() {
-    return 'BordereauLivraisons(id: $id, numero_borderau: $numero_borderau, expedition_id: $expedition_id, observation_id: $observation_id, transp_sign_id: $transp_sign_id, dest_sign_id: $dest_sign_id)';
+    return 'BordereauLivraisons(id: $id, numero_borderau: $numero_borderau, expedition_id: $expedition_id, transp_sign_id: $transp_sign_id, representant: $representant, dest_sign_id: $dest_sign_id)';
   }
 
   @override
@@ -77,8 +77,8 @@ class BordereauLivraisons {
     return other.id == id &&
         other.numero_borderau == numero_borderau &&
         other.expedition_id == expedition_id &&
-        other.observation_id == observation_id &&
         other.transp_sign_id == transp_sign_id &&
+        other.representant == representant &&
         other.dest_sign_id == dest_sign_id;
   }
 
@@ -87,8 +87,8 @@ class BordereauLivraisons {
     return id.hashCode ^
         numero_borderau.hashCode ^
         expedition_id.hashCode ^
-        observation_id.hashCode ^
         transp_sign_id.hashCode ^
+        representant.hashCode ^
         dest_sign_id.hashCode;
   }
 }

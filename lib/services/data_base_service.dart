@@ -75,6 +75,7 @@ import '../modals/pieces.dart';
 import '../modals/positions.dart';
 import '../modals/quartiers.dart';
 import '../modals/recus.dart';
+import '../modals/signature.dart';
 import '../modals/souscriptions.dart';
 import '../modals/statut_expeditions.dart';
 import '../modals/statuts.dart';
@@ -86,6 +87,7 @@ import '../modals/transport_mode.dart';
 import '../modals/transporteurs.dart';
 import '../modals/type_camions.dart';
 import '../modals/type_chargements.dart';
+import '../modals/type_paiements.dart';
 import '../modals/users.dart';
 import 'secure_storage.dart';
 
@@ -376,6 +378,14 @@ class DBServices {
           LetreVoitures data = LetreVoitures.fromMap(dataMap);
           provider.updateContrat(data);
         }
+
+        if (responseData.containsKey('signature') &&
+            responseData['signature'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['signature'];
+
+          Signatures data = Signatures.fromMap(dataMap);
+          provider.setSignature(data);
+        }
       }
 
       return response.statusCode.toString();
@@ -423,6 +433,13 @@ class DBServices {
           BordereauLivraisons data = BordereauLivraisons.fromMap(dataMap);
           provider.updateBordereau(data);
         }
+        if (responseData.containsKey('signature') &&
+            responseData['signature'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['signature'];
+
+          Signatures data = Signatures.fromMap(dataMap);
+          provider.setSignature(data);
+        }
       }
 
       return response.statusCode.toString();
@@ -468,6 +485,60 @@ class DBServices {
 
           BordereauLivraisons data = BordereauLivraisons.fromMap(dataMap);
           provider.updateBordereau(data);
+        }
+
+        if (responseData.containsKey('signature') &&
+            responseData['signature'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['signature'];
+
+          Signatures data = Signatures.fromMap(dataMap);
+          provider.setSignature(data);
+        }
+      }
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return "202"; // Code d'erreur personnalisé
+    }
+  }
+
+  Future<String> signatureOrdre(
+      BonCommandes data, File file, ApiProvider provider) async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/ordre/signer/${data.id}";
+      final uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'API-KEY': api_key,
+          'AUTH-TOKEN': auth_token,
+          'Authorization': 'Bearer $token',
+        });
+
+      if (file != null) {
+        request.files.add(await http.MultipartFile.fromPath('path', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('ordre') &&
+            responseData['ordre'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['ordre'];
+
+          BonCommandes data = BonCommandes.fromMap(dataMap);
+          provider.updateBonCommande(data);
+        }
+
+        if (responseData.containsKey('signature') &&
+            responseData['signature'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['signature'];
+
+          Signatures data = Signatures.fromMap(dataMap);
+          provider.setSignature(data);
         }
       }
 
@@ -1282,6 +1353,75 @@ class DBServices {
       }
     } catch (error) {
       return <TypeChargements>[];
+    }
+  }
+
+  Future<List<TypePaiements>> getTypePaiements() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/type/paiements";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => TypePaiements.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Signatures>> getTransporteurSignatures() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/signatures";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Signatures.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Signatures>> getSignatures() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/signatures";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Signatures.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
     }
   }
 

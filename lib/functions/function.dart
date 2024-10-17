@@ -26,6 +26,7 @@ import 'package:bodah/modals/tarifications.dart';
 import 'package:bodah/modals/tarifs.dart';
 import 'package:bodah/modals/tdos.dart';
 import 'package:bodah/modals/transport_mode.dart';
+import 'package:bodah/modals/type_paiements.dart';
 import 'package:bodah/modals/unites.dart';
 import 'package:bodah/modals/vgms.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -63,6 +64,7 @@ import '../modals/paiement_solde.dart';
 import '../modals/path.dart';
 import '../modals/pays.dart';
 import '../modals/rules.dart';
+import '../modals/signature.dart';
 import '../modals/souscriptions.dart';
 import '../modals/statut_expeditions.dart';
 import '../modals/transporteurs.dart';
@@ -186,8 +188,30 @@ class Functions {
         id: id,
         expedition_id: 0,
         numero_borderau: '',
-        observation_id: 0,
       ),
+    );
+  }
+
+  TypePaiements type_piament(
+      List<TypePaiements> type_piaments, int? type_paiement_id) {
+    if (type_paiement_id == null) {
+      return TypePaiements(id: 0, nom: "");
+    }
+
+    return type_piaments.firstWhere(
+      (data) => data.id == type_paiement_id,
+      orElse: () => TypePaiements(id: 0, nom: ""),
+    );
+  }
+
+  Signatures signature(List<Signatures> signatures, int? signature_id) {
+    if (signature_id == null) {
+      return Signatures(id: 0, path: "");
+    }
+
+    return signatures.firstWhere(
+      (data) => data.id == signature_id,
+      orElse: () => Signatures(id: 0, path: ""),
     );
   }
 
@@ -277,20 +301,17 @@ class Functions {
     return ordres.firstWhere(
       (data) => data.annonce_id == annonce.id,
       orElse: () => BonCommandes(
-          id: 0,
-          numero_bon_commande: "",
-          is_validated: 0,
-          description: "",
-          delai_chargement: 0,
-          amende_delai_chargement: 0,
-          amende_dechargement: 0,
-          montant_paye: 0,
-          annonce_id: 0,
-          donneur_ordre_id: 0,
-          entite_facture_id: 0,
-          deleted: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: 0,
+        numero_bon_commande: "",
+        is_validated: 0,
+        delai_chargement: 0,
+        amende_delai_chargement: 0,
+        amende_dechargement: 0,
+        montant_paye: 0,
+        annonce_id: 0,
+        donneur_ordre_id: 0,
+        entite_facture_id: 0,
+      ),
     );
   }
 
@@ -684,17 +705,15 @@ class Functions {
     return expeditions.firstWhere(
       (data) => data.id == expedition_id,
       orElse: () => Expeditions(
-          id: 0,
-          numero_expedition: "",
-          transporteur_id: 0,
-          statu_expedition_id: 0,
-          annonce_id: 0,
-          deleted: 0,
-          date_depart: DateTime.now(),
-          type_paiement_id: 0,
-          vehicule_id: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: 0,
+        numero_expedition: "",
+        transporteur_id: 0,
+        statu_expedition_id: 0,
+        annonce_id: 0,
+        date_depart: DateTime.now(),
+        type_paiement_id: 0,
+        vehicule_id: 0,
+      ),
     );
   }
 
@@ -917,20 +936,17 @@ class Functions {
     return ordres.firstWhere(
       (data) => data.id == id,
       orElse: () => BonCommandes(
-          id: id,
-          numero_bon_commande: "",
-          is_validated: 0,
-          description: "",
-          delai_chargement: 0,
-          amende_delai_chargement: 0,
-          amende_dechargement: 0,
-          montant_paye: 0,
-          annonce_id: 0,
-          donneur_ordre_id: 0,
-          entite_facture_id: 0,
-          deleted: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: id,
+        numero_bon_commande: "",
+        is_validated: 0,
+        delai_chargement: 0,
+        amende_delai_chargement: 0,
+        amende_dechargement: 0,
+        montant_paye: 0,
+        annonce_id: 0,
+        donneur_ordre_id: 0,
+        entite_facture_id: 0,
+      ),
     );
   }
 

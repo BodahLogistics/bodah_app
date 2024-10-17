@@ -78,11 +78,13 @@ import '../../modals/quartiers.dart';
 import '../../modals/recepteurs.dart';
 import '../../modals/recus.dart';
 import '../../modals/rules.dart';
+import '../../modals/signature.dart';
 import '../../modals/transport_liaison.dart';
 import '../../modals/transport_mode.dart';
 import '../../modals/transporteurs.dart';
 import '../../modals/type_camions.dart';
 import '../../modals/type_chargements.dart';
+import '../../modals/type_paiements.dart';
 import '../../modals/vgms.dart';
 import '../../services/secure_storage.dart';
 
@@ -959,6 +961,11 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setSignature(Signatures data) {
+    _signatures.insert(0, data);
+    notifyListeners();
+  }
+
   void updateAutreDoc(AutreDocs data) {
     int index = _autre_docs.indexWhere((account) => account.id == data.id);
     if (index != -1) {
@@ -1173,6 +1180,12 @@ class ApiProvider with ChangeNotifier {
   List<TransportLiaisons> _chauffeurs = [];
   List<TransportLiaisons> get chauffeurs => _chauffeurs;
 
+  List<TypePaiements> _type_paiements = [];
+  List<TypePaiements> get type_piaments => _type_paiements;
+
+  List<Signatures> _signatures = [];
+  List<Signatures> get signatures => _signatures;
+
   Future<void> InitData() async {
     _isLoading = true;
     try {
@@ -1245,7 +1258,12 @@ class ApiProvider with ChangeNotifier {
             _pieces = response_piece;
             final response_soldes = await apiService.getPaiementSoldes();
             _paiement_soldes = response_soldes;
+            final response_signature = await apiService.getSignatures();
+            _signatures = response_signature;
           } else {
+            final response_signature =
+                await apiService.getTransporteurSignatures();
+            _signatures = response_signature;
             await InitTransporteurAnnonce();
             final response_bordereaux =
                 await apiService.getTransporteurBordereaux();
@@ -1300,6 +1318,8 @@ class ApiProvider with ChangeNotifier {
           final response_type_chargement =
               await apiService.getTypeChargements();
           _type_chargements = response_type_chargement;
+          final response_type_pay = await apiService.getTypePaiements();
+          _type_paiements = response_type_pay;
           final response_unite = await apiService.getUnites();
           _unites = response_unite;
           final response_statuts = await apiService.getStatutExpeditions();
@@ -1606,6 +1626,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_contrat = await apiService.getTransporteurContrat();
     _contrats = response_contrat;
+    final response_signature = await apiService.getTransporteurSignatures();
+    _signatures = response_signature;
     _isLoading = false;
     notifyListeners();
   }
@@ -1654,6 +1676,8 @@ class ApiProvider with ChangeNotifier {
     _isLoading = true;
     final response_bordereaux = await apiService.getTransporteurBordereaux();
     _bordereaux = response_bordereaux;
+    final response_signature = await apiService.getTransporteurSignatures();
+    _signatures = response_signature;
     _isLoading = false;
     notifyListeners();
   }
@@ -1692,6 +1716,8 @@ class ApiProvider with ChangeNotifier {
     _transporteurs = response_transporteur;
     final response_camions = await apiService.getCamions();
     _camions = response_camions;
+    final response_signature = await apiService.getSignatures();
+    _signatures = response_signature;
     _isLoading = false;
     notifyListeners();
   }
@@ -1820,6 +1846,8 @@ class ApiProvider with ChangeNotifier {
     _annonces = response_annonce;
     final response_localisation = await apiService.getLocalisations();
     _localisations = response_localisation;
+    final response_signature = await apiService.getSignatures();
+    _signatures = response_signature;
     _isLoading = false;
     notifyListeners();
   }

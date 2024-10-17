@@ -1,28 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
 
 class BonCommandes {
-  final int id;
-  final String numero_bon_commande;
-  final int is_validated;
-  final String? description;
-  final int delai_chargement;
-  final double amende_delai_chargement;
-  final double amende_dechargement;
-  final double? montant_paye;
-  final int annonce_id;
-  final int donneur_ordre_id;
-  final int entite_facture_id;
-  final int deleted;
-  final DateTime created_at;
-  final DateTime updated_at;
+  int id;
+  String numero_bon_commande;
+  int is_validated;
+  int delai_chargement;
+  double amende_delai_chargement;
+  double amende_dechargement;
+  double montant_paye;
+  int annonce_id;
+  int donneur_ordre_id;
+  int entite_facture_id;
+  int? signature_id;
+  int? type_paiement_id;
 
   BonCommandes({
     required this.id,
     required this.numero_bon_commande,
     required this.is_validated,
-    required this.description,
     required this.delai_chargement,
     required this.amende_delai_chargement,
     required this.amende_dechargement,
@@ -30,16 +28,14 @@ class BonCommandes {
     required this.annonce_id,
     required this.donneur_ordre_id,
     required this.entite_facture_id,
-    required this.deleted,
-    required this.created_at,
-    required this.updated_at,
+    this.signature_id,
+    this.type_paiement_id,
   });
 
   BonCommandes copyWith({
     int? id,
     String? numero_bon_commande,
     int? is_validated,
-    String? description,
     int? delai_chargement,
     double? amende_delai_chargement,
     double? amende_dechargement,
@@ -47,15 +43,13 @@ class BonCommandes {
     int? annonce_id,
     int? donneur_ordre_id,
     int? entite_facture_id,
-    int? deleted,
-    DateTime? created_at,
-    DateTime? updated_at,
+    int? signature_id,
+    int? type_paiement_id,
   }) {
     return BonCommandes(
       id: id ?? this.id,
       numero_bon_commande: numero_bon_commande ?? this.numero_bon_commande,
       is_validated: is_validated ?? this.is_validated,
-      description: description ?? this.description,
       delai_chargement: delai_chargement ?? this.delai_chargement,
       amende_delai_chargement:
           amende_delai_chargement ?? this.amende_delai_chargement,
@@ -64,9 +58,8 @@ class BonCommandes {
       annonce_id: annonce_id ?? this.annonce_id,
       donneur_ordre_id: donneur_ordre_id ?? this.donneur_ordre_id,
       entite_facture_id: entite_facture_id ?? this.entite_facture_id,
-      deleted: deleted ?? this.deleted,
-      created_at: created_at ?? this.created_at,
-      updated_at: updated_at ?? this.updated_at,
+      signature_id: signature_id ?? this.signature_id,
+      type_paiement_id: type_paiement_id ?? this.type_paiement_id,
     );
   }
 
@@ -75,7 +68,6 @@ class BonCommandes {
       'id': id,
       'numero_bon_commande': numero_bon_commande,
       'is_validated': is_validated,
-      'description': description,
       'delai_chargement': delai_chargement,
       'amende_delai_chargement': amende_delai_chargement,
       'amende_dechargement': amende_dechargement,
@@ -83,9 +75,8 @@ class BonCommandes {
       'annonce_id': annonce_id,
       'donneur_ordre_id': donneur_ordre_id,
       'entite_facture_id': entite_facture_id,
-      'deleted': deleted,
-      'created_at': created_at.millisecondsSinceEpoch,
-      'updated_at': updated_at.millisecondsSinceEpoch,
+      'signature_id': signature_id,
+      'type_paiement_id': type_paiement_id,
     };
   }
 
@@ -94,26 +85,18 @@ class BonCommandes {
       id: map['id'] as int,
       numero_bon_commande: map['numero_bon_commande'] as String,
       is_validated: map['is_validated'] as int,
-      description:
-          map['description'] != null ? map['description'] as String : null,
       delai_chargement: map['delai_chargement'] as int,
-      amende_delai_chargement: (map['amende_delai_chargement'] is String)
-          ? double.parse(map['amende_delai_chargement'])
-          : map['amende_delai_chargement'] as double,
-      amende_dechargement: (map['amende_dechargement'] is String)
-          ? double.parse(map['amende_dechargement'])
-          : map['amende_dechargement'] as double,
-      montant_paye: map['montant_paye'] != null
-          ? (map['montant_paye'] is String)
-              ? double.parse(map['montant_paye'])
-              : map['montant_paye'] as double
-          : null,
+      amende_delai_chargement: map['amende_delai_chargement'] as double,
+      amende_dechargement: map['amende_dechargement'] as double,
+      montant_paye: map['montant_paye'] as double,
       annonce_id: map['annonce_id'] as int,
       donneur_ordre_id: map['donneur_ordre_id'] as int,
       entite_facture_id: map['entite_facture_id'] as int,
-      deleted: map['deleted'] as int,
-      created_at: DateTime.parse(map['created_at'] as String),
-      updated_at: DateTime.parse(map['updated_at'] as String),
+      signature_id:
+          map['signature_id'] != null ? map['signature_id'] as int : null,
+      type_paiement_id: map['type_paiement_id'] != null
+          ? map['type_paiement_id'] as int
+          : null,
     );
   }
 
@@ -124,7 +107,7 @@ class BonCommandes {
 
   @override
   String toString() {
-    return 'BonCommandes(id: $id, numero_bon_commande: $numero_bon_commande, is_validated: $is_validated, description: $description, delai_chargement: $delai_chargement, amende_delai_chargement: $amende_delai_chargement, amende_dechargement: $amende_dechargement, montant_paye: $montant_paye, annonce_id: $annonce_id, donneur_ordre_id: $donneur_ordre_id, entite_facture_id: $entite_facture_id, deleted: $deleted, created_at: $created_at, updated_at: $updated_at)';
+    return 'BonCommandes(id: $id, numero_bon_commande: $numero_bon_commande, is_validated: $is_validated, delai_chargement: $delai_chargement, amende_delai_chargement: $amende_delai_chargement, amende_dechargement: $amende_dechargement, montant_paye: $montant_paye, annonce_id: $annonce_id, donneur_ordre_id: $donneur_ordre_id, entite_facture_id: $entite_facture_id, signature_id: $signature_id, type_paiement_id: $type_paiement_id)';
   }
 
   @override
@@ -134,7 +117,6 @@ class BonCommandes {
     return other.id == id &&
         other.numero_bon_commande == numero_bon_commande &&
         other.is_validated == is_validated &&
-        other.description == description &&
         other.delai_chargement == delai_chargement &&
         other.amende_delai_chargement == amende_delai_chargement &&
         other.amende_dechargement == amende_dechargement &&
@@ -142,9 +124,8 @@ class BonCommandes {
         other.annonce_id == annonce_id &&
         other.donneur_ordre_id == donneur_ordre_id &&
         other.entite_facture_id == entite_facture_id &&
-        other.deleted == deleted &&
-        other.created_at == created_at &&
-        other.updated_at == updated_at;
+        other.signature_id == signature_id &&
+        other.type_paiement_id == type_paiement_id;
   }
 
   @override
@@ -152,7 +133,6 @@ class BonCommandes {
     return id.hashCode ^
         numero_bon_commande.hashCode ^
         is_validated.hashCode ^
-        description.hashCode ^
         delai_chargement.hashCode ^
         amende_delai_chargement.hashCode ^
         amende_dechargement.hashCode ^
@@ -160,8 +140,7 @@ class BonCommandes {
         annonce_id.hashCode ^
         donneur_ordre_id.hashCode ^
         entite_facture_id.hashCode ^
-        deleted.hashCode ^
-        created_at.hashCode ^
-        updated_at.hashCode;
+        signature_id.hashCode ^
+        type_paiement_id.hashCode;
   }
 }

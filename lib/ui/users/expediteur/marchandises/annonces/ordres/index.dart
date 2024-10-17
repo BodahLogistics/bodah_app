@@ -362,7 +362,7 @@ class MonOrdreTransport extends StatelessWidget {
                                                         ordre,
                                                         donneur_user.id ==
                                                                 user.id &&
-                                                            ordre.deleted == 0,
+                                                            false,
                                                         ordre.is_validated == 0,
                                                         entite_facture,
                                                         donneur_ordre,

@@ -19,6 +19,11 @@ import '../../../../../../modals/users.dart';
 import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../../../../modals/camions.dart';
+import '../../../../../modals/charges.dart';
+import '../../../../../modals/destinataires.dart';
+import '../../../../../modals/entreprises.dart';
+import '../../../../../modals/expediteurs.dart';
+import '../../../../../modals/pieces.dart';
 import '../../../../../modals/statut_expeditions.dart';
 import '../../../../../modals/transporteurs.dart';
 
@@ -43,6 +48,13 @@ class ChargBordereaux extends StatelessWidget {
         function.user_transporteur(user, transporteurs);
     List<Camions> camions = api_provider.camions;
     List<Users> users = api_provider.users;
+    List<Charge> charges = api_provider.charges;
+    List<Pieces> pieces = api_provider.pieces;
+    List<Entreprises> entreprises = api_provider.entreprises;
+    List<Destinataires> destinataires = api_provider.destinataires;
+    List<Expediteurs> expediteurs = api_provider.expediteurs;
+    List<Annonces> pictues = api_provider.annonces;
+
     Future<void> refresh() async {
       await api_provider.InitTransporteurBordereau();
       await api_provider.InitTransporteurExpeditionForAnnonce();
@@ -78,17 +90,32 @@ class ChargBordereaux extends StatelessWidget {
           ? RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
-              child: Center(
-                  child: Text(
-                      "Vous n'avez aucun bordereau de livraisons disponible",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        color:
-                            user.dark_mode == 1 ? MyColors.light : Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ))),
-            )
+              child: SingleChildScrollView(
+                physics:
+                    AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+                child: SizedBox(
+                  height: MediaQuery.of(context)
+                      .size
+                      .height, // Prend toute la hauteur de l'écran
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                          16.0), // Ajoute un peu de padding
+                      child: Text(
+                        "Vous n'avez aucune lettre de voiture disponible",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: user.dark_mode == 1
+                              ? MyColors.light
+                              : Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ))
           : RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
@@ -125,6 +152,35 @@ class ChargBordereaux extends StatelessWidget {
                           transporteurs, expedition.transporteur_id);
                       Users chauffeur_user =
                           function.user(users, transporteur.user_id);
+
+                      Pieces piece = function.data_piece(
+                          pieces, transporteur.id, "Transporteur");
+
+                      String quantite = "";
+                      String poids = "";
+
+                      List<Charge> data_charges =
+                          function.expedition_charges(charges, expedition);
+                      if (data_charges.isNotEmpty) {
+                        for (var i = 0; i < data_charges.length; i++) {
+                          quantite += data_charges[i].quantite;
+                          poids += data_charges[i].poids;
+                        }
+                      }
+
+                      Annonces annonce =
+                          function.annonce(annonces, expedition.annonce_id);
+
+                      Expediteurs expediteur = function.expediteur(
+                          expediteurs, annonce.expediteur_id);
+                      Entreprises entreprise = function.expediteur_entreprise(
+                          entreprises, expediteur.id);
+                      Users expediteur_user =
+                          function.user(users, expediteur.user_id);
+                      Destinataires destinataire = function
+                          .marchandise_destinataire(destinataires, marchandise);
+                      Users destinataire_user =
+                          function.user(users, destinataire.user_id);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 0),
                         child: TextButton(
@@ -648,10 +704,27 @@ class ChargBordereaux extends StatelessWidget {
                                                                     .circular(
                                                                         5))),
                                                 onPressed: () {
-                                                  /* String url =
-                                                  "https://test.bodah.bj/storage/" +
-                                                      data.path;
-                                              downloadDocument(context, url);*/
+                                                  downloadBordereau(
+                                                      context,
+                                                      expedition,
+                                                      data,
+                                                      transporteur,
+                                                      chauffeur_user,
+                                                      expediteur,
+                                                      expediteur_user,
+                                                      destinataire,
+                                                      destinataire_user,
+                                                      entreprise,
+                                                      camion,
+                                                      marchandise,
+                                                      localisation,
+                                                      pay_depart,
+                                                      pay_dest,
+                                                      ville_dep,
+                                                      ville_dest,
+                                                      piece,
+                                                      quantite,
+                                                      poids);
                                                 },
                                                 child: Text(
                                                   "Téléchargez",
