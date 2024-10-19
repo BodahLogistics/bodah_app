@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class TransportMode {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   TransportMode({
     required this.id,
     required this.nom,

@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 class Villes {
-  final int id;
-  final String name;
-  final int country_id;
+  int id;
+  String name;
+  int country_id;
   Villes({
     required this.id,
     required this.name,

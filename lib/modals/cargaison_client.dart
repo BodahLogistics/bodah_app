@@ -2,17 +2,16 @@
 import 'dart:convert';
 
 class CargaisonClient {
-  final int id;
-  final int client_id;
-  final int cargaison_id;
-  final int quantite;
-  final int deleted;
+  int id;
+  int client_id;
+  int cargaison_id;
+  int quantite;
+
   CargaisonClient({
     required this.id,
     required this.client_id,
     required this.cargaison_id,
     required this.quantite,
-    required this.deleted,
   });
 
   CargaisonClient copyWith({
@@ -20,14 +19,12 @@ class CargaisonClient {
     int? client_id,
     int? cargaison_id,
     int? quantite,
-    int? deleted,
   }) {
     return CargaisonClient(
       id: id ?? this.id,
       client_id: client_id ?? this.client_id,
       cargaison_id: cargaison_id ?? this.cargaison_id,
       quantite: quantite ?? this.quantite,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -37,17 +34,29 @@ class CargaisonClient {
       'client_id': client_id,
       'cargaison_id': cargaison_id,
       'quantite': quantite,
-      'deleted': deleted,
     };
   }
 
   factory CargaisonClient.fromMap(Map<String, dynamic> map) {
     return CargaisonClient(
-      id: map['id'] as int,
-      client_id: map['client_id'] as int,
-      cargaison_id: map['cargaison_id'] as int,
-      quantite: map['quantite'] as int,
-      deleted: map['deleted'] as int,
+      id: map['id'] != null
+          ? (map['id'] is String ? int.parse(map['id']) : map['id'] as int)
+          : 0, // Valeur par défaut si null
+      client_id: map['client_id'] != null
+          ? (map['client_id'] is String
+              ? int.parse(map['client_id'])
+              : map['client_id'] as int)
+          : 0, // Valeur par défaut si null
+      cargaison_id: map['cargaison_id'] != null
+          ? (map['cargaison_id'] is String
+              ? int.parse(map['cargaison_id'])
+              : map['cargaison_id'] as int)
+          : 0, // Valeur par défaut si null
+      quantite: map['quantite'] != null
+          ? (map['quantite'] is String
+              ? int.parse(map['quantite'])
+              : map['quantite'] as int)
+          : 0, // Valeur par défaut si null
     );
   }
 
@@ -58,7 +67,7 @@ class CargaisonClient {
 
   @override
   String toString() {
-    return 'CargaisonClient(id: $id, client_id: $client_id, cargaison_id: $cargaison_id, quantite: $quantite, deleted: $deleted)';
+    return 'CargaisonClient(id: $id, client_id: $client_id, cargaison_id: $cargaison_id, quantite: $quantite)';
   }
 
   @override
@@ -68,8 +77,7 @@ class CargaisonClient {
     return other.id == id &&
         other.client_id == client_id &&
         other.cargaison_id == cargaison_id &&
-        other.quantite == quantite &&
-        other.deleted == deleted;
+        other.quantite == quantite;
   }
 
   @override
@@ -77,7 +85,6 @@ class CargaisonClient {
     return id.hashCode ^
         client_id.hashCode ^
         cargaison_id.hashCode ^
-        quantite.hashCode ^
-        deleted.hashCode;
+        quantite.hashCode;
   }
 }

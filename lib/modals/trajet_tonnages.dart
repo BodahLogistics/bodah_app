@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 class TrajetTonnages {
-  final int id;
-  final int annonce_id;
-  final String? nombre_tonnes;
-  final String? numero_marchandise;
+  int id;
+  int annonce_id;
+  String? nombre_tonnes;
+  String? numero_marchandise;
   TrajetTonnages({
     required this.id,
     required this.annonce_id,

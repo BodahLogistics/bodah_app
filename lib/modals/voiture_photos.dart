@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 class VoiturePhotos {
-  final int id;
-  final int voiture_id;
-  final String path;
+  int id;
+  int voiture_id;
+  String path;
   VoiturePhotos({
     required this.id,
     required this.voiture_id,

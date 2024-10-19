@@ -2,19 +2,18 @@
 import 'dart:convert';
 
 class Conducteur {
-  final int id;
-  final String reference;
-  final String nom;
-  final String telephone;
-  final int country_id;
-  final int deleted;
+  int id;
+  String reference;
+  String nom;
+  String telephone;
+  int country_id;
+
   Conducteur({
     required this.id,
     required this.reference,
     required this.nom,
     required this.telephone,
     required this.country_id,
-    required this.deleted,
   });
 
   Conducteur copyWith({
@@ -23,7 +22,6 @@ class Conducteur {
     String? nom,
     String? telephone,
     int? country_id,
-    int? deleted,
   }) {
     return Conducteur(
       id: id ?? this.id,
@@ -31,7 +29,6 @@ class Conducteur {
       nom: nom ?? this.nom,
       telephone: telephone ?? this.telephone,
       country_id: country_id ?? this.country_id,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -42,7 +39,6 @@ class Conducteur {
       'nom': nom,
       'telephone': telephone,
       'country_id': country_id,
-      'deleted': deleted,
     };
   }
 
@@ -53,7 +49,6 @@ class Conducteur {
       nom: map['nom'] as String,
       telephone: map['telephone'] as String,
       country_id: map['country_id'] as int,
-      deleted: map['deleted'] as int,
     );
   }
 
@@ -64,7 +59,7 @@ class Conducteur {
 
   @override
   String toString() {
-    return 'Conducteur(id: $id, reference: $reference, nom: $nom, telephone: $telephone, country_id: $country_id, deleted: $deleted)';
+    return 'Conducteur(id: $id, reference: $reference, nom: $nom, telephone: $telephone, country_id: $country_id)';
   }
 
   @override
@@ -75,8 +70,7 @@ class Conducteur {
         other.reference == reference &&
         other.nom == nom &&
         other.telephone == telephone &&
-        other.country_id == country_id &&
-        other.deleted == deleted;
+        other.country_id == country_id;
   }
 
   @override
@@ -85,7 +79,6 @@ class Conducteur {
         reference.hashCode ^
         nom.hashCode ^
         telephone.hashCode ^
-        country_id.hashCode ^
-        deleted.hashCode;
+        country_id.hashCode;
   }
 }

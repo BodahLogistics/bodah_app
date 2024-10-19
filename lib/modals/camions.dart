@@ -3,14 +3,14 @@ import 'dart:convert';
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 
 class Camions {
-  final int id;
-  final String num_immatriculation;
-  final int? type_vehicule_id;
-  final int? modele_id;
-  final String modele_type;
-  final String? face_avant_image;
-  final String? partie_arriere_image;
-  final String? profil_image;
+  int id;
+  String num_immatriculation;
+  int? type_vehicule_id;
+  int? modele_id;
+  String modele_type;
+  String? face_avant_image;
+  String? partie_arriere_image;
+  String? profil_image;
   Camions({
     required this.id,
     required this.num_immatriculation,
@@ -62,9 +62,15 @@ class Camions {
       id: map['id'] as int,
       num_immatriculation: map['num_immatriculation'] as String,
       type_vehicule_id: map['type_vehicule_id'] != null
-          ? map['type_vehicule_id'] as int
+          ? map['type_vehicule_id'] is String
+              ? int.parse(map['type_vehicule_id'])
+              : map['type_vehicule_id'] as int
           : null,
-      modele_id: map['modele_id'] != null ? map['modele_id'] as int : null,
+      modele_id: map['modele_id'] != null
+          ? map['modele_id'] is String
+              ? int.parse(map['modele_id'])
+              : map['modele_id'] as int
+          : null,
       modele_type: map['modele_type'] as String,
       face_avant_image: map['face_avant_image'] != null
           ? map['face_avant_image'] as String

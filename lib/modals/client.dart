@@ -1,20 +1,19 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Client {
-  final int id;
-  final String reference;
-  final String nom;
-  final String telephone;
-  final int country_id;
-  final int deleted;
+  int id;
+  String reference;
+  String nom;
+  String telephone;
+  int country_id;
+
   Client({
     required this.id,
     required this.reference,
     required this.nom,
     required this.telephone,
     required this.country_id,
-    required this.deleted,
   });
 
   Client copyWith({
@@ -23,7 +22,6 @@ class Client {
     String? nom,
     String? telephone,
     int? country_id,
-    int? deleted,
   }) {
     return Client(
       id: id ?? this.id,
@@ -31,7 +29,6 @@ class Client {
       nom: nom ?? this.nom,
       telephone: telephone ?? this.telephone,
       country_id: country_id ?? this.country_id,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -42,18 +39,18 @@ class Client {
       'nom': nom,
       'telephone': telephone,
       'country_id': country_id,
-      'deleted': deleted,
     };
   }
 
   factory Client.fromMap(Map<String, dynamic> map) {
     return Client(
-      id: map['id'] as int,
-      reference: map['reference'] as String,
-      nom: map['nom'] != null ? map['nom'] as String : "",
-      telephone: map['telephone'] as String,
-      country_id: map['country_id'] as int,
-      deleted: map['deleted'] as int,
+      id: map['id'] != null ? int.tryParse(map['id'].toString()) ?? 0 : 0,
+      reference: map['reference'] ?? '',
+      nom: map['nom'] ?? '',
+      telephone: map['telephone'] ?? '',
+      country_id: map['country_id'] != null
+          ? int.tryParse(map['country_id'].toString()) ?? 0
+          : 0,
     );
   }
 
@@ -64,7 +61,7 @@ class Client {
 
   @override
   String toString() {
-    return 'Client(id: $id, reference: $reference, nom: $nom, telephone: $telephone, country_id: $country_id, deleted: $deleted)';
+    return 'Client(id: $id, reference: $reference, nom: $nom, telephone: $telephone, country_id: $country_id)';
   }
 
   @override
@@ -75,8 +72,7 @@ class Client {
         other.reference == reference &&
         other.nom == nom &&
         other.telephone == telephone &&
-        other.country_id == country_id &&
-        other.deleted == deleted;
+        other.country_id == country_id;
   }
 
   @override
@@ -85,7 +81,6 @@ class Client {
         reference.hashCode ^
         nom.hashCode ^
         telephone.hashCode ^
-        country_id.hashCode ^
-        deleted.hashCode;
+        country_id.hashCode;
   }
 }

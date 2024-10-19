@@ -48,9 +48,15 @@ class Tarifications {
     return Tarifications(
       id: map['id'] as int,
       marchandise_id: map['marchandise_id'] as int,
-      prix_expedition: map['prix_expedition'] as double,
-      prix_transport: map['prix_transport'] as String,
-      tarif_unitaire: map['tarif_unitaire'] as String,
+      prix_expedition: map['prix_expedition'] is String
+          ? double.parse(map['prix_expedition'])
+          : map['prix_expedition'] as double, // Conversion si c'est une chaîne,
+      prix_transport: map['prix_transport'] != null
+          ? map['prix_transport'] as String
+          : '', // Gérer le cas où 'prix_transport' est null
+      tarif_unitaire: map['tarif_unitaire'] != null
+          ? map['tarif_unitaire'] as String
+          : '', // Gérer le cas où 'tarif_unitaire' est null
     );
   }
 

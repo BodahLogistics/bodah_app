@@ -2,12 +2,12 @@
 import 'dart:convert';
 
 class Bl {
-  final int id;
-  final String? path;
-  final int modele_id;
-  final String modele_type;
-  final String reference;
-  final String? ref;
+  int id;
+  String? path;
+  int modele_id;
+  String modele_type;
+  String reference;
+  String? ref;
 
   Bl({
     required this.id,

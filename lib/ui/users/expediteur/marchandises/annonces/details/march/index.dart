@@ -24,20 +24,9 @@ import '../../../../../../../providers/api/api_data.dart';
 import '../../../../../../../providers/calculator/index.dart';
 import '../../marchandises/edit.dart';
 
-class ListMarchs extends StatefulWidget {
+class ListMarchs extends StatelessWidget {
   const ListMarchs({super.key, required this.annonce});
   final Annonces annonce;
-
-  @override
-  State<ListMarchs> createState() => _ListMarchsState();
-}
-
-class _ListMarchsState extends State<ListMarchs> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitForSomeAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +40,16 @@ class _ListMarchsState extends State<ListMarchs> {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Marchandises> marchandises = api_provider.marchandises;
-    marchandises =
-        function.annonce_marchandises(marchandises, widget.annonce.id);
+    marchandises = function.annonce_marchandises(marchandises, annonce.id);
     Marchandises marchandise = marchandises.first;
     List<Destinataires> destinataires = api_provider.destinataires;
     List<AnnoncePhotos> photos = api_provider.photos;
     List<AnnoncePhotos> pictues =
-        function.annonce_pictures(widget.annonce, marchandises, photos);
+        function.annonce_pictures(annonce, marchandises, photos);
     final CarouselSliderController controller = CarouselSliderController();
     List<Expediteurs> expediteurs = api_provider.expediteurs;
     Expediteurs expediteur =
-        function.expediteur(expediteurs, widget.annonce.expediteur_id);
+        function.expediteur(expediteurs, annonce.expediteur_id);
     List<Entreprises> entreprises = api_provider.entreprises;
     Entreprises expediteur_entreprise =
         function.expediteur_entreprise(entreprises, expediteur.id);
@@ -93,17 +81,31 @@ class _ListMarchsState extends State<ListMarchs> {
         ? RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,
-            child: Center(
-                child: Text(
-              "Vous n'avez encore pas ajouté de marchandises",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: "Poppins",
-                  color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14),
-            )),
-          )
+            child: SingleChildScrollView(
+              physics:
+                  AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.7, // Prend toute la hauteur de l'écran
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.all(16.0), // Ajoute un peu de padding
+                    child: Text(
+                      "Aucune donnée disponible",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: user!.dark_mode == 1
+                            ? MyColors.light
+                            : Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ))
         : RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,
@@ -112,117 +114,87 @@ class _ListMarchsState extends State<ListMarchs> {
                 children: [
                   pictues.isEmpty
                       ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 70),
-                              child: IconButton(
-                                  onPressed: () {
-                                    if (controller != null) {
-                                      controller.previousPage();
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_left,
-                                    color: user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.secondary,
-                                    size: 40,
-                                  )),
-                            ),
-                            Expanded(
-                              child: CarouselSlider(
-                                items: pictues.map((photo) {
-                                  Marchandises marchandise =
-                                      function.marchandise(
-                                          marchandises, photo.marchandise_id);
-                                  return Builder(builder: (context) {
-                                    return Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl: photo.image_path,
-                                            fit: BoxFit.cover,
-                                            height: 150,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.6,
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              color: MyColors.secondary,
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                              Icons.error,
-                                              color: Colors.red,
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: CarouselSlider(
+                                  items: pictues.map((photo) {
+                                    Marchandises marchandise =
+                                        function.marchandise(
+                                            marchandises, photo.marchandise_id);
+                                    return Builder(builder: (context) {
+                                      return Column(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            child: CachedNetworkImage(
+                                              imageUrl: photo.image_path,
+                                              fit: BoxFit.cover,
+                                              height: 150,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: MyColors.secondary,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            marchandise.nom,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.black,
-                                                fontFamily: "Poppins",
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16),
+                                          SizedBox(
+                                            height: 10,
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                                }).toList(),
-                                carouselController: controller,
-                                options: CarouselOptions(
-                                  pauseAutoPlayOnManualNavigate: false,
-                                  height: 200,
-                                  aspectRatio: 16 / 9,
-                                  autoPlay: true,
-                                  autoPlayInterval: Duration(seconds: 8),
-                                  autoPlayAnimationDuration:
-                                      Duration(milliseconds: 800),
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  pauseAutoPlayOnTouch: false,
-                                  viewportFraction: 1,
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              marchandise.nom,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: user!.dark_mode == 1
+                                                      ? MyColors.light
+                                                      : MyColors.black,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                  }).toList(),
+                                  carouselController: controller,
+                                  options: CarouselOptions(
+                                    pauseAutoPlayOnManualNavigate: false,
+                                    height: 200,
+                                    aspectRatio: 16 / 9,
+                                    autoPlay: true,
+                                    autoPlayInterval: Duration(seconds: 8),
+                                    autoPlayAnimationDuration:
+                                        Duration(milliseconds: 800),
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    pauseAutoPlayOnTouch: false,
+                                    viewportFraction: 1,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 70),
-                              child: IconButton(
-                                  onPressed: () {
-                                    if (controller != null) {
-                                      controller.nextPage();
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_right,
-                                    color: user.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.secondary,
-                                    size: 40,
-                                  )),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(bottom: 4, right: 4, left: 2),
@@ -231,50 +203,6 @@ class _ListMarchsState extends State<ListMarchs> {
                           left: 10, right: 10, bottom: 5, top: 5),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Statut de l'annonce",
-                                  style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10,
-                                      color: user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              widget.annonce.is_active == 1
-                                  ? Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Annonce publiée",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.green),
-                                      ),
-                                    )
-                                  : Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Annonce non publiée",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.red),
-                                      ),
-                                    ),
-                            ],
-                          ),
                           SizedBox(
                             height: 15,
                           ),
@@ -295,7 +223,7 @@ class _ListMarchsState extends State<ListMarchs> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          color: user.dark_mode == 1
+                                          color: user!.dark_mode == 1
                                               ? MyColors.light
                                               : MyColors.black,
                                           fontFamily: "Poppins",
@@ -1232,7 +1160,8 @@ class _ListMarchsState extends State<ListMarchs> {
                                                     localisation.address_exp ??
                                                         "",
                                                     localisation.address_liv ??
-                                                        "");
+                                                        "",
+                                                    type_cahrgement);
 
                                                 Navigator.of(context).push(
                                                   PageRouteBuilder(

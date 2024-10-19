@@ -3,11 +3,11 @@ import 'dart:convert';
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 
 class Tarif {
-  final int id;
-  final double montant;
-  final double accompte;
-  final String modele_type;
-  final int modele_id;
+  int id;
+  double montant;
+  double accompte;
+  String modele_type;
+  int modele_id;
 
   Tarif({
     required this.id,

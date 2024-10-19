@@ -2,40 +2,33 @@
 import 'dart:convert';
 
 class Souscriptions {
-  final int id;
-  final String numero_souscription;
-  final int transporteur_id;
-  final int deleted;
-  final int marchandise_id;
-  final DateTime created_at;
-  final DateTime updated_at;
+  int id;
+  String numero_souscription;
+  int transporteur_id;
+  int marchandise_id;
+  DateTime created_at;
+
   Souscriptions({
     required this.id,
     required this.numero_souscription,
     required this.transporteur_id,
-    required this.deleted,
     required this.marchandise_id,
     required this.created_at,
-    required this.updated_at,
   });
 
   Souscriptions copyWith({
     int? id,
     String? numero_souscription,
     int? transporteur_id,
-    int? deleted,
     int? marchandise_id,
     DateTime? created_at,
-    DateTime? updated_at,
   }) {
     return Souscriptions(
       id: id ?? this.id,
       numero_souscription: numero_souscription ?? this.numero_souscription,
       transporteur_id: transporteur_id ?? this.transporteur_id,
-      deleted: deleted ?? this.deleted,
       marchandise_id: marchandise_id ?? this.marchandise_id,
       created_at: created_at ?? this.created_at,
-      updated_at: updated_at ?? this.updated_at,
     );
   }
 
@@ -44,10 +37,8 @@ class Souscriptions {
       'id': id,
       'numero_souscription': numero_souscription,
       'transporteur_id': transporteur_id,
-      'deleted': deleted,
       'marchandise_id': marchandise_id,
       'created_at': created_at.millisecondsSinceEpoch,
-      'updated_at': updated_at.millisecondsSinceEpoch,
     };
   }
 
@@ -55,11 +46,13 @@ class Souscriptions {
     return Souscriptions(
       id: map['id'] as int,
       numero_souscription: map['numero_souscription'] as String,
-      transporteur_id: map['transporteur_id'] as int,
-      deleted: map['deleted'] as int,
-      marchandise_id: map['marchandise_id'] as int,
+      transporteur_id: map['transporteur_id'] is String
+          ? int.parse(map['transporteur_id'])
+          : map['transporteur_id'] as int,
+      marchandise_id: map['marchandise_id'] is String
+          ? int.parse(map['marchandise_id'])
+          : map['marchandise_id'] as int,
       created_at: DateTime.parse(map['created_at'] as String),
-      updated_at: DateTime.parse(map['updated_at'] as String),
     );
   }
 
@@ -70,7 +63,7 @@ class Souscriptions {
 
   @override
   String toString() {
-    return 'Souscriptions(id: $id, numero_souscription: $numero_souscription, transporteur_id: $transporteur_id, deleted: $deleted, marchandise_id: $marchandise_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'Souscriptions(id: $id, numero_souscription: $numero_souscription, transporteur_id: $transporteur_id, marchandise_id: $marchandise_id, created_at: $created_at)';
   }
 
   @override
@@ -80,10 +73,8 @@ class Souscriptions {
     return other.id == id &&
         other.numero_souscription == numero_souscription &&
         other.transporteur_id == transporteur_id &&
-        other.deleted == deleted &&
         other.marchandise_id == marchandise_id &&
-        other.created_at == created_at &&
-        other.updated_at == updated_at;
+        other.created_at == created_at;
   }
 
   @override
@@ -91,9 +82,7 @@ class Souscriptions {
     return id.hashCode ^
         numero_souscription.hashCode ^
         transporteur_id.hashCode ^
-        deleted.hashCode ^
         marchandise_id.hashCode ^
-        created_at.hashCode ^
-        updated_at.hashCode;
+        created_at.hashCode;
   }
 }

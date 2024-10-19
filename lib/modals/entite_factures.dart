@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 class EntiteFactures {
-  final int id;
-  final int user_id;
-  final String? ifu;
-  final String reference;
+  int id;
+  int user_id;
+  String? ifu;
+  String reference;
   EntiteFactures({
     required this.id,
     required this.user_id,

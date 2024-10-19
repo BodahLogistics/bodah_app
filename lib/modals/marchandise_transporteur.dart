@@ -1,10 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
 class MarchandiseTransporteur {
   int id;
   int annonce_id;
   String nombre_tonnes;
+
   MarchandiseTransporteur({
     required this.id,
     required this.annonce_id,
@@ -33,9 +33,13 @@ class MarchandiseTransporteur {
 
   factory MarchandiseTransporteur.fromMap(Map<String, dynamic> map) {
     return MarchandiseTransporteur(
-      id: map['id'] as int,
-      annonce_id: map['annonce_id'] as int,
-      nombre_tonnes: map['nombre_tonnes'] as String,
+      id: map['id'] is String ? int.parse(map['id']) : map['id'] as int,
+      annonce_id: map['annonce_id'] is String
+          ? int.parse(map['annonce_id'])
+          : map['annonce_id'] as int,
+      nombre_tonnes: map['nombre_tonnes'] != null
+          ? map['nombre_tonnes'].toString()
+          : '', // Ensuring it's always a string
     );
   }
 

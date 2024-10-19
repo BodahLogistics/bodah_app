@@ -76,22 +76,29 @@ class Marchandises {
 
   factory Marchandises.fromMap(Map<String, dynamic> map) {
     return Marchandises(
-      id: map['id'] as int,
+      id: int.tryParse(map['id'].toString()) ??
+          0, // Vérification du type et conversion
       nom: map['nom'] as String,
-      annonce_id: map['annonce_id'] as int,
+      annonce_id: int.tryParse(map['annonce_id'].toString()) ??
+          0, // Conversion en int si nécessaire
       numero_marchandise: map['numero_marchandise'] as String,
-      quantite: map['quantite'] as String,
+      quantite:
+          map['quantite'].toString(), // Assurez-vous que c'est bien une chaîne
       type_chargement_id: map['type_chargement_id'] != null
-          ? map['type_chargement_id'] as int
+          ? int.tryParse(map['type_chargement_id'].toString())
           : null,
-      poids: map['poids'] as String,
-      destinataire_id:
-          map['destinataire_id'] != null ? map['destinataire_id'] as int : null,
-      nombre_camions: map['nombre_camions'] as int,
+      poids: map['poids'].toString(), // Assurez-vous que c'est bien une chaîne
+      destinataire_id: map['destinataire_id'] != null
+          ? int.tryParse(map['destinataire_id'].toString())
+          : null,
+      nombre_camions: int.tryParse(map['nombre_camions'].toString()) ??
+          0, // Conversion en int
       date_chargement: map['date_chargement'] != null
-          ? DateTime.parse(map['date_chargement'] as String)
+          ? DateTime.tryParse(map['date_chargement'].toString())
           : null,
-      devise_id: map['devise_id'] != null ? map['devise_id'] as int : null,
+      devise_id: map['devise_id'] != null
+          ? int.tryParse(map['devise_id'].toString())
+          : null,
     );
   }
 

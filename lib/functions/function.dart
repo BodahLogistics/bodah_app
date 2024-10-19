@@ -90,8 +90,11 @@ class Functions {
       Users? user, List<Transporteurs> transporteurs) {
     return transporteurs.firstWhere(
       (data) => data.user_id == user!.id,
-      orElse: () =>
-          Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+      orElse: () => Transporteurs(
+        id: 0,
+        numero_transporteur: "",
+        user_id: 0,
+      ),
     );
   }
 
@@ -170,14 +173,12 @@ class Functions {
     return ltas.firstWhere(
       (data) => data.id == id,
       orElse: () => Lta(
-          id: id,
-          path: "",
-          modele_id: 0,
-          deleted: 0,
-          modele_type: "",
-          reference: "",
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: id,
+        path: "",
+        modele_id: 0,
+        modele_type: "",
+        reference: "",
+      ),
     );
   }
 
@@ -247,13 +248,12 @@ class Functions {
     return souscriptions.firstWhere(
       (data) => data.marchandise_id == marchandise.id,
       orElse: () => Souscriptions(
-          id: 0,
-          numero_souscription: "",
-          transporteur_id: 0,
-          deleted: 0,
-          marchandise_id: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: 0,
+        numero_souscription: "",
+        transporteur_id: 0,
+        marchandise_id: 0,
+        created_at: DateTime.now(),
+      ),
     );
   }
 
@@ -301,6 +301,7 @@ class Functions {
     return ordres.firstWhere(
       (data) => data.annonce_id == annonce.id,
       orElse: () => BonCommandes(
+        created_at: DateTime.now(),
         id: 0,
         numero_bon_commande: "",
         is_validated: 0,
@@ -320,14 +321,24 @@ class Functions {
     return annonces.firstWhere(
       (data) => data.id == marchandise.annonce_id,
       orElse: () => Annonces(
-          id: 0,
-          numero_annonce: "",
-          is_active: 0,
-          user_id: 0,
-          deleted: 0,
-          expediteur_id: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: 0,
+        numero_annonce: "",
+        is_active: 0,
+        user_id: 0,
+        expediteur_id: 0,
+        created_at: DateTime.now(),
+      ),
+    );
+  }
+
+  Expediteurs user_expediteur(List<Expediteurs> datas, Users user) {
+    return datas.firstWhere(
+      (data) => data.user_id == user.id,
+      orElse: () => Expediteurs(
+        id: 0,
+        user_id: 0,
+        numero_expediteur: "",
+      ),
     );
   }
 
@@ -335,8 +346,11 @@ class Functions {
       List<Destinataires> destinataires, Marchandises marchandise) {
     return destinataires.firstWhere(
       (data) => data.id == marchandise.destinataire_id,
-      orElse: () =>
-          Destinataires(id: 0, numero_destinataire: "", user_id: 0, deleted: 0),
+      orElse: () => Destinataires(
+        id: 0,
+        numero_destinataire: "",
+        user_id: 0,
+      ),
     );
   }
 
@@ -352,8 +366,11 @@ class Functions {
       List<Transporteurs> transporteurs, Expeditions expedition) {
     return transporteurs.firstWhere(
       (data) => data.id == expedition.transporteur_id,
-      orElse: () =>
-          Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+      orElse: () => Transporteurs(
+        id: 0,
+        numero_transporteur: "",
+        user_id: 0,
+      ),
     );
   }
 
@@ -421,12 +438,12 @@ class Functions {
     return conducteurs.firstWhere(
       (data) => data.id == chargement_effectue.conducteur_id,
       orElse: () => Conducteur(
-          id: 0,
-          reference: "",
-          nom: "",
-          telephone: "",
-          country_id: 0,
-          deleted: 0),
+        id: 0,
+        reference: "",
+        nom: "",
+        telephone: "",
+        country_id: 0,
+      ),
     );
   }
 
@@ -443,12 +460,12 @@ class Functions {
     return clients.firstWhere(
       (data) => data.id == id,
       orElse: () => Client(
-          id: 0,
-          reference: "",
-          nom: "",
-          telephone: "",
-          country_id: 0,
-          deleted: 0),
+        id: 0,
+        reference: "",
+        nom: "",
+        telephone: "",
+        country_id: 0,
+      ),
     );
   }
 
@@ -459,14 +476,14 @@ class Functions {
           data.modele_type.contains("CargaisonClient") &&
           data.modele_id == cargaison_client.id,
       orElse: () => Positions(
-          id: 0,
-          pay_dep_id: 0,
-          pay_liv_id: 0,
-          city_dep_id: 0,
-          city_liv_id: 0,
-          modele_id: 0,
-          modele_type: "",
-          deleted: 0),
+        id: 0,
+        pay_dep_id: 0,
+        pay_liv_id: 0,
+        city_dep_id: 0,
+        city_liv_id: 0,
+        modele_id: 0,
+        modele_type: "",
+      ),
     );
   }
 
@@ -485,14 +502,14 @@ class Functions {
           data.modele_type.contains("ChargementEffectue") &&
           data.modele_id == chargement_effectue.id,
       orElse: () => Positions(
-          id: 0,
-          pay_dep_id: 0,
-          pay_liv_id: 0,
-          city_dep_id: 0,
-          city_liv_id: 0,
-          modele_id: 0,
-          modele_type: "",
-          deleted: 0),
+        id: 0,
+        pay_dep_id: 0,
+        pay_liv_id: 0,
+        city_dep_id: 0,
+        city_liv_id: 0,
+        modele_id: 0,
+        modele_type: "",
+      ),
     );
   }
 
@@ -514,12 +531,12 @@ class Functions {
   Cargaison cargaison(List<Cargaison> cargaisons, int id) {
     return cargaisons.firstWhere((data) => data.id == id,
         orElse: () => Cargaison(
-            id: 0,
-            reference: "",
-            modele_type: "",
-            modele_id: 0,
-            nom: "",
-            deleted: 0));
+              id: 0,
+              reference: "",
+              modele_type: "",
+              modele_id: 0,
+              nom: "",
+            ));
   }
 
   Chargement cargaison_client_chargement(
@@ -536,11 +553,10 @@ class Functions {
     return imports.firstWhere(
       (data) => data.id == id,
       orElse: () => Import(
-          id: id,
-          reference: "",
-          transport_mode_id: 0,
-          expediteur_id: 0,
-          deleted: 0),
+        id: id,
+        reference: "",
+        transport_mode_id: 0,
+      ),
     );
   }
 
@@ -548,11 +564,10 @@ class Functions {
     return exports.firstWhere(
       (data) => data.id == id,
       orElse: () => Exports(
-          id: id,
-          reference: "",
-          transport_mode_id: 0,
-          expediteur_id: 0,
-          deleted: 0),
+        id: id,
+        reference: "",
+        transport_mode_id: 0,
+      ),
     );
   }
 
@@ -727,8 +742,11 @@ class Functions {
   Expediteurs expediteur(List<Expediteurs> expediteurs, int expediteur_id) {
     return expediteurs.firstWhere(
       (data) => data.id == expediteur_id,
-      orElse: () =>
-          Expediteurs(id: 0, user_id: 0, numero_expediteur: "", deleted: 0),
+      orElse: () => Expediteurs(
+        id: 0,
+        user_id: 0,
+        numero_expediteur: "",
+      ),
     );
   }
 
@@ -756,8 +774,11 @@ class Functions {
       List<Transporteurs> transporteurs, int transporteur_id) {
     return transporteurs.firstWhere(
       (data) => data.id == transporteur_id,
-      orElse: () =>
-          Transporteurs(id: 0, numero_transporteur: "", user_id: 0, deleted: 0),
+      orElse: () => Transporteurs(
+        id: 0,
+        numero_transporteur: "",
+        user_id: 0,
+      ),
     );
   }
 
@@ -879,14 +900,16 @@ class Functions {
     );
   }
 
-  PaiementSolde paiement_solde(
+  List<PaiementSolde> paiement_soldes(
       List<PaiementSolde> paiements, String data_modele, int data_id) {
-    return paiements.firstWhere(
-      (data) =>
-          data.modele_type.contains(data_modele) && data.modele_id == data_id,
-      orElse: () =>
-          PaiementSolde(id: 0, montant: 0, modele_id: 0, modele_type: ""),
-    );
+    return paiements
+        .where((data) =>
+            data.modele_id == data_id && data.modele_type.contains(data_modele))
+        .toList();
+  }
+
+  double totalPaiement(List<PaiementSolde> datas) {
+    return datas.fold(0, (previousValue, data) => previousValue + data.montant);
   }
 
   Marchandises firstMarchandise(List<Marchandises> datas) {
@@ -907,14 +930,13 @@ class Functions {
     return annonces.firstWhere(
       (data) => data.id == annonce_id,
       orElse: () => Annonces(
-          id: 0,
-          numero_annonce: "",
-          is_active: 0,
-          user_id: 0,
-          deleted: 0,
-          expediteur_id: 0,
-          created_at: DateTime.now(),
-          updated_at: DateTime.now()),
+        id: 0,
+        numero_annonce: "",
+        is_active: 0,
+        user_id: 0,
+        expediteur_id: 0,
+        created_at: DateTime.now(),
+      ),
     );
   }
 
@@ -936,6 +958,7 @@ class Functions {
     return ordres.firstWhere(
       (data) => data.id == id,
       orElse: () => BonCommandes(
+        created_at: DateTime.now(),
         id: id,
         numero_bon_commande: "",
         is_validated: 0,

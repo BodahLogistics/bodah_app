@@ -290,7 +290,8 @@ class MonOrdreTransport extends StatelessWidget {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        ordre.is_validated == 1
+                                        ordre.is_validated == 1 ||
+                                                ordre.signature_id != null
                                             ? Container(
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
@@ -372,9 +373,12 @@ class MonOrdreTransport extends StatelessWidget {
                                                         donneur_user);
                                                   }
                                                 },
-                                                child: ordre.is_validated == 0
+                                                child: ordre.is_validated ==
+                                                            0 &&
+                                                        ordre.signature_id ==
+                                                            null
                                                     ? Text(
-                                                        "Exécutez",
+                                                        "Signez",
                                                         style: TextStyle(
                                                             color:
                                                                 MyColors.light,

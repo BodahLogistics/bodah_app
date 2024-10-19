@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
+import '../../../../../modals/type_chargements.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../../providers/calculator/index.dart';
@@ -74,6 +75,7 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
     Pays pay_liv = provider.pay_liv;
     List<File> files = provider.files_selected;
     bool upload = provider.upload;
+    TypeChargements type_chargement = provider.type_chargement;
     bool affiche = provider.affiche;
     if (tarif > 0) {
       Tarif.text = tarif.toString();
@@ -86,6 +88,7 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
     List<Villes> villes_expedition = provider.villes_expeditions;
     List<Villes> villes_livraison = provider.villes_livraison;
     final service = Provider.of<DBServices>(context);
+    List<TypeChargements> type_chargements = api_provider.type_chargements;
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -860,8 +863,94 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
                   height: 15,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: Column(
+                        children: [
+                          user.dark_mode == 1
+                              ? Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Type de chargement",
+                                    style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: MyColors.light,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: SizedBox(
+                              height: user.dark_mode == 1 ? 50 : 50,
+                              child: DropdownSearch<String>(
+                                popupProps: PopupProps.dialog(
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
+                                  disabledItemFn: (String s) =>
+                                      s.startsWith('I'),
+                                ),
+
+                                items: type_chargements
+                                    .map((type) => type.name)
+                                    .toList(),
+                                filterFn: (user, filter) => user
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()),
+
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                      labelText: user.dark_mode == 1
+                                          ? ""
+                                          : "Type de chargement",
+                                      labelStyle: TextStyle(
+                                          color: user.dark_mode == 1
+                                              ? MyColors.light
+                                              : MyColors.black,
+                                          fontSize: 14,
+                                          fontFamily: "Poppins"),
+                                      hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Poppins",
+                                        color: user.dark_mode == 1
+                                            ? MyColors.light
+                                            : MyColors.black,
+                                      )),
+                                ),
+                                dropdownBuilder: (context, selectedItem) {
+                                  return Text(
+                                    selectedItem ?? '',
+                                    style: TextStyle(
+                                      color: user.dark_mode == 1
+                                          ? MyColors.light
+                                          : MyColors.black,
+                                      fontFamily: "Poppins",
+                                    ),
+                                  );
+                                },
+
+                                onChanged: (String? selectedType) {
+                                  if (selectedType != null) {
+                                    final selected =
+                                        type_chargements.firstWhere(
+                                      (element) => element.name == selectedType,
+                                      orElse: () =>
+                                          TypeChargements(id: 0, name: ""),
+                                    );
+                                    provider.change_type_chargement(selected);
+                                  }
+                                },
+                                selectedItem: type_chargement
+                                    .name, // Remplacez 'null' par le type de compte par défaut si nécessaire
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.45,
                       child: Column(
@@ -1035,7 +1124,8 @@ class _PublishAnnonceExpState extends State<PublishAnnonceExp> {
                                   ville_liv,
                                   files,
                                   api_provider,
-                                  tarif_unitaire);
+                                  tarif_unitaire,
+                                  type_chargement);
 
                               if (statut_code == "202") {
                                 provider.change_affiche(false);

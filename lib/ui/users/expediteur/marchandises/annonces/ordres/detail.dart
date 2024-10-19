@@ -2,6 +2,7 @@
 
 import 'package:bodah/ui/users/expediteur/drawer/index.dart';
 import 'package:bodah/ui/users/expediteur/marchandises/annonces/detail.dart';
+import 'package:bodah/ui/users/expediteur/marchandises/documents/ordres/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,11 +10,20 @@ import '../../../../../../colors/color.dart';
 import '../../../../../../functions/function.dart';
 import '../../../../../../modals/annonces.dart';
 import '../../../../../../modals/bon_commandes.dart';
+import '../../../../../../modals/destinataires.dart';
 import '../../../../../../modals/donneur_ordres.dart';
 import '../../../../../../modals/entite_factures.dart';
 import '../../../../../../modals/entreprises.dart';
+import '../../../../../../modals/expediteurs.dart';
+import '../../../../../../modals/localisations.dart';
 import '../../../../../../modals/marchandises.dart';
+import '../../../../../../modals/paiement_solde.dart';
+import '../../../../../../modals/pays.dart';
+import '../../../../../../modals/signature.dart';
+import '../../../../../../modals/tarifications.dart';
+import '../../../../../../modals/type_paiements.dart';
 import '../../../../../../modals/users.dart';
+import '../../../../../../modals/villes.dart';
 import '../../../../../../providers/api/api_data.dart';
 import '../../expeditions/detail.dart';
 
@@ -37,15 +47,59 @@ class DetailOrdre extends StatelessWidget {
     DonneurOrdres donneur_ordre =
         function.donneur_ordres(donneur_ordres, ordre.donneur_ordre_id);
     List<Entreprises> entreprises = api_provider.entreprises;
-    Entreprises entite_facture_entreprise =
-        function.entite_entreprise(entreprises, entite_facture.id);
-    Entreprises donneur_ordre_entreprise =
-        function.donneur_entreprise(entreprises, donneur_ordre.id);
     Annonces annonce = function.annonce(annonces, ordre.annonce_id);
     Users donneur_user = function.user(users, donneur_ordre.user_id);
     Users entite_user = function.user(users, entite_facture.user_id);
     List<Marchandises> marchandises = api_provider.marchandises;
     marchandises = function.annonce_marchandises(marchandises, annonce.id);
+    List<Localisations> localisations = api_provider.localisations;
+    List<Pays> pays = api_provider.pays;
+    List<Villes> all_villes = api_provider.all_villes;
+    List<PaiementSolde> paiements = api_provider.paiement_soldes;
+    List<PaiementSolde> paiem = function.paiement_soldes(
+        paiements, "Marchandise", marchandises.first.id);
+    Localisations localisation =
+        function.marchandise_localisation(localisations, marchandises.first.id);
+    Pays pay_depart = function.pay(pays, localisation.pays_exp_id);
+    Pays pay_dest = function.pay(pays, localisation.pays_liv_id);
+    Villes ville_dep = function.ville(all_villes, localisation.city_exp_id);
+    Villes ville_dest = function.ville(all_villes, localisation.city_liv_id);
+
+    List<Destinataires> destinataires = api_provider.destinataires;
+    List<Expediteurs> expediteurs = api_provider.expediteurs;
+    List<Signatures> signatures = api_provider.signatures;
+    List<TypePaiements> type_paiements = api_provider.type_piaments;
+    List<Tarifications> tarifications = api_provider.tarifications;
+
+    Expediteurs expediteur =
+        function.expediteur(expediteurs, annonce.expediteur_id);
+    Entreprises entreprise =
+        function.expediteur_entreprise(entreprises, expediteur.id);
+    Users expediteur_user = function.user(users, expediteur.user_id);
+    Destinataires destinataire =
+        function.marchandise_destinataire(destinataires, marchandises.first);
+    Users destinataire_user = function.user(users, destinataire.user_id);
+    Expediteurs destinataire_expediteur =
+        function.user_expediteur(expediteurs, destinataire_user);
+    Entreprises destinataire_entreprise =
+        function.expediteur_entreprise(entreprises, destinataire_expediteur.id);
+    Expediteurs donneur_expediteur =
+        function.user_expediteur(expediteurs, donneur_user);
+    Entreprises donneur_entreprise =
+        function.expediteur_entreprise(entreprises, donneur_expediteur.id);
+    Expediteurs entite_expediteur =
+        function.user_expediteur(expediteurs, entite_user);
+    Entreprises entite_entreprise =
+        function.expediteur_entreprise(entreprises, entite_expediteur.id);
+    Signatures signature = function.signature(signatures, ordre.signature_id);
+    TypePaiements type_paiement =
+        function.type_piament(type_paiements, ordre.type_paiement_id);
+    Tarifications tarification =
+        function.marchandise_tarification(tarifications, marchandises.first.id);
+    double montant = tarification.prix_expedition;
+    double accompte = ordre.montant_paye;
+    double totalPay = function.totalPaiement(paiem);
+    double solde = montant - accompte - totalPay;
 
     Future<void> refresh() async {
       await api_provider.InitForSomeOrdre();
@@ -81,21 +135,36 @@ class DetailOrdre extends StatelessWidget {
           ? RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
-              child: Center(
-                  child: Text(
-                "Aucun ordre de transport n'est émis pour cette annonce",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: "Poppins",
-                    color: user.dark_mode == 1 ? MyColors.light : Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14),
-              )),
-            )
+              child: SingleChildScrollView(
+                physics:
+                    AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      .8, // Prend toute la hauteur de l'écran
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                          16.0), // Ajoute un peu de padding
+                      child: Text(
+                        "Aucune donnée disponible",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: user.dark_mode == 1
+                              ? MyColors.light
+                              : Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ))
           : RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 7, right: 7),
@@ -320,7 +389,8 @@ class DetailOrdre extends StatelessWidget {
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          ordre.is_validated == 1
+                                          ordre.is_validated == 1 ||
+                                                  ordre.signature_id != null
                                               ? Container(
                                                   alignment:
                                                       Alignment.centerLeft,
@@ -376,7 +446,7 @@ class DetailOrdre extends StatelessWidget {
                                             padding: const EdgeInsets.only(
                                                 top: 10, bottom: 5),
                                             child: SizedBox(
-                                              height: 25,
+                                              height: 20,
                                               child: ElevatedButton(
                                                   style: ElevatedButton.styleFrom(
                                                       backgroundColor:
@@ -389,27 +459,50 @@ class DetailOrdre extends StatelessWidget {
                                                                           5))),
                                                   onPressed: () {
                                                     if (ordre.is_validated ==
-                                                        0) {
-                                                      showAllFromOrdre(
+                                                            1 ||
+                                                        ordre.signature_id !=
+                                                            null) {
+                                                      downloadOrdre(
                                                           context,
-                                                          annonce,
                                                           ordre,
-                                                          donneur_user.id ==
-                                                                  user.id &&
-                                                              false,
-                                                          ordre.is_validated ==
-                                                              0,
-                                                          entite_facture,
                                                           donneur_ordre,
-                                                          entite_facture_entreprise,
-                                                          donneur_ordre_entreprise,
+                                                          entite_facture,
+                                                          donneur_user,
                                                           entite_user,
-                                                          donneur_user);
+                                                          donneur_expediteur,
+                                                          entite_expediteur,
+                                                          entite_entreprise,
+                                                          donneur_entreprise,
+                                                          expediteur,
+                                                          expediteur_user,
+                                                          entreprise,
+                                                          signature,
+                                                          marchandises.first,
+                                                          localisation,
+                                                          pay_depart,
+                                                          pay_dest,
+                                                          ville_dep,
+                                                          ville_dest,
+                                                          type_paiement,
+                                                          montant,
+                                                          accompte,
+                                                          solde,
+                                                          destinataire,
+                                                          destinataire_user,
+                                                          destinataire_expediteur,
+                                                          destinataire_entreprise,
+                                                          function);
+                                                    } else {
+                                                      signerOrdre(
+                                                          context, ordre);
                                                     }
                                                   },
-                                                  child: ordre.is_validated == 0
+                                                  child: ordre.is_validated ==
+                                                              0 &&
+                                                          ordre.signature_id ==
+                                                              null
                                                       ? Text(
-                                                          "Exécutez",
+                                                          "Signez",
                                                           style: TextStyle(
                                                               color: MyColors
                                                                   .light,
@@ -490,17 +583,31 @@ class DetailOrdre extends StatelessWidget {
                                                 fontFamily: "Poppins",
                                                 fontSize: 10),
                                           ),
-                                          Text(
-                                            donneur_user.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: user.dark_mode == 1
-                                                    ? MyColors.light
-                                                    : MyColors.textColor,
-                                                fontFamily: "Poppins",
-                                                fontSize: 9),
-                                          ),
+                                          donneur_entreprise.id != 0
+                                              ? Text(
+                                                  donneur_user.name,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: user.dark_mode == 1
+                                                          ? MyColors.light
+                                                          : MyColors.textColor,
+                                                      fontFamily: "Poppins",
+                                                      fontSize: 9),
+                                                )
+                                              : Text(
+                                                  donneur_user.name,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: user.dark_mode == 1
+                                                          ? MyColors.light
+                                                          : MyColors.textColor,
+                                                      fontFamily: "Poppins",
+                                                      fontSize: 9),
+                                                ),
                                         ],
                                       ),
                                     ),
@@ -621,7 +728,7 @@ class DetailOrdre extends StatelessWidget {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                donneur_ordre_entreprise.id == 0
+                                donneur_entreprise.id == 0
                                     ? Container()
                                     : Padding(
                                         padding:
@@ -657,8 +764,7 @@ class DetailOrdre extends StatelessWidget {
                                                         fontSize: 10),
                                                   ),
                                                   Text(
-                                                    donneur_ordre_entreprise
-                                                        .name,
+                                                    donneur_entreprise.name,
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -701,8 +807,7 @@ class DetailOrdre extends StatelessWidget {
                                                         fontSize: 10),
                                                   ),
                                                   Text(
-                                                    donneur_ordre_entreprise
-                                                            .ifu ??
+                                                    donneur_entreprise.ifu ??
                                                         "----",
                                                     maxLines: 1,
                                                     overflow:
@@ -910,7 +1015,7 @@ class DetailOrdre extends StatelessWidget {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                entite_facture_entreprise.id == 0
+                                entite_entreprise.id == 0
                                     ? Container()
                                     : Padding(
                                         padding:
@@ -946,8 +1051,7 @@ class DetailOrdre extends StatelessWidget {
                                                         fontSize: 10),
                                                   ),
                                                   Text(
-                                                    entite_facture_entreprise
-                                                        .name,
+                                                    entite_entreprise.name,
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -990,8 +1094,7 @@ class DetailOrdre extends StatelessWidget {
                                                         fontSize: 10),
                                                   ),
                                                   Text(
-                                                    entite_facture_entreprise
-                                                            .ifu ??
+                                                    entite_entreprise.ifu ??
                                                         "----",
                                                     maxLines: 1,
                                                     overflow:
@@ -1045,12 +1148,12 @@ void showAllFromOrdre(
           return buildAlertDialog(
             context: dialogcontext,
             bottom: MediaQuery.of(dialogcontext).size.height * 0.65,
-            message: "Validez l'ordre",
+            message: "Signez l'ordre",
             backgroundColor: MyColors.primary,
             textColor: MyColors.light,
             onPressed: () {
-              Navigator.of(dialogcontext).pop();
-              ValidateOrdre(dialogcontext, ordre);
+              // Navigator.of(dialogcontext).pop();
+              signerOrdre(dialogcontext, ordre);
             },
           );
         },

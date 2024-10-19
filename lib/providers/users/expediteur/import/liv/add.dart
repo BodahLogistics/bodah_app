@@ -32,12 +32,12 @@ class ProvAddLiv with ChangeNotifier {
     _loading = false;
     _villes = [];
     _marchandise = Cargaison(
-        id: 0,
-        reference: "",
-        modele_type: "",
-        modele_id: 0,
-        nom: "",
-        deleted: 0);
+      id: 0,
+      reference: "",
+      modele_type: "",
+      modele_id: 0,
+      nom: "",
+    );
     _quantite = 0;
     _superviseur = "";
     _pay = Pays(id: 0, name: "");
@@ -52,7 +52,12 @@ class ProvAddLiv with ChangeNotifier {
   bool _loading = false;
   List<Villes> _villes = [];
   Cargaison _marchandise = Cargaison(
-      id: 0, reference: "", modele_type: "", modele_id: 0, nom: "", deleted: 0);
+    id: 0,
+    reference: "",
+    modele_type: "",
+    modele_id: 0,
+    nom: "",
+  );
   int _quantite = 0;
   String _superviseur = "";
   Pays _pay = Pays(id: 0, name: "");

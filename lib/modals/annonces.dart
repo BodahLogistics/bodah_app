@@ -1,28 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
 
 class Annonces {
-  final int id;
-  final String numero_annonce;
-  final int is_active;
-  final int user_id;
-  final int deleted;
-  final int expediteur_id;
-  final String? numero_bl;
-  final DateTime created_at;
-  final DateTime updated_at;
+  int id;
+  String numero_annonce;
+  int is_active;
+  int user_id;
+  int expediteur_id;
+  String? numero_bl;
+  DateTime created_at;
 
   Annonces({
     required this.id,
     required this.numero_annonce,
     required this.is_active,
     required this.user_id,
-    required this.deleted,
     required this.expediteur_id,
     this.numero_bl,
     required this.created_at,
-    required this.updated_at,
   });
 
   Annonces copyWith({
@@ -30,22 +27,18 @@ class Annonces {
     String? numero_annonce,
     int? is_active,
     int? user_id,
-    int? deleted,
     int? expediteur_id,
     String? numero_bl,
     DateTime? created_at,
-    DateTime? updated_at,
   }) {
     return Annonces(
       id: id ?? this.id,
       numero_annonce: numero_annonce ?? this.numero_annonce,
       is_active: is_active ?? this.is_active,
       user_id: user_id ?? this.user_id,
-      deleted: deleted ?? this.deleted,
       expediteur_id: expediteur_id ?? this.expediteur_id,
       numero_bl: numero_bl ?? this.numero_bl,
       created_at: created_at ?? this.created_at,
-      updated_at: updated_at ?? this.updated_at,
     );
   }
 
@@ -55,25 +48,31 @@ class Annonces {
       'numero_annonce': numero_annonce,
       'is_active': is_active,
       'user_id': user_id,
-      'deleted': deleted,
       'expediteur_id': expediteur_id,
       'numero_bl': numero_bl,
-      'created_at': created_at.toIso8601String(),
-      'updated_at': updated_at.toIso8601String(),
+      'created_at': created_at.millisecondsSinceEpoch,
     };
   }
 
   factory Annonces.fromMap(Map<String, dynamic> map) {
     return Annonces(
-      id: map['id'] as int,
+      id: map['id'] != null ? map['id'] as int : 0, // Par défaut à 0 si null
       numero_annonce: map['numero_annonce'] as String,
-      is_active: map['is_active'] as int,
-      user_id: map['user_id'] as int,
-      deleted: map['deleted'] as int,
-      expediteur_id: map['expediteur_id'] as int,
-      numero_bl: map['numero_bl'] != null ? map['numero_bl'] as String : null,
-      created_at: DateTime.parse(map['created_at'] as String),
-      updated_at: DateTime.parse(map['updated_at'] as String),
+      is_active: map['is_active'] != null
+          ? map['is_active'] as int
+          : 0, // Par défaut à 0 si null
+      user_id: map['user_id'] != null
+          ? map['user_id'] as int
+          : 0, // Par défaut à 0 si null
+      expediteur_id: map['expediteur_id'] != null
+          ? map['expediteur_id'] as int
+          : 0, // Par défaut à 0 si null
+      numero_bl: map['numero_bl'] != null
+          ? map['numero_bl'] as String
+          : null, // Laisser null si absent
+      created_at: map['created_at'] != null
+          ? DateTime.parse(map['created_at'] as String)
+          : DateTime.now(), // Par défaut à la date actuelle si null
     );
   }
 
@@ -84,7 +83,7 @@ class Annonces {
 
   @override
   String toString() {
-    return 'Annonces(id: $id, numero_annonce: $numero_annonce, is_active: $is_active, user_id: $user_id, deleted: $deleted, expediteur_id: $expediteur_id, numero_bl: $numero_bl, created_at: $created_at, updated_at: $updated_at)';
+    return 'Annonces(id: $id, numero_annonce: $numero_annonce, is_active: $is_active, user_id: $user_id, expediteur_id: $expediteur_id, numero_bl: $numero_bl, created_at: $created_at)';
   }
 
   @override
@@ -95,11 +94,9 @@ class Annonces {
         other.numero_annonce == numero_annonce &&
         other.is_active == is_active &&
         other.user_id == user_id &&
-        other.deleted == deleted &&
         other.expediteur_id == expediteur_id &&
         other.numero_bl == numero_bl &&
-        other.created_at == created_at &&
-        other.updated_at == updated_at;
+        other.created_at == created_at;
   }
 
   @override
@@ -108,10 +105,8 @@ class Annonces {
         numero_annonce.hashCode ^
         is_active.hashCode ^
         user_id.hashCode ^
-        deleted.hashCode ^
         expediteur_id.hashCode ^
         numero_bl.hashCode ^
-        created_at.hashCode ^
-        updated_at.hashCode;
+        created_at.hashCode;
   }
 }

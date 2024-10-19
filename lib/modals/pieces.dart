@@ -2,11 +2,11 @@
 import 'dart:convert';
 
 class Pieces {
-  final int id;
-  final String num_piece;
-  final int modele_id;
-  final int? type_piece_id;
-  final String modele_type;
+  int id;
+  String num_piece;
+  int modele_id;
+  int? type_piece_id;
+  String modele_type;
   Pieces({
     required this.id,
     required this.num_piece,

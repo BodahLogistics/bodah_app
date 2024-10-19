@@ -521,6 +521,8 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -1263,10 +1265,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => EntiteFactures.fromMap(json)).toList();
       } else {
-        return <EntiteFactures>[];
+        return [];
       }
     } catch (error) {
-      return <EntiteFactures>[];
+      return [];
     }
   }
 
@@ -1286,10 +1288,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => DonneurOrdres.fromMap(json)).toList();
       } else {
-        return <DonneurOrdres>[];
+        return [];
       }
     } catch (error) {
-      return <DonneurOrdres>[];
+      return [];
     }
   }
 
@@ -3614,10 +3616,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => BonCommandes.fromMap(json)).toList();
       } else {
-        return <BonCommandes>[];
+        return [];
       }
     } catch (error) {
-      return <BonCommandes>[];
+      return [];
     }
   }
 
@@ -4405,10 +4407,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Expeditions.fromMap(json)).toList();
       } else {
-        return <Expeditions>[];
+        return [];
       }
     } catch (error) {
-      return <Expeditions>[];
+      return [];
     }
   }
 
@@ -4643,7 +4645,8 @@ class DBServices {
       Villes ville_liv,
       List<File> files,
       ApiProvider provider,
-      String tarif_unitaire) async {
+      String tarif_unitaire,
+      TypeChargements type_chargement) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/publish";
@@ -4666,6 +4669,7 @@ class DBServices {
         ..fields['city_liv'] = ville_liv.id.toString()
         ..fields['pays_liv'] = pay_liv.id.toString()
         ..fields['address_exp'] = adress_exp
+        ..fields['type_chargement'] = type_chargement.id.toString()
         ..fields['address_liv'] = adress_liv;
 
       if (files.isNotEmpty) {
@@ -4713,6 +4717,22 @@ class DBServices {
           provider.setLocalisation(data);
         }
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
         if (responseData.containsKey('photos') &&
             responseData['photos'] is List) {
           List<dynamic> datasList = responseData['photos'];
@@ -4758,8 +4778,26 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      print(response.body);
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('annonce') &&
             responseData['annonce'] is Map<String, dynamic>) {
@@ -4824,6 +4862,22 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('annonce') &&
             responseData['annonce'] is Map<String, dynamic>) {
@@ -4995,8 +5049,18 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      print(response.body);
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city') &&
+            responseData['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('user') &&
             responseData['user'] is Map<String, dynamic>) {
@@ -5080,6 +5144,14 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city') &&
+            responseData['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('user') &&
             responseData['user'] is Map<String, dynamic>) {
@@ -5221,6 +5293,13 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+
+        if (data.containsKey('city') && data['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = data['city'];
+
+          final dat = Villes.fromMap(dataMap);
+          provider.setCity(dat);
+        }
 
         if (data['data'] is Map<String, dynamic>) {
           Map<String, dynamic> userMap = data['data'];
@@ -5504,6 +5583,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
         if (responseData.containsKey('conducteur') &&
             responseData['conducteur'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['conducteur'];
@@ -5600,6 +5695,22 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('conducteur') &&
             responseData['conducteur'] is Map<String, dynamic>) {
@@ -5708,6 +5819,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
         if (responseData.containsKey('import') &&
             responseData['import'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['import'];
@@ -5788,9 +5915,25 @@ class DBServices {
           api_provider.setTarif(data);
         }
 
+        if (responseData.containsKey('tarif2') &&
+            responseData['tarif2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif2'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
         if (responseData.containsKey('position') &&
             responseData['position'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('position2') &&
+            responseData['position2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position2'];
 
           final data = Positions.fromMap(dataMap);
           api_provider.setPosition(data);
@@ -5891,6 +6034,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
         if (responseData.containsKey('export') &&
             responseData['export'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['export'];
@@ -5971,9 +6130,25 @@ class DBServices {
           api_provider.setTarif(data);
         }
 
+        if (responseData.containsKey('tarif2') &&
+            responseData['tarif2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['tarif2'];
+
+          final data = Tarif.fromMap(dataMap);
+          api_provider.setTarif(data);
+        }
+
         if (responseData.containsKey('position') &&
             responseData['position'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['position'];
+
+          final data = Positions.fromMap(dataMap);
+          api_provider.setPosition(data);
+        }
+
+        if (responseData.containsKey('position2') &&
+            responseData['position2'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['position2'];
 
           final data = Positions.fromMap(dataMap);
           api_provider.setPosition(data);
@@ -6069,6 +6244,21 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
 
         if (responseData.containsKey('import') &&
             responseData['import'] is Map<String, dynamic>) {
@@ -6224,6 +6414,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
         if (responseData.containsKey('export') &&
             responseData['export'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['export'];
@@ -6378,6 +6584,21 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
 
         if (responseData.containsKey('import') &&
             responseData['import'] is Map<String, dynamic>) {
@@ -6533,6 +6754,21 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          api_provider.setCity(data);
+        }
 
         if (responseData.containsKey('export') &&
             responseData['export'] is Map<String, dynamic>) {
@@ -6726,6 +6962,21 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
@@ -6816,6 +7067,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['client'];
@@ -6896,9 +7163,18 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      print(response.body);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city') &&
+            responseData['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
@@ -6960,6 +7236,14 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city') &&
+            responseData['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['client'];
@@ -7020,6 +7304,14 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('city') &&
+            responseData['city'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
@@ -7085,6 +7377,21 @@ class DBServices {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
 
         if (responseData.containsKey('client') &&
             responseData['client'] is Map<String, dynamic>) {
@@ -7175,6 +7482,22 @@ class DBServices {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
+        if (responseData.containsKey('city_liv') &&
+            responseData['city_liv'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_liv'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
+        }
+
         if (responseData.containsKey('conducteur') &&
             responseData['conducteur'] is Map<String, dynamic>) {
           Map<String, dynamic> dataMap = responseData['conducteur'];
@@ -7245,7 +7568,8 @@ class DBServices {
       List<File> files,
       Marchandises marchandise,
       String tarif_unitaire,
-      ApiProvider provider) async {
+      ApiProvider provider,
+      TypeChargements type_chargement) async {
     try {
       String? token = await secure.readSecureData('token');
       var url = "${api_url}home/expediteur/annonce/update/${marchandise.id}";
@@ -7267,6 +7591,7 @@ class DBServices {
         ..fields['city_liv'] = ville_liv.id.toString()
         ..fields['pays_liv'] = pay_liv.id.toString()
         ..fields['address_exp'] = adress_exp
+        ..fields['type_chargement'] = type_chargement.id.toString()
         ..fields['address_liv'] = adress_liv;
 
       if (files.isNotEmpty) {
@@ -7304,6 +7629,22 @@ class DBServices {
 
           final data = Localisations.fromMap(dataMap);
           provider.updateLocalisation(data);
+        }
+
+        if (responseData.containsKey('localisation') &&
+            responseData['localisation'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['localisation'];
+
+          final data = Localisations.fromMap(dataMap);
+          provider.setLocalisation(data);
+        }
+
+        if (responseData.containsKey('city_dep') &&
+            responseData['city_dep'] is Map<String, dynamic>) {
+          Map<String, dynamic> dataMap = responseData['city_dep'];
+
+          final data = Villes.fromMap(dataMap);
+          provider.setCity(data);
         }
 
         if (responseData.containsKey('photos') &&

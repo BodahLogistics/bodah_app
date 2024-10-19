@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 class DonneurOrdres {
-  final int id;
-  final int user_id;
-  final String? ifu;
-  final String reference;
+  int id;
+  int user_id;
+  String? ifu;
+  String reference;
   DonneurOrdres({
     required this.id,
     required this.user_id,

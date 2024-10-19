@@ -53,9 +53,13 @@ class AnnonceTransporteurs {
       numero_annonce: map['numero_annonce'] as String,
       transporteur_id: map['transporteur_id'] as int,
       type_chargement_id: map['type_chargement_id'] != null
-          ? map['type_chargement_id'] as int
+          ? (map['type_chargement_id'] is String
+              ? int.parse(map['type_chargement_id'])
+              : map['type_chargement_id'] as int)
           : null,
-      vehicule_id: map['vehicule_id'] as int,
+      vehicule_id: map['vehicule_id'] is String
+          ? int.parse(map['vehicule_id'])
+          : map['vehicule_id'] as int,
       created_at: DateTime.parse(map['created_at'] as String),
     );
   }

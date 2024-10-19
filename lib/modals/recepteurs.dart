@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 class Recepteurs {
-  final int id;
-  final String reference;
-  final int user_id;
+  int id;
+  String reference;
+  int user_id;
   Recepteurs({
     required this.id,
     required this.reference,

@@ -44,21 +44,36 @@ class MesChargements extends StatelessWidget {
         ? RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,
-            child: Center(
-                child: Text(
-              "Auncune expédition disponible",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: "Poppins",
-                  color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14),
-            )),
-          )
+            child: SingleChildScrollView(
+              physics:
+                  AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.7, // Prend toute la hauteur de l'écran
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.all(16.0), // Ajoute un peu de padding
+                    child: Text(
+                      "Aucune donnée disponible",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: user!.dark_mode == 1
+                            ? MyColors.light
+                            : Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ))
         : RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,
             child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,

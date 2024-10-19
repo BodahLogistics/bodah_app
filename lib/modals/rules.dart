@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class Rules {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   Rules({
     required this.id,
     required this.nom,

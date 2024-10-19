@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class TypeChargements {
-  final int id;
-  final String name;
+  int id;
+  String name;
   TypeChargements({
     required this.id,
     required this.name,

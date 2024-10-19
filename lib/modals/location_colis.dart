@@ -2,20 +2,20 @@
 import 'dart:convert';
 
 class LocationColis {
-  final int id;
-  final int coli_id;
-  final int pay_dep_id;
-  final int pay_dest_id;
-  final int dep_dep_id;
-  final int dep_dest_id;
-  final int com_dep_id;
-  final int com_dest_id;
-  final int arrond_dep_id;
-  final int arrond_dest_id;
-  final int quart_dep_id;
-  final int quart_dest_id;
-  final String? address_dep;
-  final String? adress_dest;
+  int id;
+  int coli_id;
+  int pay_dep_id;
+  int pay_dest_id;
+  int dep_dep_id;
+  int dep_dest_id;
+  int com_dep_id;
+  int com_dest_id;
+  int arrond_dep_id;
+  int arrond_dest_id;
+  int quart_dep_id;
+  int quart_dest_id;
+  String? address_dep;
+  String? adress_dest;
   LocationColis({
     required this.id,
     required this.coli_id,

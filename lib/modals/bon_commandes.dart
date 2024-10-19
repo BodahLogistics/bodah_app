@@ -16,6 +16,7 @@ class BonCommandes {
   int entite_facture_id;
   int? signature_id;
   int? type_paiement_id;
+  DateTime created_at;
 
   BonCommandes({
     required this.id,
@@ -30,6 +31,7 @@ class BonCommandes {
     required this.entite_facture_id,
     this.signature_id,
     this.type_paiement_id,
+    required this.created_at,
   });
 
   BonCommandes copyWith({
@@ -45,6 +47,7 @@ class BonCommandes {
     int? entite_facture_id,
     int? signature_id,
     int? type_paiement_id,
+    DateTime? created_at,
   }) {
     return BonCommandes(
       id: id ?? this.id,
@@ -60,6 +63,7 @@ class BonCommandes {
       entite_facture_id: entite_facture_id ?? this.entite_facture_id,
       signature_id: signature_id ?? this.signature_id,
       type_paiement_id: type_paiement_id ?? this.type_paiement_id,
+      created_at: created_at ?? this.created_at,
     );
   }
 
@@ -77,6 +81,7 @@ class BonCommandes {
       'entite_facture_id': entite_facture_id,
       'signature_id': signature_id,
       'type_paiement_id': type_paiement_id,
+      'created_at': created_at.millisecondsSinceEpoch,
     };
   }
 
@@ -86,9 +91,20 @@ class BonCommandes {
       numero_bon_commande: map['numero_bon_commande'] as String,
       is_validated: map['is_validated'] as int,
       delai_chargement: map['delai_chargement'] as int,
-      amende_delai_chargement: map['amende_delai_chargement'] as double,
-      amende_dechargement: map['amende_dechargement'] as double,
-      montant_paye: map['montant_paye'] as double,
+
+      // Conversion sécurisée des chaînes en double
+      amende_delai_chargement: map['amende_delai_chargement'] is String
+          ? double.parse(map['amende_delai_chargement'])
+          : map['amende_delai_chargement'] as double,
+
+      amende_dechargement: map['amende_dechargement'] is String
+          ? double.parse(map['amende_dechargement'])
+          : map['amende_dechargement'] as double,
+
+      montant_paye: map['montant_paye'] is String
+          ? double.parse(map['montant_paye'])
+          : map['montant_paye'] as double,
+      created_at: DateTime.parse(map['created_at'] as String),
       annonce_id: map['annonce_id'] as int,
       donneur_ordre_id: map['donneur_ordre_id'] as int,
       entite_facture_id: map['entite_facture_id'] as int,
@@ -107,7 +123,7 @@ class BonCommandes {
 
   @override
   String toString() {
-    return 'BonCommandes(id: $id, numero_bon_commande: $numero_bon_commande, is_validated: $is_validated, delai_chargement: $delai_chargement, amende_delai_chargement: $amende_delai_chargement, amende_dechargement: $amende_dechargement, montant_paye: $montant_paye, annonce_id: $annonce_id, donneur_ordre_id: $donneur_ordre_id, entite_facture_id: $entite_facture_id, signature_id: $signature_id, type_paiement_id: $type_paiement_id)';
+    return 'BonCommandes(id: $id, numero_bon_commande: $numero_bon_commande, is_validated: $is_validated, delai_chargement: $delai_chargement, amende_delai_chargement: $amende_delai_chargement, amende_dechargement: $amende_dechargement, montant_paye: $montant_paye, annonce_id: $annonce_id, donneur_ordre_id: $donneur_ordre_id, entite_facture_id: $entite_facture_id, signature_id: $signature_id, type_paiement_id: $type_paiement_id, created_at: $created_at)';
   }
 
   @override
@@ -125,7 +141,8 @@ class BonCommandes {
         other.donneur_ordre_id == donneur_ordre_id &&
         other.entite_facture_id == entite_facture_id &&
         other.signature_id == signature_id &&
-        other.type_paiement_id == type_paiement_id;
+        other.type_paiement_id == type_paiement_id &&
+        other.created_at == created_at;
   }
 
   @override
@@ -141,6 +158,7 @@ class BonCommandes {
         donneur_ordre_id.hashCode ^
         entite_facture_id.hashCode ^
         signature_id.hashCode ^
-        type_paiement_id.hashCode;
+        type_paiement_id.hashCode ^
+        created_at.hashCode;
   }
 }

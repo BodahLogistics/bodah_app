@@ -7,7 +7,7 @@ class OrdreTransport {
   String modele_type;
   String reference;
   String? nom;
-  String path;
+  String? path;
 
   OrdreTransport({
     required this.id,
@@ -54,7 +54,7 @@ class OrdreTransport {
       modele_type: map['modele_type'] as String,
       reference: map['reference'] as String,
       nom: map['nom'] != null ? map['nom'] as String : null,
-      path: map['path'] as String,
+      path: map['path'] != null ? map['path'] as String : null,
     );
   }
 
@@ -71,23 +71,22 @@ class OrdreTransport {
   @override
   bool operator ==(covariant OrdreTransport other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.modele_id == modele_id &&
-      other.modele_type == modele_type &&
-      other.reference == reference &&
-      other.nom == nom &&
-      other.path == path;
+
+    return other.id == id &&
+        other.modele_id == modele_id &&
+        other.modele_type == modele_type &&
+        other.reference == reference &&
+        other.nom == nom &&
+        other.path == path;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      modele_id.hashCode ^
-      modele_type.hashCode ^
-      reference.hashCode ^
-      nom.hashCode ^
-      path.hashCode;
+        modele_id.hashCode ^
+        modele_type.hashCode ^
+        reference.hashCode ^
+        nom.hashCode ^
+        path.hashCode;
   }
 }

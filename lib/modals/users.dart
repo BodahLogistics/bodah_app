@@ -82,10 +82,10 @@ class Users {
           ? int.parse(map['city_id'].toString())
           : null, // Conversion en int
       telephone: map['telephone'] as String,
-      deleted: map['deleted'] as int,
-      is_verified: map['is_verified'] as int,
-      is_active: map['is_active'] as int,
-      dark_mode: map['dark_mode'] as int,
+      deleted: map['deleted'] != null ? map['deleted'] as int : 0,
+      is_verified: map['is_verified'] != null ? map['is_verified'] as int : 0,
+      is_active: map['is_active'] != null ? map['is_active'] as int : 0,
+      dark_mode: map['dark_mode'] != null ? map['dark_mode'] as int : 0,
     );
   }
 

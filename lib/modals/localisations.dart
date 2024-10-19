@@ -2,14 +2,14 @@
 import 'dart:convert';
 
 class Localisations {
-  final int id;
-  final int pays_exp_id;
-  final int pays_liv_id;
-  final int city_exp_id;
-  final int city_liv_id;
-  final int marchandise_id;
-  final String? address_exp;
-  final String? address_liv;
+  int id;
+  int pays_exp_id;
+  int pays_liv_id;
+  int city_exp_id;
+  int city_liv_id;
+  int marchandise_id;
+  String? address_exp;
+  String? address_liv;
   Localisations({
     required this.id,
     required this.pays_exp_id,
@@ -58,12 +58,22 @@ class Localisations {
 
   factory Localisations.fromMap(Map<String, dynamic> map) {
     return Localisations(
-      id: map['id'] as int,
-      pays_exp_id: map['pays_exp_id'] as int,
-      pays_liv_id: map['pays_liv_id'] as int,
-      city_exp_id: map['city_exp_id'] as int,
-      city_liv_id: map['city_liv_id'] as int,
-      marchandise_id: map['marchandise_id'] as int,
+      id: map['id'] is String ? int.parse(map['id']) : map['id'] as int,
+      pays_exp_id: map['pays_exp_id'] is String
+          ? int.parse(map['pays_exp_id'])
+          : map['pays_exp_id'] as int,
+      pays_liv_id: map['pays_liv_id'] is String
+          ? int.parse(map['pays_liv_id'])
+          : map['pays_liv_id'] as int,
+      city_exp_id: map['city_exp_id'] is String
+          ? int.parse(map['city_exp_id'])
+          : map['city_exp_id'] as int,
+      city_liv_id: map['city_liv_id'] is String
+          ? int.parse(map['city_liv_id'])
+          : map['city_liv_id'] as int,
+      marchandise_id: map['marchandise_id'] is String
+          ? int.parse(map['marchandise_id'])
+          : map['marchandise_id'] as int,
       address_exp:
           map['address_exp'] != null ? map['address_exp'] as String : null,
       address_liv:

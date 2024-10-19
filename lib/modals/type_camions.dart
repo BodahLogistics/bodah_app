@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class TypeCamions {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   TypeCamions({
     required this.id,
     required this.nom,

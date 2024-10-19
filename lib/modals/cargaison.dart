@@ -2,13 +2,13 @@
 import 'dart:convert';
 
 class Cargaison {
-  final int id;
-  final String reference;
-  final String? ref;
-  final String modele_type;
-  final int modele_id;
-  final String nom;
-  final int deleted;
+  int id;
+  String reference;
+  String? ref;
+  String modele_type;
+  int modele_id;
+  String nom;
+
   Cargaison({
     required this.id,
     required this.reference,
@@ -16,7 +16,6 @@ class Cargaison {
     required this.modele_type,
     required this.modele_id,
     required this.nom,
-    required this.deleted,
   });
 
   Cargaison copyWith({
@@ -26,7 +25,6 @@ class Cargaison {
     String? modele_type,
     int? modele_id,
     String? nom,
-    int? deleted,
   }) {
     return Cargaison(
       id: id ?? this.id,
@@ -35,7 +33,6 @@ class Cargaison {
       modele_type: modele_type ?? this.modele_type,
       modele_id: modele_id ?? this.modele_id,
       nom: nom ?? this.nom,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -47,22 +44,26 @@ class Cargaison {
       'modele_type': modele_type,
       'modele_id': modele_id,
       'nom': nom,
-      'deleted': deleted,
     };
   }
 
   factory Cargaison.fromMap(Map<String, dynamic> map) {
     return Cargaison(
-      id: map['id'] as int,
-      reference: map['reference'] as String,
+      id: map['id'] != null
+          ? (map['id'] is String ? int.parse(map['id']) : map['id'] as int)
+          : 0,
+      reference: map['reference'] != null ? map['reference'] as String : '',
       ref: map['ref'] != null ? map['ref'] as String : null,
-      modele_type: map['modele_type'] as String,
-      modele_id: map['modele_id'] as int,
-      nom: map['nom'] as String,
-      deleted: map['deleted'] as int,
+      modele_type:
+          map['modele_type'] != null ? map['modele_type'] as String : '',
+      modele_id: map['modele_id'] != null
+          ? (map['modele_id'] is String
+              ? int.parse(map['modele_id'])
+              : map['modele_id'] as int)
+          : 0,
+      nom: map['nom'] != null ? map['nom'] as String : '',
     );
   }
-
   String toJson() => json.encode(toMap());
 
   factory Cargaison.fromJson(String source) =>
@@ -70,7 +71,7 @@ class Cargaison {
 
   @override
   String toString() {
-    return 'Cargaison(id: $id, reference: $reference, ref: $ref, modele_type: $modele_type, modele_id: $modele_id, nom: $nom, deleted: $deleted)';
+    return 'Cargaison(id: $id, reference: $reference, ref: $ref, modele_type: $modele_type, modele_id: $modele_id, nom: $nom)';
   }
 
   @override
@@ -82,8 +83,7 @@ class Cargaison {
         other.ref == ref &&
         other.modele_type == modele_type &&
         other.modele_id == modele_id &&
-        other.nom == nom &&
-        other.deleted == deleted;
+        other.nom == nom;
   }
 
   @override
@@ -93,7 +93,6 @@ class Cargaison {
         ref.hashCode ^
         modele_type.hashCode ^
         modele_id.hashCode ^
-        nom.hashCode ^
-        deleted.hashCode;
+        nom.hashCode;
   }
 }

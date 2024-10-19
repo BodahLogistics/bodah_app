@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class TypePieces {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   TypePieces({
     required this.id,
     required this.nom,

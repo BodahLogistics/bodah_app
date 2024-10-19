@@ -2,15 +2,14 @@
 import 'dart:convert';
 
 class ChargementEffectue {
-  final int id;
-  final String reference;
-  final DateTime? debut;
-  final DateTime? fin;
-  final int modele_id;
-  final String modele_type;
-  final int vehicule_id;
-  final int deleted;
-  final int conducteur_id;
+  int id;
+  String reference;
+  DateTime? debut;
+  DateTime? fin;
+  int modele_id;
+  String modele_type;
+  int vehicule_id;
+  int conducteur_id;
   ChargementEffectue({
     required this.id,
     required this.reference,
@@ -19,7 +18,6 @@ class ChargementEffectue {
     required this.modele_id,
     required this.modele_type,
     required this.vehicule_id,
-    required this.deleted,
     required this.conducteur_id,
   });
 
@@ -31,7 +29,6 @@ class ChargementEffectue {
     int? modele_id,
     String? modele_type,
     int? vehicule_id,
-    int? deleted,
     int? conducteur_id,
   }) {
     return ChargementEffectue(
@@ -42,7 +39,6 @@ class ChargementEffectue {
       modele_id: modele_id ?? this.modele_id,
       modele_type: modele_type ?? this.modele_type,
       vehicule_id: vehicule_id ?? this.vehicule_id,
-      deleted: deleted ?? this.deleted,
       conducteur_id: conducteur_id ?? this.conducteur_id,
     );
   }
@@ -56,23 +52,27 @@ class ChargementEffectue {
       'modele_id': modele_id,
       'modele_type': modele_type,
       'vehicule_id': vehicule_id,
-      'deleted': deleted,
       'conducteur_id': conducteur_id,
     };
   }
 
   factory ChargementEffectue.fromMap(Map<String, dynamic> map) {
     return ChargementEffectue(
-      id: map['id'] as int,
+      id: map['id'] is String ? int.parse(map['id']) : map['id'] as int,
       reference: map['reference'] as String,
       fin: map['fin'] != null ? DateTime.parse(map['fin'] as String) : null,
       debut:
           map['debut'] != null ? DateTime.parse(map['debut'] as String) : null,
-      modele_id: map['modele_id'] as int,
+      modele_id: map['modele_id'] is String
+          ? int.parse(map['modele_id'])
+          : map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
-      vehicule_id: map['vehicule_id'] as int,
-      deleted: map['deleted'] as int,
-      conducteur_id: map['conducteur_id'] as int,
+      vehicule_id: map['vehicule_id'] is String
+          ? int.parse(map['vehicule_id'])
+          : map['vehicule_id'] as int,
+      conducteur_id: map['conducteur_id'] is String
+          ? int.parse(map['conducteur_id'])
+          : map['conducteur_id'] as int,
     );
   }
 
@@ -83,7 +83,7 @@ class ChargementEffectue {
 
   @override
   String toString() {
-    return 'ChargementEffectue(id: $id, reference: $reference, debut: $debut, fin: $fin, modele_id: $modele_id, modele_type: $modele_type, vehicule_id: $vehicule_id, deleted: $deleted, conducteur_id: $conducteur_id)';
+    return 'ChargementEffectue(id: $id, reference: $reference, debut: $debut, fin: $fin, modele_id: $modele_id, modele_type: $modele_type, vehicule_id: $vehicule_id, conducteur_id: $conducteur_id)';
   }
 
   @override
@@ -97,7 +97,6 @@ class ChargementEffectue {
         other.modele_id == modele_id &&
         other.modele_type == modele_type &&
         other.vehicule_id == vehicule_id &&
-        other.deleted == deleted &&
         other.conducteur_id == conducteur_id;
   }
 
@@ -110,7 +109,6 @@ class ChargementEffectue {
         modele_id.hashCode ^
         modele_type.hashCode ^
         vehicule_id.hashCode ^
-        deleted.hashCode ^
         conducteur_id.hashCode;
   }
 }

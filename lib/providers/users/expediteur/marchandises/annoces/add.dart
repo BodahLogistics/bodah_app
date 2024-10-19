@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
+import '../../../../../modals/type_chargements.dart';
 import '../../../../../services/data_base_service.dart';
 
 class ProvPublishAnnonce with ChangeNotifier {
@@ -42,6 +43,7 @@ class ProvPublishAnnonce with ChangeNotifier {
   }
 
   void reset() {
+    _type_chargement = TypeChargements(id: 0, name: "");
     _files_selected = [];
     _nom = "";
     _tarif_unitaire = "";
@@ -55,6 +57,15 @@ class ProvPublishAnnonce with ChangeNotifier {
     _ville_liv = Villes(id: 0, name: "", country_id: 0);
     _adress_liv = "";
     _affiche = false;
+    notifyListeners();
+  }
+
+  TypeChargements _type_chargement = TypeChargements(id: 0, name: "");
+
+  TypeChargements get type_chargement => _type_chargement;
+
+  void change_type_chargement(TypeChargements value) {
+    _type_chargement = value;
     notifyListeners();
   }
 

@@ -3720,12 +3720,12 @@ Future<dynamic> NewLiv(BuildContext context, int import_id) {
                       final pay_selected = cargaisons.firstWhere(
                         (element) => element.nom == selectedType,
                         orElse: () => Cargaison(
-                            id: 0,
-                            reference: "",
-                            modele_type: "",
-                            modele_id: 0,
-                            nom: "",
-                            deleted: 0),
+                          id: 0,
+                          reference: "",
+                          modele_type: "",
+                          modele_id: 0,
+                          nom: "",
+                        ),
                       );
                       provider.change_marchandise(pay_selected);
                     }
@@ -4399,12 +4399,12 @@ Future<dynamic> UpdateLiv(BuildContext context, LivraisonCargaison livraison,
                       final pay_selected = cargaisons.firstWhere(
                         (element) => element.nom == selectedType,
                         orElse: () => Cargaison(
-                            id: 0,
-                            reference: "",
-                            modele_type: "",
-                            modele_id: 0,
-                            nom: "",
-                            deleted: 0),
+                          id: 0,
+                          reference: "",
+                          modele_type: "",
+                          modele_id: 0,
+                          nom: "",
+                        ),
                       );
                       provider.change_marchandise(pay_selected);
                     }
@@ -7327,11 +7327,11 @@ Future<dynamic> showMarch(BuildContext context, int data_id, String modele) {
                       if (cargaison_clients.isEmpty) {
                         cargaison_clients = [
                           CargaisonClient(
-                              id: 0,
-                              client_id: 0,
-                              cargaison_id: 0,
-                              quantite: 0,
-                              deleted: 0)
+                            id: 0,
+                            client_id: 0,
+                            cargaison_id: 0,
+                            quantite: 0,
+                          )
                         ];
                       }
 

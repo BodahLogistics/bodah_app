@@ -2,28 +2,25 @@
 import 'dart:convert';
 
 class Expediteurs {
-  final int id;
-  final int user_id;
-  final String numero_expediteur;
-  final int deleted;
+  int id;
+  int user_id;
+  String numero_expediteur;
+
   Expediteurs({
     required this.id,
     required this.user_id,
     required this.numero_expediteur,
-    required this.deleted,
   });
 
   Expediteurs copyWith({
     int? id,
     int? user_id,
     String? numero_expediteur,
-    int? deleted,
   }) {
     return Expediteurs(
       id: id ?? this.id,
       user_id: user_id ?? this.user_id,
       numero_expediteur: numero_expediteur ?? this.numero_expediteur,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -32,7 +29,6 @@ class Expediteurs {
       'id': id,
       'user_id': user_id,
       'numero_expediteur': numero_expediteur,
-      'deleted': deleted,
     };
   }
 
@@ -41,7 +37,6 @@ class Expediteurs {
       id: map['id'] as int,
       user_id: map['user_id'] as int,
       numero_expediteur: map['numero_expediteur'] as String,
-      deleted: map['deleted'] as int,
     );
   }
 
@@ -51,9 +46,8 @@ class Expediteurs {
       Expediteurs.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() {
-    return 'Expediteurs(id: $id, user_id: $user_id, numero_expediteur: $numero_expediteur, deleted: $deleted)';
-  }
+  String toString() =>
+      'Expediteurs(id: $id, user_id: $user_id, numero_expediteur: $numero_expediteur)';
 
   @override
   bool operator ==(covariant Expediteurs other) {
@@ -61,15 +55,10 @@ class Expediteurs {
 
     return other.id == id &&
         other.user_id == user_id &&
-        other.numero_expediteur == numero_expediteur &&
-        other.deleted == deleted;
+        other.numero_expediteur == numero_expediteur;
   }
 
   @override
-  int get hashCode {
-    return id.hashCode ^
-        user_id.hashCode ^
-        numero_expediteur.hashCode ^
-        deleted.hashCode;
-  }
+  int get hashCode =>
+      id.hashCode ^ user_id.hashCode ^ numero_expediteur.hashCode;
 }

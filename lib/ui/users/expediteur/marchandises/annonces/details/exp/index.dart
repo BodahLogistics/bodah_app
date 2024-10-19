@@ -16,20 +16,9 @@ import '../../../../../../../modals/transporteurs.dart';
 import '../../../../../../../modals/users.dart';
 import '../../../../../../../providers/api/api_data.dart';
 
-class ListExp extends StatefulWidget {
+class ListExp extends StatelessWidget {
   const ListExp({super.key, required this.annonce});
   final Annonces annonce;
-
-  @override
-  State<ListExp> createState() => _ListExpState();
-}
-
-class _ListExpState extends State<ListExp> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ApiProvider>(context, listen: false).InitExpeditionForAnnonce();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +33,7 @@ class _ListExpState extends State<ListExp> {
     List<Charge> charges = api_provider.charges;
     List<Tarif> tarifs = api_provider.tarifs;
     List<Expeditions> expeditions = api_provider.expeditions;
-    expeditions = function.annonce_expeditions(expeditions, widget.annonce);
+    expeditions = function.annonce_expeditions(expeditions, annonce);
 
     Future<void> refresh() async {
       await api_provider.InitExpeditionForAnnonce();
@@ -54,17 +43,31 @@ class _ListExpState extends State<ListExp> {
         ? RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,
-            child: Center(
-                child: Text(
-              "Auncune expédition n'est déjà fait pour cette annonce",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: "Poppins",
-                  color: user!.dark_mode == 1 ? MyColors.light : Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14),
-            )),
-          )
+            child: SingleChildScrollView(
+              physics:
+                  AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.7, // Prend toute la hauteur de l'écran
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.all(16.0), // Ajoute un peu de padding
+                    child: Text(
+                      "Aucune donnée disponible",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: user!.dark_mode == 1
+                            ? MyColors.light
+                            : Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ))
         : RefreshIndicator(
             color: MyColors.secondary,
             onRefresh: refresh,

@@ -83,16 +83,31 @@ class MesBls extends StatelessWidget {
           ? RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
-              child: Center(
-                  child: Text("Aucuen donnée disponible",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        color:
-                            user.dark_mode == 1 ? MyColors.light : Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ))),
-            )
+              child: SingleChildScrollView(
+                physics:
+                    AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.7, // Prend toute la hauteur de l'écran
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                          16.0), // Ajoute un peu de padding
+                      child: Text(
+                        "Aucune donnée disponible",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: user.dark_mode == 1
+                              ? MyColors.light
+                              : Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ))
           : RefreshIndicator(
               color: MyColors.secondary,
               onRefresh: refresh,
@@ -467,12 +482,12 @@ class MesBls extends StatelessWidget {
                         if (cargaisons.isEmpty) {
                           cargaisons = [
                             Cargaison(
-                                id: 0,
-                                reference: "",
-                                modele_type: "",
-                                modele_id: 0,
-                                nom: "",
-                                deleted: 0)
+                              id: 0,
+                              reference: "",
+                              modele_type: "",
+                              modele_id: 0,
+                              nom: "",
+                            )
                           ];
                         }
 
@@ -482,11 +497,11 @@ class MesBls extends StatelessWidget {
                         if (cargaison_clients.isEmpty) {
                           cargaison_clients = [
                             CargaisonClient(
-                                id: 0,
-                                client_id: 0,
-                                cargaison_id: 0,
-                                quantite: 0,
-                                deleted: 0)
+                              id: 0,
+                              client_id: 0,
+                              cargaison_id: 0,
+                              quantite: 0,
+                            )
                           ];
                         }
                         Chargement chargement =
@@ -496,11 +511,11 @@ class MesBls extends StatelessWidget {
                         if (cargaison_clients.isEmpty) {
                           cargaison_clients = [
                             CargaisonClient(
-                                id: 0,
-                                client_id: 0,
-                                cargaison_id: 0,
-                                quantite: 0,
-                                deleted: 0)
+                              id: 0,
+                              client_id: 0,
+                              cargaison_id: 0,
+                              quantite: 0,
+                            )
                           ];
                         }
 

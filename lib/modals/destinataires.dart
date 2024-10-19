@@ -2,17 +2,16 @@
 import 'dart:convert';
 
 class Destinataires {
-  final int id;
-  final String numero_destinataire;
-  final String? ifu;
-  final int user_id;
-  final int deleted;
+  int id;
+  String numero_destinataire;
+  String? ifu;
+  int user_id;
+
   Destinataires({
     required this.id,
     required this.numero_destinataire,
     this.ifu,
     required this.user_id,
-    required this.deleted,
   });
 
   Destinataires copyWith({
@@ -20,14 +19,12 @@ class Destinataires {
     String? numero_destinataire,
     String? ifu,
     int? user_id,
-    int? deleted,
   }) {
     return Destinataires(
       id: id ?? this.id,
       numero_destinataire: numero_destinataire ?? this.numero_destinataire,
       ifu: ifu ?? this.ifu,
       user_id: user_id ?? this.user_id,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -37,7 +34,6 @@ class Destinataires {
       'numero_destinataire': numero_destinataire,
       'ifu': ifu,
       'user_id': user_id,
-      'deleted': deleted,
     };
   }
 
@@ -47,7 +43,6 @@ class Destinataires {
       numero_destinataire: map['numero_destinataire'] as String,
       ifu: map['ifu'] != null ? map['ifu'] as String : null,
       user_id: map['user_id'] as int,
-      deleted: map['deleted'] as int,
     );
   }
 
@@ -58,7 +53,7 @@ class Destinataires {
 
   @override
   String toString() {
-    return 'Destinataires(id: $id, numero_destinataire: $numero_destinataire, ifu: $ifu, user_id: $user_id, deleted: $deleted)';
+    return 'Destinataires(id: $id, numero_destinataire: $numero_destinataire, ifu: $ifu, user_id: $user_id)';
   }
 
   @override
@@ -68,8 +63,7 @@ class Destinataires {
     return other.id == id &&
         other.numero_destinataire == numero_destinataire &&
         other.ifu == ifu &&
-        other.user_id == user_id &&
-        other.deleted == deleted;
+        other.user_id == user_id;
   }
 
   @override
@@ -77,7 +71,6 @@ class Destinataires {
     return id.hashCode ^
         numero_destinataire.hashCode ^
         ifu.hashCode ^
-        user_id.hashCode ^
-        deleted.hashCode;
+        user_id.hashCode;
   }
 }

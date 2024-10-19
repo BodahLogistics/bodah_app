@@ -2,9 +2,9 @@
 import 'dart:convert';
 
 class LogoEntreprises {
-  final int id;
-  final String path;
-  final int entreprise_id;
+  int id;
+  String path;
+  int entreprise_id;
   LogoEntreprises({
     required this.id,
     required this.path,

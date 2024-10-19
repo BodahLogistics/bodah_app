@@ -44,6 +44,7 @@ class TranspDocument extends StatelessWidget {
       color: MyColors.secondary,
       onRefresh: refresh,
       child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: Container(
           color: user!.dark_mode == 1

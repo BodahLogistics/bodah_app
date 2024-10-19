@@ -2,12 +2,12 @@
 import 'dart:convert';
 
 class Entreprises {
-  final int id;
-  final String name;
-  final String? ifu;
-  final String numero_entreprise;
-  final String entrepriseable_type;
-  final int entrepriseable_id;
+  int id;
+  String name;
+  String? ifu;
+  String numero_entreprise;
+  String entrepriseable_type;
+  int entrepriseable_id;
   Entreprises({
     required this.id,
     required this.name,

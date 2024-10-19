@@ -48,12 +48,22 @@ class InfoLocalisations {
 
   factory InfoLocalisations.fromMap(Map<String, dynamic> map) {
     return InfoLocalisations(
-      id: map['id'] as int,
-      pays_dep_id: map['pays_dep_id'] as int,
-      pays_dest_id: map['pays_dest_id'] as int,
-      ville_dep_id: map['ville_dep_id'] as int,
-      ville_dest_id: map['ville_dest_id'] as int,
-      annonce_id: map['annonce_id'] as int,
+      id: map['id'] is String ? int.parse(map['id']) : map['id'] as int,
+      pays_dep_id: map['pays_dep_id'] is String
+          ? int.parse(map['pays_dep_id'])
+          : map['pays_dep_id'] as int,
+      pays_dest_id: map['pays_dest_id'] is String
+          ? int.parse(map['pays_dest_id'])
+          : map['pays_dest_id'] as int,
+      ville_dep_id: map['ville_dep_id'] is String
+          ? int.parse(map['ville_dep_id'])
+          : map['ville_dep_id'] as int,
+      ville_dest_id: map['ville_dest_id'] is String
+          ? int.parse(map['ville_dest_id'])
+          : map['ville_dest_id'] as int,
+      annonce_id: map['annonce_id'] is String
+          ? int.parse(map['annonce_id'])
+          : map['annonce_id'] as int,
     );
   }
 

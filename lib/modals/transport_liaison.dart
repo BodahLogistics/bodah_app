@@ -49,7 +49,7 @@ class TransportLiaisons {
           : null,
       proprietaire_id: map['proprietaire_id'] as int,
       transporteur_id: map['transporteur_id'] as int,
-      during: map['during'] as int,
+      during: map['during'] != null ? map['during'] as int : 0,
     );
   }
 

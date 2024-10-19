@@ -1,12 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class Chargement {
-  final int id;
-  final int modele_id;
-  final String modele_type;
-  final DateTime debut;
-  final DateTime? fin;
+  int id;
+  int modele_id;
+  String modele_type;
+  DateTime debut;
+  DateTime? fin;
   Chargement({
     required this.id,
     required this.modele_id,
@@ -42,12 +44,29 @@ class Chargement {
   }
 
   factory Chargement.fromMap(Map<String, dynamic> map) {
+    final dateFormatDDMMYY = DateFormat('dd/MM/yy'); // Format pour "18/10/18"
+    final dateFormatYYYYMMDD =
+        DateFormat('yyyy-MM-dd'); // Format pour "2024-10-18"
+
+    // Utilisation de try-catch pour tenter les deux formats
+    DateTime parseDate(String date) {
+      try {
+        return dateFormatYYYYMMDD
+            .parse(date); // Essayer avec le format "yyyy-MM-dd"
+      } catch (e) {
+        return dateFormatDDMMYY
+            .parse(date); // Si échec, essayer avec le format "dd/MM/yy"
+      }
+    }
+
     return Chargement(
       id: map['id'] as int,
       modele_id: map['modele_id'] as int,
       modele_type: map['modele_type'] as String,
-      debut: DateTime.parse(map['debut'] as String),
-      fin: map['fin'] != null ? DateTime.parse(map['fin'] as String) : null,
+      debut: parseDate(map['debut'] as String), // Convertir la date de début
+      fin: map['fin'] != null
+          ? parseDate(map['fin'] as String)
+          : null, // Convertir la date de fin, si elle existe
     );
   }
 

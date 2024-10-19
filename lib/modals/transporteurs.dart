@@ -2,19 +2,18 @@
 import 'dart:convert';
 
 class Transporteurs {
-  final int id;
-  final String numero_transporteur;
-  final int user_id;
-  final String? num_permis;
-  final String? photo_url;
-  final int deleted;
+  int id;
+  String numero_transporteur;
+  int user_id;
+  String? num_permis;
+  String? photo_url;
+
   Transporteurs({
     required this.id,
     required this.numero_transporteur,
     required this.user_id,
     this.num_permis,
     this.photo_url,
-    required this.deleted,
   });
 
   Transporteurs copyWith({
@@ -23,7 +22,6 @@ class Transporteurs {
     int? user_id,
     String? num_permis,
     String? photo_url,
-    int? deleted,
   }) {
     return Transporteurs(
       id: id ?? this.id,
@@ -31,7 +29,6 @@ class Transporteurs {
       user_id: user_id ?? this.user_id,
       num_permis: num_permis ?? this.num_permis,
       photo_url: photo_url ?? this.photo_url,
-      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -42,7 +39,6 @@ class Transporteurs {
       'user_id': user_id,
       'num_permis': num_permis,
       'photo_url': photo_url,
-      'deleted': deleted,
     };
   }
 
@@ -54,7 +50,6 @@ class Transporteurs {
       num_permis:
           map['num_permis'] != null ? map['num_permis'] as String : null,
       photo_url: map['photo_url'] != null ? map['photo_url'] as String : null,
-      deleted: map['deleted'] as int,
     );
   }
 
@@ -65,7 +60,7 @@ class Transporteurs {
 
   @override
   String toString() {
-    return 'Transporteurs(id: $id, numero_transporteur: $numero_transporteur, user_id: $user_id, num_permis: $num_permis, photo_url: $photo_url, deleted: $deleted)';
+    return 'Transporteurs(id: $id, numero_transporteur: $numero_transporteur, user_id: $user_id, num_permis: $num_permis, photo_url: $photo_url)';
   }
 
   @override
@@ -76,8 +71,7 @@ class Transporteurs {
         other.numero_transporteur == numero_transporteur &&
         other.user_id == user_id &&
         other.num_permis == num_permis &&
-        other.photo_url == photo_url &&
-        other.deleted == deleted;
+        other.photo_url == photo_url;
   }
 
   @override
@@ -86,7 +80,6 @@ class Transporteurs {
         numero_transporteur.hashCode ^
         user_id.hashCode ^
         num_permis.hashCode ^
-        photo_url.hashCode ^
-        deleted.hashCode;
+        photo_url.hashCode;
   }
 }

@@ -10,7 +10,6 @@ class Expeditions {
   String? obs;
   DateTime date_depart;
   DateTime? date_arrivee;
-  double? caution;
   int type_paiement_id;
   int vehicule_id;
 
@@ -23,7 +22,6 @@ class Expeditions {
     this.obs,
     required this.date_depart,
     this.date_arrivee,
-    this.caution,
     required this.type_paiement_id,
     required this.vehicule_id,
   });
@@ -37,7 +35,6 @@ class Expeditions {
     String? obs,
     DateTime? date_depart,
     DateTime? date_arrivee,
-    double? caution,
     int? type_paiement_id,
     int? vehicule_id,
   }) {
@@ -50,7 +47,6 @@ class Expeditions {
       obs: obs ?? this.obs,
       date_depart: date_depart ?? this.date_depart,
       date_arrivee: date_arrivee ?? this.date_arrivee,
-      caution: caution ?? this.caution,
       type_paiement_id: type_paiement_id ?? this.type_paiement_id,
       vehicule_id: vehicule_id ?? this.vehicule_id,
     );
@@ -66,7 +62,6 @@ class Expeditions {
       'obs': obs,
       'date_depart': date_depart.millisecondsSinceEpoch,
       'date_arrivee': date_arrivee?.millisecondsSinceEpoch,
-      'caution': caution,
       'type_paiement_id': type_paiement_id,
       'vehicule_id': vehicule_id,
     };
@@ -84,7 +79,6 @@ class Expeditions {
       date_arrivee: map['date_arrivee'] != null
           ? DateTime.parse(map['date_arrivee'] as String)
           : null,
-      caution: map['caution'] != null ? map['caution'] as double : null,
       type_paiement_id: map['type_paiement_id'] as int,
       vehicule_id: map['vehicule_id'] as int,
     );
@@ -97,7 +91,7 @@ class Expeditions {
 
   @override
   String toString() {
-    return 'Expeditions(id: $id, annonce_id: $annonce_id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, obs: $obs, date_depart: $date_depart, date_arrivee: $date_arrivee, caution: $caution, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id)';
+    return 'Expeditions(id: $id, annonce_id: $annonce_id, numero_expedition: $numero_expedition, transporteur_id: $transporteur_id, statu_expedition_id: $statu_expedition_id, obs: $obs, date_depart: $date_depart, date_arrivee: $date_arrivee, type_paiement_id: $type_paiement_id, vehicule_id: $vehicule_id)';
   }
 
   @override
@@ -112,7 +106,6 @@ class Expeditions {
         other.obs == obs &&
         other.date_depart == date_depart &&
         other.date_arrivee == date_arrivee &&
-        other.caution == caution &&
         other.type_paiement_id == type_paiement_id &&
         other.vehicule_id == vehicule_id;
   }
@@ -127,7 +120,6 @@ class Expeditions {
         obs.hashCode ^
         date_depart.hashCode ^
         date_arrivee.hashCode ^
-        caution.hashCode ^
         type_paiement_id.hashCode ^
         vehicule_id.hashCode;
   }

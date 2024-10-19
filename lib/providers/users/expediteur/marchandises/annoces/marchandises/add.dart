@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages
+// ignore_for_file: non_constant_identifier_names, unnecessary_nullable_for_final_variable_declarations, prefer_const_constructors, use_build_context_synchronously, depend_on_referenced_packages, unnecessary_null_comparison
 
 import 'dart:io';
 
@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
+import '../../../../../../modals/type_chargements.dart';
 import '../../../../../../services/data_base_service.dart';
 
 class ProvAddMarchandise with ChangeNotifier {
@@ -25,9 +26,11 @@ class ProvAddMarchandise with ChangeNotifier {
       Villes ville_expedition,
       Villes ville_livraison,
       String adresse_liv,
-      String adress_exp) {
+      String adress_exp,
+      TypeChargements type_chargement) {
+    _type_chargement = type_chargement;
     _adress_exp = adress_exp;
-    _adress_liv = adress_liv;
+    _adress_liv = adresse_liv;
     _ville_liv = ville_livraison;
     _ville_exp = ville_expedition;
     _pay_exp = pay_expeditioon;
@@ -36,12 +39,14 @@ class ProvAddMarchandise with ChangeNotifier {
     _quantite = marchandise.quantite;
     _tarif_unitaire = tarifications.tarif_unitaire;
     _poids = marchandise.poids;
-    _date_chargement =
-        DateFormat("yyyy-MM-dd").format(marchandise.date_chargement!);
+    _date_chargement = marchandise.date_chargement != null
+        ? DateFormat("yyyy-MM-dd").format(marchandise.date_chargement!)
+        : DateFormat("yyyy-MM-dd").format(DateTime.now());
     notifyListeners();
   }
 
   void reset() {
+    _type_chargement = TypeChargements(id: 0, name: "");
     _files_selected = [];
     _nom = "";
     _tarif_unitaire = "";
@@ -55,6 +60,15 @@ class ProvAddMarchandise with ChangeNotifier {
     _ville_liv = Villes(id: 0, name: "", country_id: 0);
     _adress_liv = "";
     _affiche = false;
+    notifyListeners();
+  }
+
+  TypeChargements _type_chargement = TypeChargements(id: 0, name: "");
+
+  TypeChargements get type_chargement => _type_chargement;
+
+  void change_type_chargement(TypeChargements value) {
+    _type_chargement = value;
     notifyListeners();
   }
 

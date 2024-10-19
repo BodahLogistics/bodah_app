@@ -372,6 +372,18 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setCity(Villes data) {
+    int index = _all_villes.indexWhere((ville) => ville.id == data.id);
+
+    if (index == -1) {
+      _all_villes.insert(0, data);
+    } else {
+      _all_villes[index] = data;
+    }
+
+    notifyListeners();
+  }
+
   void updateAnnonce(Annonces data) {
     int index = _annonces.indexWhere((account) => account.id == data.id);
     if (index != -1) {
@@ -1876,10 +1888,6 @@ class ApiProvider with ChangeNotifier {
     _entreprises = response_entreprise;
     final response_expediteur = await apiService.getExpediteurs();
     _expediteurs = response_expediteur;
-    final response_transporteur = await apiService.getTransporteurs();
-    _transporteurs = response_transporteur;
-    final response_camions = await apiService.getCamions();
-    _camions = response_camions;
     final response_users = await apiService.getUsers();
     _users = response_users;
     _isLoading = false;

@@ -53,7 +53,6 @@ class ChargBordereaux extends StatelessWidget {
     List<Entreprises> entreprises = api_provider.entreprises;
     List<Destinataires> destinataires = api_provider.destinataires;
     List<Expediteurs> expediteurs = api_provider.expediteurs;
-    List<Annonces> pictues = api_provider.annonces;
 
     Future<void> refresh() async {
       await api_provider.InitTransporteurBordereau();
@@ -94,15 +93,14 @@ class ChargBordereaux extends StatelessWidget {
                 physics:
                     AlwaysScrollableScrollPhysics(), // Permet toujours le défilement
                 child: SizedBox(
-                  height: MediaQuery.of(context)
-                      .size
-                      .height, // Prend toute la hauteur de l'écran
+                  height: MediaQuery.of(context).size.height *
+                      0.7, // Prend toute la hauteur de l'écran
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(
                           16.0), // Ajoute un peu de padding
                       child: Text(
-                        "Vous n'avez aucune lettre de voiture disponible",
+                        "Aucune donnée disponible",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "Poppins",

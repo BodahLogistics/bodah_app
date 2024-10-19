@@ -1,17 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Positions {
-  final int id;
-  final int pay_dep_id;
-  final int pay_liv_id;
-  final int city_dep_id;
-  final int city_liv_id;
-  final String? address_dep;
-  final String? address_liv;
-  final int modele_id;
-  final String modele_type;
-  final int deleted;
+  int id;
+  int pay_dep_id;
+  int pay_liv_id;
+  int city_dep_id;
+  int city_liv_id;
+  String? address_dep;
+  String? address_liv;
+  int modele_id;
+  String modele_type;
+
   Positions({
     required this.id,
     required this.pay_dep_id,
@@ -22,32 +22,33 @@ class Positions {
     this.address_liv,
     required this.modele_id,
     required this.modele_type,
-    required this.deleted,
   });
 
-  Positions copyWith({
-    int? id,
-    int? pay_dep_id,
-    int? pay_liv_id,
-    int? city_dep_id,
-    int? city_liv_id,
-    String? address_dep,
-    String? address_liv,
-    int? modele_id,
-    String? modele_type,
-    int? deleted,
-  }) {
+  factory Positions.fromMap(Map<String, dynamic> map) {
+    // Fonction pour convertir une chaîne en entier si nécessaire
+    int parseInt(dynamic value) {
+      if (value is String) {
+        return int.tryParse(value) ?? 0; // Utilise 0 par défaut si échec
+      } else if (value is int) {
+        return value;
+      }
+      return 0; // Valeur par défaut si null ou autre
+    }
+
     return Positions(
-      id: id ?? this.id,
-      pay_dep_id: pay_dep_id ?? this.pay_dep_id,
-      pay_liv_id: pay_liv_id ?? this.pay_liv_id,
-      city_dep_id: city_dep_id ?? this.city_dep_id,
-      city_liv_id: city_liv_id ?? this.city_liv_id,
-      address_dep: address_dep ?? this.address_dep,
-      address_liv: address_liv ?? this.address_liv,
-      modele_id: modele_id ?? this.modele_id,
-      modele_type: modele_type ?? this.modele_type,
-      deleted: deleted ?? this.deleted,
+      id: parseInt(map['id']),
+      pay_dep_id: parseInt(map['pay_dep_id']), // Conversion explicite en entier
+      pay_liv_id: parseInt(map['pay_liv_id']), // Conversion explicite en entier
+      city_dep_id:
+          parseInt(map['city_dep_id']), // Conversion explicite en entier
+      city_liv_id:
+          parseInt(map['city_liv_id']), // Conversion explicite en entier
+      address_dep:
+          map['address_dep'] != null ? map['address_dep'] as String : null,
+      address_liv:
+          map['address_liv'] != null ? map['address_liv'] as String : null,
+      modele_id: parseInt(map['modele_id']),
+      modele_type: map['modele_type'] as String,
     );
   }
 
@@ -62,25 +63,7 @@ class Positions {
       'address_liv': address_liv,
       'modele_id': modele_id,
       'modele_type': modele_type,
-      'deleted': deleted,
     };
-  }
-
-  factory Positions.fromMap(Map<String, dynamic> map) {
-    return Positions(
-      id: map['id'] as int,
-      pay_dep_id: map['pay_dep_id'] as int,
-      pay_liv_id: map['pay_liv_id'] as int,
-      city_dep_id: map['city_dep_id'] as int,
-      city_liv_id: map['city_liv_id'] as int,
-      address_dep:
-          map['address_dep'] != null ? map['address_dep'] as String : null,
-      address_liv:
-          map['address_liv'] != null ? map['address_liv'] as String : null,
-      modele_id: map['modele_id'] as int,
-      modele_type: map['modele_type'] as String,
-      deleted: map['deleted'] as int,
-    );
   }
 
   String toJson() => json.encode(toMap());
@@ -88,9 +71,33 @@ class Positions {
   factory Positions.fromJson(String source) =>
       Positions.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  Positions copyWith({
+    int? id,
+    int? pay_dep_id,
+    int? pay_liv_id,
+    int? city_dep_id,
+    int? city_liv_id,
+    String? address_dep,
+    String? address_liv,
+    int? modele_id,
+    String? modele_type,
+  }) {
+    return Positions(
+      id: id ?? this.id,
+      pay_dep_id: pay_dep_id ?? this.pay_dep_id,
+      pay_liv_id: pay_liv_id ?? this.pay_liv_id,
+      city_dep_id: city_dep_id ?? this.city_dep_id,
+      city_liv_id: city_liv_id ?? this.city_liv_id,
+      address_dep: address_dep ?? this.address_dep,
+      address_liv: address_liv ?? this.address_liv,
+      modele_id: modele_id ?? this.modele_id,
+      modele_type: modele_type ?? this.modele_type,
+    );
+  }
+
   @override
   String toString() {
-    return 'Position(id: $id, pay_dep_id: $pay_dep_id, pay_liv_id: $pay_liv_id, city_dep_id: $city_dep_id, city_liv_id: $city_liv_id, address_dep: $address_dep, address_liv: $address_liv, modele_id: $modele_id, modele_type: $modele_type, deleted: $deleted)';
+    return 'Positions(id: $id, pay_dep_id: $pay_dep_id, pay_liv_id: $pay_liv_id, city_dep_id: $city_dep_id, city_liv_id: $city_liv_id, address_dep: $address_dep, address_liv: $address_liv, modele_id: $modele_id, modele_type: $modele_type)';
   }
 
   @override
@@ -105,8 +112,7 @@ class Positions {
         other.address_dep == address_dep &&
         other.address_liv == address_liv &&
         other.modele_id == modele_id &&
-        other.modele_type == modele_type &&
-        other.deleted == deleted;
+        other.modele_type == modele_type;
   }
 
   @override
@@ -119,7 +125,6 @@ class Positions {
         address_dep.hashCode ^
         address_liv.hashCode ^
         modele_id.hashCode ^
-        modele_type.hashCode ^
-        deleted.hashCode;
+        modele_type.hashCode;
   }
 }

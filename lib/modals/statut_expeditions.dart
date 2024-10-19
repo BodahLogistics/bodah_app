@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class StatutExpeditions {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   StatutExpeditions({
     required this.id,
     required this.nom,

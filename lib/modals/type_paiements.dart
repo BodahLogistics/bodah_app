@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class TypePaiements {
-  final int id;
-  final String nom;
+  int id;
+  String nom;
   TypePaiements({
     required this.id,
     required this.nom,

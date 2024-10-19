@@ -3724,12 +3724,12 @@ Future<dynamic> NewLivExp(BuildContext context, int import_id) {
                       final pay_selected = cargaisons.firstWhere(
                         (element) => element.nom == selectedType,
                         orElse: () => Cargaison(
-                            id: 0,
-                            reference: "",
-                            modele_type: "",
-                            modele_id: 0,
-                            nom: "",
-                            deleted: 0),
+                          id: 0,
+                          reference: "",
+                          modele_type: "",
+                          modele_id: 0,
+                          nom: "",
+                        ),
                       );
                       provider.change_marchandise(pay_selected);
                     }
