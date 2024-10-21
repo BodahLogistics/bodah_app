@@ -5,6 +5,7 @@ import 'package:bodah/modals/marchandises.dart';
 import 'package:bodah/modals/statut_expeditions.dart';
 import 'package:bodah/modals/villes.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/detail.dart';
+import 'package:bodah/ui/users/transporteur/expeditions/location.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ import '../../../../../modals/pays.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../../../modals/camions.dart';
+import '../../../../modals/gps.dart';
 import '../../../../modals/transporteurs.dart';
 import '../drawer/index.dart';
 
@@ -40,6 +42,7 @@ class ListTransport extends StatelessWidget {
         function.user_transporteur(user, transporteurs);
     List<Camions> camions = api_provider.camions;
     List<Users> users = api_provider.users;
+    List<Gps> gps = api_provider.gps;
 
     Future<void> refresh() async {
       await api_provider.InitTransporteurExpedition();
@@ -130,6 +133,9 @@ class ListTransport extends StatelessWidget {
                           transporteurs, data.transporteur_id);
                       Users chauffeur_user =
                           function.user(users, transporteur.user_id);
+                      Gps location =
+                          function.location(gps, chauffeur_user.id, "User");
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 0),
                         child: TextButton(
@@ -624,6 +630,79 @@ class ListTransport extends StatelessWidget {
                                                 ),
                                     ],
                                   ),
+                                  statut.id == 1 && location.id != 0
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 5),
+                                          child: SizedBox(
+                                            height: 25,
+                                            width: 150,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5))),
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                    PageRouteBuilder(
+                                                      transitionDuration:
+                                                          Duration(
+                                                              milliseconds:
+                                                                  500),
+                                                      pageBuilder: (BuildContext
+                                                              context,
+                                                          Animation<double>
+                                                              animation,
+                                                          Animation<double>
+                                                              secondaryAnimation) {
+                                                        return LocationChargement(
+                                                            chargement_id:
+                                                                data.id);
+                                                      },
+                                                      transitionsBuilder:
+                                                          (BuildContext context,
+                                                              Animation<double>
+                                                                  animation,
+                                                              Animation<double>
+                                                                  secondaryAnimation,
+                                                              Widget child) {
+                                                        return ScaleTransition(
+                                                          scale: Tween<double>(
+                                                                  begin: 0.0,
+                                                                  end: 1.0)
+                                                              .animate(
+                                                                  animation),
+                                                          child: child,
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                      size: 20,
+                                                    ),
+                                                    Text(
+                                                      "Localisation",
+                                                      style: TextStyle(
+                                                          color: MyColors.light,
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                              "Poppins"),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ),
+                                        )
+                                      : Container()
                                 ],
                               ),
                             ),

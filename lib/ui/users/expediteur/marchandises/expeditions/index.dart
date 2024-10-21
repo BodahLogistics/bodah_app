@@ -12,11 +12,15 @@ import '../../../../../colors/color.dart';
 import '../../../../../functions/function.dart';
 import '../../../../../modals/annonces.dart';
 import '../../../../../modals/expeditions.dart';
+import '../../../../../modals/gps.dart';
 import '../../../../../modals/pays.dart';
+import '../../../../../modals/statut_expeditions.dart';
+import '../../../../../modals/transporteurs.dart';
 import '../../../../../modals/users.dart';
 import '../../../../../providers/api/api_data.dart';
 import '../../drawer/index.dart';
 import '../nav_bottom/index.dart';
+import 'location.dart';
 
 class MesExpeditions extends StatelessWidget {
   const MesExpeditions({super.key});
@@ -32,6 +36,10 @@ class MesExpeditions extends StatelessWidget {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Annonces> annonces = api_provider.annonces;
+    List<Gps> gps = api_provider.gps;
+    List<Transporteurs> transporteurs = api_provider.transporteurs;
+    List<Users> users = api_provider.users;
+    List<StatutExpeditions> statuts = api_provider.statut_expeditions;
 
     Future<void> refresh() async {
       await api_provider.InitExpedition();
@@ -116,6 +124,14 @@ class MesExpeditions extends StatelessWidget {
                         function.ville(all_villes, localisation.city_exp_id);
                     Villes ville_dest =
                         function.ville(all_villes, localisation.city_liv_id);
+                    Transporteurs transporteur = function.transporteur(
+                        transporteurs, data.transporteur_id);
+                    Users chauffeur_user =
+                        function.user(users, transporteur.user_id);
+                    Gps location =
+                        function.location(gps, chauffeur_user.id, "User");
+                    StatutExpeditions statut =
+                        function.statut(statuts, data.statu_expedition_id);
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 0),
@@ -393,6 +409,73 @@ class MesExpeditions extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                statut.id == 1 && location.id != 0
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 5),
+                                        child: SizedBox(
+                                          height: 25,
+                                          width: 150,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5))),
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                  PageRouteBuilder(
+                                                    transitionDuration:
+                                                        Duration(
+                                                            milliseconds: 500),
+                                                    pageBuilder: (BuildContext
+                                                            context,
+                                                        Animation<double>
+                                                            animation,
+                                                        Animation<double>
+                                                            secondaryAnimation) {
+                                                      return LocationCamion(
+                                                          chargement_id:
+                                                              data.id);
+                                                    },
+                                                    transitionsBuilder:
+                                                        (BuildContext context,
+                                                            Animation<double>
+                                                                animation,
+                                                            Animation<double>
+                                                                secondaryAnimation,
+                                                            Widget child) {
+                                                      return ScaleTransition(
+                                                        scale: Tween<double>(
+                                                                begin: 0.0,
+                                                                end: 1.0)
+                                                            .animate(animation),
+                                                        child: child,
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.location_on,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  ),
+                                                  Text(
+                                                    "Localisation",
+                                                    style: TextStyle(
+                                                        color: MyColors.light,
+                                                        fontSize: 10,
+                                                        fontFamily: "Poppins"),
+                                                  ),
+                                                ],
+                                              )),
+                                        ),
+                                      )
+                                    : Container()
                               ],
                             ),
                           ),

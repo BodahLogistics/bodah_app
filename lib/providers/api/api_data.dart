@@ -64,6 +64,7 @@ import '../../modals/entite_factures.dart';
 import '../../modals/entreprises.dart';
 import '../../modals/expediteurs.dart';
 import '../../modals/fiche_technique.dart';
+import '../../modals/gps.dart';
 import '../../modals/info_localisation.dart';
 import '../../modals/interchanges.dart';
 import '../../modals/localisations.dart';
@@ -1198,6 +1199,9 @@ class ApiProvider with ChangeNotifier {
   List<Signatures> _signatures = [];
   List<Signatures> get signatures => _signatures;
 
+  List<Gps> _gps = [];
+  List<Gps> get gps => _gps;
+
   Future<void> InitData() async {
     _isLoading = true;
     try {
@@ -1254,6 +1258,8 @@ class ApiProvider with ChangeNotifier {
             _ordres = response_ordres;
             final response_expedition = await apiService.getExpeditions();
             _expeditions = response_expedition;
+            final response_gps = await apiService.getGps();
+            _gps = response_gps;
             final response_entite = await apiService.getEntiteFactures();
             _entite_factures = response_entite;
             final response_donneur = await apiService.getDonneurOrdres();
@@ -1273,6 +1279,8 @@ class ApiProvider with ChangeNotifier {
             final response_signature = await apiService.getSignatures();
             _signatures = response_signature;
           } else {
+            final response_gps = await apiService.getTransporteurGps();
+            _gps = response_gps;
             final response_signature =
                 await apiService.getTransporteurSignatures();
             _signatures = response_signature;
@@ -1503,6 +1511,18 @@ class ApiProvider with ChangeNotifier {
     _localisations = response_localisation;
     final response_annonce = await apiService.getAnnonces();
     _annonces = response_annonce;
+    final response_gps = await apiService.getGps();
+    _gps = response_gps;
+    final response_transporteur = await apiService.getTransporteurs();
+    _transporteurs = response_transporteur;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitGps() async {
+    _isLoading = true;
+    final response_gps = await apiService.getGps();
+    _gps = response_gps;
     _isLoading = false;
     notifyListeners();
   }
@@ -1512,6 +1532,16 @@ class ApiProvider with ChangeNotifier {
     final response_expedition = await apiService.getTransporteurExpditions();
     _expeditions = response_expedition;
     await InitTransporteurAnnonce();
+    final response_gps = await apiService.getTransporteurGps();
+    _gps = response_gps;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> InitTransporteurGps() async {
+    _isLoading = true;
+    final response_gps = await apiService.getTransporteurGps();
+    _gps = response_gps;
     _isLoading = false;
     notifyListeners();
   }

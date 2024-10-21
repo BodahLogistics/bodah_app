@@ -60,6 +60,7 @@ import '../modals/expediteurs.dart';
 import '../modals/expeditions.dart';
 import '../modals/exports.dart';
 import '../modals/fiche_technique.dart';
+import '../modals/gps.dart';
 import '../modals/import.dart';
 import '../modals/info_localisation.dart';
 import '../modals/letrre_voyage.dart';
@@ -521,8 +522,6 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print(response.statusCode);
-      print(response.body);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -1059,6 +1058,38 @@ class DBServices {
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Expeditions.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Gps>> getTransporteurGps() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/annonce/expedition/gps";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonMap = jsonDecode(response.body);
+
+        List<Gps> gpsList = [];
+
+        jsonMap.forEach((key, value) {
+          if (value is List && value.isNotEmpty) {
+            gpsList.addAll(value.map((json) => Gps.fromMap(json)).toList());
+          }
+        });
+
+        return gpsList;
       } else {
         return [];
       }
@@ -4414,6 +4445,38 @@ class DBServices {
     }
   }
 
+  Future<List<Gps>> getGps() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/expediteur/annonce/gps";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonMap = jsonDecode(response.body);
+
+        List<Gps> gpsList = [];
+
+        jsonMap.forEach((key, value) {
+          if (value is List && value.isNotEmpty) {
+            gpsList.addAll(value.map((json) => Gps.fromMap(json)).toList());
+          }
+        });
+
+        return gpsList;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<List<PaiementSolde>> getPaiementSoldes() async {
     try {
       String? token = await secure.readSecureData('token');
@@ -4778,8 +4841,6 @@ class DBServices {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print(response.body);
-
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
@@ -5048,8 +5109,6 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
-      print(response.body);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -7163,7 +7222,6 @@ class DBServices {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print(response.body);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);

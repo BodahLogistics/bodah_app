@@ -16,6 +16,7 @@ import 'package:bodah/modals/devises.dart';
 import 'package:bodah/modals/donneur_ordres.dart';
 import 'package:bodah/modals/entreprises.dart';
 import 'package:bodah/modals/exports.dart';
+import 'package:bodah/modals/gps.dart';
 import 'package:bodah/modals/info_localisation.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/lta.dart';
@@ -254,6 +255,14 @@ class Functions {
         marchandise_id: 0,
         created_at: DateTime.now(),
       ),
+    );
+  }
+
+  Gps location(List<Gps> gps, int data_id, String data_modele) {
+    return gps.firstWhere(
+      (data) =>
+          data.modele_id == data_id && data.modele_type.contains(data_modele),
+      orElse: () => Gps(id: 0, lat: 0, long: 0, modele_id: 0, modele_type: ""),
     );
   }
 
