@@ -18,6 +18,7 @@ import 'package:bodah/modals/entreprises.dart';
 import 'package:bodah/modals/exports.dart';
 import 'package:bodah/modals/gps.dart';
 import 'package:bodah/modals/info_localisation.dart';
+import 'package:bodah/modals/letrre_voyage.dart';
 import 'package:bodah/modals/livraison_cargaison.dart';
 import 'package:bodah/modals/lta.dart';
 import 'package:bodah/modals/pieces.dart';
@@ -187,6 +188,7 @@ class Functions {
     return bordereaux.firstWhere(
       (data) => data.id == id,
       orElse: () => BordereauLivraisons(
+        created_at: DateTime.now(),
         id: id,
         expedition_id: 0,
         numero_borderau: '',
@@ -1129,6 +1131,24 @@ class Functions {
         .where((data) =>
             data.modele_type.contains('Expedition') &&
             expeditionIds.contains(data.modele_id))
+        .toList();
+  }
+
+  List<LetreVoitures> expedition_contrats(
+      List<LetreVoitures> contrats, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return contrats
+        .where((data) => expeditionIds.contains(data.expedition_id))
+        .toList();
+  }
+
+  List<BordereauLivraisons> expedition_bordereaux(
+      List<BordereauLivraisons> bordereaux, List<Expeditions> expeditions) {
+    List<int> expeditionIds = expeditions.map((exp) => exp.id).toList();
+
+    return bordereaux
+        .where((data) => expeditionIds.contains(data.expedition_id))
         .toList();
   }
 

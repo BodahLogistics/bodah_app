@@ -24,6 +24,7 @@ import '../../../../../modals/destinataires.dart';
 import '../../../../../modals/entreprises.dart';
 import '../../../../../modals/expediteurs.dart';
 import '../../../../../modals/pieces.dart';
+import '../../../../../modals/signature.dart';
 import '../../../../../modals/statut_expeditions.dart';
 import '../../../../../modals/transporteurs.dart';
 
@@ -53,6 +54,7 @@ class ChargBordereaux extends StatelessWidget {
     List<Entreprises> entreprises = api_provider.entreprises;
     List<Destinataires> destinataires = api_provider.destinataires;
     List<Expediteurs> expediteurs = api_provider.expediteurs;
+    List<Signatures> signatures = api_provider.signatures;
 
     Future<void> refresh() async {
       await api_provider.InitTransporteurBordereau();
@@ -179,6 +181,14 @@ class ChargBordereaux extends StatelessWidget {
                           .marchandise_destinataire(destinataires, marchandise);
                       Users destinataire_user =
                           function.user(users, destinataire.user_id);
+                      Signatures transp_sign =
+                          function.signature(signatures, data.transp_sign_id);
+                      Signatures exped_sign =
+                          function.signature(signatures, data.dest_sign_id);
+                      Expediteurs exped = function.user_expediteur(
+                          expediteurs, destinataire_user);
+                      Entreprises dest_entreprise =
+                          function.expediteur_entreprise(entreprises, exped.id);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 0),
                         child: TextButton(
@@ -713,6 +723,7 @@ class ChargBordereaux extends StatelessWidget {
                                                       destinataire,
                                                       destinataire_user,
                                                       entreprise,
+                                                      dest_entreprise,
                                                       camion,
                                                       marchandise,
                                                       localisation,
@@ -722,7 +733,9 @@ class ChargBordereaux extends StatelessWidget {
                                                       ville_dest,
                                                       piece,
                                                       quantite,
-                                                      poids);
+                                                      poids,
+                                                      transp_sign,
+                                                      exped_sign);
                                                 },
                                                 child: Text(
                                                   "Téléchargez",

@@ -802,10 +802,10 @@ class DBServices {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Transporteurs.fromMap(json)).toList();
       } else {
-        return <Transporteurs>[];
+        return [];
       }
     } catch (error) {
-      return <Transporteurs>[];
+      return [];
     }
   }
 
@@ -1427,6 +1427,75 @@ class DBServices {
       if (response.statusCode == 200) {
         List<dynamic> jsonList = jsonDecode(response.body);
         return jsonList.map((json) => Signatures.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Destinataires>> getTransporteurDestinataire() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/destinataires";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Destinataires.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Expediteurs>> getTransporteurExpediteurs() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/expediteurs";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Expediteurs.fromMap(json)).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Entreprises>> getTransporteurEntreprises() async {
+    try {
+      String? token = await secure.readSecureData('token');
+      var url = "${api_url}home/transporteur/entreprises";
+      final uri = Uri.parse(url);
+      final response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'API-KEY': api_key,
+        'AUTH-TOKEN': auth_token
+      });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = jsonDecode(response.body);
+        return jsonList.map((json) => Entreprises.fromMap(json)).toList();
       } else {
         return [];
       }

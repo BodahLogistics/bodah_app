@@ -145,15 +145,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/bord.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -182,7 +180,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -196,7 +194,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -250,15 +248,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/ordre.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -287,7 +283,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -301,7 +297,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -363,15 +359,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/appele.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -400,7 +394,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -414,7 +408,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -468,15 +462,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/inter.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -505,7 +497,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -519,7 +511,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -581,15 +573,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/tdo.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -616,7 +606,7 @@ class DocumentChargements extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -670,15 +660,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/vgm.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -705,7 +693,7 @@ class DocumentChargements extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -767,15 +755,13 @@ class DocumentChargements extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -804,7 +790,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -818,7 +804,7 @@ class DocumentChargements extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -829,6 +815,53 @@ class DocumentChargements extends StatelessWidget {
                               )
                             ],
                           ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.49,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white.withOpacity(.70)),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyColors.secondary,
+                              ),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.receipt,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Autres",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: MyColors.textColor,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 11),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            )
+                          ],
                         ),
                       ),
                     ),

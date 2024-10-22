@@ -6,13 +6,16 @@ import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/charges.dart';
 import 'package:bodah/modals/letrre_voyage.dart';
 import 'package:bodah/modals/paiement_solde.dart';
+import 'package:bodah/modals/signature.dart';
 import 'package:bodah/modals/tarifs.dart';
+import 'package:bodah/modals/type_paiements.dart';
 import 'package:bodah/ui/auth/sign_in.dart';
 import 'package:bodah/ui/users/transporteur/drawer/index.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -66,6 +69,8 @@ class ChargContrats extends StatelessWidget {
     List<Tarif> tarifs = api_provider.tarifs;
     List<Pieces> pieces = api_provider.pieces;
     List<PaiementSolde> paiements = api_provider.paiement_soldes;
+    List<Signatures> signatures = api_provider.signatures;
+
     Future<void> refresh() async {
       await api_provider.InitTransporteurContrat();
       await api_provider.InitTransporteurExpeditionForAnnonce();
@@ -190,6 +195,8 @@ class ChargContrats extends StatelessWidget {
                               0,
                               (previousValue, data) =>
                                   previousValue + data.montant);
+                      Signatures signature =
+                          function.signature(signatures, data.signature_id);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 0),
                         child: TextButton(
@@ -730,7 +737,8 @@ class ChargContrats extends StatelessWidget {
                                                       poids,
                                                       montant,
                                                       accompte,
-                                                      solde);
+                                                      solde,
+                                                      signature);
                                                 },
                                                 child: Text(
                                                   "Téléchargez",
@@ -1343,33 +1351,36 @@ void signerContrat(BuildContext context, Expeditions data) {
 }
 
 void downloadBordereau(
-  BuildContext context,
-  Expeditions data,
-  BordereauLivraisons bordereau,
-  Transporteurs transporteur,
-  Users transporteur_user,
-  Expediteurs expediteur,
-  Users expediteur_user,
-  Destinataires destinataire,
-  Users destinataire_user,
-  Entreprises entreprise,
-  Camions camion,
-  Marchandises marchandise,
-  Localisations localisation,
-  Pays pay_depart,
-  Pays pay_livraison,
-  Villes city_depart,
-  Villes city_livraison,
-  Pieces piece,
-  String quantite,
-  String poids,
-) {
+    BuildContext context,
+    Expeditions data,
+    BordereauLivraisons bordereau,
+    Transporteurs transporteur,
+    Users transporteur_user,
+    Expediteurs expediteur,
+    Users expediteur_user,
+    Destinataires destinataire,
+    Users destinataire_user,
+    Entreprises entreprise,
+    Entreprises dest_entreprise,
+    Camions camion,
+    Marchandises marchandise,
+    Localisations localisation,
+    Pays pay_depart,
+    Pays pay_livraison,
+    Villes city_depart,
+    Villes city_livraison,
+    Pieces piece,
+    String quantite,
+    String poids,
+    Signatures transp_sign,
+    Signatures exped_sign) {
   Future.delayed(Duration(milliseconds: 500), () {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogcontext) {
         final provider = Provider.of<ProvDown>(dialogcontext);
+        final function = Provider.of<Functions>(dialogcontext);
         final api_provider = Provider.of<ApiProvider>(dialogcontext);
         Users? user = api_provider.user;
         bool affiche = provider.affiche;
@@ -1425,13 +1436,45 @@ void downloadBordereau(
                         ? null
                         : () async {
                             provider.change_affiche(true);
-                            await generateBordereau();
-                            provider.change_affiche(false);
-                            showCustomSnackBar(
-                                dialogcontext,
-                                "Le document a été généré avec succès",
-                                Colors.green);
-                            Navigator.of(dialogcontext).pop();
+
+                            if (transp_sign.id == 0 || exped_sign.id == 0) {
+                              showCustomSnackBar(
+                                  dialogcontext,
+                                  "Veuillez récharger d'abord la page",
+                                  Colors.redAccent);
+                              provider.change_affiche(false);
+                            } else {
+                              await generateBordereau(
+                                  data,
+                                  bordereau,
+                                  transporteur,
+                                  transporteur_user,
+                                  expediteur,
+                                  expediteur_user,
+                                  destinataire,
+                                  destinataire_user,
+                                  entreprise,
+                                  dest_entreprise,
+                                  camion,
+                                  marchandise,
+                                  localisation,
+                                  pay_depart,
+                                  pay_livraison,
+                                  city_depart,
+                                  city_livraison,
+                                  piece,
+                                  quantite,
+                                  poids,
+                                  transp_sign,
+                                  exped_sign,
+                                  function);
+                              provider.change_affiche(false);
+                              showCustomSnackBar(
+                                  dialogcontext,
+                                  "Le document a été généré avec succès",
+                                  Colors.green);
+                              Navigator.of(dialogcontext).pop();
+                            }
                           },
                     child: affiche
                         ? Padding(
@@ -1482,16 +1525,21 @@ void downloadContrat(
     String poids,
     double montant,
     double accompte,
-    double solde) {
+    double solde,
+    Signatures signature) {
   Future.delayed(Duration(milliseconds: 500), () {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogcontext) {
         final provider = Provider.of<ProvDown>(dialogcontext);
+        final function = Provider.of<Functions>(dialogcontext);
         final api_provider = Provider.of<ApiProvider>(dialogcontext);
         Users? user = api_provider.user;
         bool affiche = provider.affiche;
+        List<TypePaiements> types = api_provider.type_piaments;
+        TypePaiements type =
+            function.type_piament(types, data.type_paiement_id);
 
         return AlertDialog(
           backgroundColor: user!.dark_mode == 1 ? MyColors.secondDark : null,
@@ -1544,13 +1592,41 @@ void downloadContrat(
                         ? null
                         : () async {
                             provider.change_affiche(true);
-                            await generateContrat();
-                            provider.change_affiche(false);
-                            showCustomSnackBar(
-                                dialogcontext,
-                                "Le document a été généré avec succès",
-                                Colors.green);
-                            Navigator.of(dialogcontext).pop();
+                            if (signature.id == 0) {
+                              showCustomSnackBar(
+                                  dialogcontext,
+                                  "Veuillez récharger votre page et réessayer",
+                                  Colors.redAccent);
+                              provider.change_affiche(false);
+                            } else {
+                              await generateContrat(
+                                  data,
+                                  contrat,
+                                  transporteur,
+                                  transporteur_user,
+                                  camion,
+                                  marchandise,
+                                  localisation,
+                                  pay_depart,
+                                  pay_livraison,
+                                  city_depart,
+                                  city_livraison,
+                                  piece,
+                                  quantite,
+                                  poids,
+                                  montant,
+                                  accompte,
+                                  solde,
+                                  signature,
+                                  type,
+                                  function);
+                              provider.change_affiche(false);
+                              showCustomSnackBar(
+                                  dialogcontext,
+                                  "Le document a été généré avec succès",
+                                  Colors.green);
+                              Navigator.of(dialogcontext).pop();
+                            }
                           },
                     child: affiche
                         ? Padding(
@@ -1583,1331 +1659,1478 @@ void downloadContrat(
   });
 }
 
-Future<void> generateBordereau() async {
+Future<void> generateBordereau(
+    Expeditions data,
+    BordereauLivraisons bordereau,
+    Transporteurs transporteur,
+    Users transporteur_user,
+    Expediteurs expediteur,
+    Users expediteur_user,
+    Destinataires destinataire,
+    Users destinataire_user,
+    Entreprises entreprise,
+    Entreprises dest_entreprise,
+    Camions camion,
+    Marchandises marchandise,
+    Localisations localisation,
+    Pays pay_depart,
+    Pays pay_livraison,
+    Villes city_depart,
+    Villes city_livraison,
+    Pieces piece,
+    String quantite,
+    String poids,
+    Signatures trans_sign,
+    Signatures exped_sign,
+    Functions function) async {
   final pdf = pw.Document();
 
-  // Préchargement des ressources
-  final fontData = await rootBundle.load("fonts/Poppins-Regular.ttf");
-  final ttf = pw.Font.ttf(fontData);
+  try {
+    final signUrl = "https://test.bodah.bj/storage/${trans_sign.path}";
 
-  final headerImageData = await rootBundle.load('images/entete.png');
-  final footerImageData = await rootBundle.load('images/footer.png');
-  final signatureDriverData = await rootBundle.load('images/sign.png');
+    final response = await http.get(Uri.parse(signUrl));
 
-  // Convertissez les données des images en format utilisable par pw.Image
-  final headerImage = pw.MemoryImage(headerImageData.buffer.asUint8List());
-  final footerImage = pw.MemoryImage(footerImageData.buffer.asUint8List());
-  final signatureDriver =
-      pw.MemoryImage(signatureDriverData.buffer.asUint8List());
+    final ExpsignUrl = "https://test.bodah.bj/storage/${exped_sign.path}";
 
-  // Obtenir la date actuelle
-  final currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now()) +
-      " à " +
-      DateFormat('HH:mm:ss').format(DateTime.now());
+    final Expresponse = await http.get(Uri.parse(ExpsignUrl));
 
-  pdf.addPage(
-    pw.MultiPage(
-      maxPages: 100,
-      pageFormat: PdfPageFormat.a4,
-      margin: pw.EdgeInsets.all(20),
-      header: (pw.Context context) {
-        return pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Text(currentDate, style: pw.TextStyle(font: ttf, fontSize: 7)),
-            pw.Image(headerImage, height: 50),
-          ],
-        );
-      },
-      footer: (pw.Context context) {
-        return pw.Column(
-          children: [
-            pw.Text('CONFIEZ-VOUS AUX PROFESSIONNELS !',
-                style: pw.TextStyle(
-                    font: ttf, fontSize: 10, fontWeight: pw.FontWeight.bold)),
-            pw.SizedBox(height: 10),
-            pw.Image(footerImage, height: 40),
-          ],
-        );
-      },
-      build: (pw.Context context) => [
-        pw.Column(
-          children: [
-            pw.Padding(
-              padding: pw.EdgeInsets.only(top: 10),
-              child: pw.Column(
-                children: [
-                  // Section du titre et du QR code
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+    if (response.statusCode == 200 && Expresponse.statusCode == 200) {
+      final fontData = await rootBundle.load("fonts/Poppins-Regular.ttf");
+      final ttf = pw.Font.ttf(fontData);
+
+      final headerImageData = await rootBundle.load('images/entete.png');
+      final footerImageData = await rootBundle.load('images/footer.png');
+
+      final headerImage = pw.MemoryImage(headerImageData.buffer.asUint8List());
+      final footerImage = pw.MemoryImage(footerImageData.buffer.asUint8List());
+
+      final currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now()) +
+          " à " +
+          DateFormat('HH:mm:ss').format(DateTime.now());
+
+      final signatureDriver = pw.MemoryImage(response.bodyBytes);
+      final ExpsignatureDriver = pw.MemoryImage(Expresponse.bodyBytes);
+      final ref = DateFormat("yyyy").format(bordereau.created_at) +
+          " " +
+          DateFormat("MM").format(bordereau.created_at) +
+          " " +
+          DateFormat("dd").format(bordereau.created_at) +
+          " " +
+          DateFormat("HH:mm:ss").format(bordereau.created_at);
+      pdf.addPage(
+        pw.MultiPage(
+          maxPages: 100,
+          pageFormat: PdfPageFormat.a4,
+          margin: pw.EdgeInsets.all(20),
+          header: (pw.Context context) {
+            return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text(currentDate,
+                    style: pw.TextStyle(font: ttf, fontSize: 7)),
+                pw.Image(headerImage, height: 50),
+              ],
+            );
+          },
+          footer: (pw.Context context) {
+            return pw.Column(
+              children: [
+                pw.Text('CONFIEZ-VOUS AUX PROFESSIONNELS !',
+                    style: pw.TextStyle(
+                        font: ttf,
+                        fontSize: 10,
+                        fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                pw.Image(footerImage, height: 40),
+              ],
+            );
+          },
+          build: (pw.Context context) => [
+            pw.Column(
+              children: [
+                pw.Padding(
+                  padding: pw.EdgeInsets.only(top: 10),
+                  child: pw.Column(
                     children: [
-                      pw.Text(
-                        'Bordereau de livraison sécurisé N°12345'.toUpperCase(),
-                        style: pw.TextStyle(
-                            font: ttf,
-                            fontSize: 9,
-                            fontWeight: pw.FontWeight.bold),
-                        textAlign: pw.TextAlign.center,
-                      ),
-                      pw.Column(
+                      // Section du titre et du QR code
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
-                          pw.BarcodeWidget(
-                            barcode: pw.Barcode.qrCode(),
-                            data: 'https://example.com',
-                            width: 60,
-                            height: 60,
-                          ),
-                          pw.SizedBox(height: 2),
-                          pw.Text('Scannez ici pour authentifier le document',
-                              style: pw.TextStyle(font: ttf, fontSize: 3)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  pw.SizedBox(height: 10),
-
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(7), // 20% largeur
-                      1: pw.FlexColumnWidth(1), // 50% largeur
-                      2: pw.FlexColumnWidth(2), // 30% largeur
-                    },
-                    children: [
-                      pw.TableRow(
-                        decoration: pw.BoxDecoration(
-                          color: PdfColors.orange, // Couleur d'en-tête
-                        ),
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Text(
-                              'TRANSPORTEUR',
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 10,
-                                color: PdfColors.black,
-                              ),
-                              textAlign: pw.TextAlign.left,
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                'DATE',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                '2024-10-15',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.white,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: [
-                      'Entreprise',
-                      'IFU',
-                      'Adresse',
-                      'Tél',
-                      'Email',
-                      'Date'
-                    ],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                      5: pw.Alignment.center,
-                    },
-                    data: [
-                      [
-                        'BODAH LOGISTICS SARL',
-                        '32 02 32 27 30 95 2',
-                        'RNIE1, Godomey, Abomey-Calavi, Bénin',
-                        '+229 20 22 60 42',
-                        'info@bodah.bj',
-                        '14-10-2024'
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                  ),
-
-                  pw.SizedBox(height: 10),
-
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.orange,
-                    ),
-                    padding: const pw.EdgeInsets.all(5),
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text(
-                      "EXPEDITEUR/CAD/TRANSITAIRE",
-                      style: pw.TextStyle(
-                          font: ttf,
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
-                          color: PdfColors.black),
-                    ),
-                  ),
-
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: ['Entreprise', 'IFU', 'Adresse', 'Tél', 'Email'],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                    },
-                    data: [
-                      [
-                        'STL BENIN',
-                        '32 02 32 27 30 95 2',
-                        'RNIE1, Godomey, Abomey-Calavi, Bénin',
-                        '+229 20 22 60 42',
-                        'info@bodah.bj',
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                  ),
-
-                  pw.SizedBox(height: 10),
-
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(6), // 20% largeur
-                      1: pw.FlexColumnWidth(1.5), // 50% largeur
-                      2: pw.FlexColumnWidth(2.5), // 30% largeur
-                    },
-                    children: [
-                      pw.TableRow(
-                        decoration: pw.BoxDecoration(
-                          color: PdfColors.orange, // Couleur d'en-tête
-                        ),
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Text(
-                              'MARCHANDISE',
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 10,
-                                color: PdfColors.black,
-                              ),
-                              textAlign: pw.TextAlign.left,
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                'N° SUIVI',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                '1025EXP5263BL41',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.white,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: [
-                      "Référence",
-                      'Nature',
-                      'Quantité',
-                      'Poids',
-                      'Lieu de chargement',
-                      'Date de chargement',
-                      'Lieu de livraison',
-                      'Date de livraison'
-                    ],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 7, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    data: [
-                      [
-                        '12563CA12',
-                        'Riz',
-                        '400 Sacs',
-                        '500 Tonnes',
-                        'Port autonome,Cotonou,Bénin',
-                        '2024-12-12',
-                        'Port autonome,Lomé,Togo',
-                        '2024-12-14'
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 7, // Taille de police pour les cellules
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                      5: pw.Alignment.center,
-                      6: pw.Alignment.center,
-                      7: pw.Alignment.center,
-                    },
-                  ),
-                  pw.SizedBox(height: 10),
-
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(6), // 20% largeur
-                      1: pw.FlexColumnWidth(1.5), // 50% largeur
-                      2: pw.FlexColumnWidth(2.5), // 30% largeur
-                    },
-                    children: [
-                      pw.TableRow(
-                        decoration: pw.BoxDecoration(
-                          color: PdfColors.orange, // Couleur d'en-tête
-                        ),
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Text(
-                              'CONDUCTEUR',
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 10,
-                                color: PdfColors.black,
-                              ),
-                              textAlign: pw.TextAlign.left,
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                'IDENTIFIANT',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.white,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(5),
-                            child: pw.Center(
-                              child: pw.Text(
-                                '1025EXP5263BL41',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: [
-                      'Nom',
-                      'N° Permis',
-                      'N° Camion',
-                      'Adresse',
-                      'Tel',
-                      'Email'
-                    ],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    data: [
-                      [
-                        'Romarick Didier',
-                        '12563CA12',
-                        'BJ45212/BJ45263',
-                        'Abomey-Calavi',
-                        '*229 98653232',
-                        'John@gmail.com'
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                      5: pw.Alignment.center,
-                    },
-                  ),
-
-                  pw.SizedBox(height: 10),
-
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.orange,
-                    ),
-                    padding: const pw.EdgeInsets.all(5),
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text(
-                      "DESTINATAIRE",
-                      style: pw.TextStyle(
-                          font: ttf,
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
-                          color: PdfColors.black),
-                    ),
-                  ),
-
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: [
-                      'Entreprise',
-                      'IFU',
-                      'Adresse',
-                      'Tél',
-                      'Email',
-                    ],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                    },
-                    data: [
-                      [
-                        'BOA UAC',
-                        '32 02 32 27 30 95 2',
-                        'RNIE1, Godomey, Abomey-Calavi, Bénin',
-                        '+229 20 22 60 42',
-                        'info@bodah.bj',
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                  ),
-
-                  pw.SizedBox(height: 20),
-
-                  // Section de Règlement (Termes)
-                  pw.Container(
-                    width: double
-                        .infinity, // Pour prendre toute la largeur disponible
-                    padding: const pw.EdgeInsets.all(7),
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(color: PdfColors.black, width: 1),
-                    ),
-                    child: pw.Text(
-                      "Observations particulières",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          font: ttf,
-                          fontSize: 8,
-                          color: PdfColors.black),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                  ),
-
-                  pw.Container(
-                    width: double.infinity,
-                    padding: const pw.EdgeInsets.all(7),
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(color: PdfColors.black, width: 1),
-                    ),
-                    child: pw.Text(
-                      "En l'absence de convention écrite ou de déclaration de valeur par le Donneur d'Ordre",
-                      maxLines: 10,
-                      overflow: pw.TextOverflow.visible,
-                      style: pw.TextStyle(
-                          font: ttf, fontSize: 7, color: PdfColors.red),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                  ),
-
-                  pw.SizedBox(height: 20),
-
-                  // Signature section (avec les images préchargées)
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                    children: [
-                      pw.Column(
-                        children: [
-                          pw.Text("CONDUCTEUR",
-                              style: pw.TextStyle(
-                                  font: ttf,
-                                  fontSize: 12,
-                                  fontWeight: pw.FontWeight.bold,
-                                  color: PdfColors.black)),
-                          pw.SizedBox(height: 0),
-                          pw.Image(signatureDriver, width: 80, height: 70),
-                          pw.SizedBox(height: 10),
-                          pw.Text('John Doe'),
-                        ],
-                      ),
-                      pw.Column(
-                        children: [
-                          pw.Text("DESTINATAIRE",
-                              style: pw.TextStyle(
-                                  font: ttf,
-                                  fontSize: 12,
-                                  fontWeight: pw.FontWeight.bold,
-                                  color: PdfColors.black)),
-                          pw.SizedBox(height: 0),
-                          pw.Image(signatureDriver, width: 80, height: 70),
-                          pw.SizedBox(height: 10),
-                          pw.Text('Maxwell Lord'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-
-  final current = DateFormat('yyyy-MM-dd').format(DateTime.now()) +
-      "_" +
-      DateFormat('HH-mm-ss').format(DateTime.now());
-  String fileName = "borcereau_livraison_sécurisée_$current.pdf";
-  final output = await getExternalStorageDirectory();
-  final file = File("${output!.path}/$fileName");
-  await file.writeAsBytes(await pdf.save());
-
-  await OpenFile.open(file.path);
-}
-
-Future<void> generateContrat() async {
-  final pdf = pw.Document();
-
-  // Préchargement des ressources
-  final fontData = await rootBundle.load("fonts/Poppins-Regular.ttf");
-  final ttf = pw.Font.ttf(fontData);
-
-  final headerImageData = await rootBundle.load('images/entete.png');
-  final footerImageData = await rootBundle.load('images/footer.png');
-  final signatureDriverData = await rootBundle.load('images/sign.png');
-  final signatureBodahData = await rootBundle.load('images/bodah.jpg');
-  final transpImageData =
-      await rootBundle.load('images/maxwell.jpg'); // Image supplémentaire
-
-  // Convertissez les données des images en format utilisable par pw.Image
-  final headerImage = pw.MemoryImage(headerImageData.buffer.asUint8List());
-  final footerImage = pw.MemoryImage(footerImageData.buffer.asUint8List());
-  final signatureDriver =
-      pw.MemoryImage(signatureDriverData.buffer.asUint8List());
-  final signatureBodah =
-      pw.MemoryImage(signatureBodahData.buffer.asUint8List());
-  final transpImage = pw.MemoryImage(transpImageData.buffer.asUint8List());
-
-  // Obtenir la date actuelle
-  final currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now()) +
-      " à " +
-      DateFormat('HH:mm:ss').format(DateTime.now());
-
-  pdf.addPage(
-    pw.MultiPage(
-      maxPages: 100,
-      pageFormat: PdfPageFormat.a4,
-      margin: pw.EdgeInsets.all(20),
-      header: (pw.Context context) {
-        return pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Text(currentDate, style: pw.TextStyle(font: ttf, fontSize: 7)),
-            pw.Image(headerImage, height: 50),
-          ],
-        );
-      },
-      footer: (pw.Context context) {
-        return pw.Column(
-          children: [
-            pw.Text('CONFIEZ-VOUS AUX PROFESSIONNELS !',
-                style: pw.TextStyle(
-                    font: ttf, fontSize: 10, fontWeight: pw.FontWeight.bold)),
-            pw.SizedBox(height: 10),
-            pw.Image(footerImage, height: 40),
-          ],
-        );
-      },
-      build: (pw.Context context) => [
-        pw.Column(
-          children: [
-            pw.Padding(
-              padding: pw.EdgeInsets.only(top: 10),
-              child: pw.Column(
-                children: [
-                  // Section du titre et du QR code
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [
-                      pw.Image(transpImage, width: 60, height: 65),
-                      pw.Expanded(
-                        child: pw.Center(
-                          child: pw.Text(
-                            'Lettre de voiture sécurisée N°12345'.toUpperCase(),
+                          pw.Text(
+                            'Bordereau de livraison sécurisé ${bordereau.numero_borderau}'
+                                .toUpperCase(),
                             style: pw.TextStyle(
                                 font: ttf,
                                 fontSize: 9,
                                 fontWeight: pw.FontWeight.bold),
                             textAlign: pw.TextAlign.center,
                           ),
+                          pw.Column(
+                            children: [
+                              pw.BarcodeWidget(
+                                barcode: pw.Barcode.qrCode(),
+                                data: entreprise.id != 0
+                                    ? "${bordereau.numero_borderau} ${dest_entreprise.name} ${transporteur_user.name} $ref"
+                                    : "${bordereau.numero_borderau} ${destinataire_user.name} ${transporteur_user.name} $ref",
+                                width: 60,
+                                height: 60,
+                              ),
+                              pw.SizedBox(height: 2),
+                              pw.Text(
+                                  'Scannez ici pour authentifier le document',
+                                  style: pw.TextStyle(font: ttf, fontSize: 3)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      pw.SizedBox(height: 10),
+
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(7), // 20% largeur
+                          1: pw.FlexColumnWidth(1), // 50% largeur
+                          2: pw.FlexColumnWidth(2), // 30% largeur
+                        },
+                        children: [
+                          pw.TableRow(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.orange, // Couleur d'en-tête
+                            ),
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Text(
+                                  'TRANSPORTEUR',
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 10,
+                                    color: PdfColors.black,
+                                  ),
+                                  textAlign: pw.TextAlign.left,
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    'DATE',
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 10,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    function.date(bordereau.created_at),
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 8,
+                                      color: PdfColors.white,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: [
+                          'Entreprise',
+                          'IFU',
+                          'Adresse',
+                          'Tél',
+                          'Email',
+                          'Date'
+                        ],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                          5: pw.Alignment.center,
+                        },
+                        data: [
+                          [
+                            'BODAH LOGISTICS SARL',
+                            '32 02 32 27 30 95 2',
+                            'RNIE1, Godomey, Abomey-Calavi, Bénin',
+                            '+229 20 22 60 42',
+                            'info@bodah.bj',
+                            '14-10-2024'
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
                         ),
                       ),
-                      pw.Column(
+
+                      pw.SizedBox(height: 10),
+
+                      pw.Container(
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.orange,
+                        ),
+                        padding: const pw.EdgeInsets.all(5),
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          "EXPEDITEUR/CAD/TRANSITAIRE",
+                          style: pw.TextStyle(
+                              font: ttf,
+                              fontSize: 12,
+                              fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.black),
+                        ),
+                      ),
+
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: ['Nom', 'IFU', 'Adresse', 'Tél', 'Email'],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                        },
+                        data: [
+                          [
+                            entreprise.id != 0
+                                ? entreprise.name
+                                : expediteur_user.name,
+                            entreprise.id != 0
+                                ? entreprise.ifu ?? "----"
+                                : "---",
+                            expediteur_user.adresse ?? "---",
+                            expediteur_user.telephone,
+                            expediteur_user.email ?? "----"
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 10),
+
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(6), // 20% largeur
+                          1: pw.FlexColumnWidth(1.5), // 50% largeur
+                          2: pw.FlexColumnWidth(2.5), // 30% largeur
+                        },
                         children: [
-                          pw.BarcodeWidget(
-                            barcode: pw.Barcode.qrCode(),
-                            data: 'https://example.com',
-                            width: 60,
-                            height: 60,
+                          pw.TableRow(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.orange, // Couleur d'en-tête
+                            ),
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Text(
+                                  'MARCHANDISE',
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 10,
+                                    color: PdfColors.black,
+                                  ),
+                                  textAlign: pw.TextAlign.left,
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    'N° SUIVI',
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 10,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    data.numero_expedition,
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 8,
+                                      color: PdfColors.white,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          pw.SizedBox(height: 2),
-                          pw.Text('Scannez ici pour authentifier le document',
-                              style: pw.TextStyle(font: ttf, fontSize: 3)),
+                        ],
+                      ),
+
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: [
+                          "Référence",
+                          'Nature',
+                          'Quantité',
+                          'Poids',
+                          'Lieu de chargement',
+                          'Date de chargement',
+                          'Lieu de livraison',
+                          'Date de livraison'
+                        ],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 7, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        data: [
+                          [
+                            marchandise.numero_marchandise,
+                            marchandise.nom,
+                            quantite,
+                            poids,
+                            localisation.address_exp != null
+                                ? "${localisation.address_exp} , ${city_depart.name}, ${pay_depart.name}"
+                                : "${city_depart.name} , ${pay_depart.name}",
+                            function.date(data.date_depart),
+                            localisation.address_liv != null
+                                ? "${localisation.address_liv} , ${city_livraison.name}, ${pay_livraison.name}"
+                                : "${city_livraison.name} , ${pay_livraison.name}",
+                            function.date(data.date_arrivee)
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 6, // Taille de police pour les cellules
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                          5: pw.Alignment.center,
+                          6: pw.Alignment.center,
+                          7: pw.Alignment.center,
+                        },
+                      ),
+                      pw.SizedBox(height: 10),
+
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(6), // 20% largeur
+                          1: pw.FlexColumnWidth(1.5), // 50% largeur
+                          2: pw.FlexColumnWidth(2.5), // 30% largeur
+                        },
+                        children: [
+                          pw.TableRow(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.orange, // Couleur d'en-tête
+                            ),
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Text(
+                                  'CONDUCTEUR',
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 10,
+                                    color: PdfColors.black,
+                                  ),
+                                  textAlign: pw.TextAlign.left,
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    'IDENTIFIANT',
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 10,
+                                      color: PdfColors.white,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    transporteur.numero_transporteur,
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: [
+                          'Nom',
+                          'N° Permis',
+                          'N° Camion',
+                          'Adresse',
+                          'Tel',
+                          'Email'
+                        ],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        data: [
+                          [
+                            transporteur_user.name,
+                            piece.num_piece,
+                            camion.num_immatriculation,
+                            transporteur_user.adresse ?? "---",
+                            transporteur_user.telephone,
+                            transporteur_user.email ?? "---"
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                          5: pw.Alignment.center,
+                        },
+                      ),
+
+                      pw.SizedBox(height: 10),
+
+                      pw.Container(
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.orange,
+                        ),
+                        padding: const pw.EdgeInsets.all(5),
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          "DESTINATAIRE",
+                          style: pw.TextStyle(
+                              font: ttf,
+                              fontSize: 12,
+                              fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.black),
+                        ),
+                      ),
+
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: [
+                          'Entreprise',
+                          'IFU',
+                          'Adresse',
+                          'Tél',
+                          'Email',
+                        ],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                        },
+                        data: [
+                          [
+                            dest_entreprise.id != 0
+                                ? dest_entreprise.name
+                                : destinataire_user.name,
+                            dest_entreprise.id != 0
+                                ? dest_entreprise.ifu ?? "----"
+                                : "---",
+                            destinataire_user.adresse ?? "---",
+                            destinataire_user.telephone,
+                            destinataire_user.email ?? "----"
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 20),
+
+                      // Section de Règlement (Termes)
+                      pw.Container(
+                        width: double
+                            .infinity, // Pour prendre toute la largeur disponible
+                        padding: const pw.EdgeInsets.all(7),
+                        decoration: pw.BoxDecoration(
+                          border:
+                              pw.Border.all(color: PdfColors.black, width: 1),
+                        ),
+                        child: pw.Text(
+                          "Observations particulières",
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              fontSize: 8,
+                              color: PdfColors.black),
+                          textAlign: pw.TextAlign.center,
+                        ),
+                      ),
+
+                      pw.Container(
+                        width: double.infinity,
+                        padding: const pw.EdgeInsets.all(7),
+                        decoration: pw.BoxDecoration(
+                          border:
+                              pw.Border.all(color: PdfColors.black, width: 1),
+                        ),
+                        child: pw.Text(
+                          data.obs ?? "Néant",
+                          maxLines: 10,
+                          overflow: pw.TextOverflow.visible,
+                          style: pw.TextStyle(
+                              font: ttf, fontSize: 7, color: PdfColors.red),
+                          textAlign: pw.TextAlign.center,
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 20),
+
+                      // Signature section (avec les images préchargées)
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                        children: [
+                          pw.Column(
+                            children: [
+                              pw.Text("CONDUCTEUR",
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                              pw.SizedBox(height: 0),
+                              pw.Image(signatureDriver, width: 80, height: 70),
+                              pw.SizedBox(height: 10),
+                              pw.Text(transporteur_user.name,
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                            ],
+                          ),
+                          pw.Column(
+                            children: [
+                              dest_entreprise.id != 0
+                                  ? pw.Text(dest_entreprise.name,
+                                      style: pw.TextStyle(
+                                          font: ttf,
+                                          fontSize: 12,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: PdfColors.black))
+                                  : pw.Text("DESTINATAIRE",
+                                      style: pw.TextStyle(
+                                          font: ttf,
+                                          fontSize: 12,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: PdfColors.black)),
+                              pw.SizedBox(height: 0),
+                              pw.Image(ExpsignatureDriver,
+                                  width: 80, height: 70),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                  bordereau.representant ??
+                                      destinataire_user.name,
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                            ],
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  pw.SizedBox(height: 10),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
 
-                  // Section du nom de la société
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.orange,
-                    ),
-                    padding: const pw.EdgeInsets.all(5),
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text(
-                      'BODAH LOGISTICS',
-                      style: pw.TextStyle(
-                          font: ttf,
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
-                          color: PdfColors.black),
-                    ),
-                  ),
+      final current = DateFormat('yyyy-MM-dd').format(DateTime.now()) +
+          "_" +
+          DateFormat('HH-mm-ss').format(DateTime.now());
+      String fileName = "borcereau_livraison_sécurisée_$current.pdf";
+      final output = await getExternalStorageDirectory();
+      final file = File("${output!.path}/$fileName");
+      await file.writeAsBytes(await pdf.save());
 
-                  // Tableau 1
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: ['IFU', 'Adresse', 'Tél', 'Email', 'Date'],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    cellAlignments: {
-                      0: pw.Alignment.center,
-                      1: pw.Alignment.center,
-                      2: pw.Alignment.center,
-                      3: pw.Alignment.center,
-                      4: pw.Alignment.center,
-                      5: pw.Alignment.center,
-                    },
-                    data: [
-                      [
-                        '32 02 32 27 30 95 2',
-                        'RNIE1, Godomey, Abomey-Calavi, Bénin',
-                        '+229 20 22 60 42',
-                        'info@bodah.bj',
-                        '14-10-2024'
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                  ),
+      await OpenFile.open(file.path);
+    }
+  } catch (e) {}
+}
 
-                  pw.SizedBox(height: 10),
+Future<void> generateContrat(
+    Expeditions data,
+    LetreVoitures contrat,
+    Transporteurs transporteur,
+    Users transporteur_user,
+    Camions camion,
+    Marchandises marchandise,
+    Localisations localisation,
+    Pays pay_depart,
+    Pays pay_livraison,
+    Villes city_depart,
+    Villes city_livraison,
+    Pieces piece,
+    String quantite,
+    String poids,
+    double montant,
+    double accompte,
+    double solde,
+    Signatures signature,
+    TypePaiements type_paiement,
+    Functions function) async {
+  final pdf = pw.Document();
+  try {
+    final signUrl = "https://test.bodah.bj/storage/${signature.path}";
 
-                  pw.Container(
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text('Donne ordre au conducteur ci-dessous:',
-                        textAlign: pw.TextAlign.start,
-                        style: pw.TextStyle(
-                            font: ttf, fontSize: 12, color: PdfColors.green)),
-                  ),
-                  pw.SizedBox(height: 5),
+    final response = await http.get(Uri.parse(signUrl));
+    final transpData = await rootBundle.load('images/user.png');
+    var transpImage = pw.MemoryImage(transpData.buffer.asUint8List());
 
-                  // Tableau 2
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(2), // 20% largeur
-                      1: pw.FlexColumnWidth(5), // 50% largeur
-                      2: pw.FlexColumnWidth(3), // 30% largeur
-                    },
+    if (response.statusCode == 200) {
+      final signatureDriver = pw.MemoryImage(response.bodyBytes);
+      final fontData = await rootBundle.load("fonts/Poppins-Regular.ttf");
+      final ttf = pw.Font.ttf(fontData);
+
+      if (transporteur.photo_url != null) {
+        final transpUrl =
+            "https://test.bodah.bj/storage/${transporteur.photo_url}";
+        final responseTransp = await http.get(Uri.parse(transpUrl));
+
+        if (responseTransp.statusCode == 200) {
+          transpImage = pw.MemoryImage(responseTransp.bodyBytes);
+        }
+      }
+
+      final headerImageData = await rootBundle.load('images/entete.png');
+      final footerImageData = await rootBundle.load('images/footer.png');
+      final signatureBodahData = await rootBundle.load('images/bodah.jpg');
+
+      // Convertissez les données des images en format utilisable par pw.Image
+      final headerImage = pw.MemoryImage(headerImageData.buffer.asUint8List());
+      final footerImage = pw.MemoryImage(footerImageData.buffer.asUint8List());
+      final signatureBodah =
+          pw.MemoryImage(signatureBodahData.buffer.asUint8List());
+
+      final currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now()) +
+          " à " +
+          DateFormat('HH:mm:ss').format(DateTime.now());
+      final ref = DateFormat("yyyy").format(contrat.created_at) +
+          " " +
+          DateFormat("MM").format(contrat.created_at) +
+          " " +
+          DateFormat("dd").format(contrat.created_at) +
+          " " +
+          DateFormat("HH:mm:ss").format(contrat.created_at);
+
+      pdf.addPage(
+        pw.MultiPage(
+          maxPages: 100,
+          pageFormat: PdfPageFormat.a4,
+          margin: pw.EdgeInsets.all(20),
+          header: (pw.Context context) {
+            return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text(currentDate,
+                    style: pw.TextStyle(font: ttf, fontSize: 7)),
+                pw.Image(headerImage, height: 50),
+              ],
+            );
+          },
+          footer: (pw.Context context) {
+            return pw.Column(
+              children: [
+                pw.Text('CONFIEZ-VOUS AUX PROFESSIONNELS !',
+                    style: pw.TextStyle(
+                        font: ttf,
+                        fontSize: 10,
+                        fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                pw.Image(footerImage, height: 40),
+              ],
+            );
+          },
+          build: (pw.Context context) => [
+            pw.Column(
+              children: [
+                pw.Padding(
+                  padding: pw.EdgeInsets.only(top: 10),
+                  child: pw.Column(
                     children: [
-                      pw.TableRow(
-                        decoration: pw.BoxDecoration(
-                          color: PdfColors.orange, // Couleur d'en-tête
-                        ),
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
+                          pw.Image(transpImage, width: 60, height: 65),
+                          pw.Expanded(
                             child: pw.Center(
                               child: pw.Text(
-                                'CONDUCTEUR',
+                                'Lettre de voiture sécurisée ${contrat.reference}'
+                                    .toUpperCase(),
                                 style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
+                                    font: ttf,
+                                    fontSize: 9,
+                                    fontWeight: pw.FontWeight.bold),
                                 textAlign: pw.TextAlign.center,
                               ),
                             ),
                           ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                'John Doe', // Valeurs statiques pour exemple
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 8,
-                                  color: PdfColors.white,
-                                ),
-                                textAlign: pw.TextAlign.center,
+                          pw.Column(
+                            children: [
+                              pw.BarcodeWidget(
+                                barcode: pw.Barcode.qrCode(),
+                                data:
+                                    "${contrat.reference} ${transporteur_user.name} $ref",
+                                width: 60,
+                                height: 60,
                               ),
-                            ),
+                              pw.SizedBox(height: 2),
+                              pw.Text(
+                                  'Scannez ici pour authentifier le document',
+                                  style: pw.TextStyle(font: ttf, fontSize: 3)),
+                            ],
                           ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Column(
-                                children: [
-                                  pw.Text(
-                                    'REFERENCE',
+                        ],
+                      ),
+                      pw.SizedBox(height: 10),
+
+                      // Section du nom de la société
+                      pw.Container(
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.orange,
+                        ),
+                        padding: const pw.EdgeInsets.all(5),
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          'BODAH LOGISTICS',
+                          style: pw.TextStyle(
+                              font: ttf,
+                              fontSize: 12,
+                              fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.black),
+                        ),
+                      ),
+
+                      // Tableau 1
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: ['IFU', 'Adresse', 'Tél', 'Email', 'Date'],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                          4: pw.Alignment.center,
+                          5: pw.Alignment.center,
+                        },
+                        data: [
+                          [
+                            '32 02 32 27 30 95 2',
+                            'RNIE1, Godomey, Abomey-Calavi, Bénin',
+                            '+229 20 22 60 42',
+                            'info@bodah.bj',
+                            '14-10-2024'
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 10),
+
+                      pw.Container(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text('Donne ordre au conducteur ci-dessous:',
+                            textAlign: pw.TextAlign.start,
+                            style: pw.TextStyle(
+                                font: ttf,
+                                fontSize: 10,
+                                color: PdfColors.green)),
+                      ),
+                      pw.SizedBox(height: 5),
+
+                      // Tableau 2
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(2), // 20% largeur
+                          1: pw.FlexColumnWidth(5), // 50% largeur
+                          2: pw.FlexColumnWidth(3), // 30% largeur
+                        },
+                        children: [
+                          pw.TableRow(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.orange, // Couleur d'en-tête
+                            ),
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    'CONDUCTEUR',
                                     style: pw.TextStyle(
                                       fontWeight: pw.FontWeight.bold,
                                       fontSize: 10,
+                                      color: PdfColors.black,
                                     ),
                                     textAlign: pw.TextAlign.center,
                                   ),
-                                  pw.SizedBox(height: 2),
-                                  pw.Container(
-                                    height: 1,
-                                    color: PdfColors
-                                        .black, // Petite ligne sous le texte
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    transporteur_user.name,
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 8,
+                                      color: PdfColors.white,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
                                   ),
-                                  pw.SizedBox(height: 2),
-                                  pw.Text(
-                                    '123456789', // Référence statique
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(5),
+                                child: pw.Center(
+                                  child: pw.Column(
+                                    children: [
+                                      pw.Text(
+                                        'REFERENCE',
+                                        style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold,
+                                          fontSize: 10,
+                                        ),
+                                        textAlign: pw.TextAlign.center,
+                                      ),
+                                      pw.SizedBox(height: 2),
+                                      pw.Container(
+                                        height: 1,
+                                        color: PdfColors
+                                            .black, // Petite ligne sous le texte
+                                      ),
+                                      pw.SizedBox(height: 2),
+                                      pw.Text(
+                                        transporteur.numero_transporteur,
+                                        style: pw.TextStyle(
+                                          fontSize: 8,
+                                          color: PdfColors.white,
+                                        ),
+                                        textAlign: pw.TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      pw.Table.fromTextArray(
+                        border: pw.TableBorder.all(),
+                        headers: [
+                          'N° Permis',
+                          'N° Camion',
+                          'Adresse',
+                          'Tel',
+                          'Email'
+                        ],
+                        headerStyle: pw.TextStyle(
+                          font: ttf, // Police
+                          fontSize: 10, // Taille de police
+                          fontWeight: pw.FontWeight.bold, // En gras
+                          color:
+                              PdfColors.black, // Couleur du texte des en-têtes
+                        ),
+                        data: [
+                          [
+                            piece.num_piece,
+                            camion.num_immatriculation,
+                            transporteur_user.adresse ?? "---",
+                            transporteur_user.telephone,
+                            transporteur_user.email ?? "----"
+                          ]
+                        ],
+                        cellStyle: pw.TextStyle(
+                          font: ttf, // Police pour le contenu
+                          fontSize: 8, // Taille de police pour les cellules
+                        ),
+                        cellAlignments: {
+                          0: pw.Alignment
+                              .center, // Centrer la colonne 0 (N° Permis)
+                          1: pw.Alignment
+                              .center, // Centrer la colonne 1 (N° Camion)
+                          2: pw.Alignment
+                              .center, // Centrer la colonne 2 (Adresse)
+                          3: pw.Alignment.center, // Centrer la colonne 3 (Tel)
+                          4: pw
+                              .Alignment.center, // Centrer la colonne 4 (Email)
+                        },
+                      ),
+
+                      pw.SizedBox(height: 10),
+
+                      pw.Container(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text('De charger la marchandise ci-dessous:',
+                            textAlign: pw.TextAlign.start,
+                            style: pw.TextStyle(
+                                font: ttf,
+                                fontSize: 10,
+                                color: PdfColors.green)),
+                      ),
+                      pw.SizedBox(height: 5),
+
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(2), // 20% largeur
+                          1: pw.FlexColumnWidth(3), // 50% largeur
+                          2: pw.FlexColumnWidth(2), // 30% largeur
+                          3: pw.FlexColumnWidth(3),
+                        },
+                        children: [
+                          pw.TableRow(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.orange, // Couleur d'en-tête
+                            ),
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    "Objet du contrat",
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 10,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    "Transport de marchandise", // Valeurs statiques pour exemple
                                     style: pw.TextStyle(
                                       fontSize: 8,
                                       color: PdfColors.white,
                                     ),
                                     textAlign: pw.TextAlign.center,
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    "Réglement",
+                                    style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 10,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    type_paiement.nom,
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.white,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
 
-                  pw.Table.fromTextArray(
-                    border: pw.TableBorder.all(),
-                    headers: [
-                      'N° Permis',
-                      'N° Camion',
-                      'Adresse',
-                      'Tel',
-                      'Email'
-                    ],
-                    headerStyle: pw.TextStyle(
-                      font: ttf, // Police
-                      fontSize: 10, // Taille de police
-                      fontWeight: pw.FontWeight.bold, // En gras
-                      color: PdfColors.black, // Couleur du texte des en-têtes
-                    ),
-                    data: [
-                      [
-                        '12563CA12',
-                        'BJ45212/BJ45263',
-                        'Abomey-Calavi',
-                        '*229 98653232',
-                        'John@gmail.com'
-                      ]
-                    ],
-                    cellStyle: pw.TextStyle(
-                      font: ttf, // Police pour le contenu
-                      fontSize: 8, // Taille de police pour les cellules
-                    ),
-                    cellAlignments: {
-                      0: pw
-                          .Alignment.center, // Centrer la colonne 0 (N° Permis)
-                      1: pw
-                          .Alignment.center, // Centrer la colonne 1 (N° Camion)
-                      2: pw.Alignment.center, // Centrer la colonne 2 (Adresse)
-                      3: pw.Alignment.center, // Centrer la colonne 3 (Tel)
-                      4: pw.Alignment.center, // Centrer la colonne 4 (Email)
-                    },
-                  ),
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(1.9), // 20% largeur
+                          1: pw.FlexColumnWidth(2.7), // 50% largeur
+                          2: pw.FlexColumnWidth(1), // 30% largeur
+                          3: pw.FlexColumnWidth(1.3),
+                          4: pw.FlexColumnWidth(1.1),
+                          5: pw.FlexColumnWidth(2),
+                        },
+                        children: [
+                          pw.TableRow(
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Référence",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    marchandise.numero_marchandise,
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Nature",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    marchandise.nom,
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Tarif",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    function.formatAmount(montant) + " XOF",
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
 
-                  pw.SizedBox(height: 10),
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(1.9), // 20% largeur
+                          1: pw.FlexColumnWidth(2.7), // 50% largeur
+                          2: pw.FlexColumnWidth(1), // 30% largeur
+                          3: pw.FlexColumnWidth(1.3),
+                          4: pw.FlexColumnWidth(1.1),
+                          5: pw.FlexColumnWidth(2),
+                        },
+                        children: [
+                          pw.TableRow(
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Lieu de chargement",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    localisation.address_exp != null
+                                        ? "${localisation.address_exp} , ${city_depart.name}, ${pay_depart.name}"
+                                        : "${city_depart.name} , ${pay_depart.name}",
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Quantité",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    quantite,
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Accompte",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    function.formatAmount(accompte) + " XOF",
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(1.9), // 20% largeur
+                          1: pw.FlexColumnWidth(2.7), // 50% largeur
+                          2: pw.FlexColumnWidth(1), // 30% largeur
+                          3: pw.FlexColumnWidth(1.3),
+                          4: pw.FlexColumnWidth(1.1),
+                          5: pw.FlexColumnWidth(2),
+                        },
+                        children: [
+                          pw.TableRow(
+                            children: [
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Lieu de livraison",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    localisation.address_liv != null
+                                        ? "${localisation.address_liv} , ${city_livraison.name}, ${pay_livraison.name}"
+                                        : "${city_livraison.name} , ${pay_livraison.name}",
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Poids",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    poids,
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Text(
+                                  "Solde",
+                                  style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                    color: PdfColors.black,
+                                  ),
+                                ),
+                              ),
+                              pw.Padding(
+                                padding: pw.EdgeInsets.all(8),
+                                child: pw.Center(
+                                  child: pw.Text(
+                                    function.formatAmount(solde) + " XOF",
+                                    style: pw.TextStyle(
+                                      fontSize: 8,
+                                      color: PdfColors.black,
+                                    ),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
 
-                  pw.Container(
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text('De charger la marchandise ci-dessous:',
-                        textAlign: pw.TextAlign.start,
-                        style: pw.TextStyle(
-                            font: ttf, fontSize: 12, color: PdfColors.green)),
-                  ),
-                  pw.SizedBox(height: 5),
+                      pw.SizedBox(height: 20),
 
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(2), // 20% largeur
-                      1: pw.FlexColumnWidth(3), // 50% largeur
-                      2: pw.FlexColumnWidth(2), // 30% largeur
-                      3: pw.FlexColumnWidth(3),
-                    },
-                    children: [
-                      pw.TableRow(
+                      // Section de Règlement (Termes)
+                      pw.Container(
+                        width: double
+                            .infinity, // Pour prendre toute la largeur disponible
+                        padding: const pw.EdgeInsets.all(7),
                         decoration: pw.BoxDecoration(
-                          color: PdfColors.orange, // Couleur d'en-tête
+                          border:
+                              pw.Border.all(color: PdfColors.black, width: 1),
                         ),
+                        child: pw.Text(
+                          "ENGAGEMENT",
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              fontSize: 8,
+                              color: PdfColors.black),
+                          textAlign: pw.TextAlign.center,
+                        ),
+                      ),
+
+                      pw.Container(
+                        width: double.infinity,
+                        padding: const pw.EdgeInsets.all(7),
+                        decoration: pw.BoxDecoration(
+                          border:
+                              pw.Border.all(color: PdfColors.black, width: 1),
+                        ),
+                        child: pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text(
+                              "En l'absence de convention écrite ou de déclaration de valeur par le Donneur d'Ordre, la responsabilité du conducteur en cas de perte, avarie ou retard de livraison est limitée à l'indemnité prévue par le contrat type.",
+                              maxLines: 10,
+                              overflow: pw.TextOverflow.visible,
+                              style: pw.TextStyle(font: ttf, fontSize: 7),
+                              textAlign: pw.TextAlign.justify,
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Text(
+                              "Le conducteur du camion de transport déclare avoir parfaite connaissance de la réglementation en vigueur applicable au transport et à la manutention des marchandises et notamment celles concernant le transport du riz",
+                              maxLines: 10,
+                              overflow: pw.TextOverflow.visible,
+                              style: pw.TextStyle(font: ttf, fontSize: 7),
+                              textAlign: pw.TextAlign.justify,
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Text(
+                              maxLines: 10,
+                              overflow: pw.TextOverflow.visible,
+                              "Le conducteur du camion de transport reconnait expressément avoir toutes les autorisations requises pour exercer son activité.",
+                              style: pw.TextStyle(font: ttf, fontSize: 7),
+                              textAlign: pw.TextAlign.justify,
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Text(
+                              maxLines: 5,
+                              overflow: pw.TextOverflow.visible,
+                              "En cas de non renouvellement de son agrément ou d’arrêt d’activité pour quelques raisons que se soient, il en informera immédiatement son client.",
+                              style: pw.TextStyle(font: ttf, fontSize: 7),
+                              textAlign: pw.TextAlign.justify,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 20),
+
+                      // Signature section (avec les images préchargées)
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                         children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Objet du contrat",
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
+                          pw.Column(
+                            children: [
+                              pw.Text("CONDUCTEUR",
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                              pw.SizedBox(height: 0),
+                              pw.Image(signatureDriver, width: 80, height: 70),
+                              pw.SizedBox(height: 10),
+                              pw.Text(transporteur_user.name,
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                            ],
                           ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Transport de marchandise", // Valeurs statiques pour exemple
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.white,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Réglement",
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Transport Mobile Money", // Valeurs statiques pour exemple
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
+                          pw.Column(
+                            children: [
+                              pw.Text("BODAH LOGISTICS",
+                                  style: pw.TextStyle(
+                                      font: ttf,
+                                      fontSize: 12,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black)),
+                              pw.SizedBox(height: 0),
+                              pw.Image(signatureBodah, width: 80, height: 60),
+                              pw.SizedBox(height: 10),
+                              pw.Text('Massaoudy TROUCOU'),
+                            ],
                           ),
                         ],
                       ),
                     ],
                   ),
-
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(1.9), // 20% largeur
-                      1: pw.FlexColumnWidth(2.7), // 50% largeur
-                      2: pw.FlexColumnWidth(1), // 30% largeur
-                      3: pw.FlexColumnWidth(1.3),
-                      4: pw.FlexColumnWidth(1.1),
-                      5: pw.FlexColumnWidth(2),
-                    },
-                    children: [
-                      pw.TableRow(
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Référence",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "05MDGHHB5263526",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Nature",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Riz",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Tarif",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "25 0000,00 XOF",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(1.9), // 20% largeur
-                      1: pw.FlexColumnWidth(2.7), // 50% largeur
-                      2: pw.FlexColumnWidth(1), // 30% largeur
-                      3: pw.FlexColumnWidth(1.3),
-                      4: pw.FlexColumnWidth(1.1),
-                      5: pw.FlexColumnWidth(2),
-                    },
-                    children: [
-                      pw.TableRow(
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Lieu de chargement",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Port , Cotonou, Bénin",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Quantité",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "2500 Sacs",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Accompte",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "25 0000,00 XOF",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FlexColumnWidth(1.9), // 20% largeur
-                      1: pw.FlexColumnWidth(2.7), // 50% largeur
-                      2: pw.FlexColumnWidth(1), // 30% largeur
-                      3: pw.FlexColumnWidth(1.3),
-                      4: pw.FlexColumnWidth(1.1),
-                      5: pw.FlexColumnWidth(2),
-                    },
-                    children: [
-                      pw.TableRow(
-                        children: [
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Lieu de livraison",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "Port, Lomé, Togo",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Poids",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "50 Tonnes",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Text(
-                              "Solde",
-                              style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 9,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ),
-                          pw.Padding(
-                            padding: pw.EdgeInsets.all(8),
-                            child: pw.Center(
-                              child: pw.Text(
-                                "25 0000,00 XOF",
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  color: PdfColors.black,
-                                ),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  pw.SizedBox(height: 20),
-
-                  // Section de Règlement (Termes)
-                  pw.Container(
-                    width: double
-                        .infinity, // Pour prendre toute la largeur disponible
-                    padding: const pw.EdgeInsets.all(7),
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(color: PdfColors.black, width: 1),
-                    ),
-                    child: pw.Text(
-                      "ENGAGEMENT",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          font: ttf,
-                          fontSize: 8,
-                          color: PdfColors.black),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                  ),
-
-                  pw.Container(
-                    width: double.infinity,
-                    padding: const pw.EdgeInsets.all(7),
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(color: PdfColors.black, width: 1),
-                    ),
-                    child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text(
-                          "En l'absence de convention écrite ou de déclaration de valeur par le Donneur d'Ordre, la responsabilité du conducteur en cas de perte, avarie ou retard de livraison est limitée à l'indemnité prévue par le contrat type.",
-                          maxLines: 10,
-                          overflow: pw.TextOverflow.visible,
-                          style: pw.TextStyle(font: ttf, fontSize: 7),
-                          textAlign: pw.TextAlign.justify,
-                        ),
-                        pw.SizedBox(height: 5),
-                        pw.Text(
-                          "Le conducteur du camion de transport déclare avoir parfaite connaissance de la réglementation en vigueur applicable au transport et à la manutention des marchandises et notamment celles concernant le transport du riz",
-                          maxLines: 10,
-                          overflow: pw.TextOverflow.visible,
-                          style: pw.TextStyle(font: ttf, fontSize: 7),
-                          textAlign: pw.TextAlign.justify,
-                        ),
-                        pw.SizedBox(height: 5),
-                        pw.Text(
-                          maxLines: 10,
-                          overflow: pw.TextOverflow.visible,
-                          "Le conducteur du camion de transport reconnait expressément avoir toutes les autorisations requises pour exercer son activité.",
-                          style: pw.TextStyle(font: ttf, fontSize: 7),
-                          textAlign: pw.TextAlign.justify,
-                        ),
-                        pw.SizedBox(height: 5),
-                        pw.Text(
-                          maxLines: 5,
-                          overflow: pw.TextOverflow.visible,
-                          "En cas de non renouvellement de son agrément ou d’arrêt d’activité pour quelques raisons que se soient, il en informera immédiatement son client.",
-                          style: pw.TextStyle(font: ttf, fontSize: 7),
-                          textAlign: pw.TextAlign.justify,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  pw.SizedBox(height: 20),
-
-                  // Signature section (avec les images préchargées)
-                  pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                    children: [
-                      pw.Column(
-                        children: [
-                          pw.Text("CONDUCTEUR",
-                              style: pw.TextStyle(
-                                  font: ttf,
-                                  fontSize: 12,
-                                  fontWeight: pw.FontWeight.bold,
-                                  color: PdfColors.black)),
-                          pw.SizedBox(height: 0),
-                          pw.Image(signatureDriver, width: 80, height: 70),
-                          pw.SizedBox(height: 10),
-                          pw.Text('John Doe'),
-                        ],
-                      ),
-                      pw.Column(
-                        children: [
-                          pw.Text("BODAH LOGISTICS",
-                              style: pw.TextStyle(
-                                  font: ttf,
-                                  fontSize: 12,
-                                  fontWeight: pw.FontWeight.bold,
-                                  color: PdfColors.black)),
-                          pw.SizedBox(height: 0),
-                          pw.Image(signatureBodah, width: 80, height: 60),
-                          pw.SizedBox(height: 10),
-                          pw.Text('Massaoudy TROUCOU'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
-    ),
-  );
+      );
 
-  final current = DateFormat('yyyy-MM-dd').format(DateTime.now()) +
-      "_" +
-      DateFormat('HH-mm-ss').format(DateTime.now());
-  String fileName = "lettre_voiture_sécurisée_$current.pdf";
-  final output = await getExternalStorageDirectory();
-  final file = File("${output!.path}/$fileName");
-  await file.writeAsBytes(await pdf.save());
+      final current = DateFormat('yyyy-MM-dd').format(DateTime.now()) +
+          "_" +
+          DateFormat('HH-mm-ss').format(DateTime.now());
+      String fileName = "lettre_voiture_sécurisée_$current.pdf";
+      final output = await getExternalStorageDirectory();
+      final file = File("${output!.path}/$fileName");
+      await file.writeAsBytes(await pdf.save());
 
-  await OpenFile.open(file.path);
+      await OpenFile.open(file.path);
+    }
+  } catch (e) {}
 }

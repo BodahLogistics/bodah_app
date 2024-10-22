@@ -176,15 +176,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/bord.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -213,7 +211,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -227,7 +225,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -260,15 +258,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/ordre.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -299,7 +295,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -315,7 +311,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -377,15 +373,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/appele.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -414,7 +408,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -428,7 +422,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -482,15 +476,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/inter.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -519,7 +511,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -533,7 +525,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -595,15 +587,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/tdo.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -630,7 +620,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -684,15 +674,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/vgm.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -719,7 +707,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -781,15 +769,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/recu.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -816,7 +802,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -870,15 +856,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -907,7 +891,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -921,7 +905,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -983,15 +967,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/recu.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1018,7 +1000,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -1072,15 +1054,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1107,7 +1087,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -1169,15 +1149,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/recu.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1204,7 +1182,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -1258,15 +1236,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1295,7 +1271,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -1309,7 +1285,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -1371,15 +1347,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/recu.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1408,7 +1382,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -1422,7 +1396,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -1476,15 +1450,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1511,7 +1483,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -1573,15 +1545,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/recu.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1608,7 +1578,7 @@ class MesDocuments extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.green,
+                                            color: MyColors.textColor,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11),
@@ -1662,15 +1632,13 @@ class MesDocuments extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MyColors.textColor.withOpacity(.75),
+                                  color: MyColors.secondary,
                                 ),
                                 child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                      "images/fact.png",
-                                      scale: 2.5,
-                                      fit: BoxFit.cover,
-                                      height: 20,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.receipt,
+                                      color: Colors.white,
                                     )),
                               ),
                               SizedBox(
@@ -1699,7 +1667,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),
@@ -1713,7 +1681,7 @@ class MesDocuments extends StatelessWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: MyColors.textColor,
                                                 fontFamily: "Poppins",
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 11),

@@ -1313,6 +1313,15 @@ class ApiProvider with ChangeNotifier {
             _chauffeurs = response_chauffeurs;
             final response_users = await apiService.getUsers();
             _users = response_users;
+            final response_destinataire =
+                await apiService.getTransporteurDestinataire();
+            _destinataires = response_destinataire;
+            final response_entreprise =
+                await apiService.getTransporteurEntreprises();
+            _entreprises = response_entreprise;
+            final response_expediteur =
+                await apiService.getTransporteurExpediteurs();
+            _expediteurs = response_expediteur;
             final response_piece = await apiService.getTransporteurPieces();
             _pieces = response_piece;
             final response_marchandise =
@@ -1515,6 +1524,8 @@ class ApiProvider with ChangeNotifier {
     _gps = response_gps;
     final response_transporteur = await apiService.getTransporteurs();
     _transporteurs = response_transporteur;
+    final response_statuts = await apiService.getStatutExpeditions();
+    _statut_expeditions = response_statuts;
     _isLoading = false;
     notifyListeners();
   }
@@ -1534,6 +1545,22 @@ class ApiProvider with ChangeNotifier {
     await InitTransporteurAnnonce();
     final response_gps = await apiService.getTransporteurGps();
     _gps = response_gps;
+    final response_statuts = await apiService.getStatutExpeditions();
+    _statut_expeditions = response_statuts;
+    final response_piece = await apiService.getTransporteurPieces();
+    _pieces = response_piece;
+    final response_transporteur = await apiService.getTransporteur();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getTransporteurCamions();
+    _camions = response_camions;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
+    final response_charge = await apiService.getTransporteurCharge();
+    _charges = response_charge;
+    final response_all_villes = await apiService.getAllVilles();
+    _all_villes = response_all_villes;
+    final response_type_pay = await apiService.getTypePaiements();
+    _type_paiements = response_type_pay;
     _isLoading = false;
     notifyListeners();
   }
@@ -1638,7 +1665,6 @@ class ApiProvider with ChangeNotifier {
     _fiche_techniques = response_fiche_technique;
     final response_import_ordre = await apiService.getImportOrdre();
     _import_ordres = response_import_ordre;
-
     _isLoading = false;
     notifyListeners();
   }
@@ -1659,7 +1685,19 @@ class ApiProvider with ChangeNotifier {
     _interchanges = response_interchange;
     final response_contrat = await apiService.getTransporteurContrat();
     _contrats = response_contrat;
-
+    final response_signature = await apiService.getTransporteurSignatures();
+    _signatures = response_signature;
+    final response_destinataire =
+        await apiService.getTransporteurDestinataire();
+    _destinataires = response_destinataire;
+    final response_entreprise = await apiService.getTransporteurEntreprises();
+    _entreprises = response_entreprise;
+    final response_expediteur = await apiService.getTransporteurExpediteurs();
+    _expediteurs = response_expediteur;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
+    final response_charge = await apiService.getTransporteurCharge();
+    _charges = response_charge;
     _isLoading = false;
     notifyListeners();
   }
@@ -1670,6 +1708,20 @@ class ApiProvider with ChangeNotifier {
     _contrats = response_contrat;
     final response_signature = await apiService.getTransporteurSignatures();
     _signatures = response_signature;
+    final response_localisation = await apiService.getLocalisations();
+    _localisations = response_localisation;
+    final response_type_pay = await apiService.getTypePaiements();
+    _type_paiements = response_type_pay;
+    final response_piece = await apiService.getTransporteurPieces();
+    _pieces = response_piece;
+    final response_transporteur = await apiService.getTransporteur();
+    _transporteurs = response_transporteur;
+    final response_camions = await apiService.getTransporteurCamions();
+    _camions = response_camions;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
+    final response_charge = await apiService.getTransporteurCharge();
+    _charges = response_charge;
     _isLoading = false;
     notifyListeners();
   }
@@ -1720,6 +1772,15 @@ class ApiProvider with ChangeNotifier {
     _bordereaux = response_bordereaux;
     final response_signature = await apiService.getTransporteurSignatures();
     _signatures = response_signature;
+    final response_destinataire =
+        await apiService.getTransporteurDestinataire();
+    _destinataires = response_destinataire;
+    final response_entreprise = await apiService.getTransporteurEntreprises();
+    _entreprises = response_entreprise;
+    final response_expediteur = await apiService.getTransporteurExpediteurs();
+    _expediteurs = response_expediteur;
+    final response_users = await apiService.getUsers();
+    _users = response_users;
     _isLoading = false;
     notifyListeners();
   }

@@ -8,6 +8,7 @@ class BordereauLivraisons {
   int? transp_sign_id;
   String? representant;
   int? dest_sign_id;
+  DateTime created_at;
   BordereauLivraisons({
     required this.id,
     required this.numero_borderau,
@@ -15,6 +16,7 @@ class BordereauLivraisons {
     this.transp_sign_id,
     this.representant,
     this.dest_sign_id,
+    required this.created_at,
   });
 
   BordereauLivraisons copyWith({
@@ -24,6 +26,7 @@ class BordereauLivraisons {
     int? transp_sign_id,
     String? representant,
     int? dest_sign_id,
+    DateTime? created_at,
   }) {
     return BordereauLivraisons(
       id: id ?? this.id,
@@ -32,6 +35,7 @@ class BordereauLivraisons {
       transp_sign_id: transp_sign_id ?? this.transp_sign_id,
       representant: representant ?? this.representant,
       dest_sign_id: dest_sign_id ?? this.dest_sign_id,
+      created_at: created_at ?? this.created_at,
     );
   }
 
@@ -43,6 +47,7 @@ class BordereauLivraisons {
       'transp_sign_id': transp_sign_id,
       'representant': representant,
       'dest_sign_id': dest_sign_id,
+      'created_at': created_at.millisecondsSinceEpoch,
     };
   }
 
@@ -57,6 +62,7 @@ class BordereauLivraisons {
           map['representant'] != null ? map['representant'] as String : null,
       dest_sign_id:
           map['dest_sign_id'] != null ? map['dest_sign_id'] as int : null,
+      created_at: DateTime.parse(map['created_at'] as String),
     );
   }
 
@@ -67,7 +73,7 @@ class BordereauLivraisons {
 
   @override
   String toString() {
-    return 'BordereauLivraisons(id: $id, numero_borderau: $numero_borderau, expedition_id: $expedition_id, transp_sign_id: $transp_sign_id, representant: $representant, dest_sign_id: $dest_sign_id)';
+    return 'BordereauLivraisons(id: $id, numero_borderau: $numero_borderau, expedition_id: $expedition_id, transp_sign_id: $transp_sign_id, representant: $representant, dest_sign_id: $dest_sign_id, created_at: $created_at)';
   }
 
   @override
@@ -79,7 +85,8 @@ class BordereauLivraisons {
         other.expedition_id == expedition_id &&
         other.transp_sign_id == transp_sign_id &&
         other.representant == representant &&
-        other.dest_sign_id == dest_sign_id;
+        other.dest_sign_id == dest_sign_id &&
+        other.created_at == created_at;
   }
 
   @override
@@ -89,6 +96,7 @@ class BordereauLivraisons {
         expedition_id.hashCode ^
         transp_sign_id.hashCode ^
         representant.hashCode ^
-        dest_sign_id.hashCode;
+        dest_sign_id.hashCode ^
+        created_at.hashCode;
   }
 }
