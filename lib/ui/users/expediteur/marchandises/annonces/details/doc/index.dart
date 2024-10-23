@@ -23,7 +23,6 @@ import '../../../../../../../modals/interchanges.dart';
 import '../../../../../../../modals/lta.dart';
 import '../../../../../../../modals/recus.dart';
 import '../../../../../../../modals/tdos.dart';
-import '../../../../../../../modals/users.dart';
 import '../../../../../../../modals/vgms.dart';
 import '../../../../../../../providers/api/api_data.dart';
 import '../../../../../transporteur/annonces/details/docs/index.dart';
@@ -37,7 +36,7 @@ class ListDocAnnonce extends StatelessWidget {
   Widget build(BuildContext context) {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
-    Users? user = api_provider.user;
+
     List<Expeditions> expeditions = api_provider.expeditions;
     expeditions = function.annonce_expeditions(expeditions, annonce);
     List<Appeles> appeles = api_provider.appeles;
@@ -133,7 +132,7 @@ class ListDocAnnonce extends StatelessWidget {
                                 ? Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "Aucune intercganges",
+                                      "Aucune interchange",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -148,7 +147,7 @@ class ListDocAnnonce extends StatelessWidget {
                                         alignment: Alignment.center,
                                         child: Text(
                                           interchanges.length.toString() +
-                                              " interchanges",
+                                              " interchange",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -357,7 +356,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (tdos.isNotEmpty) {
+                          showTdo(context, annonce.id, "Annonce", tdos);
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -429,7 +432,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (bfus.isNotEmpty) {
+                          showBfu(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -493,7 +500,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (cos.isNotEmpty) {
+                          showCo(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -581,7 +592,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (vgms.isNotEmpty) {
+                          showVgm(context, annonce.id, "Annonce", vgms);
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -611,7 +626,7 @@ class ListDocAnnonce extends StatelessWidget {
                                 ? Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "Aucune VGM",
+                                      "Aucun VGM",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -645,7 +660,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (bls.isNotEmpty) {
+                          showBl(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -747,7 +766,7 @@ class ListDocAnnonce extends StatelessWidget {
                                 ? Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "Aucune AVD",
+                                      "Aucun AVD",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -781,7 +800,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (cps.isNotEmpty) {
+                          showCps(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -869,7 +892,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (appeles.isNotEmpty) {
+                          showApeles(context, annonce.id, "Annonce", appeles);
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -899,7 +926,7 @@ class ListDocAnnonce extends StatelessWidget {
                                 ? Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "Aucune appélé",
+                                      "Aucun appélé",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -948,7 +975,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (declarations.isNotEmpty) {
+                          showDecla(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -1033,7 +1064,11 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (autre_docs.isNotEmpty) {
+                          showAutreDoc(context, annonce.id, "Annonce");
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -1113,7 +1148,34 @@ class ListDocAnnonce extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (ordre.id > 0) {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 500),
+                              pageBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation) {
+                                return DetailOrdre(
+                                  id: ordre.id,
+                                );
+                              },
+                              transitionsBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -1139,7 +1201,7 @@ class ListDocAnnonce extends StatelessWidget {
                             SizedBox(
                               height: 15,
                             ),
-                            ordres.isEmpty
+                            ordre.id == 0
                                 ? Container(
                                     alignment: Alignment.center,
                                     child: Text(
@@ -1156,8 +1218,7 @@ class ListDocAnnonce extends StatelessWidget {
                                 : Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      (ordres.length).toString() +
-                                          " ordre de transport",
+                                      "1 ordre de transport",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -1188,7 +1249,7 @@ class ListDocAnnonce extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         if (bordereaux.isNotEmpty) {
-                          showBordereaux(context, bordereaux);
+                          showBordereauxExpediteur(context, bordereaux);
                         }
                       },
                       child: Container(
@@ -1269,631 +1330,71 @@ class ListDocAnnonce extends StatelessWidget {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.47,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(.70)),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: MyColors.secondary,
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.receipt,
-                                  color: Colors.white,
-                                )),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              " Autres",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: MyColors.textColor,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 11),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
                     child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       onPressed: () {
                         if (ltas.isNotEmpty) {
                           showLta(context, annonce.id, "Annonce");
                         }
                       },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "LTA",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: ltas.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          ltas.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (tdos.isNotEmpty) {
-                          showTdo(context, annonce.id, "Annonce", tdos);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "TDO",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: tdos.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          tdos.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (ordre.id > 0) {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 500),
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return DetailOrdre(
-                                  id: ordre.id,
-                                );
-                              },
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "Ordre de transport",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: ordre.id > 0
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          ordre.id == 0
-                              ? Icon(
-                                  Icons.add,
-                                  size: 20,
-                                  color: user!.dark_mode == 1
-                                      ? MyColors.light
-                                      : MyColors.black,
-                                )
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (bfus.isNotEmpty) {
-                          showBfu(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "BFU",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: bfus.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          bfus.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (cos.isNotEmpty) {
-                          showCo(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          cos.length < 2
-                              ? Flexible(
-                                  child: Text(
-                                    "Certificat d'origine",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 8,
-                                        color: cos.isNotEmpty
-                                            ? Colors.green
-                                            : user!.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )
-                              : Flexible(
-                                  child: Text(
-                                    "Certificat d'origines",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 9,
-                                        color: Colors.green,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                          cos.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (vgms.isNotEmpty) {
-                          showVgm(context, annonce.id, "Annonce", vgms);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "VGM",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: vgms.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          vgms.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (bls.isNotEmpty) {
-                          showBl(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "BL",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: bls.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          bls.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (avds.isNotEmpty) {
-                          showAvd(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "AVD",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: avds.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          avds.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.23,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (cps.isNotEmpty) {
-                          showCps(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          cps.length < 2
-                              ? Flexible(
-                                  child: Text(
-                                    "Certificat Phyto-sanitaire",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 8,
-                                        color: cps.isNotEmpty
-                                            ? Colors.green
-                                            : user!.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )
-                              : Flexible(
-                                  child: Text(
-                                    "Certificat phyto-sanitaires",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 9,
-                                        color: Colors.green,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                          cps.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (appeles.isNotEmpty) {
-                          showApeles(context, annonce.id, "Annonce", appeles);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          appeles.length < 2
-                              ? Flexible(
-                                  child: Text(
-                                    "Appélé",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 8,
-                                        color: appeles.isNotEmpty
-                                            ? Colors.green
-                                            : user!.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )
-                              : Flexible(
-                                  child: Text(
-                                    "Appélés",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 9,
-                                        color: Colors.green,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                          appeles.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (declarations.isNotEmpty) {
-                          showDecla(context, annonce.id, "Annonce");
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          declarations.length < 2
-                              ? Flexible(
-                                  child: Text(
-                                    "Déclaration",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 8,
-                                        color: declarations.isNotEmpty
-                                            ? Colors.green
-                                            : user!.dark_mode == 1
-                                                ? MyColors.light
-                                                : MyColors.black,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )
-                              : Flexible(
-                                  child: Text(
-                                    "Déclarations",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 9,
-                                        color: Colors.green,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                          declarations.isEmpty
-                              ? Container()
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () {
-                          if (autre_docs.isNotEmpty) {
-                            showAutreDoc(context, annonce.id, "Annonce");
-                          }
-                        },
-                        child: Row(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white.withOpacity(.70)),
+                        child: Column(
                           children: [
-                            Flexible(
-                              child: Text(
-                                "Autre document",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    color: ltas.isNotEmpty
-                                        ? Colors.green
-                                        : user!.dark_mode == 1
-                                            ? MyColors.light
-                                            : MyColors.black,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500),
-                              ),
+                            SizedBox(
+                              height: 10,
                             ),
-                            autre_docs.isEmpty
-                                ? Container()
-                                : Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 20,
-                                    color: Colors.green,
+                            Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyColors.secondary,
+                              ),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.receipt,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            ltas.isEmpty
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Aucun LTA",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      (ltas.length).toString() + " LTA",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: MyColors.textColor,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11),
+                                    ),
                                   ),
+                            SizedBox(
+                              height: 15,
+                            )
                           ],
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

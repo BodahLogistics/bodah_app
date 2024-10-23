@@ -5,7 +5,9 @@ import 'package:bodah/modals/annonces.dart';
 import 'package:bodah/modals/bordereau_livraisons.dart';
 import 'package:bodah/modals/expeditions.dart';
 import 'package:bodah/modals/letrre_voyage.dart';
+import 'package:bodah/modals/souscriptions.dart';
 import 'package:bodah/modals/tarifications.dart';
+import 'package:bodah/modals/transport_liaison.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +42,8 @@ class HomeTransporteur extends StatelessWidget {
     List<Pays> pays = api_provider.pays;
     List<Villes> all_villes = api_provider.all_villes;
     List<Tarifications> tarifications = api_provider.tarifications;
-
+    List<Souscriptions> souscriptions = api_provider.souscriptions;
+    List<TransportLiaisons> chauffeurs = api_provider.chauffeurs;
     Future<void> refresh() async {
       await api_provider.InitTransporteurAnnonce();
     }
@@ -60,76 +63,57 @@ class HomeTransporteur extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
                         color: user!.dark_mode == 1
-                            ? MyColors.textColor
-                            : function
-                                .convertHexToColor("#00000040")
-                                .withOpacity(.10)),
+                            ? null
+                            : Colors.white.withOpacity(.8)),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 7,
+                          height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.check_circle_outline,
-                                  color: MyColors.secondary,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              expeditions.length.toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: MyColors.secondary,
-                                fontSize: 14,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    color: MyColors.secondary,
-                                    width: 5,
-                                    height: 10,
-                                  )),
-                            ),
-                          ],
+                        Text(
+                          "${expeditions.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(
+                              Icons.location_on,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
                           child: Text(
-                            "Mes Transports",
+                            "Transports éffectués",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                color: MyColors.secondary,
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11),
+                                fontSize: 8),
                           ),
                         ),
                         SizedBox(
@@ -144,57 +128,43 @@ class HomeTransporteur extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: MyColors.secondary.withOpacity(.10)),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
+                        color: user.dark_mode == 1
+                            ? null
+                            : Colors.white.withOpacity(.8)),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 7,
+                          height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.receipt,
-                                  color: MyColors.primary,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              bordereaux.length.toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: MyColors.primary,
-                                fontSize: 14,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    color: MyColors.primary,
-                                    width: 5,
-                                    height: 10,
-                                  )),
-                            ),
-                          ],
+                        Text(
+                          "${bordereaux.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.receipt,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -203,10 +173,12 @@ class HomeTransporteur extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                color: MyColors.primary,
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11),
+                                fontSize: 8),
                           ),
                         ),
                         SizedBox(
@@ -215,7 +187,7 @@ class HomeTransporteur extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
             SizedBox(
@@ -229,72 +201,57 @@ class HomeTransporteur extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: MyColors.primary),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
+                        color: user.dark_mode == 1
+                            ? null
+                            : Colors.white.withOpacity(.8)),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 7,
+                          height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.receipt,
-                                  color: MyColors.primary,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              contrats.length.toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: MyColors.light,
-                                fontSize: 14,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    color: Colors.green,
-                                    width: 5,
-                                    height: 10,
-                                  )),
-                            ),
-                          ],
+                        Text(
+                          "${contrats.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(
+                              Icons.email,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
                           child: Text(
-                            "Lettres de voiture",
+                            "Lettre de voiture",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                color: MyColors.light,
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11),
+                                fontSize: 8),
                           ),
                         ),
                         SizedBox(
@@ -309,69 +266,57 @@ class HomeTransporteur extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: MyColors.secondary),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
+                        color: user.dark_mode == 1
+                            ? null
+                            : Colors.white.withOpacity(.8)),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 7,
+                          height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.route,
-                                  color: MyColors.secondary,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              trajets.length.toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: MyColors.light,
-                                fontSize: 14,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    color: MyColors.secondary,
-                                    width: 5,
-                                    height: 10,
-                                  )),
-                            ),
-                          ],
+                        Text(
+                          "${trajets.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.route,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
                           child: Text(
-                            "Mes Trajets",
+                            "Trajets publiés",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                color: MyColors.light,
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11),
+                                fontSize: 8),
                           ),
                         ),
                         SizedBox(
@@ -380,7 +325,145 @@ class HomeTransporteur extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
+                        color: user.dark_mode == 1
+                            ? null
+                            : Colors.white.withOpacity(.8)),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "${souscriptions.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(
+                              Icons.subscriptions,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Souscriptions",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: MyColors.textColor,
+                            width: .5,
+                            style: BorderStyle.solid),
+                        color: user.dark_mode == 1
+                            ? null
+                            : Colors.white.withOpacity(.8)),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "${chauffeurs.length}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: user.dark_mode == 1
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 25,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.people_alt,
+                              color: user.dark_mode == 1
+                                  ? Colors.white
+                                  : MyColors.secondary,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Chauffeurs",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: user.dark_mode == 1
+                                    ? Colors.white
+                                    : MyColors.textColor,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             annonces.isNotEmpty

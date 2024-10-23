@@ -72,87 +72,6 @@ class DrawerExpediteur extends StatelessWidget {
             padding: const EdgeInsets.only(top: 25),
             child: ListTile(
               onTap: () {
-                provider.change_index(2);
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500),
-                    pageBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation) {
-                      return DashMarchExp();
-                    },
-                    transitionsBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation,
-                        Widget child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              },
-              leading: Icon(
-                FontAwesomeIcons.truck,
-                color: current_index == 2
-                    ? Colors.white
-                    : user.dark_mode == 1
-                        ? MyColors.light
-                        : null,
-              ),
-              tileColor: current_index == 2 ? MyColors.secondary : null,
-              title: Text(
-                "Envoi de marchandise",
-                style: TextStyle(
-                    fontSize: 12,
-                    color: current_index == 2
-                        ? Colors.white
-                        : user.dark_mode == 1
-                            ? MyColors.light
-                            : function.convertHexToColor("#222523"),
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              provider.change_index(1);
-            },
-            leading: Icon(
-              FontAwesomeIcons.box,
-              color: current_index == 1
-                  ? Colors.white
-                  : user.dark_mode == 1
-                      ? MyColors.light
-                      : null,
-            ),
-            tileColor: current_index == 1 ? MyColors.secondary : null,
-            title: Text(
-              "Envoi de colis",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: current_index == 1
-                      ? Colors.white
-                      : user.dark_mode == 1
-                          ? MyColors.light
-                          : function.convertHexToColor("#222523"),
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.w400),
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: ListTile(
-              onTap: () {
                 provider.change_index(0);
                 Navigator.of(context).pushReplacement(
                   PageRouteBuilder(
@@ -169,7 +88,7 @@ class DrawerExpediteur extends StatelessWidget {
                 );
               },
               leading: Icon(
-                Icons.dashboard,
+                Icons.home,
                 color: current_index == 0
                     ? Colors.white
                     : user.dark_mode == 1
@@ -239,6 +158,61 @@ class DrawerExpediteur extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
           ),
+          SizedBox(
+            height: 8,
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: ListTile(
+              onTap: () {
+                provider.change_index(2);
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return DashMarchExp();
+                    },
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.dashboard,
+                color: current_index == 2
+                    ? Colors.white
+                    : user.dark_mode == 1
+                        ? MyColors.light
+                        : null,
+              ),
+              tileColor: current_index == 2 ? MyColors.secondary : null,
+              title: Text(
+                "Dashboard",
+                style: TextStyle(
+                    fontSize: 12,
+                    color: current_index == 2
+                        ? Colors.white
+                        : user.dark_mode == 1
+                            ? MyColors.light
+                            : function.convertHexToColor("#222523"),
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
           ListTile(
             onTap: () {
               provider.change_index(11);
@@ -266,7 +240,7 @@ class DrawerExpediteur extends StatelessWidget {
               );
             },
             leading: Icon(
-              Icons.check_circle_outline,
+              Icons.location_on,
               color: current_index == 11
                   ? Colors.white
                   : user.dark_mode == 1
@@ -314,7 +288,7 @@ class DrawerExpediteur extends StatelessWidget {
               );
             },
             leading: Icon(
-              Icons.local_shipping,
+              Icons.inventory_2,
               color: current_index == 4
                   ? Colors.white
                   : user.dark_mode == 1

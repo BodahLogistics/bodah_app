@@ -40,7 +40,6 @@ class ListDocuments extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final api_provider = Provider.of<ApiProvider>(context);
 
-    Users? user = api_provider.user;
     List<Appeles> appeles = api_provider.appeles;
     appeles = function.data_appeles(appeles, data_id, data_modele);
     List<Interchanges> interchanges = api_provider.interchanges;
@@ -82,18 +81,20 @@ class ListDocuments extends StatelessWidget {
     return RefreshIndicator(
       color: MyColors.secondary,
       onRefresh: refresh,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SizedBox(
+              height: 30,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (interchanges.isNotEmpty) {
                         showInterchanges(
@@ -102,60 +103,85 @@ class ListDocuments extends StatelessWidget {
                         NewInter(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
-                      children: [
-                        interchanges.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Interchange",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: interchanges.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Interchanges",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        interchanges.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          interchanges.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucune interchange",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : interchanges.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        interchanges.length.toString() +
+                                            " interchange",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        interchanges.length.toString() +
+                                            " interchanges",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (recus.isNotEmpty) {
                         showRecus(context, data_id, data_modele, recus);
@@ -163,107 +189,91 @@ class ListDocuments extends StatelessWidget {
                         NewRecu(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
-                      children: [
-                        recus.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Reçu et facture",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: recus.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Reçu et factures",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        recus.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (ltas.isNotEmpty) {
-                        showLta(context, data_id, data_modele);
-                      } else {
-                        NewLta(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "LTA",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: ltas.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        ltas.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          recus.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun reçu",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : recus.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (recus.length).toString() + " reçus",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (recus.length).toString() + " reçus",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (fiche_techniques.isNotEmpty) {
                         showFiches(context, data_id, data_modele);
@@ -271,68 +281,85 @@ class ListDocuments extends StatelessWidget {
                         NewFiche(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
-                      children: [
-                        fiche_techniques.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Fiche technique",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: fiche_techniques.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Fiche techniques",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        fiche_techniques.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          fiche_techniques.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucune fiche technique",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : fiche_techniques.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        fiche_techniques.length.toString() +
+                                            " fiche technique",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        fiche_techniques.length.toString() +
+                                            " fiches techniques",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (tdos.isNotEmpty) {
                         showTdo(context, data_id, data_modele, tdos);
@@ -340,107 +367,77 @@ class ListDocuments extends StatelessWidget {
                         NewTdo(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "TDO",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: tdos.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        tdos.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          tdos.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun TDO",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    (tdos.length).toString() + " TDO",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (ordres.isNotEmpty) {
-                        showImportOrdre(context, data_id, data_modele);
-                      } else {
-                        NewImportOrdre(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        ordres.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Ordre de transport",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: ordres.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Ordres de transport",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        ordres.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (bfus.isNotEmpty) {
                         showBfu(context, data_id, data_modele);
@@ -448,46 +445,69 @@ class ListDocuments extends StatelessWidget {
                         NewBfu(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "BFU",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: bfus.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        bfus.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          bfus.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun BFU",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    bfus.length.toString() + " BFU",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.47,
                   child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
                       if (cos.isNotEmpty) {
                         showCo(context, data_id, data_modele);
@@ -495,52 +515,854 @@ class ListDocuments extends StatelessWidget {
                         NewCo(context, data_id, data_modele);
                       }
                     },
-                    child: Row(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          cos.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun certificat d'origine",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : cos.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (cos.length).toString() +
+                                            " certificat d'origine",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (cos.length).toString() +
+                                            " certificats d'origine",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (vgms.isNotEmpty) {
+                        showVgm(context, data_id, data_modele, vgms);
+                      } else {
+                        NewVgm(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          vgms.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun VGM",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    vgms.length.toString() + " VGM",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (bls.isNotEmpty) {
+                        showBl(context, data_id, data_modele);
+                      } else {
+                        NewBl(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          bls.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun BL",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    (bls.length).toString() + " BL",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (avds.isNotEmpty) {
+                        showAvd(context, data_id, data_modele);
+                      } else {
+                        NewAvd(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          avds.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun AVD",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    avds.length.toString() + " AVD",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (cps.isNotEmpty) {
+                        showCps(context, data_id, data_modele);
+                      } else {
+                        NewCps(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          cps.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun certificat phyto-sanitaire",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : cps.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (cps.length).toString() +
+                                            " certificat phyto-sanitaire",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (cps.length).toString() +
+                                            " certificats phyto-sanitaires",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (appeles.isNotEmpty) {
+                        showApeles(context, data_id, data_modele, appeles);
+                      } else {
+                        NewApele(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          appeles.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun appélé",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : appeles.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        appeles.length.toString() + " appélé",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        appeles.length.toString() + " appélés",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (declarations.isNotEmpty) {
+                        showDecla(context, data_id, data_modele);
+                      } else {
+                        NewDecla(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          declarations.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucune déclaration",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : declarations.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (declarations.length).toString() +
+                                            " déclaration",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (declarations.length).toString() +
+                                            " déclarations",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (autre_docs.isNotEmpty) {
+                        showAutreDoc(context, data_id, data_modele);
+                      } else {
+                        NewDoc(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          autre_docs.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun autre document",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : autre_docs.length < 2
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        autre_docs.length.toString() +
+                                            " autre document",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        autre_docs.length.toString() +
+                                            " autres documents",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (ordres.isNotEmpty) {
+                        showImportOrdre(context, data_id, data_modele);
+                      } else {
+                        NewImportOrdre(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ordres.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun ordre de transport",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "1 ordre de transport",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: TextButton(
+                    onPressed: () {
+                      if (ltas.isNotEmpty) {
+                        showLta(context, data_id, data_modele);
+                      } else {
+                        NewLta(context, data_id, data_modele);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(.70)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.secondary,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          ltas.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Aucun LTA",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    (ltas.length).toString() + " LTA",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: MyColors.textColor,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.47,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(.70)),
+                    child: Column(
                       children: [
-                        cos.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Certificat d'origine",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: cos.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Certificat d'origines",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        cos.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: MyColors.secondary,
+                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.receipt,
+                                color: Colors.white,
+                              )),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Autres",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: MyColors.textColor,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 11),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        )
                       ],
                     ),
                   ),
@@ -550,390 +1372,7 @@ class ListDocuments extends StatelessWidget {
             SizedBox(
               height: 40,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (vgms.isNotEmpty) {
-                        showVgm(context, data_id, data_modele, vgms);
-                      } else {
-                        NewVgm(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "VGM",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: vgms.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        vgms.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (bls.isNotEmpty) {
-                        showBl(context, data_id, data_modele);
-                      } else {
-                        NewBl(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "BL",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: bls.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        bls.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (avds.isNotEmpty) {
-                        showAvd(context, data_id, data_modele);
-                      } else {
-                        NewAvd(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "AVD",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 8,
-                                color: avds.isNotEmpty
-                                    ? Colors.green
-                                    : user!.dark_mode == 1
-                                        ? MyColors.light
-                                        : MyColors.black,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        avds.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (cps.isNotEmpty) {
-                        showCps(context, data_id, data_modele);
-                      } else {
-                        NewCps(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        cps.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Certificat Phyto-sanitaire",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: cps.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Certificat phyto-sanitaires",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        cps.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (appeles.isNotEmpty) {
-                        showApeles(context, data_id, data_modele, appeles);
-                      } else {
-                        NewApele(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        appeles.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Appélé",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: appeles.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Appélés",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        appeles.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
-                      if (declarations.isNotEmpty) {
-                        showDecla(context, data_id, data_modele);
-                      } else {
-                        NewDecla(context, data_id, data_modele);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        declarations.length < 2
-                            ? Flexible(
-                                child: Text(
-                                  "Déclaration",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: declarations.isNotEmpty
-                                          ? Colors.green
-                                          : user!.dark_mode == 1
-                                              ? MyColors.light
-                                              : MyColors.black,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              )
-                            : Flexible(
-                                child: Text(
-                                  "Déclarations",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.green,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                        declarations.isEmpty
-                            ? Icon(
-                                Icons.add,
-                                size: 20,
-                                color: user!.dark_mode == 1
-                                    ? MyColors.light
-                                    : MyColors.black,
-                              )
-                            : Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20,
-                                color: Colors.green,
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {
-                        if (autre_docs.isNotEmpty) {
-                          showAutreDoc(context, data_id, data_modele);
-                        } else {
-                          NewDoc(context, data_id, data_modele);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "Autre document",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: ltas.isNotEmpty
-                                      ? Colors.green
-                                      : user!.dark_mode == 1
-                                          ? MyColors.light
-                                          : MyColors.black,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          autre_docs.isEmpty
-                              ? Icon(
-                                  Icons.add,
-                                  size: 20,
-                                  color: user!.dark_mode == 1
-                                      ? MyColors.light
-                                      : MyColors.black,
-                                )
-                              : Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 20,
-                                  color: Colors.green,
-                                ),
-                        ],
-                      )),
-                ),
-              ],
-            ),
-          ],
+          ]),
         ),
       ),
     );

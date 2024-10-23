@@ -3,6 +3,7 @@
 import 'package:bodah/modals/rules.dart';
 import 'package:bodah/providers/users/transporteur/drawer/index.dart';
 import 'package:bodah/ui/users/transporteur/dashboard/accueil.dart';
+import 'package:bodah/ui/users/transporteur/dashboard/index.dart';
 import 'package:bodah/ui/users/transporteur/documents/index.dart';
 import 'package:bodah/ui/users/transporteur/expeditions/list.dart';
 import 'package:bodah/ui/users/transporteur/souscriptions/list.dart';
@@ -88,7 +89,7 @@ class DrawerTransporteur extends StatelessWidget {
                 );
               },
               leading: Icon(
-                Icons.dashboard,
+                Icons.home,
                 color: current_index == 0
                     ? Colors.white
                     : user.dark_mode == 1
@@ -137,7 +138,7 @@ class DrawerTransporteur extends StatelessWidget {
               );
             },
             leading: Icon(
-              Icons.local_taxi,
+              Icons.people,
               color: current_index == 1
                   ? Colors.white
                   : user.dark_mode == 1
@@ -158,9 +159,61 @@ class DrawerTransporteur extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
           ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: ListTile(
+              onTap: () {
+                provider.change_index(2);
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return WelcomeTransporteur();
+                    },
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.dashboard,
+                color: current_index == 2
+                    ? Colors.white
+                    : user.dark_mode == 1
+                        ? MyColors.light
+                        : null,
+              ),
+              tileColor: current_index == 2 ? MyColors.secondary : null,
+              title: Text(
+                "Dashboard",
+                style: TextStyle(
+                    fontSize: 12,
+                    color: current_index == 2
+                        ? Colors.white
+                        : user.dark_mode == 1
+                            ? MyColors.light
+                            : function.convertHexToColor("#222523"),
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
           ListTile(
             onTap: () {
-              provider.change_index(2);
+              provider.change_index(3);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -186,18 +239,18 @@ class DrawerTransporteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.route,
-              color: current_index == 2
+              color: current_index == 3
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 2 ? MyColors.secondary : null,
+            tileColor: current_index == 3 ? MyColors.secondary : null,
             title: Text(
               "Mes trajets",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 2
+                  color: current_index == 3
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -208,7 +261,7 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(3);
+              provider.change_index(4);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -234,18 +287,18 @@ class DrawerTransporteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.local_shipping,
-              color: current_index == 3
+              color: current_index == 4
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 3 ? MyColors.secondary : null,
+            tileColor: current_index == 4 ? MyColors.secondary : null,
             title: Text(
               "Annonces d'expédition",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 3
+                  color: current_index == 4
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -256,7 +309,7 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(4);
+              provider.change_index(5);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -282,18 +335,18 @@ class DrawerTransporteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.subscriptions,
-              color: current_index == 4
+              color: current_index == 5
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 4 ? MyColors.secondary : null,
+            tileColor: current_index == 5 ? MyColors.secondary : null,
             title: Text(
               "Mes souscriptions",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 4
+                  color: current_index == 5
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -304,7 +357,7 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(5);
+              provider.change_index(6);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -329,19 +382,19 @@ class DrawerTransporteur extends StatelessWidget {
               );
             },
             leading: Icon(
-              Icons.check_circle_outline,
-              color: current_index == 5
+              Icons.location_on,
+              color: current_index == 6
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 5 ? MyColors.secondary : null,
+            tileColor: current_index == 6 ? MyColors.secondary : null,
             title: Text(
               "Mes transports",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 5
+                  color: current_index == 6
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -352,7 +405,7 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(6);
+              provider.change_index(7);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -378,18 +431,18 @@ class DrawerTransporteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.receipt,
-              color: current_index == 6
+              color: current_index == 7
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 6 ? MyColors.secondary : null,
+            tileColor: current_index == 7 ? MyColors.secondary : null,
             title: Text(
               "Mes documents",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 6
+                  color: current_index == 7
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -400,22 +453,22 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(7);
+              provider.change_index(8);
             },
             leading: Icon(
               Icons.share,
-              color: current_index == 7
+              color: current_index == 8
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 7 ? MyColors.secondary : null,
+            tileColor: current_index == 8 ? MyColors.secondary : null,
             title: Text(
               "Partagez",
               style: TextStyle(
                   fontSize: 12,
-                  color: current_index == 7
+                  color: current_index == 8
                       ? Colors.white
                       : user.dark_mode == 1
                           ? MyColors.light
@@ -475,7 +528,7 @@ class DrawerTransporteur extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              provider.change_index(8);
+              provider.change_index(9);
               Navigator.of(context).push(
                 PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 500),
@@ -501,13 +554,13 @@ class DrawerTransporteur extends StatelessWidget {
             },
             leading: Icon(
               Icons.settings,
-              color: current_index == 8
+              color: current_index == 9
                   ? Colors.white
                   : user.dark_mode == 1
                       ? MyColors.light
                       : null,
             ),
-            tileColor: current_index == 8 ? MyColors.secondary : null,
+            tileColor: current_index == 9 ? MyColors.secondary : null,
             title: Text(
               "Paramètres",
               style: TextStyle(
